@@ -1,0 +1,14 @@
+url,title,query,study_area,discovery_method,searched_at,result_rank,snippet,search_language,search_location,notes,collector
+https://example.com/atlanta/waze-cut-through,"Fictional Atlanta cut-through, banned",Atlanta navigation app traffic,Atlanta,google_first_page,2026-03-01T15:04:00-08:00,1,A fictional first-page snippet.,en,"Atlanta, GA",Hand-collected example.,field notes
+https://example.com/nyc/congestion-routing?ref=newsletter,Fictional NYC routing note,NYC routing app regulation,NYC,gemini,2026-02-11,,,en,,Gemini example with an alias.,gemini-session
+https://example.com/sf/lombard-access.pdf,Fictional SF access PDF,San Francisco street restrictions,SF,grok_bot,2026-01-20T18:00:00Z,3,PDF URLs stay eligible.,en,"San Francisco, CA",Paywalls and PDFs are not checked.,grok-session
+https://example.com/california/state-routing-bill,Fictional California bill,,California,publisher_search,,,,en,,"State study area, not a city.",publisher site
+https://example.com/nj/shore-traffic,Fictional shore complaint,,NJ,other,2026-04-02,,,en,,Residents describe a fictional restriction.,community post
+https://example.com/boston/gps-truck-ban?utm_source=digest&topic=trucks,Fictional Boston truck ban,Boston GPS truck restrictions,Boston,google_first_page,2026-03-15T12:00:00Z,2,Tracking parameters are preserved.,en,"Boston, MA",,google
+https://example.com/chicago/lake-shore,Fictional Chicago item,,Chicago,unknown,,,,en,,,manual
+https://example.com/la/canyon-traffic,Fictional LA canyon story,Los Angeles canyon navigation apps,LA,google_first_page,,,This row is valid and warns about missing search time and rank.,en,"Los Angeles, CA",,google
+https://example.com/miami/bridge-closure,Fictional Miami note,,Miami,publisher_search,2025-11-02,,,en,,Fictional café-district detour.,publisher site
+https://example.com/philadelphia/center-city,Fictional Philly note,,Philly,gemini,2026-05-01T00:00:00+00:00,,,en,,,gemini-session
+https://example.com/slc/canyon-road,Fictional SLC note,,SLC,grok_bot,,,,en,,,grok-session
+https://example.com/seattle/ferry-queue,Fictional Seattle ferry queue,,Seattle,other,,,,en,,First copy of a repeated URL.,manual
+https://example.com/seattle/ferry-queue,Fictional Seattle ferry queue again,Seattle ferry navigation apps,Seattle,google_first_page,2026-06-01T10:00:00Z,4,"Same normalized URL, separate discovery.",en,"Seattle, WA",Second copy is kept.,google

@@ -1,0 +1,76 @@
+{
+  "study_areas": [
+    {
+      "id": "atlanta",
+      "name": "Atlanta",
+      "kind": "city",
+      "aliases": ["atlanta", "atl"]
+    },
+    {
+      "id": "boston",
+      "name": "Boston",
+      "kind": "city",
+      "aliases": ["boston"]
+    },
+    {
+      "id": "chicago",
+      "name": "Chicago",
+      "kind": "city",
+      "aliases": ["chicago"]
+    },
+    {
+      "id": "los_angeles",
+      "name": "Los Angeles",
+      "kind": "city",
+      "aliases": ["los angeles", "la", "l.a."]
+    },
+    {
+      "id": "miami",
+      "name": "Miami",
+      "kind": "city",
+      "aliases": ["miami"]
+    },
+    {
+      "id": "new_york_city",
+      "name": "New York City",
+      "kind": "city",
+      "aliases": ["new york city", "nyc", "n.y.c."]
+    },
+    {
+      "id": "philadelphia",
+      "name": "Philadelphia",
+      "kind": "city",
+      "aliases": ["philadelphia", "philly"]
+    },
+    {
+      "id": "salt_lake_city",
+      "name": "Salt Lake City",
+      "kind": "city",
+      "aliases": ["salt lake city", "salt lake", "slc"]
+    },
+    {
+      "id": "san_francisco",
+      "name": "San Francisco",
+      "kind": "city",
+      "aliases": ["san francisco", "sf", "s.f."]
+    },
+    {
+      "id": "seattle",
+      "name": "Seattle",
+      "kind": "city",
+      "aliases": ["seattle"]
+    },
+    {
+      "id": "california",
+      "name": "California",
+      "kind": "state",
+      "aliases": ["california", "california (state)", "ca"]
+    },
+    {
+      "id": "new_jersey",
+      "name": "New Jersey",
+      "kind": "state",
+      "aliases": ["new jersey", "new jersey (state)", "nj", "n.j."]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+https://example.com/sf/lombard-txt
+https://example.com/sf/twin-peaks-routing?ref=sample
+
+https://example.com/sf/great-highway.pdf#page=2

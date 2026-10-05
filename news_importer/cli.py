@@ -1,0 +1,318 @@
+"""Command-line interface for the local URL importer."""
+
+from __future__ import annotations
+
+import argparse
+import sys
+from pathlib import Path
+
+from news_importer import __version__
+from news_importer.db import export_pending, list_discoveries
+from news_importer.errors import ImporterError
+from news_importer.importer import import_path, resolve_study_area_filter
+from news_importer.models import ImportDefaults, ImportSummary
+from news_importer.study_areas import Catalog, load_catalog
+from news_importer.validate import ALLOWED_DISCOVERY_METHODS
+
+DEFAULT_DB = "data/news.sqlite"
+DEFAULT_REPORT_DIR = "data/reports"
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    try:
+        if args.command == "import":
+            return command_import(args)
+        if args.command == "list":
+            return command_list(args)
+        if args.command == "export":
+            return command_export(args)
+    except ImporterError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    parser.error(f"unknown command {args.command}")
+    return 2
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="python3 -m news_importer",
+        description=(
+            "Import locally collected news URLs into SQLite. "
+            "This command does not fetch pages."
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=(
+            "examples:\n"
+            "  python3 -m news_importer import samples/discoveries.csv\n"
+            "  python3 -m news_importer import samples/discoveries.csv --dry-run\n"
+            "  python3 -m news_importer list --study-area SF\n"
+            "  python3 -m news_importer export --output data/exports/pending.csv\n"
+        ),
+    )
+    parser.add_argument("--version", action="version", version=__version__)
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    import_parser = subparsers.add_parser(
+        "import",
+        help="import a CSV or TXT URL list",
+        description=(
+            "Import a CSV file or a text file with one URL per nonblank line. "
+            "Valid rows are stored. Invalid rows are reported and skipped. "
+            "Reimporting a file creates a new batch and keeps the old rows."
+        ),
+    )
+    import_parser.add_argument("path", help="CSV or TXT file to import")
+    _add_db(import_parser)
+    import_parser.add_argument(
+        "--report-dir",
+        default=DEFAULT_REPORT_DIR,
+        help=f"directory for the JSON batch report (default: {DEFAULT_REPORT_DIR})",
+    )
+    import_parser.add_argument(
+        "--format",
+        choices=("csv", "txt"),
+        help="input format when the file extension is not .csv or .txt",
+    )
+    import_parser.add_argument(
+        "--study-area",
+        help=(
+            "study area used when a row does not supply one. "
+            "Aliases such as NYC, SF, and LA are accepted. "
+            "A row value wins. Unknown values are kept and flagged."
+        ),
+    )
+    import_parser.add_argument(
+        "--discovery-method",
+        help=(
+            "discovery method used when a row does not supply one. "
+            f"Known values: {', '.join(ALLOWED_DISCOVERY_METHODS)}. "
+            "Missing values become unknown. Unrecognized values are kept and flagged."
+        ),
+    )
+    import_parser.add_argument(
+        "--query",
+        help="search query used when a row does not supply one",
+    )
+    import_parser.add_argument(
+        "--searched-at",
+        help=(
+            "ISO 8601 date (YYYY-MM-DD) or timestamp with a timezone, "
+            "used when a row does not supply searched_at. "
+            "The import time is never used as the search time."
+        ),
+    )
+    import_parser.add_argument(
+        "--study-areas",
+        help="path to a study-area JSON file (default: the built-in configuration)",
+    )
+    import_parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="validate and print the summary without writing the database or a report",
+    )
+
+    list_parser = subparsers.add_parser(
+        "list",
+        help="show recent discoveries",
+        description="Show discoveries newest first. This does not change the database.",
+    )
+    _add_db(list_parser)
+    list_parser.add_argument("--batch", help="show only this import-batch id")
+    list_parser.add_argument(
+        "--study-area",
+        help="filter by study-area id or alias, such as SF or new_york_city",
+    )
+    list_parser.add_argument(
+        "--limit",
+        type=_positive_int,
+        default=20,
+        help="maximum rows to display (default: 20)",
+    )
+    list_parser.add_argument(
+        "--study-areas",
+        help="path to a study-area JSON file (default: the built-in configuration)",
+    )
+
+    export_parser = subparsers.add_parser(
+        "export",
+        help="export pending discoveries to CSV",
+        description=(
+            "Write discoveries whose crawl_status is pending. "
+            "Exporting does not change crawl_status."
+        ),
+    )
+    _add_db(export_parser)
+    export_parser.add_argument(
+        "--output",
+        help="CSV path to create. Omit to write CSV to standard output.",
+    )
+    return parser
+
+
+def command_import(args: argparse.Namespace) -> int:
+    defaults = ImportDefaults(
+        study_area=_clean(args.study_area),
+        discovery_method=_clean(args.discovery_method),
+        query=_clean(args.query),
+        searched_at=_clean(args.searched_at),
+    )
+    summary = import_path(
+        args.path,
+        db_path=args.db,
+        report_dir=args.report_dir,
+        defaults=defaults,
+        dry_run=args.dry_run,
+        input_format=args.format,
+        study_areas_path=args.study_areas,
+    )
+    print(format_summary(summary), end="")
+    return 0
+
+
+def command_list(args: argparse.Namespace) -> int:
+    catalog = load_catalog(args.study_areas)
+    study_area = resolve_study_area_filter(args.study_area, catalog)
+    batch_id = _clean(args.batch)
+    rows, total = list_discoveries(
+        Path(args.db).expanduser(),
+        batch_id=batch_id,
+        study_area=study_area,
+        limit=args.limit,
+    )
+    print(format_list(rows, total=total, catalog=catalog), end="")
+    return 0
+
+
+def command_export(args: argparse.Namespace) -> int:
+    database = Path(args.db).expanduser()
+    if args.output:
+        destination = Path(args.output).expanduser()
+        try:
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            with destination.open("w", encoding="utf-8", newline="") as handle:
+                count = export_pending(database, handle)
+        except OSError as exc:
+            raise ImporterError(
+                f"could not write {destination}: {exc.strerror}"
+            ) from exc
+        print(f"exported {count} pending discoveries to {destination}", file=sys.stderr)
+        return 0
+
+    count = export_pending(database, sys.stdout)
+    print(f"exported {count} pending discoveries", file=sys.stderr)
+    return 0
+
+
+def format_summary(summary: ImportSummary) -> str:
+    lines = []
+    if summary.dry_run:
+        lines.append("dry run: no database changes and no report written")
+    lines.append(f"file: {summary.source_filename}")
+    lines.append(f"format: {summary.source_format}")
+    lines.append(f"accepted: {summary.accepted}")
+    lines.append(f"rejected: {summary.rejected}")
+    lines.append(f"repeated_urls: {summary.repeated_urls}")
+    lines.append(f"warnings: {summary.warnings}")
+    if summary.dry_run:
+        lines.append("batch_id: not created")
+    else:
+        lines.append(f"batch_id: {summary.batch_id}")
+        lines.append(f"database: {summary.database_path}")
+        lines.append(f"report: {summary.report_path}")
+    if summary.repeated_normalized_urls:
+        lines.append("repeated normalized URLs:")
+        shown = summary.repeated_normalized_urls[:20]
+        lines.extend(f"  {url}" for url in shown)
+        hidden = len(summary.repeated_normalized_urls) - len(shown)
+        if hidden:
+            lines.append(f"  and {hidden} more")
+    if summary.rejections:
+        lines.append("rejected records:")
+        for item in summary.rejections:
+            reasons = "; ".join(reason.message for reason in item.reasons)
+            lines.append(f"  record {item.record_number}: {reasons}")
+    if summary.warning_rows:
+        lines.append("warnings:")
+        for item in summary.warning_rows:
+            messages = "; ".join(warning.message for warning in item.warnings)
+            lines.append(f"  record {item.record_number}: {messages}")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def format_list(rows, *, total: int, catalog: Catalog) -> str:
+    showing = len(rows)
+    lines = [f"showing {showing} of {total} discoveries"]
+    if showing == 0:
+        lines.append("")
+        return "\n".join(lines)
+    for row in rows:
+        lines.append("")
+        lines.append(row["id"])
+        lines.append(f"  original_url: {row['original_url']}")
+        lines.append(f"  normalized_url: {row['normalized_url']}")
+        lines.append(f"  hostname: {row['hostname']}")
+        lines.append(f"  study_area: {_study_area_label(row['study_area'], catalog)}")
+        lines.append(f"  study_area_raw: {_null(row['study_area_raw'])}")
+        lines.append(f"  discovery_method: {row['discovery_method']}")
+        lines.append(f"  crawl_status: {row['crawl_status']}")
+        lines.append(f"  searched_at: {_null(row['searched_at'])}")
+        lines.append(f"  result_rank: {_null(row['result_rank'])}")
+        lines.append(f"  batch_id: {row['batch_id']}")
+        lines.append(f"  source: {row['source_filename']}")
+        lines.append(f"  record: {row['input_record_number']}")
+        lines.append(f"  imported_at: {row['imported_at']}")
+        lines.append(f"  repeat: {'yes' if row['is_repeat'] else 'no'}")
+        lines.append(f"  warnings: {_warning_text(row['warnings_json'])}")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def _study_area_label(stored: str | None, catalog: Catalog) -> str:
+    if stored is None:
+        return "null"
+    area = catalog.by_id.get(stored)
+    if area is None:
+        return f"{stored} (not in the study-area list)"
+    return f"{area.display_name} ({area.id})"
+
+
+def _warning_text(warnings_json: str) -> str:
+    import json
+
+    try:
+        warnings = json.loads(warnings_json)
+    except json.JSONDecodeError:
+        return warnings_json
+    if not warnings:
+        return "none"
+    return "; ".join(item.get("message", "") for item in warnings)
+
+
+def _null(value: object) -> str:
+    if value is None:
+        return "null"
+    return str(value)
+
+
+def _clean(value: str | None) -> str | None:
+    if value is None:
+        return None
+    text = value.strip()
+    return text or None
+
+
+def _positive_int(value: str) -> int:
+    if not value.isdecimal() or int(value) < 1:
+        raise argparse.ArgumentTypeError("limit must be a positive integer")
+    return int(value)
+
+
+def _add_db(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--db",
+        default=DEFAULT_DB,
+        help=f"SQLite database path (default: {DEFAULT_DB})",
+    )
