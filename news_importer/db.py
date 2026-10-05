@@ -83,7 +83,10 @@ _SCHEMA = (
         warnings_json TEXT NOT NULL,
         crawl_status TEXT NOT NULL DEFAULT 'pending',
         is_repeat INTEGER NOT NULL CHECK (is_repeat IN (0, 1)),
-        original_record_json TEXT NOT NULL
+        original_record_json TEXT NOT NULL,
+        source_id TEXT,
+        last_outcome TEXT,
+        last_attempt_id TEXT
     )
     """,
     "CREATE INDEX IF NOT EXISTS idx_discoveries_normalized_url ON discoveries(normalized_url)",
@@ -91,7 +94,51 @@ _SCHEMA = (
     "CREATE INDEX IF NOT EXISTS idx_discoveries_study_area ON discoveries(study_area)",
     "CREATE INDEX IF NOT EXISTS idx_discoveries_crawl_status ON discoveries(crawl_status)",
     "CREATE INDEX IF NOT EXISTS idx_discoveries_imported_at ON discoveries(imported_at)",
+    """
+    CREATE TABLE IF NOT EXISTS sources (
+        id TEXT PRIMARY KEY,
+        normalized_url TEXT NOT NULL UNIQUE,
+        requested_url TEXT NOT NULL,
+        hostname TEXT NOT NULL,
+        created_at TEXT NOT NULL
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS source_discoveries (
+        source_id TEXT NOT NULL,
+        discovery_id TEXT NOT NULL,
+        linked_at TEXT NOT NULL,
+        PRIMARY KEY (source_id, discovery_id)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS fetch_attempts (
+        id TEXT PRIMARY KEY,
+        source_id TEXT NOT NULL,
+        attempt_number INTEGER NOT NULL,
+        requested_url TEXT NOT NULL,
+        final_url TEXT,
+        retrieved_at TEXT NOT NULL,
+        http_status INTEGER,
+        content_type TEXT,
+        observed_title TEXT,
+        publication_date TEXT,
+        outcome TEXT NOT NULL,
+        quality_flags_json TEXT NOT NULL,
+        error TEXT,
+        archive_dir TEXT NOT NULL,
+        source_kind TEXT NOT NULL,
+        UNIQUE (source_id, attempt_number)
+    )
+    """,
+    "CREATE INDEX IF NOT EXISTS idx_fetch_attempts_source_id ON fetch_attempts(source_id)",
 )
+
+_DISCOVERY_COLUMNS = {
+    "source_id": "TEXT",
+    "last_outcome": "TEXT",
+    "last_attempt_id": "TEXT",
+}
 
 
 def connect(path: Path) -> sqlite3.Connection:
@@ -116,6 +163,10 @@ def connect(path: Path) -> sqlite3.Connection:
 def ensure_schema(connection: sqlite3.Connection) -> None:
     for statement in _SCHEMA:
         connection.execute(statement)
+    columns = {row[1] for row in connection.execute("PRAGMA table_info(discoveries)")}
+    for name, declaration in _DISCOVERY_COLUMNS.items():
+        if name not in columns:
+            connection.execute(f"ALTER TABLE discoveries ADD COLUMN {name} {declaration}")
 
 
 def read_existing_normalized_urls(path: Path) -> set[str]:
@@ -265,11 +316,12 @@ def list_discoveries(
     *,
     batch_id: str | None,
     study_area: str | None,
+    status: str | None = None,
     limit: int,
 ) -> tuple[list[sqlite3.Row], int]:
     connection = _open_readonly(path)
     try:
-        clause, params = _filters(batch_id, study_area)
+        clause, params = _filters(batch_id, study_area, status)
         total = connection.execute(
             f"SELECT COUNT(*) FROM discoveries {clause}",
             params,
@@ -377,7 +429,11 @@ def _open_readonly(path: Path) -> sqlite3.Connection:
     return connection
 
 
-def _filters(batch_id: str | None, study_area: str | None) -> tuple[str, list[str]]:
+def _filters(
+    batch_id: str | None,
+    study_area: str | None,
+    status: str | None = None,
+) -> tuple[str, list[str]]:
     clauses: list[str] = []
     params: list[str] = []
     if batch_id:
@@ -386,6 +442,9 @@ def _filters(batch_id: str | None, study_area: str | None) -> tuple[str, list[st
     if study_area:
         clauses.append("study_area = ?")
         params.append(study_area)
+    if status:
+        clauses.append("crawl_status = ?")
+        params.append(status)
     if not clauses:
         return "", params
     return "WHERE " + " AND ".join(clauses), params

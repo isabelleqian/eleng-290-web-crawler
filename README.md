@@ -1,10 +1,13 @@
-# AI News Scraper: URL importer
+# AI News Scraper: URL importer and archive
 
-This is the first piece of a research project about navigation-app traffic, access restrictions, routing-app rules, and community complaints. It stores URLs you already collected. It does not search the web, download pages, read PDFs, or call a language model.
+This project collects news and regulations about navigation-app traffic, access restrictions, routing-app rules, and community complaints. It has two local stages:
 
-Later stages can use Crawl4AI to fetch the articles and PDFs in this queue. This importer does not include Crawl4AI and does not need it installed.
+- `import`, `list`, and `export` store URLs you already collected. They do not search the web or download pages.
+- `crawl` reads that queue and archives each selected URL. It uses a direct HTTP request for the status, redirects, and original PDF bytes, then uses locally installed Crawl4AI to render HTML.
 
-The sample URLs use `example.com` and are fictional.
+It does not call a language model, classify topics, or judge credibility.
+
+The sample URLs use `example.com` and are fictional. Do not crawl them as research articles.
 
 ## Quick start
 
@@ -171,9 +174,9 @@ Not checked:
 - a PDF opens
 - the article is about that study area, or about any particular jurisdiction
 - Google showed the link on the first page
-- publication date, credibility, relevance, novelty, or category
+- credibility, relevance, novelty, or category
 
-Those judgments belong to later stages. This importer does not assign them.
+Import does not assign those. A later `crawl` can store an observed title and publication date from the page in the archive. It leaves the imported title and snippet on the discovery row.
 
 ## Commands
 
@@ -248,41 +251,120 @@ Each real import is one database transaction. A database failure rolls the batch
 - warnings in `warnings_json`
 - `crawl_status`, which starts as `pending`
 - `is_repeat`, which records whether the normalized URL had already been seen at import time
+- `source_id`, `last_outcome`, and `last_attempt_id`, which stay null until a crawl links the row to an archive
+
+An existing database gains those three columns the next time you import or crawl. Discovery ids and the original rows are kept. `sources`, `source_discoveries`, and `fetch_attempts` record the shared archive and each attempt.
 
 The batch report is `data/reports/<batch-id>.json`. It repeats the counts and lists rejected rows, warnings, and repeated normalized URLs. Open that file when you want the machine-readable review list. `python3 -m news_importer list` shows the same warnings in the terminal.
 
 Generated databases, reports, and exports are gitignored. The sample files in `samples/` are part of the project.
 
-## How the export connects to Crawl4AI later
+`export` still writes the pending queue and does not change `crawl_status`. `crawl` reads the database directly, so you do not need to export before archiving.
 
-`export` writes a queue, not a new import file. The important columns for the next stage are:
+## Retrieve and archive
 
-- `discovery_id`, the stable id to write results back to
-- `original_url`, the URL that was collected
-- `normalized_url`, for comparison only
-- `study_area`, `discovery_method`, `query`, `searched_at`, `result_rank`
-- `extra_metadata_json`, `warnings_json`, and `original_record_json`
+Crawl4AI 0.9.4 and `pypdf` install into the same Python you use for `python3`. One-time setup:
 
-A later script can read that CSV, give Crawl4AI the original URL after trimming surrounding whitespace, save the retrieved HTML or PDF, and then update SQLite:
-
-```sql
-UPDATE discoveries
-SET crawl_status = 'fetched'
-WHERE id = 'disc_...';
+```bash
+python3 -m pip install "crawl4ai==0.9.4" pypdf
+python3 -m playwright install chromium
+crawl4ai-doctor
+python3 -c "from crawl4ai.__version__ import __version__; print(__version__)"
 ```
 
-Fetch the trimmed original URL. The normalized URL is safe for spotting repeats, but it lowercases the host and drops the fragment. PDF links are already eligible for import; this component does not download them. Paywall detection is also left for later.
+`crawl4ai-doctor` checks that the browser is ready. PDF text uses `pypdf`, which the install command above includes. If a PDF archive is flagged `pdf_text_unavailable`, install `pypdf` for this same Python and retry.
 
-This repository does not call Crawl4AI. The importer works offline.
+Import URLs first, then crawl five unique pending URLs:
+
+```bash
+python3 -m news_importer import your-urls.csv
+python3 -m news_importer crawl --limit 5
+```
+
+Preview the queue without fetching or changing the database or archive:
+
+```bash
+python3 -m news_importer crawl --limit 5 --dry-run
+```
+
+Inspect outcomes:
+
+```bash
+python3 -m news_importer list --status fetched
+python3 -m news_importer list --status failed
+python3 -m news_importer list --status blocked
+python3 -m news_importer list --status not_found
+```
+
+Each source is `data/archive/<source-id>/`. Each attempt is `attempt-001`, `attempt-002`, and so on. Open `metadata.json` in the latest attempt folder. `content.md` is the extracted text, `raw.html` is the HTML, and `original.pdf` is present only when the queued URL itself is a PDF.
+
+Retry failed, blocked, and not-found sources without recrawling successes:
+
+```bash
+python3 -m news_importer crawl --retry --limit 5
+```
+
+Save a webpage PDF snapshot as well as the article text. The snapshot is `page.pdf`. It is not the publisher's original PDF. If the snapshot fails, the HTML and extracted text are still kept.
+
+```bash
+python3 -m news_importer crawl --limit 5 --save-page-pdf
+```
+
+Other useful selectors:
+
+```bash
+python3 -m news_importer crawl --limit 5 --study-area SF
+python3 -m news_importer crawl --limit 5 --batch batch_id_here
+python3 -m news_importer crawl --limit 5 --timeout 45 --output-dir data/archive
+python3 -m news_importer crawl --refresh --limit 5
+```
+
+`--refresh` fetches a new attempt for selected pending URLs even when an archive already exists. Older attempt folders are left in place.
+
+`--http-only` skips Crawl4AI and archives the HTTP response text. It cannot make webpage PDF snapshots.
+
+```bash
+python3 -m news_importer crawl --limit 5 --http-only
+```
+
+### What a crawl does
+
+The crawl selects unique normalized URLs, up to `--limit` (default 5). Every discovery of that URL is linked to one stable source id. A new pending discovery of a URL that already has a saved article reuses that archive unless you pass `--refresh`.
+
+For a URL that needs a fetch, the crawler requests only that URL. It does not follow links or download PDFs linked from the page. Those PDF links are listed in `metadata.json` as `pdf_link_candidates`.
+
+HTML is rendered with Crawl4AI when it is available. The run config turns off deep crawling, stealth, navigator overrides, and overlay removal, and it bypasses Crawl4AI's cache. Original PDFs are detected from the response type and the `%PDF` file header, not only from a `.pdf` suffix. Their bytes are saved as `original.pdf`. Text is extracted with `pypdf` when it is installed. If no text comes out, the original file stays and the attempt is flagged `needs_ocr`. OCR is not implemented yet.
+
+At most two URLs are fetched at once (`--concurrency`, default 2). Requests to the same host wait `--host-delay` seconds (default 1). Timeouts and temporary HTTP failures (429 and 500–504) are retried up to `--retries` extra times (default 2). A `Retry-After` value is honored up to 60 seconds. A longer `Retry-After` is recorded and the crawler stops instead of sending another request. `robots.txt` disallow rules are recorded as `blocked` and are not bypassed.
+
+### Queue status
+
+| Status | Meaning |
+| --- | --- |
+| `pending` | Imported, or returned here after an interrupted run. Eligible for a normal crawl. |
+| `processing` | Claimed by a crawl that has not finished this URL. |
+| `fetched` | An attempt was saved. The finer result is `last_outcome`: `retrieved`, `partial`, `paywall`, or `empty`. |
+| `blocked` | Robots, HTTP 401/403/429, or an access-barrier page. |
+| `not_found` | HTTP 404 or 410. |
+| `failed` | Timeout, network error, or HTTP 5xx after the retries. `last_outcome` is `timeout` or `network_error`. |
+
+A real crawl, including one that then selects nothing, first sets leftover `processing` rows back to `pending`. Dry-run does not do that, and it does not fetch. Artifacts are written before the attempt row is marked complete. A crash can leave an attempt folder without a database row; the next attempt uses a new folder and does not overwrite the old one.
+
+HTTP 200, or a successful Crawl4AI result, is not treated as proof of a full article. Short HTML, paywall language, and access-barrier language set `partial`, `paywall`, or `blocked`, and the flags record the signal. Unknown titles and dates stay null. Dates are taken only from ISO-like publication metadata, and conflicting dates stay null.
+
+### Archive metadata
+
+`metadata.json` includes the source id, attempt id, requested URL, final URL, UTC timestamp, HTTP status, content type, observed title, publication date, outcome, quality flags, errors, and artifact paths. Imported titles and snippets are copied under `discovery_records` and are not used as the observed title. The extracted text is the general page text. It is not filtered with research keywords.
 
 ## Project layout
 
 ```text
-news_importer/          command-line importer
+news_importer/          import, list, export, and crawl
   study_areas.json      the 12 study areas and aliases
 samples/discoveries.csv fictional CSV collected by hand and by research agents
 samples/discoveries.txt fictional one-URL-per-line file
-tests/test_importer.py  offline tests
+tests/test_importer.py  offline importer tests
+tests/test_crawl.py     crawl tests against a local HTTP server
 ```
 
 ## Tests
@@ -291,11 +373,16 @@ tests/test_importer.py  offline tests
 python3 -m unittest discover -s tests -v
 ```
 
-The tests use temporary databases. They do not fetch URLs.
+Importer tests use temporary databases and do not fetch URLs. Crawl tests use a local HTTP server and fixtures. They do not call live newspaper sites. The Crawl4AI configuration check runs with this same `python3`.
 
 ## Limitations
 
-- This component does not search, crawl, parse PDFs, classify articles, or provide a graphical interface.
+- Import does not search or download pages. Crawl downloads only the queued URL. It does not search, follow links, or download linked PDFs.
+- There is no language-model summary, credibility score, topic label, or textbook comparison.
+- OCR is not implemented. A PDF with no extractable text is saved and flagged for review.
+- Paywall and bot-block flags use the HTTP status, `robots.txt`, and a short list of page phrases. Read the flags before treating a page as complete or blocked.
+- Webpage PDF snapshots require Crawl4AI and `--save-page-pdf`. `--http-only` cannot create them.
+- Run one crawl at a time. A second crawl would also reset `processing` rows to `pending`.
 - Reimporting a file adds a new batch on purpose. It does not update the old rows.
 - Exporting the queue does not mark rows as fetched.
 - A study area is a search label, not an inferred jurisdiction.

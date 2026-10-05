@@ -1,12 +1,14 @@
-"""Command-line interface for the local URL importer."""
+"""Command-line interface for import and retrieval."""
 
 from __future__ import annotations
 
 import argparse
 import sys
+from collections import Counter
 from pathlib import Path
 
 from news_importer import __version__
+from news_importer.crawl import QUEUE_STATUSES, CrawlOptions, run_crawl
 from news_importer.db import export_pending, list_discoveries
 from news_importer.errors import ImporterError
 from news_importer.importer import import_path, resolve_study_area_filter
@@ -16,6 +18,7 @@ from news_importer.validate import ALLOWED_DISCOVERY_METHODS
 
 DEFAULT_DB = "data/news.sqlite"
 DEFAULT_REPORT_DIR = "data/reports"
+DEFAULT_ARCHIVE_DIR = "data/archive"
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -28,6 +31,8 @@ def main(argv: list[str] | None = None) -> int:
             return command_list(args)
         if args.command == "export":
             return command_export(args)
+        if args.command == "crawl":
+            return command_crawl(args)
     except ImporterError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
@@ -39,8 +44,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python3 -m news_importer",
         description=(
-            "Import locally collected news URLs into SQLite. "
-            "This command does not fetch pages."
+            "Import locally collected news URLs into SQLite, then archive the "
+            "queued pages. import, list, and export do not fetch pages. "
+            "crawl fetches only the queued URLs."
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=(
@@ -49,6 +55,11 @@ def build_parser() -> argparse.ArgumentParser:
             "  python3 -m news_importer import samples/discoveries.csv --dry-run\n"
             "  python3 -m news_importer list --study-area SF\n"
             "  python3 -m news_importer export --output data/exports/pending.csv\n"
+            "  python3 -m news_importer crawl --limit 5\n"
+            "  python3 -m news_importer crawl --limit 5 --dry-run\n"
+            "  python3 -m news_importer list --status failed\n"
+            "  python3 -m news_importer crawl --retry --limit 5\n"
+            "  python3 -m news_importer crawl --limit 5 --save-page-pdf\n"
         ),
     )
     parser.add_argument("--version", action="version", version=__version__)
@@ -131,6 +142,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="maximum rows to display (default: 20)",
     )
     list_parser.add_argument(
+        "--status",
+        choices=QUEUE_STATUSES,
+        help="show only discoveries in this queue status",
+    )
+    list_parser.add_argument(
         "--study-areas",
         help="path to a study-area JSON file (default: the built-in configuration)",
     )
@@ -147,6 +163,87 @@ def build_parser() -> argparse.ArgumentParser:
     export_parser.add_argument(
         "--output",
         help="CSV path to create. Omit to write CSV to standard output.",
+    )
+
+    crawl_parser = subparsers.add_parser(
+        "crawl",
+        help="archive queued URLs",
+        description=(
+            "Fetch pending discoveries and save each attempt under its own folder. "
+            "Repeated discoveries of the same normalized URL share one source. "
+            "A real run first returns any leftover processing rows to pending. "
+            "Dry-run only prints the queue."
+        ),
+    )
+    _add_db(crawl_parser)
+    crawl_parser.add_argument(
+        "--limit",
+        type=_positive_int,
+        default=5,
+        help="maximum number of unique URLs to select (default: 5)",
+    )
+    crawl_parser.add_argument("--batch", help="select discoveries from this import batch only")
+    crawl_parser.add_argument(
+        "--study-area",
+        help="select discoveries for this study-area id or alias, such as SF",
+    )
+    crawl_parser.add_argument(
+        "--study-areas",
+        help="path to a study-area JSON file (default: the built-in configuration)",
+    )
+    crawl_parser.add_argument(
+        "--output-dir",
+        default=DEFAULT_ARCHIVE_DIR,
+        help=f"directory for archive folders (default: {DEFAULT_ARCHIVE_DIR})",
+    )
+    crawl_parser.add_argument(
+        "--timeout",
+        type=_positive_float,
+        default=30.0,
+        help="per-request timeout in seconds (default: 30)",
+    )
+    crawl_parser.add_argument(
+        "--concurrency",
+        type=_positive_int,
+        default=2,
+        help="maximum URLs fetched at once (default: 2)",
+    )
+    crawl_parser.add_argument(
+        "--host-delay",
+        type=_nonnegative_float,
+        default=1.0,
+        help="seconds to wait between requests to the same host (default: 1)",
+    )
+    crawl_parser.add_argument(
+        "--retries",
+        type=_nonnegative_int,
+        default=2,
+        help="extra attempts for timeouts and temporary HTTP failures (default: 2)",
+    )
+    crawl_parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="print the selected queue without fetching or changing the database or archive",
+    )
+    crawl_parser.add_argument(
+        "--save-page-pdf",
+        action="store_true",
+        help="also save a Crawl4AI PDF snapshot of each HTML page",
+    )
+    crawl_parser.add_argument(
+        "--refresh",
+        action="store_true",
+        help="fetch a new attempt even when an archive already exists",
+    )
+    crawl_parser.add_argument(
+        "--retry",
+        action="store_true",
+        help="select failed, blocked, and not_found sources instead of the pending queue",
+    )
+    crawl_parser.add_argument(
+        "--http-only",
+        action="store_true",
+        help="archive the HTTP response without starting Crawl4AI",
     )
     return parser
 
@@ -179,6 +276,7 @@ def command_list(args: argparse.Namespace) -> int:
         Path(args.db).expanduser(),
         batch_id=batch_id,
         study_area=study_area,
+        status=args.status,
         limit=args.limit,
     )
     print(format_list(rows, total=total, catalog=catalog), end="")
@@ -202,6 +300,33 @@ def command_export(args: argparse.Namespace) -> int:
 
     count = export_pending(database, sys.stdout)
     print(f"exported {count} pending discoveries", file=sys.stderr)
+    return 0
+
+
+def command_crawl(args: argparse.Namespace) -> int:
+    catalog = load_catalog(args.study_areas)
+    study_area = resolve_study_area_filter(args.study_area, catalog)
+    summary = run_crawl(
+        CrawlOptions(
+            db_path=Path(args.db).expanduser(),
+            output_dir=Path(args.output_dir).expanduser(),
+            limit=args.limit,
+            batch_id=_clean(args.batch),
+            study_area=study_area,
+            timeout=args.timeout,
+            dry_run=args.dry_run,
+            save_page_pdf=args.save_page_pdf,
+            refresh=args.refresh,
+            retry=args.retry,
+            concurrency=args.concurrency,
+            host_delay=args.host_delay,
+            retries=args.retries,
+            http_only=args.http_only,
+        )
+    )
+    if summary.renderer_warning:
+        print(f"warning: {summary.renderer_warning}", file=sys.stderr)
+    print(format_crawl(summary), end="")
     return 0
 
 
@@ -258,6 +383,9 @@ def format_list(rows, *, total: int, catalog: Catalog) -> str:
         lines.append(f"  study_area_raw: {_null(row['study_area_raw'])}")
         lines.append(f"  discovery_method: {row['discovery_method']}")
         lines.append(f"  crawl_status: {row['crawl_status']}")
+        if "last_outcome" in row.keys():
+            lines.append(f"  last_outcome: {_null(row['last_outcome'])}")
+            lines.append(f"  source_id: {_null(row['source_id'])}")
         lines.append(f"  searched_at: {_null(row['searched_at'])}")
         lines.append(f"  result_rank: {_null(row['result_rank'])}")
         lines.append(f"  batch_id: {row['batch_id']}")
@@ -304,10 +432,69 @@ def _clean(value: str | None) -> str | None:
     return text or None
 
 
+def format_crawl(summary) -> str:
+    lines = []
+    if summary.dry_run:
+        lines.append("dry run: no fetches and no database or archive changes")
+    else:
+        lines.append(f"recovered_processing: {summary.recovered_processing}")
+    lines.append(f"selected: {summary.selected}")
+    if not summary.dry_run and summary.results:
+        counts = Counter(item.outcome or "unknown" for item in summary.results)
+        for outcome, count in sorted(counts.items()):
+            lines.append(f"{outcome}: {count}")
+    for item in summary.results:
+        lines.append("")
+        lines.append(item.requested_url)
+        lines.append(f"  action: {item.action}")
+        lines.append(f"  source_id: {item.source_id}")
+        lines.append(f"  discoveries: {', '.join(item.discovery_ids)}")
+        if item.outcome is not None:
+            lines.append(f"  outcome: {item.outcome}")
+        if item.crawl_status is not None:
+            lines.append(f"  crawl_status: {item.crawl_status}")
+        if item.http_status is not None:
+            lines.append(f"  http_status: {item.http_status}")
+        if item.attempt_id is not None:
+            lines.append(f"  attempt_id: {item.attempt_id}")
+        if item.archive_dir is not None:
+            lines.append(f"  archive: {item.archive_dir}")
+        if item.error:
+            lines.append(f"  error: {item.error}")
+    lines.append("")
+    return "\n".join(lines)
+
+
 def _positive_int(value: str) -> int:
     if not value.isdecimal() or int(value) < 1:
-        raise argparse.ArgumentTypeError("limit must be a positive integer")
+        raise argparse.ArgumentTypeError("value must be a positive integer")
     return int(value)
+
+
+def _nonnegative_int(value: str) -> int:
+    if not value.isdecimal():
+        raise argparse.ArgumentTypeError("value must be a non-negative integer")
+    return int(value)
+
+
+def _positive_float(value: str) -> float:
+    try:
+        number = float(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError("value must be a positive number") from None
+    if number <= 0:
+        raise argparse.ArgumentTypeError("value must be a positive number")
+    return number
+
+
+def _nonnegative_float(value: str) -> float:
+    try:
+        number = float(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError("value must be a non-negative number") from None
+    if number < 0:
+        raise argparse.ArgumentTypeError("value must be a non-negative number")
+    return number
 
 
 def _add_db(parser: argparse.ArgumentParser) -> None:

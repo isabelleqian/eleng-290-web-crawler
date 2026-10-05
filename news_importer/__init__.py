@@ -1,3 +1,3 @@
-"""Local URL importer for the AI News Scraper research project."""
+"""Local URL importer and source archive for the AI News Scraper."""
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
