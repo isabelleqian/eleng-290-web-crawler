@@ -34,15 +34,14 @@ _BLOCK_PHRASES = (
     "verify you are human",
     "please verify you are a human",
     "checking your browser",
-    "cf-browser-verification",
-    "cf-challenge",
-    "/cdn-cgi/challenge",
     "enable javascript and cookies",
     "are you a robot",
     "bot detection",
     "unusual traffic from your computer",
     "pardon our interruption",
     "access to this page has been denied",
+    "you don't have permission to access this content",
+    "you do not have permission to access this content",
 )
 _PAYWALL_PHRASES = (
     "subscribe to continue",
@@ -52,7 +51,8 @@ _PAYWALL_PHRASES = (
     "sign in to continue",
     "sign in to read the full",
     "this content is reserved for subscribers",
-    "already a subscriber",
+)
+_PAYWALL_MARKUP = (
     'data-paywall',
     'class="paywall"',
     "class='paywall'",
@@ -158,9 +158,20 @@ class HostGate:
             self._next_at[key] = time.monotonic() + self.delay
 
 
+@dataclass
+class _RobotsRecord:
+    parser: object | None = None
+    failure: str | None = None
+    failure_kind: str | None = None
+
+
 class RobotsCache:
+    """Remember one robots.txt per origin, then decide each URL on its own."""
+
     def __init__(self) -> None:
-        self._decisions: dict[str, tuple[bool, QualityFlag | None]] = {}
+        self._records: dict[str, _RobotsRecord] = {}
+        self._locks: dict[str, asyncio.Lock] = {}
+        self._guard = asyncio.Lock()
 
     async def check(
         self,
@@ -171,18 +182,21 @@ class RobotsCache:
     ) -> tuple[bool, QualityFlag | None]:
         parts = urlsplit(url)
         origin = f"{parts.scheme}://{parts.netloc}"
-        if origin in self._decisions:
-            return self._decisions[origin]
-        robots_url = f"{origin}/robots.txt"
-        await gate.wait(parts.netloc.lower())
-        response = await asyncio.to_thread(
-            _request,
-            robots_url,
-            min(timeout, 10.0),
-        )
-        decision = _robots_decision(response, url)
-        self._decisions[origin] = decision
-        return decision
+        async with self._guard:
+            lock = self._locks.setdefault(origin, asyncio.Lock())
+        async with lock:
+            record = self._records.get(origin)
+            if record is None:
+                robots_url = f"{origin}/robots.txt"
+                await gate.wait(parts.netloc.lower())
+                response = await asyncio.to_thread(
+                    _request,
+                    robots_url,
+                    min(timeout, 10.0),
+                )
+                record = _robots_record(response)
+                self._records[origin] = record
+        return _robots_decision(record, url)
 
 
 def extract_pdf_text(data: bytes) -> PdfText:
@@ -233,6 +247,29 @@ async def fetch_url(
     allowed, robots_flag = await robots.check(url, timeout=timeout, gate=gate)
     if not allowed:
         flags = [robots_flag] if robots_flag is not None else []
+        if robots_flag is not None and robots_flag.code == "robots_network_error":
+            return FetchResult(
+                requested_url=url,
+                final_url=None,
+                http_status=None,
+                content_type=None,
+                outcome="network_error",
+                observed_title=None,
+                publication_date=None,
+                html=None,
+                markdown=None,
+                original_pdf=None,
+                page_pdf=None,
+                body=None,
+                source_kind="html",
+                quality_flags=flags,
+                errors=[robots_flag.signal],
+                renderer="none",
+            )
+        if robots_flag is not None and robots_flag.code == "robots_unreachable":
+            robots_error = "robots.txt could not be read, so this URL was not requested"
+        else:
+            robots_error = "robots.txt disallows this URL for this crawler"
         return FetchResult(
             requested_url=url,
             final_url=None,
@@ -248,7 +285,7 @@ async def fetch_url(
             body=None,
             source_kind="html",
             quality_flags=flags,
-            errors=["robots.txt disallows this URL for this crawler"],
+            errors=[robots_error],
             renderer="none",
         )
 
@@ -396,23 +433,40 @@ def _retry_after_seconds(value: str | None) -> float | None:
     return max(0.0, (when - datetime.now(timezone.utc)).total_seconds())
 
 
-def _robots_decision(
-    response: _HttpResult,
-    target_url: str,
-) -> tuple[bool, QualityFlag | None]:
+def _robots_record(response: _HttpResult) -> _RobotsRecord:
     if response.status == 404:
-        return True, None
+        return _RobotsRecord()
+    if response.hint == "network_error":
+        return _RobotsRecord(
+            failure=response.error or "Could not read robots.txt",
+            failure_kind="network_error",
+        )
     if response.hint is not None or response.status != 200:
         detail = response.error or f"HTTP {response.status}"
-        return True, QualityFlag(
-            "robots_check_failed",
-            f"Could not read robots.txt ({detail}). The URL was still requested.",
-        )
+        return _RobotsRecord(failure=detail, failure_kind="unreachable")
     from urllib.robotparser import RobotFileParser
 
     parser = RobotFileParser()
     parser.parse(response.body.decode("utf-8", "replace").splitlines())
-    if parser.can_fetch(USER_AGENT, target_url):
+    return _RobotsRecord(parser=parser)
+
+
+def _robots_decision(
+    record: _RobotsRecord,
+    target_url: str,
+) -> tuple[bool, QualityFlag | None]:
+    if record.failure_kind == "network_error":
+        return False, QualityFlag(
+            "robots_network_error",
+            record.failure or f"Could not read robots.txt for {target_url}",
+        )
+    if record.failure is not None:
+        return False, QualityFlag(
+            "robots_unreachable",
+            f"Could not read robots.txt ({record.failure}). {target_url} was not requested.",
+        )
+    parser = record.parser
+    if parser is None or parser.can_fetch(USER_AGENT, target_url):
         return True, None
     return False, QualityFlag(
         "robots_disallow",
@@ -624,7 +678,7 @@ def _interpret_pdf(
             )
         )
         flags.append(QualityFlag("needs_review", "The original PDF needs review or OCR"))
-    outcome = "retrieved"
+    outcome = "retrieved" if extracted.text else "empty"
     if response.status in {401, 403, 429}:
         outcome = "blocked"
     elif response.status in {404, 410}:
@@ -802,10 +856,12 @@ def _assess(
     source_kind: str,
     flags: list[QualityFlag],
 ) -> tuple[str, list[QualityFlag]]:
-    haystack = f"{html or ''}\n{text or ''}".lower()
     visible = re.sub(r"\s+", " ", text or "").strip()
-    block = _first_phrase(haystack, _BLOCK_PHRASES)
-    paywall = _first_phrase(haystack, _PAYWALL_PHRASES)
+    visible_haystack = visible.lower()
+    block = _first_phrase(visible_haystack, _BLOCK_PHRASES)
+    paywall = _first_phrase(visible_haystack, _PAYWALL_PHRASES)
+    if paywall is None and html:
+        paywall = _first_phrase(html.lower(), _PAYWALL_MARKUP)
     if status in {401, 403, 429}:
         outcome = "blocked"
     elif status in {404, 410}:

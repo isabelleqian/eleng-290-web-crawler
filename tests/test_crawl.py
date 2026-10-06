@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import csv
 import importlib.util
 import json
 import sqlite3
@@ -136,6 +137,11 @@ class CrawlTests(unittest.TestCase):
         self.assertEqual(summary.results[0].outcome, "retrieved")
         self.assertEqual(summary.results[0].crawl_status, "fetched")
         metadata, folder = self.only_attempt()
+        relative = folder.relative_to(self.archive).parts
+        self.assertEqual(relative[0], "boston")
+        self.assertEqual(relative[1], "127.0.0.1")
+        self.assertTrue(relative[2].startswith("story--src_"))
+        self.assertEqual(relative[3], "attempt-001")
         self.assertEqual(metadata["observed_title"], "Boston street pilot")
         self.assertEqual(metadata["publication_date"], "2024-06-15T13:00:00Z")
         self.assertEqual(metadata["source_kind"], "html")
@@ -194,7 +200,7 @@ class CrawlTests(unittest.TestCase):
         second = self.crawl()
         self.assertEqual(second.results[0].action, "reuse")
         self.assertEqual(self.hit_count("/story"), 1)
-        self.assertEqual(len(list(self.archive.glob("*/attempt-*"))), 1)
+        self.assertEqual(len(list(self.archive.glob("**/attempt-*"))), 1)
         connection = connect(self.db)
         try:
             rows = connection.execute(
@@ -219,7 +225,7 @@ class CrawlTests(unittest.TestCase):
         self.import_rows([{"url": url, "title": "Again", "study_area": "boston"}])
         summary = self.crawl(refresh=True)
         self.assertEqual(summary.results[0].action, "fetch")
-        folders = sorted(self.archive.glob("*/attempt-*"))
+        folders = sorted(self.archive.glob("**/attempt-*"))
         self.assertEqual([path.name for path in folders], ["attempt-001", "attempt-002"])
         kept = json.loads((folders[0] / "metadata.json").read_text(encoding="utf-8"))
         self.assertEqual(kept["attempt_id"], first_meta["attempt_id"])
@@ -235,9 +241,10 @@ class CrawlTests(unittest.TestCase):
         self.import_rows([{"url": f"{self.base}/old", "title": "Old headline"}])
         summary = self.crawl()
         self.assertEqual(summary.results[0].outcome, "retrieved")
-        metadata, _folder = self.only_attempt()
+        metadata, folder = self.only_attempt()
         self.assertEqual(metadata["requested_url"], f"{self.base}/old")
         self.assertEqual(metadata["final_url"], f"{self.base}/article")
+        self.assertEqual(folder.relative_to(self.archive).parts[0], "unassigned")
         self.assertEqual(metadata["observed_title"], "Boston street pilot")
 
     def test_original_pdf_is_preserved_without_relying_on_the_suffix(self) -> None:
@@ -273,7 +280,7 @@ class CrawlTests(unittest.TestCase):
         self.route("/scan", 200, "application/pdf", PDF_BYTES)
         self.import_rows([{"url": f"{self.base}/scan", "title": "Scanned notice"}])
         summary = self.crawl(pdf_text_extractor=lambda _data: PdfText(None, None))
-        self.assertEqual(summary.results[0].outcome, "retrieved")
+        self.assertEqual(summary.results[0].outcome, "empty")
         metadata, folder = self.only_attempt()
         self.assertEqual((folder / "original.pdf").read_bytes(), PDF_BYTES)
         self.assertFalse((folder / "content.md").exists())
@@ -400,6 +407,92 @@ class CrawlTests(unittest.TestCase):
         self.assertGreaterEqual(self.hit_count("/robots.txt"), 1)
         metadata, _folder = self.only_attempt()
         self.assertIn("robots_disallow", {flag["code"] for flag in metadata["quality_flags"]})
+        signal = next(
+            flag["signal"]
+            for flag in metadata["quality_flags"]
+            if flag["code"] == "robots_disallow"
+        )
+        self.assertIn(f"{self.base}/story", signal)
+
+    def test_each_robots_block_names_its_own_url(self) -> None:
+        self.route("/robots.txt", 200, "text/plain", b"User-agent: *\nDisallow: /\n")
+        self.route("/chicago", 200, "text/html", LONG_HTML.encode())
+        self.route("/seattle", 200, "text/html", LONG_HTML.encode())
+        self.import_rows(
+            [
+                {"url": f"{self.base}/chicago", "title": "Chicago"},
+                {"url": f"{self.base}/seattle", "title": "Seattle"},
+            ]
+        )
+        summary = self.crawl(limit=2, concurrency=2)
+        self.assertEqual({item.outcome for item in summary.results}, {"blocked"})
+        self.assertEqual(self.hit_count("/chicago"), 0)
+        self.assertEqual(self.hit_count("/seattle"), 0)
+        chicago = self.metadata_for("/chicago")
+        seattle = self.metadata_for("/seattle")
+        chicago_signal = next(
+            flag["signal"] for flag in chicago["quality_flags"] if flag["code"] == "robots_disallow"
+        )
+        seattle_signal = next(
+            flag["signal"] for flag in seattle["quality_flags"] if flag["code"] == "robots_disallow"
+        )
+        self.assertIn(f"{self.base}/chicago", chicago_signal)
+        self.assertNotIn("/seattle", chicago_signal)
+        self.assertIn(f"{self.base}/seattle", seattle_signal)
+        self.assertNotIn("/chicago", seattle_signal)
+
+    def test_unreachable_robots_txt_blocks_the_page_without_fetching_it(self) -> None:
+        self.route("/robots.txt", 403, "text/plain", b"forbidden")
+        self.route("/story", 200, "text/html", LONG_HTML.encode())
+        self.import_rows([{"url": f"{self.base}/story", "title": "Headline"}])
+        summary = self.crawl()
+        self.assertEqual(summary.results[0].outcome, "blocked")
+        self.assertEqual(self.hit_count("/story"), 0)
+        metadata, _folder = self.only_attempt()
+        self.assertIn("robots_unreachable", {flag["code"] for flag in metadata["quality_flags"]})
+        self.assertIn(f"{self.base}/story", metadata["quality_flags"][0]["signal"])
+        self.assertIn("not requested", metadata["errors"][0])
+
+    def test_robots_txt_timeout_is_treated_as_a_disallow(self) -> None:
+        self.httpd.routes["/robots.txt"] = lambda: (
+            time.sleep(0.8) or (200, {"Content-Type": "text/plain"}, b"User-agent: *\nAllow: /\n")
+        )
+        self.route("/story", 200, "text/html", LONG_HTML.encode())
+        self.import_rows([{"url": f"{self.base}/story", "title": "Headline"}])
+        summary = self.crawl(timeout=0.2, retries=1)
+        self.assertEqual(summary.results[0].outcome, "blocked")
+        self.assertEqual(self.hit_count("/story"), 0)
+        metadata, _folder = self.only_attempt()
+        self.assertIn("robots_unreachable", {flag["code"] for flag in metadata["quality_flags"]})
+
+    def test_cloudflare_script_and_subscriber_prompt_do_not_hide_a_full_article(self) -> None:
+        scripted = article_html(
+            extra='<script src="/cdn-cgi/challenge-platform/h/g/orchestrate/chl_page/v1"></script>'
+        )
+        prompted = article_html(extra="<p>Already a subscriber? Log in</p>")
+        self.route("/scripted", 200, "text/html", scripted.encode())
+        self.route("/prompted", 200, "text/html", prompted.encode())
+        self.import_rows(
+            [
+                {"url": f"{self.base}/scripted", "title": "Scripted"},
+                {"url": f"{self.base}/prompted", "title": "Prompted"},
+            ]
+        )
+        summary = self.crawl(limit=2)
+        by_url = {item.requested_url: item for item in summary.results}
+        self.assertEqual(by_url[f"{self.base}/scripted"].outcome, "retrieved")
+        self.assertEqual(by_url[f"{self.base}/prompted"].outcome, "retrieved")
+
+    def test_permission_wall_is_blocked_even_when_the_chrome_is_long(self) -> None:
+        wall = article_html(
+            extra="<p>You don't have permission to access this content</p>"
+        )
+        self.route("/wall", 200, "text/html", wall.encode())
+        self.import_rows([{"url": f"{self.base}/wall", "title": "Wall"}])
+        summary = self.crawl()
+        self.assertEqual(summary.results[0].outcome, "blocked")
+        metadata, _folder = self.only_attempt()
+        self.assertIn("block_phrase", {flag["code"] for flag in metadata["quality_flags"]})
 
     def test_resume_retries_failures_without_recrawling_successes(self) -> None:
         self.route("/gone", 404, "text/html", b"<html><title>Gone</title><body>Gone</body></html>")
@@ -431,9 +524,10 @@ class CrawlTests(unittest.TestCase):
         self.assertTrue(retried.results[0].requested_url.endswith("/gone"))
         self.assertEqual(self.hit_count("/kept"), kept_hits)
         source = source_id_for(f"{self.base}/gone")
-        names = sorted(path.name for path in (self.archive / source).glob("attempt-*"))
+        source_dir = self.source_folder(source)
+        names = sorted(path.name for path in source_dir.glob("attempt-*"))
         self.assertEqual(names, ["attempt-001", "attempt-002"])
-        self.assertTrue((self.archive / source / "attempt-001" / "metadata.json").is_file())
+        self.assertTrue((source_dir / "attempt-001" / "metadata.json").is_file())
 
     def test_processing_rows_are_recovered_and_dry_run_changes_nothing(self) -> None:
         self.route("/story", 200, "text/html", LONG_HTML.encode())
@@ -544,7 +638,7 @@ class CrawlTests(unittest.TestCase):
         )
         self.assertTrue(renderer.requested)
         self.assertEqual(saved.results[0].outcome, "retrieved")
-        folders = sorted((self.archive / source_id_for(f"{self.base}/render")).glob("attempt-*"))
+        folders = sorted(self.source_folder(source_id_for(f"{self.base}/render")).glob("attempt-*"))
         self.assertEqual((folders[-1] / "page.pdf").read_bytes(), b"%PDF-1.4\nsnapshot\n")
         self.assertFalse((folders[-1] / "original.pdf").exists())
 
@@ -705,6 +799,29 @@ class CrawlTests(unittest.TestCase):
             report_dir=self.root / "reports",
         )
 
+    def test_retrieval_sheet_lists_extracted_file_paths(self) -> None:
+        self.route("/story", 200, "text/html; charset=utf-8", LONG_HTML.encode())
+        self.import_rows(
+            [{"url": f"{self.base}/story", "title": "Imported", "study_area": "Boston"}]
+        )
+        sheet = self.root / "retrievals.csv"
+        summary = self.crawl(sheet_path=sheet)
+        self.assertEqual(summary.sheet_path, str(sheet))
+        with sheet.open(encoding="utf-8", newline="") as handle:
+            rows = list(csv.DictReader(handle))
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["imported_title"], "Imported")
+        self.assertEqual(rows[0]["outcome"], "retrieved")
+        raw_html = Path(rows[0]["raw_html"])
+        markdown = Path(rows[0]["markdown"])
+        metadata = Path(rows[0]["metadata_json"])
+        self.assertTrue(raw_html.is_file())
+        self.assertTrue(markdown.is_file())
+        self.assertTrue(metadata.is_file())
+        self.assertEqual(rows[0]["original_pdf"], "")
+        self.assertEqual(rows[0]["page_pdf"], "")
+        self.assertEqual(rows[0]["archive_dir"], str(raw_html.parent))
+
     def crawl(self, **kwargs):
         values = {
             "db_path": self.db,
@@ -723,8 +840,73 @@ class CrawlTests(unittest.TestCase):
     def hit_count(self, path: str) -> int:
         return sum(1 for hit in self.httpd.hits if hit == path)
 
+    def test_legacy_hash_folder_moves_under_the_study_area(self) -> None:
+        url = f"{self.base}/story"
+        self.import_rows([{"url": url, "title": "Headline", "study_area": "boston"}])
+        source = source_id_for(url)
+        legacy = self.archive / source / "attempt-001"
+        legacy.mkdir(parents=True)
+        (legacy / "metadata.json").write_text("{}\n", encoding="utf-8")
+        connection = connect(self.db)
+        try:
+            ensure_schema(connection)
+            connection.execute(
+                """
+                INSERT INTO sources (
+                    id, normalized_url, requested_url, hostname, created_at
+                ) VALUES (?, ?, ?, ?, ?)
+                """,
+                (source, url, url, "127.0.0.1", "2026-01-01T00:00:00Z"),
+            )
+            connection.execute(
+                "UPDATE discoveries SET source_id = ? WHERE normalized_url = ?",
+                (source, url),
+            )
+            connection.execute(
+                """
+                INSERT INTO fetch_attempts (
+                    id, source_id, attempt_number, requested_url, final_url,
+                    retrieved_at, http_status, content_type, observed_title,
+                    publication_date, outcome, quality_flags_json, error,
+                    archive_dir, source_kind
+                ) VALUES (?, ?, 1, ?, ?, ?, 200, 'text/html', 'Headline', NULL,
+                          'retrieved', '[]', NULL, ?, 'html')
+                """,
+                (
+                    "att_legacy",
+                    source,
+                    url,
+                    url,
+                    "2026-01-01T00:00:00Z",
+                    str(legacy),
+                ),
+            )
+            from news_importer.crawl import _relocate_legacy_archives
+
+            moved = _relocate_legacy_archives(self.archive, connection)
+            stored = connection.execute(
+                "SELECT archive_dir FROM fetch_attempts WHERE id = 'att_legacy'"
+            ).fetchone()[0]
+        finally:
+            connection.close()
+        self.assertEqual(moved, 1)
+        destination = self.source_folder(source) / "attempt-001"
+        self.assertEqual(destination.relative_to(self.archive).parts[0], "boston")
+        self.assertTrue((destination / "metadata.json").is_file())
+        self.assertFalse((self.archive / source).exists())
+        self.assertEqual(Path(stored), destination)
+
+    def source_folder(self, source_id: str) -> Path:
+        matches = [
+            path
+            for path in self.archive.rglob("*")
+            if path.is_dir() and (path.name == source_id or path.name.endswith(f"--{source_id}"))
+        ]
+        self.assertEqual(len(matches), 1, matches)
+        return matches[0]
+
     def only_attempt(self) -> tuple[dict, Path]:
-        folders = list(self.archive.glob("*/attempt-*"))
+        folders = list(self.archive.glob("**/attempt-*"))
         self.assertEqual(len(folders), 1, folders)
         metadata = json.loads((folders[0] / "metadata.json").read_text(encoding="utf-8"))
         return metadata, folders[0]
@@ -732,7 +914,7 @@ class CrawlTests(unittest.TestCase):
     def attempt_dir(self, suffix: str) -> Path:
         matches = [
             path
-            for path in self.archive.glob("*/attempt-*")
+            for path in self.archive.glob("**/attempt-*")
             if suffix in json.loads((path / "metadata.json").read_text(encoding="utf-8"))["requested_url"]
         ]
         self.assertEqual(len(matches), 1, matches)

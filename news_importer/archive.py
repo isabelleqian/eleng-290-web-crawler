@@ -6,10 +6,12 @@ import hashlib
 import json
 import re
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from news_importer.retrieve import FetchResult
 
 _ATTEMPT_DIR = re.compile(r"attempt-(\d+)$")
+_SAFE_PART = re.compile(r"[^A-Za-z0-9._-]+")
 
 
 def source_id_for(normalized_url: str) -> str:
@@ -17,15 +19,88 @@ def source_id_for(normalized_url: str) -> str:
     return f"src_{digest}"
 
 
-def next_attempt_number(source_id: str, output_dir: Path, existing_numbers: list[int]) -> int:
+def folder_study_area(study_areas: list[str | None]) -> str:
+    """Pick one folder label from the study areas linked to a source."""
+    unique: list[str] = []
+    for area in study_areas:
+        if area and area not in unique:
+            unique.append(area)
+    if len(unique) == 1:
+        return _path_part(unique[0])
+    if len(unique) > 1:
+        return "mixed"
+    return "unassigned"
+
+
+def source_directory(
+    output_dir: Path,
+    *,
+    source_id: str,
+    hostname: str,
+    normalized_url: str,
+    study_areas: list[str | None],
+) -> Path:
+    """Build a browsable folder for one source.
+
+    The path is study area, hostname, then a page name. The source id stays
+    on the last folder so the directory still matches the database.
+    """
+    area = folder_study_area(study_areas)
+    host = _path_part(hostname or "unknown-host")
+    slug = _slug_from_url(normalized_url)
+    return output_dir / area / host / f"{slug}--{source_id}"
+
+
+def find_source_directory(output_dir: Path, source_id: str) -> Path | None:
+    """Return the folder that already holds this source, including older hash folders."""
+    if not output_dir.is_dir():
+        return None
+    direct = output_dir / source_id
+    if direct.is_dir():
+        return direct
+    matches = [
+        path
+        for path in output_dir.rglob("*")
+        if path.is_dir() and path.name.endswith(f"--{source_id}")
+    ]
+    if not matches:
+        return None
+    return sorted(matches)[0]
+
+
+def next_attempt_number(source_dir: Path, existing_numbers: list[int]) -> int:
     disk_max = 0
-    folder = output_dir / source_id
-    if folder.is_dir():
-        for child in folder.iterdir():
+    if source_dir.is_dir():
+        for child in source_dir.iterdir():
             match = _ATTEMPT_DIR.fullmatch(child.name)
             if match:
                 disk_max = max(disk_max, int(match.group(1)))
     return max([0, disk_max, *existing_numbers]) + 1
+
+
+def _path_part(value: str) -> str:
+    text = _SAFE_PART.sub("-", value.strip()).strip("-._")
+    if text in {"", ".", ".."}:
+        return "unknown"
+    return text[:80]
+
+
+def _slug_from_url(url: str) -> str:
+    parts = urlsplit(url)
+    segments = [segment for segment in parts.path.split("/") if segment]
+    if not segments:
+        leaf = "home"
+    elif (
+        len(segments) >= 2
+        and segments[-1].isdigit()
+        and not segments[-2].isdigit()
+    ):
+        leaf = f"{segments[-2]}-{segments[-1]}"
+    else:
+        leaf = segments[-1]
+    if parts.query:
+        leaf = f"{leaf}-{parts.query}"
+    return _path_part(leaf).lower()
 
 
 def write_attempt(

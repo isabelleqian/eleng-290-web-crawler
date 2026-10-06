@@ -42,6 +42,48 @@ EXPORT_COLUMNS = [
     "original_record_json",
 ]
 
+RETRIEVAL_COLUMNS = [
+    "discovery_id",
+    "batch_id",
+    "study_area",
+    "original_url",
+    "normalized_url",
+    "hostname",
+    "imported_title",
+    "imported_snippet",
+    "discovery_method",
+    "crawl_status",
+    "outcome",
+    "source_id",
+    "attempt_id",
+    "attempt_number",
+    "requested_url",
+    "final_url",
+    "retrieved_at",
+    "http_status",
+    "content_type",
+    "observed_title",
+    "publication_date",
+    "source_kind",
+    "archive_dir",
+    "raw_html",
+    "markdown",
+    "metadata_json",
+    "original_pdf",
+    "page_pdf",
+    "body_file",
+    "error",
+]
+
+_ARTIFACT_FILES = {
+    "raw_html": "raw.html",
+    "markdown": "content.md",
+    "metadata_json": "metadata.json",
+    "original_pdf": "original.pdf",
+    "page_pdf": "page.pdf",
+    "body_file": "body.bin",
+}
+
 _SCHEMA = (
     """
     CREATE TABLE IF NOT EXISTS import_batches (
@@ -328,7 +370,7 @@ def list_discoveries(
         ).fetchone()[0]
         rows = connection.execute(
             f"""
-            SELECT * FROM discoveries
+            {_list_select(connection)}
             {clause}
             ORDER BY imported_at DESC, rowid DESC
             LIMIT ?
@@ -398,6 +440,116 @@ def export_pending(path: Path, output) -> int:
     return len(rows)
 
 
+def export_retrievals(path: Path, output) -> int:
+    """Write one row per discovery, including paths to its latest extracted files."""
+    import csv
+
+    connection = _open_readonly(path)
+    try:
+        columns = {row[1] for row in connection.execute("PRAGMA table_info(discoveries)")}
+        has_attempts = connection.execute(
+            """
+            SELECT 1 FROM sqlite_master
+            WHERE type = 'table' AND name = 'fetch_attempts'
+            """
+        ).fetchone()
+        if "last_attempt_id" in columns and has_attempts is not None:
+            rows = connection.execute(
+                """
+                SELECT
+                    discoveries.id AS discovery_id,
+                    discoveries.batch_id,
+                    discoveries.study_area,
+                    discoveries.original_url,
+                    discoveries.normalized_url,
+                    discoveries.hostname,
+                    discoveries.title AS imported_title,
+                    discoveries.snippet AS imported_snippet,
+                    discoveries.discovery_method,
+                    discoveries.crawl_status,
+                    discoveries.source_id,
+                    fetch_attempts.id AS attempt_id,
+                    fetch_attempts.attempt_number,
+                    fetch_attempts.requested_url,
+                    fetch_attempts.final_url,
+                    fetch_attempts.retrieved_at,
+                    fetch_attempts.http_status,
+                    fetch_attempts.content_type,
+                    fetch_attempts.observed_title,
+                    fetch_attempts.publication_date,
+                    fetch_attempts.outcome,
+                    fetch_attempts.source_kind,
+                    fetch_attempts.archive_dir,
+                    fetch_attempts.error
+                FROM discoveries
+                LEFT JOIN fetch_attempts
+                    ON fetch_attempts.id = discoveries.last_attempt_id
+                ORDER BY discoveries.imported_at ASC, discoveries.rowid ASC
+                """
+            ).fetchall()
+        else:
+            rows = connection.execute(
+                """
+                SELECT
+                    id AS discovery_id,
+                    batch_id,
+                    study_area,
+                    original_url,
+                    normalized_url,
+                    hostname,
+                    title AS imported_title,
+                    snippet AS imported_snippet,
+                    discovery_method,
+                    crawl_status,
+                    NULL AS source_id,
+                    NULL AS attempt_id,
+                    NULL AS attempt_number,
+                    NULL AS requested_url,
+                    NULL AS final_url,
+                    NULL AS retrieved_at,
+                    NULL AS http_status,
+                    NULL AS content_type,
+                    NULL AS observed_title,
+                    NULL AS publication_date,
+                    NULL AS outcome,
+                    NULL AS source_kind,
+                    NULL AS archive_dir,
+                    NULL AS error
+                FROM discoveries
+                ORDER BY imported_at ASC, rowid ASC
+                """
+            ).fetchall()
+    except sqlite3.Error as exc:
+        raise ImporterError(f"database error ({path}): {exc}") from exc
+    finally:
+        connection.close()
+
+    writer = csv.DictWriter(
+        output,
+        fieldnames=RETRIEVAL_COLUMNS,
+        lineterminator="\n",
+        extrasaction="raise",
+    )
+    writer.writeheader()
+    for row in rows:
+        record = {column: _csv_cell(row[column]) for column in RETRIEVAL_COLUMNS if column in row.keys()}
+        record.update(_artifact_paths(row["archive_dir"]))
+        writer.writerow(record)
+    return len(rows)
+
+
+def _artifact_paths(archive_dir: str | None) -> dict[str, str]:
+    paths = {column: "" for column in _ARTIFACT_FILES}
+    if not archive_dir:
+        return paths
+    folder = Path(archive_dir)
+    for column, filename in _ARTIFACT_FILES.items():
+        candidate = folder / filename
+        if candidate.is_file():
+            paths[column] = str(candidate)
+    return paths
+
+
 def _open_readonly(path: Path) -> sqlite3.Connection:
     """Open an existing database without creating tables or changing rows."""
     if not path.exists():
@@ -427,6 +579,25 @@ def _open_readonly(path: Path) -> sqlite3.Connection:
             f"database {path} has no discoveries table. Import a file first."
         )
     return connection
+
+
+def _list_select(connection: sqlite3.Connection) -> str:
+    columns = {row[1] for row in connection.execute("PRAGMA table_info(discoveries)")}
+    has_attempts = connection.execute(
+        """
+        SELECT 1 FROM sqlite_master
+        WHERE type = 'table' AND name = 'fetch_attempts'
+        """
+    ).fetchone()
+    if "last_attempt_id" in columns and has_attempts is not None:
+        return """
+            SELECT discoveries.*, (
+                SELECT archive_dir FROM fetch_attempts
+                WHERE fetch_attempts.id = discoveries.last_attempt_id
+            ) AS archive_dir
+            FROM discoveries
+        """
+    return "SELECT * FROM discoveries"
 
 
 def _filters(
