@@ -296,7 +296,28 @@ python3 -m news_importer list --status blocked
 python3 -m news_importer list --status not_found
 ```
 
-Each source is `data/archive/<source-id>/`. Each attempt is `attempt-001`, `attempt-002`, and so on. Open `metadata.json` in the latest attempt folder. `content.md` is the extracted text, `raw.html` is the HTML, and `original.pdf` is present only when the queued URL itself is a PDF.
+Each source gets a folder you can browse by study area, site, and page name:
+
+```text
+data/archive/<study-area>/<hostname>/<page>--<source-id>/attempt-001/
+```
+
+For example, a California bill and a page with no study area land in:
+
+```text
+data/archive/california/legiscan.com/ab2015-2025--src_.../attempt-001/
+data/archive/unassigned/www.nature.com/s44284-026-00443-x--src_.../attempt-001/
+```
+
+`unassigned` means the discovery had no study area. `mixed` means the same URL was linked to more than one study area before its first crawl. The batch id stays on the discovery and records which import the row came from. It is not the folder name. The source id at the end of the folder matches `source_id` in the database. Later discoveries of the same URL stay in that folder. `python3 -m news_importer list` prints the `archive:` path after a crawl.
+
+Open `metadata.json` in the latest attempt folder. `content.md` is the extracted text, `raw.html` is the HTML, and `original.pdf` is present only when the queued URL itself is a PDF. A later crawl moves an older hash-only folder, `data/archive/src_.../`, into this layout and leaves the attempt files inside it.
+
+Every real crawl also refreshes `data/exports/retrievals.csv`. That sheet has one row per discovery and, for the latest attempt, the paths to `raw.html`, `content.md`, `metadata.json`, `original.pdf`, `page.pdf`, and `body.bin` when those files exist. Rebuild it without fetching again:
+
+```bash
+python3 -m news_importer export --retrieved --output data/exports/retrievals.csv
+```
 
 Retry failed, blocked, and not-found sources without recrawling successes:
 
@@ -335,7 +356,7 @@ For a URL that needs a fetch, the crawler requests only that URL. It does not fo
 
 HTML is rendered with Crawl4AI when it is available. The run config turns off deep crawling, stealth, navigator overrides, and overlay removal, and it bypasses Crawl4AI's cache. Original PDFs are detected from the response type and the `%PDF` file header, not only from a `.pdf` suffix. Their bytes are saved as `original.pdf`. Text is extracted with `pypdf` when it is installed. If no text comes out, the original file stays and the attempt is flagged `needs_ocr`. OCR is not implemented yet.
 
-At most two URLs are fetched at once (`--concurrency`, default 2). Requests to the same host wait `--host-delay` seconds (default 1). Timeouts and temporary HTTP failures (429 and 500–504) are retried up to `--retries` extra times (default 2). A `Retry-After` value is honored up to 60 seconds. A longer `Retry-After` is recorded and the crawler stops instead of sending another request. `robots.txt` disallow rules are recorded as `blocked` and are not bypassed.
+At most two URLs are fetched at once (`--concurrency`, default 2). Requests to the same host wait `--host-delay` seconds (default 1). Timeouts and temporary HTTP failures (429 and 500–504) are retried up to `--retries` extra times (default 2). A `Retry-After` value is honored up to 60 seconds. A longer `Retry-After` is recorded and the crawler stops instead of sending another request. `robots.txt` disallow rules are recorded as `blocked` and are not bypassed. A missing file (HTTP 404) allows the fetch. If `robots.txt` cannot be read — a timeout, a 403, or any status other than 200 or 404 — the URL is recorded as `blocked` and is not requested. Each blocked URL is named in its own robots message.
 
 ### Queue status
 
@@ -380,7 +401,7 @@ Importer tests use temporary databases and do not fetch URLs. Crawl tests use a 
 - Import does not search or download pages. Crawl downloads only the queued URL. It does not search, follow links, or download linked PDFs.
 - There is no language-model summary, credibility score, topic label, or textbook comparison.
 - OCR is not implemented. A PDF with no extractable text is saved and flagged for review.
-- Paywall and bot-block flags use the HTTP status, `robots.txt`, and a short list of page phrases. Read the flags before treating a page as complete or blocked.
+- Paywall and bot-block flags use the HTTP status, `robots.txt`, and a short list of visible phrases. A Cloudflare script path, or a login line such as "Already a subscriber?", does not by itself mark a captured article blocked or paywalled. A page that says the reader has no permission to access the content is `blocked`. A PDF with no extractable text is `empty` and flagged `needs_ocr`.
 - Webpage PDF snapshots require Crawl4AI and `--save-page-pdf`. `--http-only` cannot create them.
 - Run one crawl at a time. A second crawl would also reset `processing` rows to `pending`.
 - Reimporting a file adds a new batch on purpose. It does not update the old rows.

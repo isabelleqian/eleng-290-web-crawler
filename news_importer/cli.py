@@ -9,7 +9,7 @@ from pathlib import Path
 
 from news_importer import __version__
 from news_importer.crawl import QUEUE_STATUSES, CrawlOptions, run_crawl
-from news_importer.db import export_pending, list_discoveries
+from news_importer.db import export_pending, export_retrievals, list_discoveries
 from news_importer.errors import ImporterError
 from news_importer.importer import import_path, resolve_study_area_filter
 from news_importer.models import ImportDefaults, ImportSummary
@@ -19,6 +19,7 @@ from news_importer.validate import ALLOWED_DISCOVERY_METHODS
 DEFAULT_DB = "data/news.sqlite"
 DEFAULT_REPORT_DIR = "data/reports"
 DEFAULT_ARCHIVE_DIR = "data/archive"
+DEFAULT_RETRIEVALS = "data/exports/retrievals.csv"
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -55,6 +56,7 @@ def build_parser() -> argparse.ArgumentParser:
             "  python3 -m news_importer import samples/discoveries.csv --dry-run\n"
             "  python3 -m news_importer list --study-area SF\n"
             "  python3 -m news_importer export --output data/exports/pending.csv\n"
+            "  python3 -m news_importer export --retrieved --output data/exports/retrievals.csv\n"
             "  python3 -m news_importer crawl --limit 5\n"
             "  python3 -m news_importer crawl --limit 5 --dry-run\n"
             "  python3 -m news_importer list --status failed\n"
@@ -155,11 +157,17 @@ def build_parser() -> argparse.ArgumentParser:
         "export",
         help="export pending discoveries to CSV",
         description=(
-            "Write discoveries whose crawl_status is pending. "
-            "Exporting does not change crawl_status."
+            "Write a CSV sheet. By default this is the pending crawl queue. "
+            "Pass --retrieved to write every discovery and the paths to its "
+            "latest extracted files. Exporting does not change crawl_status."
         ),
     )
     _add_db(export_parser)
+    export_parser.add_argument(
+        "--retrieved",
+        action="store_true",
+        help="include retrieval results and paths to raw.html, content.md, metadata, and PDFs",
+    )
     export_parser.add_argument(
         "--output",
         help="CSV path to create. Omit to write CSV to standard output.",
@@ -285,21 +293,23 @@ def command_list(args: argparse.Namespace) -> int:
 
 def command_export(args: argparse.Namespace) -> int:
     database = Path(args.db).expanduser()
+    export = export_retrievals if args.retrieved else export_pending
+    label = "discoveries" if args.retrieved else "pending discoveries"
     if args.output:
         destination = Path(args.output).expanduser()
         try:
             destination.parent.mkdir(parents=True, exist_ok=True)
             with destination.open("w", encoding="utf-8", newline="") as handle:
-                count = export_pending(database, handle)
+                count = export(database, handle)
         except OSError as exc:
             raise ImporterError(
                 f"could not write {destination}: {exc.strerror}"
             ) from exc
-        print(f"exported {count} pending discoveries to {destination}", file=sys.stderr)
+        print(f"exported {count} {label} to {destination}", file=sys.stderr)
         return 0
 
-    count = export_pending(database, sys.stdout)
-    print(f"exported {count} pending discoveries", file=sys.stderr)
+    count = export(database, sys.stdout)
+    print(f"exported {count} {label}", file=sys.stderr)
     return 0
 
 
@@ -314,6 +324,7 @@ def command_crawl(args: argparse.Namespace) -> int:
             batch_id=_clean(args.batch),
             study_area=study_area,
             timeout=args.timeout,
+            sheet_path=Path(args.db).expanduser().parent / "exports" / "retrievals.csv",
             dry_run=args.dry_run,
             save_page_pdf=args.save_page_pdf,
             refresh=args.refresh,
@@ -386,6 +397,8 @@ def format_list(rows, *, total: int, catalog: Catalog) -> str:
         if "last_outcome" in row.keys():
             lines.append(f"  last_outcome: {_null(row['last_outcome'])}")
             lines.append(f"  source_id: {_null(row['source_id'])}")
+        if "archive_dir" in row.keys() and row["archive_dir"]:
+            lines.append(f"  archive: {row['archive_dir']}")
         lines.append(f"  searched_at: {_null(row['searched_at'])}")
         lines.append(f"  result_rank: {_null(row['result_rank'])}")
         lines.append(f"  batch_id: {row['batch_id']}")
@@ -439,6 +452,8 @@ def format_crawl(summary) -> str:
     else:
         lines.append(f"recovered_processing: {summary.recovered_processing}")
     lines.append(f"selected: {summary.selected}")
+    if summary.sheet_path:
+        lines.append(f"retrievals: {summary.sheet_path}")
     if not summary.dry_run and summary.results:
         counts = Counter(item.outcome or "unknown" for item in summary.results)
         for outcome, count in sorted(counts.items()):

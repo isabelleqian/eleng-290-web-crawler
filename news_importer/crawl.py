@@ -3,12 +3,19 @@
 from __future__ import annotations
 
 import asyncio
+import shutil
 import sqlite3
 from dataclasses import dataclass, field
 from pathlib import Path
 from urllib.parse import urlsplit, urlunsplit
 
-from news_importer.archive import next_attempt_number, source_id_for, write_attempt
+from news_importer.archive import (
+    find_source_directory,
+    next_attempt_number,
+    source_directory,
+    source_id_for,
+    write_attempt,
+)
 from news_importer.crawl4ai_backend import Crawl4AIRenderer
 from news_importer.db import connect, ensure_schema
 from news_importer.errors import ImporterError
@@ -45,6 +52,7 @@ class CrawlOptions:
     http_only: bool = False
     renderer: object | None = None
     pdf_text_extractor: object | None = None
+    sheet_path: Path | None = None
 
 
 @dataclass
@@ -69,6 +77,7 @@ class CrawlSummary:
     selected: int
     results: list[CrawlItem] = field(default_factory=list)
     renderer_warning: str | None = None
+    sheet_path: str | None = None
 
 
 @dataclass
@@ -127,6 +136,7 @@ async def _run(options: CrawlOptions) -> CrawlSummary:
     try:
         ensure_schema(connection)
         recovered = _recover_processing(connection)
+        _relocate_legacy_archives(options.output_dir, connection)
         jobs = _select_jobs(connection, options)
         fetch_jobs = [job for job in jobs if job.action == "fetch"]
         if fetch_jobs and renderer is None and not options.http_only:
@@ -147,6 +157,7 @@ async def _run(options: CrawlOptions) -> CrawlSummary:
             selected=len(results),
             results=results,
             renderer_warning=warning,
+            sheet_path=_write_retrieval_sheet(options),
         )
     finally:
         connection.close()
@@ -292,10 +303,17 @@ def _assign_attempt(connection: sqlite3.Connection, job: _Job, output_dir: Path)
             (job.source_id,),
         ).fetchall()
         numbers = [row["attempt_number"] for row in rows]
-    number = next_attempt_number(job.source_id, output_dir, numbers)
+    source_dir = find_source_directory(output_dir, job.source_id) or source_directory(
+        output_dir,
+        source_id=job.source_id,
+        hostname=job.hostname,
+        normalized_url=job.normalized_url,
+        study_areas=[row["study_area"] for row in job.rows],
+    )
+    number = next_attempt_number(source_dir, numbers)
     job.attempt_number = number
     job.attempt_id = new_id("att")
-    job.archive_dir = output_dir / job.source_id / f"attempt-{number:03d}"
+    job.archive_dir = source_dir / f"attempt-{number:03d}"
 
 
 def _claim(connection: sqlite3.Connection, job: _Job) -> None:
@@ -484,6 +502,74 @@ def _update_discoveries(
         """,
         [crawl_status, job.source_id, outcome, attempt_id, *ids],
     )
+
+
+def _write_retrieval_sheet(options: CrawlOptions) -> str | None:
+    if options.sheet_path is None:
+        return None
+    from news_importer.db import export_retrievals
+
+    destination = options.sheet_path
+    try:
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        with destination.open("w", encoding="utf-8", newline="") as handle:
+            export_retrievals(options.db_path, handle)
+    except OSError as exc:
+        raise ImporterError(
+            f"could not write {destination}: {exc.strerror}"
+        ) from exc
+    return str(destination)
+
+
+def _relocate_legacy_archives(output_dir: Path, connection: sqlite3.Connection) -> int:
+    """Move hash-named source folders under study area and hostname.
+
+    Older crawls stored a source at ``archive/<source-id>/``. New attempts
+    stay beside the files that were already saved, after that folder is moved.
+    """
+    if not output_dir.is_dir() or not _table_exists(connection, "sources"):
+        return 0
+    moved = 0
+    for child in list(output_dir.iterdir()):
+        if not child.is_dir() or not child.name.startswith("src_"):
+            continue
+        source_id = child.name
+        source = connection.execute(
+            "SELECT normalized_url, hostname FROM sources WHERE id = ?",
+            (source_id,),
+        ).fetchone()
+        if source is None:
+            continue
+        area_rows = connection.execute(
+            "SELECT study_area FROM discoveries WHERE source_id = ?",
+            (source_id,),
+        ).fetchall()
+        destination = source_directory(
+            output_dir,
+            source_id=source_id,
+            hostname=source["hostname"],
+            normalized_url=source["normalized_url"],
+            study_areas=[row["study_area"] for row in area_rows],
+        )
+        if destination.exists():
+            continue
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.move(str(child), str(destination))
+        if _table_exists(connection, "fetch_attempts"):
+            attempts = connection.execute(
+                "SELECT id, archive_dir FROM fetch_attempts WHERE source_id = ?",
+                (source_id,),
+            ).fetchall()
+            for attempt in attempts:
+                archive = Path(attempt["archive_dir"])
+                if archive.parent.name != source_id:
+                    continue
+                connection.execute(
+                    "UPDATE fetch_attempts SET archive_dir = ? WHERE id = ?",
+                    (str(destination / archive.name), attempt["id"]),
+                )
+        moved += 1
+    return moved
 
 
 def _recover_processing(connection: sqlite3.Connection) -> int:
