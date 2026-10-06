@@ -34,6 +34,8 @@ def main(argv: list[str] | None = None) -> int:
             return command_export(args)
         if args.command == "crawl":
             return command_crawl(args)
+        if args.command == "analyze":
+            return command_analyze(args)
     except ImporterError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
@@ -253,6 +255,18 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="archive the HTTP response without starting Crawl4AI",
     )
+
+    analyze_parser = subparsers.add_parser(
+        "analyze",
+        help="run research analysis pass, validate evidence passages, and export findings",
+        description="Run qualitative and quantitative research analysis on archived sources.",
+    )
+    _add_db(analyze_parser)
+    analyze_parser.add_argument(
+        "--output-dir",
+        default="data/exports",
+        help="output directory for JSON and CSV exports (default: data/exports)",
+    )
     return parser
 
 
@@ -339,6 +353,45 @@ def command_crawl(args: argparse.Namespace) -> int:
         print(f"warning: {summary.renderer_warning}", file=sys.stderr)
     print(format_crawl(summary), end="")
     return 0
+
+
+def command_analyze(args: argparse.Namespace) -> int:
+    from news_importer.analysis import (
+        build_all_analyses,
+        build_pass1_analyses,
+        export_analysis_csv,
+        export_analysis_json,
+        export_inventory_csv,
+        inventory_archived_sources,
+    )
+
+    db_path = Path(args.db).expanduser().resolve()
+    base_dir = db_path.parent.parent
+    archive_base = db_path.parent / "archive"
+    out_dir = (base_dir / args.output_dir).resolve() if not Path(args.output_dir).is_absolute() else Path(args.output_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    inventory = inventory_archived_sources(db_path, archive_base)
+    inv_csv = out_dir / "archived_sources_inventory.csv"
+    export_inventory_csv(inventory, inv_csv)
+    print(f"inventoried: {len(inventory)} attempts -> {inv_csv}")
+
+    p1_entries = build_pass1_analyses(db_path, base_dir)
+    p1_json_path = out_dir / "research_analysis_pass1.json"
+    p1_csv_path = out_dir / "research_analysis_pass1.csv"
+    export_analysis_json(p1_entries, p1_json_path)
+    export_analysis_csv(p1_entries, p1_csv_path)
+    print(f"pass 1 analyzed: {len(p1_entries)} core sources -> {p1_json_path}")
+
+    all_entries = build_all_analyses(db_path, base_dir)
+    all_json_path = out_dir / "research_analysis_all_sources.json"
+    all_csv_path = out_dir / "research_analysis_all_sources.csv"
+    export_analysis_json(all_entries, all_json_path)
+    export_analysis_csv(all_entries, all_csv_path)
+    print(f"all sources analyzed: {len(all_entries)} retrieved sources -> {all_json_path}")
+    print(f"csv export: {all_csv_path}")
+    return 0
+
 
 
 def format_summary(summary: ImportSummary) -> str:
