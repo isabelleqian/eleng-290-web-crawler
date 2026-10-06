@@ -1,0 +1,138 @@
+{
+  "version": 1,
+  "created": "2026-10-05",
+  "seed_terms": [
+    "Waze",
+    "traffic nightmare",
+    "cut-through traffic"
+  ],
+  "families": {
+    "cut_through_synonyms": {
+      "description": "Ways the phenomenon of through traffic on local streets is described.",
+      "terms": [
+        "cut-through traffic",
+        "cut-through",
+        "shortcut",
+        "rat run",
+        "neighborhood traffic",
+        "residential street",
+        "app-driven traffic",
+        "diverted traffic",
+        "neighborhood streets"
+      ],
+      "used_in_categories": [
+        "government_measures",
+        "company_measures",
+        "community_feedback"
+      ]
+    },
+    "navigation_app_generic": {
+      "description": "Brand-free references to routing apps.",
+      "terms": [
+        "navigation app",
+        "GPS app",
+        "routing"
+      ],
+      "used_in_categories": [
+        "government_measures",
+        "company_measures",
+        "community_feedback"
+      ]
+    },
+    "government_mechanisms": {
+      "description": "Government access restrictions and street-design measures (search hypotheses).",
+      "terms": [
+        "local traffic only",
+        "no through traffic",
+        "local access only",
+        "resident only",
+        "turn restriction",
+        "one-way conversion",
+        "traffic calming",
+        "speed humps",
+        "diverter",
+        "road closure",
+        "slow streets",
+        "neighborhood byway",
+        "pilot",
+        "ordinance"
+      ],
+      "used_in_categories": [
+        "government_measures",
+        "company_measures",
+        "community_feedback"
+      ]
+    },
+    "company_mechanisms": {
+      "description": "Company-side routing changes, map edits and data-sharing/cooperation.",
+      "terms": [
+        "routing change",
+        "street exclusion",
+        "geofencing",
+        "map closure",
+        "data sharing",
+        "Connected Citizens",
+        "Waze for Cities",
+        "partnership",
+        "city cooperation"
+      ],
+      "used_in_categories": [
+        "company_measures"
+      ]
+    },
+    "community_feedback_terms": {
+      "description": "Markers of resident complaints and public participation.",
+      "terms": [
+        "residents",
+        "neighborhood association",
+        "community board",
+        "petition",
+        "town hall",
+        "public comment",
+        "letters",
+        "complaints",
+        "traffic nightmare"
+      ],
+      "used_in_categories": [
+        "community_feedback"
+      ]
+    }
+  },
+  "scope_terms": {
+    "city": [
+      "city council",
+      "city commission",
+      "alderman",
+      "LADOT",
+      "SFMTA",
+      "SDOT",
+      "NYC DOT",
+      "CDOT",
+      "Streets Department",
+      "Boston Transportation Department",
+      "transportation division",
+      "neighborhood",
+      "residential block"
+    ],
+    "state": [
+      "legislature",
+      "Assembly",
+      "bill",
+      "Caltrans",
+      "NJDOT",
+      "statewide",
+      "attorney general",
+      "municipalities",
+      "legislation"
+    ]
+  },
+  "brand_terms": [
+    "Waze",
+    "Google Maps",
+    "Apple Maps"
+  ],
+  "notes": [
+    "Mechanisms are search hypotheses, not claims of implementation.",
+    "Textbook novelty unknown until a baseline is provided."
+  ]
+}

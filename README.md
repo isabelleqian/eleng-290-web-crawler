@@ -1,11 +1,10 @@
 # AI News Scraper: URL importer and archive
 
-This project collects news and regulations about navigation-app traffic, access restrictions, routing-app rules, and community complaints. It has two local stages:
+This project collects, archives, and analyzes news and regulations about navigation-app traffic, access restrictions, routing-app rules, and community complaints. It has three local stages:
 
 - `import`, `list`, and `export` store URLs you already collected. They do not search the web or download pages.
 - `crawl` reads that queue and archives each selected URL. It uses a direct HTTP request for the status, redirects, and original PDF bytes, then uses locally installed Crawl4AI to render HTML.
-
-It does not call a language model, classify topics, or judge credibility.
+- `analyze` audits archived sources and executes structured research analysis over retrieved articles, validating exact supporting evidence passages, classifying governance and target geographic scopes, and exporting research datasets to CSV and JSON.
 
 The sample URLs use `example.com` and are fictional. Do not crawl them as research articles.
 
@@ -17,9 +16,11 @@ Open a terminal in this project folder. Python 3.11 or newer is enough. There is
 python3 -m news_importer import samples/discoveries.csv
 python3 -m news_importer list --study-area SF
 python3 -m news_importer export --output data/exports/pending.csv
+python3 -m news_importer analyze
 ```
 
 The first command creates `data/news.sqlite` and a JSON report under `data/reports/`. For the sample CSV you should see:
+
 
 ```text
 accepted: 13
@@ -377,24 +378,85 @@ HTTP 200, or a successful Crawl4AI result, is not treated as proof of a full art
 
 `metadata.json` includes the source id, attempt id, requested URL, final URL, UTC timestamp, HTTP status, content type, observed title, publication date, outcome, quality flags, errors, and artifact paths. Imported titles and snippets are copied under `discovery_records` and are not used as the observed title. The extracted text is the general page text. It is not filtered with research keywords.
 
+## Research Analysis
+
+The `analyze` command audits all archived sources, verifies exact verbatim evidence against underlying markdown archives (`content.md`), classifies governance levels and target geographic scopes, manages duplicate discovery records, and exports structured datasets.
+
+```bash
+# Run analysis via CLI
+python3 -m news_importer analyze
+
+# Or run the standalone runner with detailed step-by-step reporting
+python3 run_analysis.py
+```
+
+### Governance and Scope Taxonomies
+
+To evaluate where policies originate and apply, every analyzed source includes:
+
+1. **`Governing Level`**:
+   - `Government: Federal` (e.g., USDOT, TRB, Federal Register)
+   - `Government: State` (e.g., Caltrans, MassDOT, state legislatures)
+   - `Government: County` (e.g., SFCTA, regional planning agencies)
+   - `Government: City` (e.g., LADOT, CDOT, SDOT, Leonia NJ, Boston, Mantoloking NJ)
+   - `Company` (e.g., Google Maps, Waze Mobile, Smarking)
+   - `Non-Government Organization` (e.g., UC Berkeley, local advocacy groups)
+
+2. **`Authority Names`**: Explicit government bodies, agencies, corporate divisions, or citizen councils responsible.
+3. **`Target Location Type`**: `City`, `County`, `State`, or `Country`.
+4. **`Target Location`**: Named geographic jurisdiction or territory.
+
+### Codebook and Core Dimensions
+
+- **Source Type**: `news reporting`, `government material`, `company statement`, `community testimony`, `other` (academic research/legal commentary).
+- **Category**:
+  - `Experimented Measures`: Focuses on operational, algorithmic, or physical traffic interventions.
+  - `Community Feedback`: Focuses on resident testimony, complaints, or petition drives.
+  - `Both`: Substantively addresses interventions and community feedback.
+  - `Out of Scope`: Readable captures that do not concern vehicular routing traffic interventions.
+- **Measure Status**: `proposed`, `piloted`, `implemented`, `withdrawn`, `unclear`.
+- **Methodological Rules**:
+  - *Publication Date vs. Implementation Date*: Distinguishes document publication from historical policy deployment timeframes.
+  - *Reported vs. Demonstrated Causal Effects*: Separates stakeholder assertions from empirically identified causal evidence.
+  - *Duplicate Discovery Preservation*: Preserves all originating discovery records in SQLite (`source_discoveries`) while consolidating identical content for unified analysis.
+  - *Verbatim Evidence Validation*: 100% of supporting passages are checked against raw disk archives (`content.md`).
+
+### Analysis Exports
+
+All analysis outputs are saved under `data/exports/`:
+
+- `archived_sources_inventory.csv`: Complete audit of all fetch attempts with diagnostic HTTP status and content-quality codes (`robots_disallow`, `needs_ocr`, `http_status`).
+- `research_analysis_all_sources.json` & `.csv`: Comprehensive dataset covering all unique retrieved sources with governance metadata, measures, feedback, and verified passages.
+- `research_analysis_pass1.json` & `.csv`: Benchmark sample covering initial core sources.
+
 ## Project layout
 
 ```text
-news_importer/          import, list, export, and crawl
+news_importer/          import, list, export, crawl, and research analysis
+  analysis.py           research analysis models, verification, and export tools
+  all_analyses.py       comprehensive analysis builder for all retrieved sources
   study_areas.json      the 12 study areas and aliases
+queries/                search query definitions and keyword families
+run_analysis.py         standalone research analysis runner and validator
 samples/discoveries.csv fictional CSV collected by hand and by research agents
 samples/discoveries.txt fictional one-URL-per-line file
 tests/test_importer.py  offline importer tests
+tests/test_analysis.py  offline analysis codebook, verification, and export tests
 tests/test_crawl.py     crawl tests against a local HTTP server
 ```
 
 ## Tests
 
 ```bash
+# Run offline importer and research analysis tests
+python3 -m unittest tests/test_importer.py tests/test_analysis.py
+
+# Run all test suites
 python3 -m unittest discover -s tests -v
 ```
 
-Importer tests use temporary databases and do not fetch URLs. Crawl tests use a local HTTP server and fixtures. They do not call live newspaper sites. The Crawl4AI configuration check runs with this same `python3`.
+Importer tests use temporary databases and do not fetch URLs. Analysis tests validate codebook constraints, exact quotation matching, and dataset export formatting. Crawl tests use a local HTTP server and fixtures. They do not call live newspaper sites. The Crawl4AI configuration check runs with this same `python3`.
+
 
 ## Limitations
 
