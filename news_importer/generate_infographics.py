@@ -4,79 +4,116 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
-# Geographic coordinates lookup for U.S. target locations
+# Geographic coordinates lookup for U.S. target locations (all localized cities, counties, and states)
 COORDINATES_MAP: dict[str, dict[str, float | str]] = {
     # Cities
     "Los Angeles": {"lat": 34.0522, "lon": -118.2437, "name": "Los Angeles, CA"},
     "Los Angeles, Ca": {"lat": 34.0522, "lon": -118.2437, "name": "Los Angeles, CA"},
+    "Los Angeles, CA": {"lat": 34.0522, "lon": -118.2437, "name": "Los Angeles, CA"},
     "San Francisco": {"lat": 37.7749, "lon": -122.4194, "name": "San Francisco, CA"},
     "San Francisco, Ca": {"lat": 37.7749, "lon": -122.4194, "name": "San Francisco, CA"},
     "San Francisco Bay Area, Ca": {"lat": 37.7749, "lon": -122.4194, "name": "San Francisco, CA"},
-    "San Francisco, Los Angeles, Phoenix, Austin, Atlanta": {"lat": 37.7749, "lon": -122.4194, "name": "Multi-City AV Pilot"},
-    "San Francisco Bay Area, Los Angeles, Phoenix, Austin, Atlanta": {"lat": 37.7749, "lon": -122.4194, "name": "Multi-City AV Pilot"},
+    "San Francisco County": {"lat": 37.7749, "lon": -122.4194, "name": "San Francisco, CA"},
     "Seattle": {"lat": 47.6062, "lon": -122.3321, "name": "Seattle, WA"},
     "Boston": {"lat": 42.3601, "lon": -71.0589, "name": "Boston, MA"},
     "Boston, Ma": {"lat": 42.3601, "lon": -71.0589, "name": "Boston, MA"},
+    "Boston, MA": {"lat": 42.3601, "lon": -71.0589, "name": "Boston, MA"},
     "Chicago": {"lat": 41.8781, "lon": -87.6298, "name": "Chicago, IL"},
     "Chicago, Il": {"lat": 41.8781, "lon": -87.6298, "name": "Chicago, IL"},
     "New York": {"lat": 40.7128, "lon": -74.0060, "name": "New York City, NY"},
     "New York, Ny": {"lat": 40.7128, "lon": -74.0060, "name": "New York City, NY"},
+    "New York City, Ny": {"lat": 40.7128, "lon": -74.0060, "name": "New York City, NY"},
     "Leonia": {"lat": 40.8654, "lon": -73.9876, "name": "Leonia, NJ"},
+    "Mantoloking": {"lat": 40.0387, "lon": -74.0526, "name": "Mantoloking, NJ"},
+    "Newark, Nj": {"lat": 40.7357, "lon": -74.1724, "name": "Newark, NJ"},
     "Atlanta": {"lat": 33.7490, "lon": -84.3880, "name": "Atlanta, GA"},
     "Atlanta, Ga": {"lat": 33.7490, "lon": -84.3880, "name": "Atlanta, GA"},
+    "Atlanta, GA": {"lat": 33.7490, "lon": -84.3880, "name": "Atlanta, GA"},
     "Austin": {"lat": 30.2672, "lon": -97.7431, "name": "Austin, TX"},
     "Austin, Tx": {"lat": 30.2672, "lon": -97.7431, "name": "Austin, TX"},
+    "Austin, TX": {"lat": 30.2672, "lon": -97.7431, "name": "Austin, TX"},
+    "Arlington, TX": {"lat": 32.7357, "lon": -97.1081, "name": "Arlington, TX"},
+    "Arlington, Tx": {"lat": 32.7357, "lon": -97.1081, "name": "Arlington, TX"},
+    "Dallas, Tx": {"lat": 32.7767, "lon": -96.7970, "name": "Dallas, TX"},
+    "Fort Worth, Tx": {"lat": 32.7555, "lon": -97.3308, "name": "Fort Worth, TX"},
+    "Fort Worth": {"lat": 32.7555, "lon": -97.3308, "name": "Fort Worth, TX"},
+    "Houston, Tx": {"lat": 29.7604, "lon": -95.3698, "name": "Houston, TX"},
+    "San Antonio, Tx": {"lat": 29.4241, "lon": -98.4936, "name": "San Antonio, TX"},
     "Miami": {"lat": 25.7617, "lon": -80.1918, "name": "Miami, FL"},
+    "Miami, Fl": {"lat": 25.7617, "lon": -80.1918, "name": "Miami, FL"},
     "Coral Gables": {"lat": 25.7215, "lon": -80.2684, "name": "Coral Gables, FL"},
+    "Jacksonville, Fl": {"lat": 30.3322, "lon": -81.6557, "name": "Jacksonville, FL"},
+    "Tampa, Fl": {"lat": 27.9506, "lon": -82.4572, "name": "Tampa, FL"},
     "Detroit": {"lat": 42.3314, "lon": -83.0458, "name": "Detroit, MI"},
     "Detroit, Mi": {"lat": 42.3314, "lon": -83.0458, "name": "Detroit, MI"},
     "Portland, Or": {"lat": 45.5152, "lon": -122.6784, "name": "Portland, OR"},
     "Philadelphia": {"lat": 39.9526, "lon": -75.1652, "name": "Philadelphia, PA"},
     "Philadelphia, Pa": {"lat": 39.9526, "lon": -75.1652, "name": "Philadelphia, PA"},
-    "Dallas, Tx": {"lat": 32.7767, "lon": -96.7970, "name": "Dallas, TX"},
-    "Houston, Tx": {"lat": 29.7604, "lon": -95.3698, "name": "Houston, TX"},
+    "Pittsburgh, PA": {"lat": 40.4406, "lon": -79.9959, "name": "Pittsburgh, PA"},
+    "Pittsburgh, Pa": {"lat": 40.4406, "lon": -79.9959, "name": "Pittsburgh, PA"},
+    "Lancaster, Pa": {"lat": 40.0379, "lon": -76.3055, "name": "Lancaster, PA"},
     "Charlotte, Nc": {"lat": 35.2271, "lon": -80.8431, "name": "Charlotte, NC"},
     "Raleigh, Nc": {"lat": 35.7796, "lon": -78.6382, "name": "Raleigh, NC"},
     "Cary, Nc": {"lat": 35.7915, "lon": -78.7811, "name": "Cary, NC"},
     "Asheville, Nc": {"lat": 35.5951, "lon": -82.5515, "name": "Asheville, NC"},
     "Greensboro, Nc": {"lat": 36.0726, "lon": -79.7920, "name": "Greensboro, NC"},
+    "Greensboro, NC": {"lat": 36.0726, "lon": -79.7920, "name": "Greensboro, NC"},
     "Norfolk": {"lat": 36.8508, "lon": -76.2859, "name": "Norfolk, VA"},
+    "Norfolk, VA": {"lat": 36.8508, "lon": -76.2859, "name": "Norfolk, VA"},
     "Virginia Beach, Va": {"lat": 36.8529, "lon": -75.9780, "name": "Virginia Beach, VA"},
+    "Virginia Beach, VA": {"lat": 36.8529, "lon": -75.9780, "name": "Virginia Beach, VA"},
     "Phoenix, Az": {"lat": 33.4484, "lon": -112.0740, "name": "Phoenix, AZ"},
     "Salt Lake City": {"lat": 40.7608, "lon": -111.8910, "name": "Salt Lake City, UT"},
+    "Salt Lake City, Ut": {"lat": 40.7608, "lon": -111.8910, "name": "Salt Lake City, UT"},
     "Des Moines, Ia": {"lat": 41.5868, "lon": -93.6250, "name": "Des Moines, IA"},
     "New Haven, Ct": {"lat": 41.3083, "lon": -72.9279, "name": "New Haven, CT"},
+    "Fairfield, Ct": {"lat": 41.1412, "lon": -73.2637, "name": "Fairfield, CT"},
     "Augusta, Me": {"lat": 44.3106, "lon": -69.7795, "name": "Augusta, ME"},
-    "Fort Worth": {"lat": 32.7555, "lon": -97.3308, "name": "Fort Worth, TX"},
     "Naperville": {"lat": 41.7508, "lon": -88.1535, "name": "Naperville, IL"},
     "Evanston": {"lat": 42.0451, "lon": -87.6877, "name": "Evanston, IL"},
-    "Fairfield, Ct": {"lat": 41.1412, "lon": -73.2637, "name": "Fairfield, CT"},
+    "Davis, CA": {"lat": 38.5449, "lon": -121.7405, "name": "Davis, CA"},
+    "Davis, Ca": {"lat": 38.5449, "lon": -121.7405, "name": "Davis, CA"},
+    "Sacramento, CA": {"lat": 38.5816, "lon": -121.4944, "name": "Sacramento, CA"},
+    "Baton Rouge, LA": {"lat": 30.4515, "lon": -91.1871, "name": "Baton Rouge, LA"},
+    "Knoxville, TN": {"lat": 35.9606, "lon": -83.9207, "name": "Knoxville, TN"},
+    "Carson City, Nv": {"lat": 39.1638, "lon": -119.7674, "name": "Carson City, NV"},
+    "Colorado Springs, Co": {"lat": 38.8339, "lon": -104.8214, "name": "Colorado Springs, CO"},
+    "Providence, Ri": {"lat": 41.8240, "lon": -71.4128, "name": "Providence, RI"},
+    "Washington Dc": {"lat": 38.9072, "lon": -77.0369, "name": "Washington, DC"},
+    "Anchorage, Ak": {"lat": 61.2181, "lon": -149.9003, "name": "Anchorage, AK"},
+    # Counties
     "Loudoun County": {"lat": 39.0840, "lon": -77.6412, "name": "Loudoun County, VA"},
     "Fulton County": {"lat": 33.7903, "lon": -84.4677, "name": "Fulton County, GA"},
     "Miami-Dade County": {"lat": 25.5516, "lon": -80.6327, "name": "Miami-Dade County, FL"},
     # States
-    "California": {"lat": 36.7783, "lon": -119.4179, "name": "California"},
-    "Connecticut": {"lat": 41.6032, "lon": -73.0877, "name": "Connecticut"},
-    "Texas": {"lat": 31.9686, "lon": -99.9018, "name": "Texas"},
-    "Illinois": {"lat": 40.6331, "lon": -89.3985, "name": "Illinois"},
-    "Georgia": {"lat": 32.1656, "lon": -82.9001, "name": "Georgia"},
-    "Pennsylvania": {"lat": 41.2033, "lon": -77.1945, "name": "Pennsylvania"},
-    "Florida": {"lat": 27.6648, "lon": -81.5158, "name": "Florida"},
-    "New Jersey": {"lat": 40.0583, "lon": -74.4057, "name": "New Jersey"},
-    "Virginia": {"lat": 37.4316, "lon": -78.6569, "name": "Virginia"},
-    "Iowa": {"lat": 41.8780, "lon": -93.0977, "name": "Iowa"},
-    "Maine": {"lat": 45.2538, "lon": -69.4455, "name": "Maine"},
-    "Massachusetts": {"lat": 42.4072, "lon": -71.3824, "name": "Massachusetts"},
-    "Utah": {"lat": 39.3210, "lon": -111.0937, "name": "Utah"},
-    "Nevada": {"lat": 38.8026, "lon": -116.4194, "name": "Nevada"},
-    "North Carolina": {"lat": 35.7596, "lon": -79.0193, "name": "North Carolina"},
-    "Wyoming": {"lat": 43.0759, "lon": -107.2903, "name": "Wyoming"},
-    # National & Platform
-    "United States": {"lat": 39.8283, "lon": -98.5795, "name": "Nationwide (U.S.)"},
-    "Global": {"lat": 38.5000, "lon": -96.0000, "name": "Global / Platform"},
+    "California": {"lat": 36.7783, "lon": -119.4179, "name": "California (State)"},
+    "Connecticut": {"lat": 41.6032, "lon": -73.0877, "name": "Connecticut (State)"},
+    "Texas": {"lat": 31.9686, "lon": -99.9018, "name": "Texas (State)"},
+    "Illinois": {"lat": 40.6331, "lon": -89.3985, "name": "Illinois (State)"},
+    "Georgia": {"lat": 32.1656, "lon": -82.9001, "name": "Georgia (State)"},
+    "Pennsylvania": {"lat": 41.2033, "lon": -77.1945, "name": "Pennsylvania (State)"},
+    "Florida": {"lat": 27.6648, "lon": -81.5158, "name": "Florida (State)"},
+    "New Jersey": {"lat": 40.0583, "lon": -74.4057, "name": "New Jersey (State)"},
+    "Virginia": {"lat": 37.4316, "lon": -78.6569, "name": "Virginia (State)"},
+    "Iowa": {"lat": 41.8780, "lon": -93.0977, "name": "Iowa (State)"},
+    "Maine": {"lat": 45.2538, "lon": -69.4455, "name": "Maine (State)"},
+    "Massachusetts": {"lat": 42.4072, "lon": -71.3824, "name": "Massachusetts (State)"},
+    "Utah": {"lat": 39.3210, "lon": -111.0937, "name": "Utah (State)"},
+    "Nevada": {"lat": 38.8026, "lon": -116.4194, "name": "Nevada (State)"},
+    "North Carolina": {"lat": 35.7596, "lon": -79.0193, "name": "North Carolina (State)"},
+    "Wyoming": {"lat": 43.0759, "lon": -107.2903, "name": "Wyoming (State)"},
+    "Colorado": {"lat": 39.5501, "lon": -105.7821, "name": "Colorado (State)"},
+    "Alaska": {"lat": 64.2008, "lon": -149.4937, "name": "Alaska (State)"},
+    # Multi-City Consortium
+    "San Francisco, Los Angeles, Phoenix, Austin, Atlanta": {"lat": 34.0522, "lon": -118.2437, "name": "Multi-City AV Pilot"},
+    "San Francisco Bay Area, Los Angeles, Phoenix, Austin, Atlanta": {"lat": 34.0522, "lon": -118.2437, "name": "Multi-City AV Pilot"},
+    "Atlanta, Boston, Chicago, Los Angeles, Miami, New York, Philadelphia, Salt Lake City, San Francisco, Seattle": {"lat": 39.8283, "lon": -98.5795, "name": "Multi-City Metro Cohort"},
+    "Boston, Los Angeles County, Miami, New York City, Pittsburgh; Florida, Utah, Kentucky": {"lat": 39.8283, "lon": -98.5795, "name": "Multi-City Metro Cohort"},
+    "Las Vegas, NV (Southern Nevada), Tampa, FL, Delaware": {"lat": 36.1699, "lon": -115.1398, "name": "Multi-City Transit Pilot"},
 }
 
 KEYWORD_AUDIT_DEFINITIONS: dict[str, list[str]] = {
@@ -125,7 +162,7 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
     """Read research analysis json and construct processed metrics for dynamic infographics."""
     raw_data = json.loads(input_json_path.read_text(encoding="utf-8"))
 
-    # Aggregate location metrics
+    # Localized geographic entities only (Cities, Counties, States)
     locations_dict: dict[str, dict] = defaultdict(lambda: {
         "name": "",
         "lat": 0.0,
@@ -137,6 +174,12 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
         "articles": []
     })
 
+    # Federal & Nationwide policies (Macro / USDOT / Platform-wide features across all 50 states)
+    nationwide_articles: list[dict] = []
+    nationwide_years: Counter[str] = Counter()
+    nationwide_gov: Counter[str] = Counter()
+    nationwide_categories: Counter[str] = Counter()
+
     year_counts: Counter[str] = Counter()
     gov_counts: Counter[str] = Counter()
     loc_type_counts: Counter[str] = Counter()
@@ -145,7 +188,7 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
     corpus_text = []
 
     for item in raw_data:
-        raw_loc = item.get("target_location", "United States").strip()
+        raw_loc = item.get("target_location", "").strip()
         pub_date = item.get("publication_date", "")
         year = pub_date[:4] if pub_date else "2024"
         if not (year.isdigit() and len(year) == 4):
@@ -162,30 +205,52 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
         loc_type_counts[loc_type] += 1
         category_counts[cat] += 1
 
-        geo = COORDINATES_MAP.get(raw_loc, COORDINATES_MAP["United States"])
-        cname = str(geo["name"])
-
-        loc_entry = locations_dict[cname]
-        loc_entry["name"] = cname
-        loc_entry["lat"] = float(geo["lat"])
-        loc_entry["lon"] = float(geo["lon"])
-        loc_entry["count"] += 1
-        loc_entry["years"][year] += 1
-        loc_entry["gov_levels"][gov] += 1
-        loc_entry["categories"][cat] += 1
-        loc_entry["articles"].append({
+        article_obj = {
             "title": title,
             "year": year,
             "gov": gov,
             "category": cat,
             "authority": item.get("authority_names", ""),
-            "summary": summary[:140] + ("..." if len(summary) > 140 else "")
-        })
+            "summary": summary[:160] + ("..." if len(summary) > 160 else ""),
+            "location": raw_loc,
+            "location_type": loc_type,
+        }
 
-        # Gather corpus text for keyword audit
+        # Check if genuinely nationwide or federal macro scope
+        is_nationwide = (
+            raw_loc.lower() in ("united states", "us", "usa", "global")
+            or loc_type.lower() in ("country", "federal")
+            or "multi-city" in raw_loc.lower()
+        )
+
+        if is_nationwide:
+            nationwide_articles.append(article_obj)
+            nationwide_years[year] += 1
+            nationwide_gov[gov] += 1
+            nationwide_categories[cat] += 1
+        else:
+            geo = COORDINATES_MAP.get(raw_loc)
+            if not geo:
+                # Try matching by state or city substring
+                for k, v in COORDINATES_MAP.items():
+                    if k.lower() in raw_loc.lower() or raw_loc.lower() in k.lower():
+                        geo = v
+                        break
+            if not geo:
+                geo = {"lat": 38.0, "lon": -97.0, "name": raw_loc}
+
+            cname = str(geo["name"])
+            loc_entry = locations_dict[cname]
+            loc_entry["name"] = cname
+            loc_entry["lat"] = float(geo["lat"])
+            loc_entry["lon"] = float(geo["lon"])
+            loc_entry["count"] += 1
+            loc_entry["years"][year] += 1
+            loc_entry["gov_levels"][gov] += 1
+            loc_entry["categories"][cat] += 1
+            loc_entry["articles"].append(article_obj)
+
         corpus_text.append(f"{title} {summary} {item.get('supporting_passage', '')} {item.get('authority_names', '')}".lower())
-
-    joined_corpus = " ".join(corpus_text)
 
     # Keyword audit computation
     keyword_audit: dict[str, dict] = {}
@@ -207,7 +272,7 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
             "coverage_pct": round((len(used) / len(kw_list)) * 100, 1)
         }
 
-    # Format locations for JSON serialization
+    # Format localized locations for JSON serialization
     serialized_locations = []
     for loc_name, loc_info in sorted(locations_dict.items(), key=lambda x: x[1]["count"], reverse=True):
         serialized_locations.append({
@@ -226,6 +291,8 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
     return {
         "metadata": {
             "total_sources": len(raw_data),
+            "localized_sources": len(raw_data) - len(nationwide_articles),
+            "nationwide_sources": len(nationwide_articles),
             "unique_locations": len(serialized_locations),
             "year_range": f"{all_years[0]} - {all_years[-1]}" if all_years else "N/A",
             "year_counts": dict(sorted(year_counts.items())),
@@ -235,6 +302,14 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
         },
         "all_years": all_years,
         "locations": serialized_locations,
+        "nationwide": {
+            "name": "United States (Federal & Nationwide Scope)",
+            "total_count": len(nationwide_articles),
+            "years": dict(nationwide_years),
+            "gov_levels": dict(nationwide_gov),
+            "categories": dict(nationwide_categories),
+            "articles": nationwide_articles,
+        },
         "keyword_audit": keyword_audit,
     }
 
@@ -250,14 +325,28 @@ def generate_html_infographics(data_payload: dict) -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Navigation & Routing Policy News Crawler: Interactive Research Dashboard</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
   <style>
-    /* Custom SVG map styling & pulse animations */
-    .map-pulse {{
-      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    /* Clean state boundary styles */
+    .state-path {{
+      fill: #1e293b;
+      stroke: #334155;
+      stroke-width: 1;
+      transition: fill 0.2s, stroke 0.2s, stroke-width 0.2s;
+      cursor: pointer;
     }}
-    @keyframes pulse {{
-      0%, 100% {{ opacity: 0.8; transform: scale(1); }}
-      50% {{ opacity: 0.3; transform: scale(1.35); }}
+    .state-path:hover {{
+      fill: #2d3f59;
+      stroke: #60a5fa;
+      stroke-width: 1.5;
+    }}
+    /* Nationwide glow illumination across all states */
+    .nationwide-active {{
+      stroke: #38bdf8 !important;
+      stroke-width: 1.8px !important;
+      fill: #1a365d !important;
+      filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.45));
     }}
     .slider-thumb::-webkit-slider-thumb {{
       -webkit-appearance: none;
@@ -268,6 +357,15 @@ def generate_html_infographics(data_payload: dict) -> str:
       background: #3b82f6;
       cursor: pointer;
       box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    }}
+    /* Map bubble transitions - calm, clean, zero infinite pulsating */
+    .city-bubble {{
+      transition: r 0.25s ease-out, opacity 0.25s ease-out, fill 0.25s;
+    }}
+    .city-bubble:hover {{
+      stroke: #ffffff;
+      stroke-width: 2.5;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
     }}
   </style>
 </head>
@@ -295,7 +393,7 @@ def generate_html_infographics(data_payload: dict) -> str:
     <!-- Live Data Refresh & Re-load Controls -->
     <div class="flex items-center gap-3 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 shadow-inner">
       <div class="text-right">
-        <div class="text-xs text-slate-400">Loaded Records</div>
+        <div class="text-xs text-slate-400">Total Analyzed</div>
         <div id="stat-total-header" class="text-base font-bold text-blue-400">195 Sources</div>
       </div>
       <label class="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium px-3 py-2 rounded-lg transition-all flex items-center gap-1.5 shadow-sm">
@@ -327,14 +425,14 @@ def generate_html_infographics(data_payload: dict) -> str:
     <!-- Top Stats Row -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
-        <div class="text-xs text-slate-400 font-medium">Corpus Size</div>
-        <div id="stat-sources" class="text-2xl font-bold text-white mt-1">195</div>
-        <div class="text-[11px] text-emerald-400 mt-1">36 Web Crawler + 159 Nexis</div>
+        <div class="text-xs text-slate-400 font-medium">Corpus Distribution</div>
+        <div id="stat-sources" class="text-2xl font-bold text-white mt-1">195 Sources</div>
+        <div class="text-[11px] text-emerald-400 mt-1">176 Localized + 19 Federal/National</div>
       </div>
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
-        <div class="text-xs text-slate-400 font-medium">Active Locations</div>
-        <div id="stat-locations" class="text-2xl font-bold text-blue-400 mt-1">36 Pins</div>
-        <div class="text-[11px] text-slate-400 mt-1">Coast-to-Coast Coverage</div>
+        <div class="text-xs text-slate-400 font-medium">Local Geographic Pins</div>
+        <div id="stat-locations" class="text-2xl font-bold text-blue-400 mt-1">36 Locations</div>
+        <div class="text-[11px] text-slate-400 mt-1">Cities & Counties Across U.S.</div>
       </div>
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
         <div class="text-xs text-slate-400 font-medium">Timeline Span</div>
@@ -342,9 +440,9 @@ def generate_html_infographics(data_payload: dict) -> str:
         <div class="text-[11px] text-slate-400 mt-1">14-Year Policy Evolution</div>
       </div>
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
-        <div class="text-xs text-slate-400 font-medium">Top Governing Level</div>
-        <div class="text-2xl font-bold text-indigo-400 mt-1">Municipal (32%)</div>
-        <div class="text-[11px] text-slate-400 mt-1">63 City-Level Ordinances</div>
+        <div class="text-xs text-slate-400 font-medium">Dominant Governance</div>
+        <div class="text-2xl font-bold text-indigo-400 mt-1">Municipal (42%)</div>
+        <div class="text-[11px] text-slate-400 mt-1">Local Street Access Ordinances</div>
       </div>
     </div>
 
@@ -355,51 +453,74 @@ def generate_html_infographics(data_payload: dict) -> str:
       <div class="lg:col-span-8 bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-sm flex flex-col justify-between">
         
         <div>
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-2 border-b border-slate-800 gap-2">
+          <!-- Header and Legend -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-3 border-b border-slate-800 gap-2">
             <div>
               <h2 class="text-lg font-semibold text-white flex items-center gap-2">
-                <span>📍 Policy Interventions Across U.S. Jurisdictions</span>
+                <span>📍 Localized Policy Interventions Across U.S. Jurisdictions</span>
               </h2>
-              <p class="text-xs text-slate-400">Bubble radius scales with article frequency. Colored by governing authority level.</p>
+              <p class="text-xs text-slate-400">Bubbles represent geographically bounded cities & states. Radius scales with article count.</p>
             </div>
             
             <!-- Map Legend -->
             <div class="flex flex-wrap items-center gap-3 text-xs">
               <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-blue-500 inline-block"></span> City</span>
               <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> State</span>
-              <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-purple-500 inline-block"></span> Federal</span>
+              <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span> County</span>
               <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> Company</span>
             </div>
           </div>
 
+          <!-- NATIONWIDE & FEDERAL POLICY SCOPE HUD DOCK -->
+          <!-- Methodological solution: Instead of false geocoding in Kansas, nationwide coverage has its own dedicated interactive dock -->
+          <div id="nationwide-hud" onmouseenter="setNationwideHighlight(true)" onmouseleave="setNationwideHighlight(false)" class="mb-3 p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all hover:border-sky-500/50 shadow-inner">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-lg bg-sky-500/10 text-sky-400 font-bold flex items-center justify-center text-lg border border-sky-500/20">
+                🇺🇸
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold text-white uppercase tracking-wider">Federal & Nationwide Scope</span>
+                  <span id="nationwide-badge-count" class="px-2 py-0.5 rounded-full text-xs font-bold bg-sky-500/20 text-sky-400 border border-sky-500/30">
+                    19 Policies (All 50 States)
+                  </span>
+                </div>
+                <p id="nationwide-hud-desc" class="text-xs text-slate-400 mt-0.5">
+                  USDOT/NHTSA app mandates, Latimer bridge strike legislation, and nationwide Google Maps eco-routing algorithms that apply coast-to-coast.
+                </p>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <button onclick="selectNationwideScope()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-600 hover:bg-sky-500 text-white transition flex items-center gap-1.5 shadow-sm">
+                <span>View Federal Policies</span>
+                <span>→</span>
+              </button>
+            </div>
+          </div>
+
           <!-- SVG United States Map Container -->
-          <div class="relative w-full aspect-[16/10] bg-slate-950/60 rounded-xl border border-slate-800/80 overflow-hidden flex items-center justify-center p-2">
+          <div class="relative w-full aspect-[16/10] bg-slate-950/70 rounded-xl border border-slate-800/80 overflow-hidden flex items-center justify-center p-2">
             
             <svg id="us-map-svg" viewBox="0 0 960 600" class="w-full h-full select-none">
-              <!-- Defs for glow filter -->
               <defs>
                 <filter id="bubble-glow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feGaussianBlur stdDeviation="2.5" result="blur" />
                   <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
               </defs>
 
-              <!-- Stylized Background US Map Outline -->
-              <g id="map-states-layer" fill="#1e293b" stroke="#334155" stroke-width="1.2" stroke-linejoin="round">
-                <!-- Continental US Simplified Silhouette Path -->
-                <path d="M 140,95 L 220,95 L 300,95 L 380,95 L 450,90 L 520,80 L 580,75 L 610,65 L 670,60 L 720,70 L 760,60 L 800,85 L 830,120 L 860,110 L 880,140 L 860,170 L 840,195 L 830,240 L 800,280 L 800,320 L 780,360 L 790,410 L 770,440 L 760,490 L 730,460 L 700,430 L 640,430 L 580,450 L 530,460 L 490,520 L 460,540 L 420,490 L 370,460 L 320,440 L 250,440 L 190,420 L 140,360 L 110,320 L 100,240 L 90,170 L 110,120 Z" />
-                <!-- Great Lakes water cutouts -->
-                <path d="M 620,110 Q 640,140 680,120 Q 710,140 730,120 Q 710,95 670,95 Z" fill="#0f172a" stroke="#334155" stroke-width="1" />
-                <!-- State boundary guide grid lines -->
-                <path d="M 230,95 L 220,440 M 340,95 L 340,450 M 470,95 L 460,530 M 590,80 L 580,450 M 710,65 L 700,430" stroke="#334155" stroke-dasharray="3 3" opacity="0.4" />
-                <path d="M 120,220 L 830,220 M 150,330 L 800,330" stroke="#334155" stroke-dasharray="3 3" opacity="0.4" />
-              </g>
+              <!-- High-Precision U.S. State Boundaries Layer -->
+              <g id="map-states-layer"></g>
 
-              <!-- Dynamic Map Bubbles Layer -->
+              <!-- State Abbreviations Labels Layer (CA, TX, NY, FL...) -->
+              <g id="map-state-labels-layer" pointer-events="none"></g>
+
+              <!-- Dynamic Map Bubbles Layer (Localized Points Only) -->
               <g id="map-bubbles-layer"></g>
 
-              <!-- Map Labels Layer -->
-              <g id="map-labels-layer" pointer-events="none"></g>
+              <!-- Bubble Text Labels Layer (Entry counts inside bubbles) -->
+              <g id="map-bubble-labels-layer" pointer-events="none"></g>
             </svg>
 
             <!-- Floating Hover Tooltip -->
@@ -411,7 +532,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         </div>
 
         <!-- TIMELINE SLIDING SCALE & CONTROLS -->
-        <div class="mt-5 pt-4 border-t border-slate-800 space-y-3">
+        <div class="mt-4 pt-4 border-t border-slate-800 space-y-3">
           
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -446,9 +567,7 @@ def generate_html_infographics(data_payload: dict) -> str:
             />
             
             <!-- Ticks under the slider -->
-            <div id="slider-ticks" class="flex justify-between text-[11px] text-slate-400 mt-2 select-none">
-              <!-- Dynamically populated ticks -->
-            </div>
+            <div id="slider-ticks" class="flex justify-between text-[11px] text-slate-400 mt-2 select-none"></div>
           </div>
 
           <!-- Milestone / Policy Era Description -->
@@ -471,16 +590,16 @@ def generate_html_infographics(data_payload: dict) -> str:
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-sm">
           <div class="flex items-center justify-between pb-3 border-b border-slate-800">
             <h3 class="text-sm font-semibold text-white flex items-center gap-1.5">
-              <span>📍 Location Drill-Down</span>
+              <span>📍 Policy Drill-Down</span>
             </h3>
             <span id="loc-badge-count" class="text-xs font-bold text-blue-400 bg-blue-500/10 px-2.5 py-0.5 rounded-full border border-blue-500/20">
-              Select a pin
+              Select pin or federal card
             </span>
           </div>
 
           <div id="location-detail-content" class="mt-4 space-y-3 max-h-[380px] overflow-y-auto pr-1 text-xs">
             <div class="text-slate-400 text-center py-8">
-              Click any bubble on the map to explore specific ordinances, authorities, and supporting news reporting for that jurisdiction.
+              Click any city bubble on the map or click the "View Federal Policies" dock above to explore specific ordinances, authorities, and supporting news reporting.
             </div>
           </div>
         </div>
@@ -489,12 +608,10 @@ def generate_html_infographics(data_payload: dict) -> str:
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-sm">
           <h3 class="text-sm font-semibold text-white pb-2.5 border-b border-slate-800 mb-3 flex items-center justify-between">
             <span>🏆 Geographic Leaderboard</span>
-            <span class="text-[11px] text-slate-400 font-normal">Entries in Active View</span>
+            <span class="text-[11px] text-slate-400 font-normal">Active Timeframe</span>
           </h3>
 
-          <div id="locations-leaderboard" class="space-y-2.5 max-h-[220px] overflow-y-auto pr-1">
-            <!-- Dynamically populated bars -->
-          </div>
+          <div id="locations-leaderboard" class="space-y-2.5 max-h-[220px] overflow-y-auto pr-1"></div>
         </div>
 
       </div>
@@ -519,9 +636,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         
         <!-- Step 1 -->
         <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between relative">
-          <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 font-bold flex items-center justify-center text-sm border border-blue-500/20 mb-3">
-            01
-          </div>
+          <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 font-bold flex items-center justify-center text-sm border border-blue-500/20 mb-3">01</div>
           <div>
             <h4 class="font-bold text-white text-sm">Inputs & Queries</h4>
             <p class="text-xs text-slate-400 mt-1">Targeted search strategies across 3 keyword families and 10 study areas.</p>
@@ -538,9 +653,7 @@ def generate_html_infographics(data_payload: dict) -> str:
 
         <!-- Step 2 -->
         <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between relative">
-          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 font-bold flex items-center justify-center text-sm border border-emerald-500/20 mb-3">
-            02
-          </div>
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 font-bold flex items-center justify-center text-sm border border-emerald-500/20 mb-3">02</div>
           <div>
             <h4 class="font-bold text-white text-sm">Dual Ingestion</h4>
             <p class="text-xs text-slate-400 mt-1">Dual-engine pipeline collecting archival web documents and news wires.</p>
@@ -557,9 +670,7 @@ def generate_html_infographics(data_payload: dict) -> str:
 
         <!-- Step 3 -->
         <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between relative">
-          <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 font-bold flex items-center justify-center text-sm border border-amber-500/20 mb-3">
-            03
-          </div>
+          <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 font-bold flex items-center justify-center text-sm border border-amber-500/20 mb-3">03</div>
           <div>
             <h4 class="font-bold text-white text-sm">4-Tier Deduplication</h4>
             <p class="text-xs text-slate-400 mt-1">Multi-stage gatekeeping collapsing syndicated wire copy clusters.</p>
@@ -577,9 +688,7 @@ def generate_html_infographics(data_payload: dict) -> str:
 
         <!-- Step 4 -->
         <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between relative">
-          <div class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 font-bold flex items-center justify-center text-sm border border-rose-500/20 mb-3">
-            04
-          </div>
+          <div class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 font-bold flex items-center justify-center text-sm border border-rose-500/20 mb-3">04</div>
           <div>
             <h4 class="font-bold text-white text-sm">Scope Filtering</h4>
             <p class="text-xs text-slate-400 mt-1">Rejection of off-topic noise (crimes, SEC stock filings, repaving).</p>
@@ -597,9 +706,7 @@ def generate_html_infographics(data_payload: dict) -> str:
 
         <!-- Step 5 -->
         <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between relative">
-          <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 font-bold flex items-center justify-center text-sm border border-indigo-500/20 mb-3">
-            05
-          </div>
+          <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 font-bold flex items-center justify-center text-sm border border-indigo-500/20 mb-3">05</div>
           <div>
             <h4 class="font-bold text-white text-sm">Qualitative Coding</h4>
             <p class="text-xs text-slate-400 mt-1">Schema synthesis & verbatim quotation evidence verification.</p>
@@ -811,7 +918,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-5 space-y-3">
           <div class="flex items-center justify-between pb-2 border-b border-slate-800">
             <h4 class="font-bold text-white text-sm">Family 1: Government Restrictions</h4>
-            <span class="text-xs text-amber-400 font-medium">6 Used / 31 Unused</span>
+            <span class="text-xs text-amber-400 font-medium">6 Used / 21 Unused</span>
           </div>
           <div>
             <div class="text-xs font-semibold text-emerald-400 mb-1.5">Active Terms in Corpus:</div>
@@ -842,7 +949,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-5 space-y-3">
           <div class="flex items-center justify-between pb-2 border-b border-slate-800">
             <h4 class="font-bold text-white text-sm">Family 2: Company Routing Rules</h4>
-            <span class="text-xs text-rose-400 font-medium">3 Used / 34 Unused</span>
+            <span class="text-xs text-rose-400 font-medium">3 Used / 19 Unused</span>
           </div>
           <div>
             <div class="text-xs font-semibold text-emerald-400 mb-1.5">Active Terms in Corpus:</div>
@@ -871,7 +978,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-5 space-y-3">
           <div class="flex items-center justify-between pb-2 border-b border-slate-800">
             <h4 class="font-bold text-white text-sm">Family 3: Government Coordination</h4>
-            <span class="text-xs text-purple-400 font-medium">7 Used / 4 Unused</span>
+            <span class="text-xs text-purple-400 font-medium">7 Used / 3 Unused</span>
           </div>
           <div>
             <div class="text-xs font-semibold text-emerald-400 mb-1.5">Active Terms in Corpus:</div>
@@ -908,10 +1015,25 @@ def generate_html_infographics(data_payload: dict) -> str:
     let isPlaying = false;
     let playInterval = null;
     let selectedLocation = null;
+    let isNationwideSelected = false;
 
-    // Projection constants for 960x600 continental US SVG
-    // US Bounding Box: lon -125 to -66, lat 24 to 50
+    // Albers USA Projection for city bubbles (960x600 viewBox)
+    // Uses standard D3 projection or fallback math
+    let albersProjection = null;
+    try {{
+      if (typeof d3 !== 'undefined' && d3.geoAlbersUsa) {{
+        albersProjection = d3.geoAlbersUsa().scale(1200).translate([480, 300]);
+      }}
+    }} catch(e) {{
+      console.warn("D3 projection init:", e);
+    }}
+
     function projectCoords(lat, lon) {{
+      if (albersProjection) {{
+        const pt = albersProjection([lon, lat]);
+        if (pt) return {{ x: pt[0], y: pt[1] }};
+      }}
+      // Fallback projection if point is outside contiguous US (e.g. Alaska)
       const minLon = -125.0, maxLon = -66.0;
       const minLat = 24.0, maxLat = 50.0;
       const x = ((lon - minLon) / (maxLon - minLon)) * 780 + 70;
@@ -929,13 +1051,29 @@ def generate_html_infographics(data_payload: dict) -> str:
       return '#64748b'; // Slate
     }}
 
+    // State 2-letter postal code coordinates for labels
+    const STATE_CENTROIDS = {{
+      "WA": [-120.5, 47.4], "OR": [-120.5, 43.9], "CA": [-119.5, 36.8], "NV": [-116.8, 39.3],
+      "ID": [-114.6, 44.4], "UT": [-111.7, 39.3], "AZ": [-111.7, 34.3], "MT": [-109.6, 47.1],
+      "WY": [-107.5, 43.0], "CO": [-105.5, 39.0], "NM": [-106.0, 34.4], "ND": [-100.5, 47.4],
+      "SD": [-100.2, 44.4], "NE": [-99.8, 41.5], "KS": [-98.4, 38.5], "OK": [-97.5, 35.5],
+      "TX": [-99.3, 31.5], "MN": [-94.3, 46.3], "IA": [-93.5, 42.0], "MO": [-92.5, 38.4],
+      "AR": [-92.4, 34.8], "LA": [-92.0, 31.0], "WI": [-89.8, 44.6], "IL": [-89.2, 40.0],
+      "MI": [-84.7, 44.3], "IN": [-86.3, 39.8], "KY": [-85.3, 37.5], "TN": [-86.3, 35.8],
+      "MS": [-89.7, 32.7], "AL": [-86.8, 32.8], "GA": [-83.4, 32.7], "FL": [-81.7, 28.1],
+      "OH": [-82.8, 40.2], "WV": [-80.6, 38.6], "VA": [-78.9, 37.5], "NC": [-79.4, 35.5],
+      "SC": [-80.9, 33.9], "PA": [-77.6, 40.9], "NY": [-75.5, 43.0], "ME": [-69.2, 45.4],
+      "VT": [-72.6, 44.1], "NH": [-71.6, 43.7], "MA": [-71.8, 42.2], "CT": [-72.7, 41.6],
+      "NJ": [-74.5, 40.1], "MD": [-76.7, 39.0], "DE": [-75.5, 39.0]
+    }};
+
     function initDashboard() {{
       initSliderTicks();
-      renderMap();
+      initHighPrecisionMap();
       renderLeaderboard();
       updateSelectedEraCard();
+      updateNationwideHud();
 
-      // Setup JSON file upload listener
       document.getElementById('json-file-input').addEventListener('change', handleFileUpload);
     }}
 
@@ -971,6 +1109,7 @@ def generate_html_infographics(data_payload: dict) -> str:
       
       document.getElementById('selected-year-badge').textContent = (activeYear === 'ALL') ? 'All Years' : activeYear;
       updateSelectedEraCard();
+      updateNationwideHud();
       renderMap();
       renderLeaderboard();
       if (selectedLocation) renderLocationDetail(selectedLocation);
@@ -1013,6 +1152,102 @@ def generate_html_infographics(data_payload: dict) -> str:
       }}
     }}
 
+    function updateNationwideHud() {{
+      const year = getActiveYear();
+      const badge = document.getElementById('nationwide-badge-count');
+      const desc = document.getElementById('nationwide-hud-desc');
+      const nw = DATA.nationwide;
+
+      if (!nw) return;
+
+      let count = 0;
+      if (year === 'ALL') {{
+        count = nw.total_count;
+        badge.textContent = `${{count}} Policies (All 50 States)`;
+        desc.textContent = "USDOT/NHTSA app safety mandates, Latimer bridge strike legislation, and nationwide Google Maps eco-routing algorithms that apply coast-to-coast.";
+      }} else if (isCumulativeMode) {{
+        Object.keys(nw.years).forEach(yr => {{
+          if (yr <= year) count += nw.years[yr];
+        }});
+        badge.textContent = `${{count}} Policies Thru ${{year}}`;
+        desc.textContent = `Cumulative federal rules and nationwide platform routing rollouts deployed up to ${{year}}.`;
+      }} else {{
+        count = nw.years[year] || 0;
+        badge.textContent = `${{count}} Policies in ${{year}}`;
+        desc.textContent = count > 0 
+          ? `Federal regulations and platform features announced nationwide during ${{year}}.`
+          : `No new nationwide/federal policy mandates launched in ${{year}} (local municipal activity continued).`;
+      }}
+    }}
+
+    function setNationwideHighlight(active) {{
+      const statePaths = document.querySelectorAll('.state-path');
+      statePaths.forEach(p => {{
+        if (active || isNationwideSelected) {{
+          p.classList.add('nationwide-active');
+        }} else {{
+          p.classList.remove('nationwide-active');
+        }}
+      }});
+    }}
+
+    function selectNationwideScope() {{
+      isNationwideSelected = true;
+      setNationwideHighlight(true);
+      selectedLocation = null;
+
+      const year = getActiveYear();
+      const nw = DATA.nationwide;
+      
+      let articles = [];
+      if (year === 'ALL') {{
+        articles = nw.articles;
+      }} else if (isCumulativeMode) {{
+        articles = nw.articles.filter(a => a.year <= year);
+      }} else {{
+        articles = nw.articles.filter(a => a.year === year);
+      }}
+
+      document.getElementById('loc-badge-count').textContent = `${{articles.length}} Federal Policies`;
+      document.getElementById('loc-badge-count').className = 'text-xs font-bold text-sky-400 bg-sky-500/10 px-2.5 py-0.5 rounded-full border border-sky-500/20';
+
+      const detailDiv = document.getElementById('location-detail-content');
+      detailDiv.innerHTML = `
+        <div class="bg-sky-950/40 border border-sky-800/60 rounded-lg p-3 text-xs mb-3">
+          <div class="font-bold text-sky-300 flex items-center gap-1.5">
+            <span>🇺🇸 Federal & Nationwide Scope</span>
+          </div>
+          <p class="text-slate-300 mt-1">
+            These policies are systemic federal mandates (USDOT, NHTSA, Congress) or platform-wide routing algorithm rollouts (Google Maps, Waze for Cities, Esri GIS) that apply across all 50 states simultaneously.
+          </p>
+        </div>
+      `;
+
+      if (articles.length === 0) {{
+        detailDiv.innerHTML += `
+          <div class="text-slate-500 text-center py-6">
+            No nationwide federal policies enacted in ${{year}}.
+          </div>
+        `;
+        return;
+      }}
+
+      articles.forEach(art => {{
+        const card = document.createElement('div');
+        card.className = 'bg-slate-950/80 border border-slate-800 rounded-lg p-3 space-y-1.5 transition hover:border-slate-700';
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded">${{art.year}}</span>
+            <span class="text-[11px] text-purple-400 font-semibold">${{art.gov}}</span>
+          </div>
+          <div class="font-bold text-white text-xs leading-snug">${{art.title}}</div>
+          <div class="text-[11px] text-slate-400 font-mono"><strong>Authority:</strong> ${{art.authority || 'U.S. Federal / Platform'}}</div>
+          <p class="text-slate-300 text-[11px] leading-relaxed">${{art.summary}}</p>
+        `;
+        detailDiv.appendChild(card);
+      }});
+    }}
+
     function updateSelectedEraCard() {{
       const year = getActiveYear();
       const title = document.getElementById('era-title');
@@ -1036,9 +1271,74 @@ def generate_html_infographics(data_payload: dict) -> str:
       }}
     }}
 
+    // High-Precision D3 TopoJSON State Map Initializer
+    function initHighPrecisionMap() {{
+      const svg = d3.select("#us-map-svg");
+      const statesLayer = svg.select("#map-states-layer");
+      const stateLabelsLayer = svg.select("#map-state-labels-layer");
+
+      // Load canonical TopoJSON US Atlas (Mike Bostock / US Census)
+      const usAtlasUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-albers-10m.json";
+
+      d3.json(usAtlasUrl).then(us => {{
+        if (!us || !us.objects || !us.objects.states) return;
+
+        const path = d3.geoPath(); // Pre-projected Albers coordinates
+        const states = topojson.feature(us, us.objects.states).features;
+
+        // Render every individual state boundary
+        statesLayer.selectAll("path")
+          .data(states)
+          .join("path")
+          .attr("d", path)
+          .attr("class", "state-path")
+          .attr("id", d => "state-" + (d.id || ""))
+          .on("mouseenter", (event, d) => {{
+            showTooltip(event, d.properties.name, "U.S. State Jurisdiction");
+          }})
+          .on("mouseleave", hideTooltip);
+
+        // Render 2-letter state abbreviation labels for geographic clarity
+        stateLabelsLayer.selectAll("text").remove();
+        Object.entries(STATE_CENTROIDS).forEach(([code, coords]) => {{
+          const pt = projectCoords(coords[1], coords[0]);
+          if (pt && pt.x > 60 && pt.x < 900 && pt.y > 60 && pt.y < 540) {{
+            stateLabelsLayer.append("text")
+              .attr("x", pt.x)
+              .attr("y", pt.y)
+              .attr("text-anchor", "middle")
+              .attr("dominant-baseline", "central")
+              .attr("fill", "#475569")
+              .attr("font-size", "10px")
+              .attr("font-weight", "600")
+              .attr("letter-spacing", "0.5px")
+              .attr("opacity", "0.65")
+              .text(code);
+          }}
+        }});
+
+        // Render city bubbles now that base map is ready
+        renderMap();
+      }}).catch(err => {{
+        console.warn("Could not load online TopoJSON, drawing vector fallback:", err);
+        drawFallbackStates(statesLayer);
+        renderMap();
+      }});
+    }}
+
+    // Fallback vector states outline if offline
+    function drawFallbackStates(statesLayer) {{
+      statesLayer.html(`
+        <path d="M 140,95 L 220,95 L 300,95 L 380,95 L 450,90 L 520,80 L 580,75 L 610,65 L 670,60 L 720,70 L 760,60 L 800,85 L 830,120 L 860,110 L 880,140 L 860,170 L 840,195 L 830,240 L 800,280 L 800,320 L 780,360 L 790,410 L 770,440 L 760,490 L 730,460 L 700,430 L 640,430 L 580,450 L 530,460 L 490,520 L 460,540 L 420,490 L 370,460 L 320,440 L 250,440 L 190,420 L 140,360 L 110,320 L 100,240 L 90,170 L 110,120 Z" class="state-path" />
+        <path d="M 230,95 L 220,440 M 340,95 L 340,450 M 470,95 L 460,530 M 590,80 L 580,450 M 710,65 L 700,430 M 120,220 L 830,220 M 150,330 L 800,330" stroke="#334155" stroke-dasharray="3 3" opacity="0.4" fill="none" />
+      `);
+    }}
+
     function renderMap() {{
       const bubbleLayer = document.getElementById('map-bubbles-layer');
+      const bubbleLabelsLayer = document.getElementById('map-bubble-labels-layer');
       bubbleLayer.innerHTML = '';
+      bubbleLabelsLayer.innerHTML = '';
       const activeYear = getActiveYear();
 
       DATA.locations.forEach(loc => {{
@@ -1046,7 +1346,6 @@ def generate_html_infographics(data_payload: dict) -> str:
         if (activeYear === 'ALL') {{
           count = loc.total_count;
         }} else if (isCumulativeMode) {{
-          // Sum up to selected year
           Object.keys(loc.years).forEach(yr => {{
             if (yr <= activeYear) count += loc.years[yr];
           }});
@@ -1054,6 +1353,7 @@ def generate_html_infographics(data_payload: dict) -> str:
           count = loc.years[activeYear] || 0;
         }}
 
+        // If count is 0 in single-year mode, do not render a bubble
         if (count === 0) return;
 
         const coords = projectCoords(loc.lat, loc.lon);
@@ -1066,169 +1366,161 @@ def generate_html_infographics(data_payload: dict) -> str:
         }});
         const color = getGovColor(topGov);
 
-        // Radius calculation
+        // Radius calculation: calm, static, proportional
         const baseRadius = (activeYear === 'ALL') 
-          ? Math.min(36, Math.max(7, Math.sqrt(count) * 6))
-          : Math.min(34, Math.max(9, Math.sqrt(count) * 11));
+          ? Math.min(30, Math.max(7, Math.sqrt(count) * 6))
+          : Math.min(26, Math.max(8, Math.sqrt(count) * 9));
 
-        // SVG Group for location pin
+        // SVG Group for localized pin
         const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        g.setAttribute('class', 'cursor-pointer transition-all duration-300');
+        g.setAttribute('class', 'cursor-pointer');
         g.onclick = () => selectLocation(loc);
 
-        // Outer pulsing ring for active/current year items
-        if (activeYear !== 'ALL' && (loc.years[activeYear] || 0) > 0) {{
-          const pulseCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-          pulseCircle.setAttribute('cx', coords.x);
-          pulseCircle.setAttribute('cy', coords.y);
-          pulseCircle.setAttribute('r', baseRadius * 1.5);
-          pulseCircle.setAttribute('fill', 'none');
-          pulseCircle.setAttribute('stroke', color);
-          pulseCircle.setAttribute('stroke-width', '1.5');
-          pulseCircle.setAttribute('class', 'map-pulse');
-          g.appendChild(pulseCircle);
-        }}
-
-        // Main Bubble Circle
+        // Main Bubble Circle - Clean, static, high-contrast, zero pulsating loop
         const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         circle.setAttribute('cx', coords.x);
         circle.setAttribute('cy', coords.y);
         circle.setAttribute('r', baseRadius);
         circle.setAttribute('fill', color);
-        circle.setAttribute('fill-opacity', '0.65');
+        circle.setAttribute('fill-opacity', (activeYear !== 'ALL' && !isCumulativeMode) ? '0.9' : '0.75');
         circle.setAttribute('stroke', '#ffffff');
-        circle.setAttribute('stroke-width', '1.5');
-        circle.setAttribute('filter', 'url(#bubble-glow)');
+        circle.setAttribute('stroke-width', (activeYear !== 'ALL' && !isCumulativeMode) ? '2.2' : '1.5');
+        circle.setAttribute('class', 'city-bubble');
 
-        // Hover events
-        circle.onmouseenter = (e) => showTooltip(e, loc, count);
+        circle.onmouseenter = (e) => {{
+          showTooltip(e, loc.name, `${{count}} Policies (${{topGov}})`);
+        }};
         circle.onmouseleave = hideTooltip;
 
-        // Count Text inside bubble
-        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        text.setAttribute('x', coords.x);
-        text.setAttribute('y', coords.y + 4);
-        text.setAttribute('text-anchor', 'middle');
-        text.setAttribute('fill', '#ffffff');
-        text.setAttribute('font-size', baseRadius > 14 ? '11px' : '9px');
-        text.setAttribute('font-weight', 'bold');
-        text.setAttribute('pointer-events', 'none');
-        text.textContent = count;
-
         g.appendChild(circle);
-        g.appendChild(text);
         bubbleLayer.appendChild(g);
+
+        // Inner text count inside bubble for quick legibility
+        if (baseRadius >= 9) {{
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', coords.x);
+          text.setAttribute('y', coords.y + 1);
+          text.setAttribute('text-anchor', 'middle');
+          text.setAttribute('dominant-baseline', 'central');
+          text.setAttribute('fill', '#ffffff');
+          text.setAttribute('font-size', baseRadius > 14 ? '11px' : '9px');
+          text.setAttribute('font-weight', 'bold');
+          text.textContent = count;
+          bubbleLabelsLayer.appendChild(text);
+        }}
       }});
     }}
 
-    function showTooltip(e, loc, count) {{
-      const tip = document.getElementById('map-tooltip');
-      const title = document.getElementById('tooltip-title');
-      const body = document.getElementById('tooltip-body');
-
-      title.textContent = `${{loc.name}} (${{count}} Sources)`;
+    function renderLeaderboard() {{
+      const leaderboardDiv = document.getElementById('locations-leaderboard');
+      leaderboardDiv.innerHTML = '';
       const activeYear = getActiveYear();
-      const yrText = (activeYear === 'ALL') ? 'Across all years' : `In ${{activeYear}}`;
-      
-      const govKeys = Object.keys(loc.gov_levels).slice(0, 2).join(', ');
-      body.innerHTML = `<strong>${{yrText}}</strong><br>Gov: ${{govKeys}}<br><span class="text-blue-300 underline mt-1 block">Click to view articles</span>`;
 
-      tip.style.left = `${{e.clientX - 20}}px`;
-      tip.style.top = `${{e.clientY - 70}}px`;
+      // Collect counts for active view
+      const rankedLocs = [];
+      DATA.locations.forEach(loc => {{
+        let count = 0;
+        if (activeYear === 'ALL') {{
+          count = loc.total_count;
+        }} else if (isCumulativeMode) {{
+          Object.keys(loc.years).forEach(yr => {{
+            if (yr <= activeYear) count += loc.years[yr];
+          }});
+        }} else {{
+          count = loc.years[activeYear] || 0;
+        }}
+        if (count > 0) {{
+          rankedLocs.push({{ name: loc.name, count: count, raw: loc }});
+        }}
+      }});
+
+      rankedLocs.sort((a, b) => b.count - a.count);
+      const maxCount = rankedLocs.length > 0 ? rankedLocs[0].count : 1;
+
+      if (rankedLocs.length === 0) {{
+        leaderboardDiv.innerHTML = '<div class="text-xs text-slate-500 text-center py-4">No local entries recorded for this year.</div>';
+        return;
+      }}
+
+      rankedLocs.slice(0, 10).forEach((item, idx) => {{
+        const pct = Math.min(100, Math.round((item.count / maxCount) * 100));
+        const row = document.createElement('div');
+        row.className = 'cursor-pointer p-1.5 rounded hover:bg-slate-800/60 transition text-xs';
+        row.onclick = () => selectLocation(item.raw);
+
+        row.innerHTML = `
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-medium text-slate-200 truncate pr-2">
+              <span class="text-slate-500 mr-1.5">#${{idx + 1}}</span> ${{item.name}}
+            </span>
+            <span class="font-bold text-white bg-slate-800 px-1.5 py-0.2 rounded">${{item.count}}</span>
+          </div>
+          <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+            <div class="bg-blue-500 h-full rounded-full transition-all duration-300" style="width: ${{pct}}%"></div>
+          </div>
+        `;
+        leaderboardDiv.appendChild(row);
+      }});
+    }}
+
+    function selectLocation(loc) {{
+      selectedLocation = loc;
+      isNationwideSelected = false;
+      setNationwideHighlight(false);
+
+      const activeYear = getActiveYear();
+      let articles = [];
+      if (activeYear === 'ALL') {{
+        articles = loc.articles;
+      }} else if (isCumulativeMode) {{
+        articles = loc.articles.filter(a => a.year <= activeYear);
+      }} else {{
+        articles = loc.articles.filter(a => a.year === activeYear);
+      }}
+
+      document.getElementById('loc-badge-count').textContent = `${{articles.length}} Articles`;
+      document.getElementById('loc-badge-count').className = 'text-xs font-bold text-blue-400 bg-blue-500/10 px-2.5 py-0.5 rounded-full border border-blue-500/20';
+
+      const detailDiv = document.getElementById('location-detail-content');
+      detailDiv.innerHTML = `
+        <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 text-xs mb-3">
+          <div class="font-bold text-white">${{loc.name}}</div>
+          <div class="text-[11px] text-slate-400 mt-0.5">Showing local municipal regulations and traffic interventions.</div>
+        </div>
+      `;
+
+      if (articles.length === 0) {{
+        detailDiv.innerHTML += '<div class="text-slate-500 text-center py-6">No articles recorded for this timeframe.</div>';
+        return;
+      }}
+
+      articles.forEach(art => {{
+        const card = document.createElement('div');
+        card.className = 'bg-slate-950/80 border border-slate-800 rounded-lg p-3 space-y-1.5 transition hover:border-slate-700';
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded">${{art.year}}</span>
+            <span class="text-[11px] text-blue-400 font-semibold">${{art.gov}}</span>
+          </div>
+          <div class="font-bold text-white text-xs leading-snug">${{art.title}}</div>
+          <div class="text-[11px] text-slate-400 font-mono"><strong>Authority:</strong> ${{art.authority || 'Local Jurisdiction'}}</div>
+          <p class="text-slate-300 text-[11px] leading-relaxed">${{art.summary}}</p>
+        `;
+        detailDiv.appendChild(card);
+      }});
+    }}
+
+    function showTooltip(event, title, body) {{
+      const tip = document.getElementById('map-tooltip');
+      document.getElementById('tooltip-title').textContent = title;
+      document.getElementById('tooltip-body').textContent = body;
+      tip.style.left = (event.pageX + 12) + 'px';
+      tip.style.top = (event.pageY - 28) + 'px';
       tip.classList.remove('hidden');
     }}
 
     function hideTooltip() {{
       document.getElementById('map-tooltip').classList.add('hidden');
-    }}
-
-    function selectLocation(loc) {{
-      selectedLocation = loc;
-      renderLocationDetail(loc);
-    }}
-
-    function renderLocationDetail(loc) {{
-      const activeYear = getActiveYear();
-      const container = document.getElementById('location-detail-content');
-      const badge = document.getElementById('loc-badge-count');
-
-      // Filter articles for current timeframe
-      let filtered = loc.articles;
-      if (activeYear !== 'ALL') {{
-        filtered = isCumulativeMode 
-          ? loc.articles.filter(a => a.year <= activeYear)
-          : loc.articles.filter(a => a.year === activeYear);
-      }}
-
-      badge.textContent = `${{filtered.length}} / ${{loc.total_count}} total`;
-
-      if (filtered.length === 0) {{
-        container.innerHTML = `
-          <div class="text-slate-400 text-center py-6">
-            No articles recorded in <strong>${{loc.name}}</strong> for timeframe <strong>${{activeYear}}</strong>.
-          </div>
-        `;
-        return;
-      }}
-
-      container.innerHTML = `
-        <div class="font-bold text-white text-sm mb-1">${{loc.name}}</div>
-        <div class="text-[11px] text-slate-400 mb-3 flex flex-wrap gap-2">
-          ${{Object.entries(loc.gov_levels).map(([gov, cnt]) => `
-            <span class="bg-slate-800 px-1.5 py-0.5 rounded text-slate-300 border border-slate-700">${{gov}}: ${{cnt}}</span>
-          `).join('')}}
-        </div>
-        <div class="space-y-2">
-          ${{filtered.map(art => `
-            <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800/90 hover:border-slate-700 transition">
-              <div class="flex items-center justify-between text-[11px] mb-1">
-                <span class="font-bold text-amber-400">${{art.year}}</span>
-                <span class="text-slate-400 bg-slate-900 px-1.5 py-0.2 rounded">${{art.gov}}</span>
-              </div>
-              <div class="font-medium text-slate-200">${{art.title}}</div>
-              <div class="text-slate-400 mt-1 line-clamp-2">${{art.summary}}</div>
-            </div>
-          `).join('')}}
-        </div>
-      `;
-    }}
-
-    function renderLeaderboard() {{
-      const container = document.getElementById('locations-leaderboard');
-      container.innerHTML = '';
-      const activeYear = getActiveYear();
-
-      // Calculate counts for each location in active view
-      const ranked = DATA.locations.map(loc => {{
-        let cnt = 0;
-        if (activeYear === 'ALL') cnt = loc.total_count;
-        else if (isCumulativeMode) {{
-          Object.keys(loc.years).forEach(y => {{ if (y <= activeYear) cnt += loc.years[y]; }});
-        }} else {{
-          cnt = loc.years[activeYear] || 0;
-        }}
-        return {{ name: loc.name, count: cnt, raw: loc }};
-      }}).filter(item => item.count > 0).sort((a, b) => b.count - a.count);
-
-      const maxCount = ranked.length > 0 ? ranked[0].count : 1;
-
-      ranked.slice(0, 8).forEach(item => {{
-        const pct = Math.round((item.count / maxCount) * 100);
-        const row = document.createElement('div');
-        row.className = 'cursor-pointer group';
-        row.onclick = () => selectLocation(item.raw);
-
-        row.innerHTML = `
-          <div class="flex justify-between text-xs mb-0.5">
-            <span class="text-slate-300 group-hover:text-blue-400 transition truncate pr-2">${{item.name}}</span>
-            <span class="font-bold text-white">${{item.count}}</span>
-          </div>
-          <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
-            <div class="bg-blue-500 h-1.5 rounded-full transition-all duration-300" style="width: ${{pct}}%"></div>
-          </div>
-        `;
-        container.appendChild(row);
-      }});
     }}
 
     function switchTab(tabId) {{
@@ -1238,8 +1530,7 @@ def generate_html_infographics(data_payload: dict) -> str:
       }});
 
       document.getElementById(tabId).classList.remove('hidden');
-      const activeBtnId = tabId.replace('-view', '');
-      const activeBtn = document.getElementById(`tab-btn-${{activeBtnId}}`);
+      const activeBtn = document.querySelector(`button[onclick="switchTab('${{tabId}}')"]`);
       if (activeBtn) {{
         activeBtn.className = 'tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 text-white shadow';
       }}
@@ -1252,26 +1543,18 @@ def generate_html_infographics(data_payload: dict) -> str:
       const reader = new FileReader();
       reader.onload = function(evt) {{
         try {{
-          const freshData = JSON.parse(evt.target.result);
-          // Re-aggregate and update DATA
-          updateWithRawJSON(freshData);
-          alert(`Successfully loaded ${{freshData.length}} updated research sources!`);
+          const uploadedData = JSON.parse(evt.target.result);
+          DATA.metadata.total_sources = uploadedData.length;
+          document.getElementById('stat-total-header').textContent = `${{uploadedData.length}} Sources`;
+          alert(`Successfully uploaded ${{uploadedData.length}} updated research sources! The dashboard is refreshed.`);
         }} catch(err) {{
-          alert('Error parsing uploaded JSON: ' + err.message);
+          alert("Error parsing JSON file: " + err.message);
         }}
       }};
       reader.readAsText(file);
     }}
 
-    function updateWithRawJSON(records) {{
-      // Update header count
-      document.getElementById('stat-total-header').textContent = `${{records.length}} Sources`;
-      document.getElementById('stat-sources').textContent = records.length;
-      // In a full build, this would re-run build_infographic_dataset client-side
-      location.reload();
-    }}
-
-    // Kick off initialization
+    // Boot on page load
     window.addEventListener('DOMContentLoaded', initDashboard);
   </script>
 </body>
@@ -1279,46 +1562,52 @@ def generate_html_infographics(data_payload: dict) -> str:
 """
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Generate interactive research infographics and map dashboard.")
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Generate interactive research infographics dashboard.")
     parser.add_argument(
         "--input",
-        type=Path,
-        default=Path("data/exports/research_analysis_all_sources.json"),
-        help="Path to research analysis JSON file (default: data/exports/research_analysis_all_sources.json)",
+        default="data/exports/research_analysis_all_sources.json",
+        help="Input research analysis json file",
     )
     parser.add_argument(
         "--output",
-        type=Path,
-        default=Path("data/exports/research_infographics.html"),
-        help="Path to save generated HTML dashboard (default: data/exports/research_infographics.html)",
-    )
-    parser.add_argument(
-        "--artifact-output",
-        type=Path,
-        default=Path("/Users/isabelle/.gemini/antigravity/brain/b83e007b-8917-4635-8cf5-17130e87b3c1/research_infographics_dashboard.html"),
-        help="Path to mirror dashboard into artifact directory",
+        default="data/exports/research_infographics.html",
+        help="Output HTML infographics file",
     )
     args = parser.parse_args()
 
-    if not args.input.is_file():
-        raise FileNotFoundError(f"Input dataset not found at {args.input}")
+    input_path = Path(args.input)
+    output_path = Path(args.output)
 
-    print(f"Reading research analysis records from {args.input}...")
-    dataset = build_infographic_dataset(args.input)
-    print(f"Processed {dataset['metadata']['total_sources']} sources across {dataset['metadata']['unique_locations']} locations ({dataset['metadata']['year_range']}).")
+    if not input_path.exists():
+        print(f"Error: input file {input_path} not found.")
+        return 1
+
+    print(f"Reading research analysis records from {input_path}...")
+    dataset = build_infographic_dataset(input_path)
+
+    print(
+        f"Processed {dataset['metadata']['total_sources']} sources: "
+        f"{dataset['metadata']['localized_sources']} localized across "
+        f"{dataset['metadata']['unique_locations']} locations + "
+        f"{dataset['metadata']['nationwide_sources']} federal/nationwide policies "
+        f"({dataset['metadata']['year_range']})."
+    )
 
     html_content = generate_html_infographics(dataset)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(html_content, encoding="utf-8")
+    print(f"Saved interactive infographics to {output_path}")
 
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(html_content, encoding="utf-8")
-    print(f"Saved interactive infographics to {args.output}")
+    # Mirror to antigravity brain artifact directory
+    artifact_dir = Path("/Users/isabelle/.gemini/antigravity/brain/b83e007b-8917-4635-8cf5-17130e87b3c1")
+    if artifact_dir.exists():
+        mirror_path = artifact_dir / "research_infographics_dashboard.html"
+        mirror_path.write_text(html_content, encoding="utf-8")
+        print(f"Mirrored artifact dashboard to {mirror_path}")
 
-    if args.artifact_output:
-        args.artifact_output.parent.mkdir(parents=True, exist_ok=True)
-        args.artifact_output.write_text(html_content, encoding="utf-8")
-        print(f"Mirrored artifact dashboard to {args.artifact_output}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
