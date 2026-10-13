@@ -478,13 +478,17 @@ To evaluate where policies originate and apply, every analyzed source includes:
   - *Duplicate Discovery Preservation*: Preserves all originating discovery records in SQLite (`source_discoveries`) while consolidating identical content for unified analysis.
   - *Verbatim Evidence Validation*: 100% of supporting passages are checked against raw disk archives (`content.md`).
 
-### Analysis Exports
+### Analysis & Visualization Exports
 
 All analysis outputs are saved under `data/exports/`:
 
 - `archived_sources_inventory.csv`: Complete audit of all fetch attempts with diagnostic HTTP status and content-quality codes (`robots_disallow`, `needs_ocr`, `http_status`).
 - `research_analysis_all_sources.json` & `.csv`: Comprehensive unified deliverable covering all 195 unique retrieved sources (36 baseline crawler + 159 Nexis U.S. sources) with governance metadata, measures, feedback, and verified passages. `publication_year` is the year the article was published. `location` is the place the article is about. (Replaces deprecated separate reports like `nexis_report.csv`).
 - `research_analysis_pass1.json` & `.csv`: Benchmark sample covering initial core sources.
+- `research_infographics.html`: Interactive dynamic research infographics dashboard featuring an interactive SVG U.S. map, sliding scale timeline slider (2013–2026), animated timeline playback, methodology flowchart, artifacts zoom-in, and comprehensive keyword audit. Re-generate via CLI or update live in-browser with JSON drag-and-drop:
+  ```bash
+  python3 -m news_importer infographics
+  ```
 
 ## Project layout
 
@@ -496,6 +500,7 @@ news_importer/          import, list, export, crawl, Nexis search, and research 
   nexis_analysis.py     qualitative research coding and dataset expansion for Nexis sources
   crawl_nexis_us.py     automated crawler and coder for 100 U.S. Nexis sources
   all_analyses.py       comprehensive analysis builder for all retrieved sources
+  generate_infographics.py dynamic HTML infographic builder with US map, timeline slider, and audit
 queries/                search queries, keyword families, and ready-to-use Nexis queries
   search_queries.csv    catalog of study area and U.S. overview queries (US-OVERVIEW-01, US-FEEDBACK-01)
   keyword_families.json taxonomy keyword families, governing-level mappings, and proximity rules

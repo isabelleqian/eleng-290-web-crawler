@@ -40,6 +40,8 @@ def main(argv: list[str] | None = None) -> int:
             return command_nexis(args)
         if args.command == "keywords":
             return command_keywords(args)
+        if args.command == "infographics":
+            return command_infographics(args)
     except ImporterError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
@@ -349,6 +351,26 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="print the Nexis query for each line without calling the API or writing files",
     )
+
+    infographics_parser = subparsers.add_parser(
+        "infographics",
+        help="generate interactive research infographics and map dashboard",
+        description=(
+            "Generate dynamic HTML infographics with methodology flowchart, "
+            "zoom-in artifacts, interactive US map, timeline slider (2013-2026), "
+            "and comprehensive keyword utilization audit."
+        ),
+    )
+    infographics_parser.add_argument(
+        "--input",
+        default="data/exports/research_analysis_all_sources.json",
+        help="path to research analysis JSON dataset (default: data/exports/research_analysis_all_sources.json)",
+    )
+    infographics_parser.add_argument(
+        "--output",
+        default="data/exports/research_infographics.html",
+        help="path for generated interactive HTML dashboard (default: data/exports/research_infographics.html)",
+    )
     return parser
 
 
@@ -541,6 +563,31 @@ def command_analyze(args: argparse.Namespace) -> int:
     export_analysis_csv(all_entries, all_csv_path)
     print(f"all sources analyzed: {len(all_entries)} retrieved sources -> {all_json_path}")
     print(f"csv export: {all_csv_path}")
+    return 0
+
+
+def command_infographics(args: argparse.Namespace) -> int:
+    from news_importer.generate_infographics import build_infographic_dataset, generate_html_infographics
+
+    input_path = Path(args.input).expanduser().resolve()
+    output_path = Path(args.output).expanduser().resolve()
+
+    if not input_path.exists():
+        raise ImporterError(f"input dataset not found: {input_path}")
+
+    dataset = build_infographic_dataset(input_path)
+    html_content = generate_html_infographics(dataset)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(html_content, encoding="utf-8")
+    print(f"saved interactive infographics to {output_path}")
+
+    # Mirror to antigravity brain artifact directory if accessible
+    artifact_dir = Path("/Users/isabelle/.gemini/antigravity/brain/b83e007b-8917-4635-8cf5-17130e87b3c1")
+    if artifact_dir.exists():
+        mirror_path = artifact_dir / "research_infographics_dashboard.html"
+        mirror_path.write_text(html_content, encoding="utf-8")
+        print(f"mirrored artifact dashboard to {mirror_path}")
+
     return 0
 
 
