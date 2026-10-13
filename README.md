@@ -25,11 +25,19 @@ python3 -m news_importer export --output data/exports/pending.csv
 python3 -m news_importer analyze
 ```
 
-Nexis uses the LexisNexis Web Services API. Put the library client id and secret in `.env` in this project folder (`NEXIS_CLIENT_ID` and `NEXIS_CLIENT_SECRET`). That file is gitignored. `keywords save` copies your text list into `queries/nexis_keywords.txt` and later `nexis` runs use that saved list. `--dry-run` only prints the query that would be sent. Each hit is stored at `data/nexis/<keywords>/<document-id>/` with `content.txt` and `metadata.json`. The report is `data/exports/nexis_report.csv`.
+Nexis uses the LexisNexis Web Services API. Put the library client id and secret in `.env` in this project folder (`NEXIS_CLIENT_ID` and `NEXIS_CLIENT_SECRET`). That file is gitignored. `keywords save` copies your text list into `queries/nexis_keywords.txt` and later `nexis` runs use that saved list. `--dry-run` only prints the query that would be sent. Each hit is stored at `data/nexis/<keywords>/<document-id>/` with `content.txt` and `metadata.json`.
 
-`nexis_report.csv` and `research_analysis_all_sources.csv` share a 100% compatible 27-column schema (`ANALYSIS_EXPORT_COLUMNS`), including governance levels, authority names, target locations, measure actors/mechanisms/statuses, reported and causal effects, community feedback, and supporting passages. The automated crawler and coding pipeline (`python3 -m news_importer.crawl_nexis_us --limit 100`) populates `nexis_report.csv` with 100 verified U.S. Nexis sources and expands `research_analysis_all_sources.csv` (and `.json`) across all 143 baseline crawled and Nexis U.S. sources.
+`research_analysis_all_sources.csv` and `research_analysis_all_sources.json` serve as the unified, authoritative research deliverable (with redundant separate reports like `nexis_report.csv` deprecated). The dataset uses a comprehensive 27-column schema (`ANALYSIS_EXPORT_COLUMNS`), covering governing levels, authority names, target locations, measure actors/mechanisms/statuses, reported and causal effects, community feedback, and supporting passages. The automated pipeline combines 36 verified baseline web crawler sources and 159 clean U.S. Nexis sources into a clean dataset of 195 strictly relevant sources.
 
-In Nexis, every document is globally identified by its Content Item URN (e.g., `urn:contentItem:6J9T-Y0C3-S3T5-M0JH-00000-00`). In our datasets, `archive_attempt_id` records this exact URN, while `source_id` is namespaced as `nexis_{urn}`. You can navigate directly and unambiguously to any article in Nexis Uni or the LexisNexis Web Services API by searching for this URN or Document ID.
+### Deduplication Architecture
+
+The crawler and ingestion pipeline implements a 4-tier deduplication and relevance gatekeeping architecture to prevent duplicate exports:
+1. **Global Content Item URN Tracking**: Every Nexis document is globally identified by its Content Item URN (`urn:contentItem:XXXX-XXXX-XXXX-XXXX-00000-00`). The crawler tracks both prefixed and unprefixed URNs across SQLite (`data/news.sqlite`), existing disk directories (`data/nexis/`), and the export datasets. Any previously ingested URN is skipped before download.
+2. **Canonical URL Normalization**: URLs are normalized by stripping tracking parameters, normalizing schemes/casing, and matching against `downloaded_urls`.
+3. **Syndicated Wire Normalization (`normalize_title_for_dedup`)**: Regional news outlets frequently syndicate identical national AP/PR Newswire releases with slight headline modifications. `normalize_title_for_dedup` strips wire prefixes (`PR Newswire:`, `Business Wire:`, `GlobeNewswire:`), removes punctuation, and collapses whitespace. Duplicate syndicated stories are automatically collapsed to a single canonical entry.
+4. **Multi-Source In-Memory & Database Key Consolidation**: When integrating baseline web crawler sources (`src_<hash>`) and Nexis sources (`nexis_urn:contentItem:<urn>`), records are keyed on canonical `source_id`. Pre-existing entries are updated in place rather than creating duplicate rows.
+
+In Nexis, every document is globally identified by its Content Item URN. In our datasets, `archive_attempt_id` records this exact URN, while `source_id` is namespaced as `nexis_{urn}`. You can navigate directly and unambiguously to any article in Nexis Uni or the LexisNexis Web Services API by searching for this URN or Document ID.
 
 ### Nexis Search Strategy (U.S. Overview & Taxonomy)
 
@@ -475,8 +483,7 @@ To evaluate where policies originate and apply, every analyzed source includes:
 All analysis outputs are saved under `data/exports/`:
 
 - `archived_sources_inventory.csv`: Complete audit of all fetch attempts with diagnostic HTTP status and content-quality codes (`robots_disallow`, `needs_ocr`, `http_status`).
-- `research_analysis_all_sources.json` & `.csv`: Comprehensive dataset covering all unique retrieved sources with governance metadata, measures, feedback, and verified passages. `publication_year` is the year the article was published. `location` is the place the article is about.
-- `nexis_report.csv`: Hits from a Nexis keyword search. It has the same columns, plus `archive_dir` for the stored folder.
+- `research_analysis_all_sources.json` & `.csv`: Comprehensive unified deliverable covering all 195 unique retrieved sources (36 baseline crawler + 159 Nexis U.S. sources) with governance metadata, measures, feedback, and verified passages. `publication_year` is the year the article was published. `location` is the place the article is about. (Replaces deprecated separate reports like `nexis_report.csv`).
 - `research_analysis_pass1.json` & `.csv`: Benchmark sample covering initial core sources.
 
 ## Project layout
