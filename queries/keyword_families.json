@@ -1,11 +1,262 @@
 {
-  "version": 1,
+  "version": 2,
   "created": "2026-10-05",
+  "updated": "2026-10-13",
   "seed_terms": [
     "Waze",
     "traffic nightmare",
     "cut-through traffic"
   ],
+  "taxonomy_families": {
+    "government_restrictions_and_requirements": {
+      "description": "Policies governing which roads, turns, vehicles, or access conditions a recommended route must accommodate",
+      "terms": [
+        "road access",
+        "access restriction",
+        "access restrictions",
+        "road restriction",
+        "road restrictions",
+        "turn restriction",
+        "turn restrictions",
+        "turn ban",
+        "turn bans",
+        "road closure",
+        "road closures",
+        "street closure",
+        "street closures",
+        "resident only",
+        "residents only",
+        "local access only",
+        "local traffic only",
+        "no through traffic",
+        "restricted road",
+        "restricted roads",
+        "designated route",
+        "designated routes",
+        "truck route",
+        "truck routes",
+        "truck restriction",
+        "truck restrictions",
+        "vehicle restriction",
+        "vehicle restrictions",
+        "weight restriction",
+        "height restriction",
+        "traffic calming",
+        "traffic diverter",
+        "traffic diverters",
+        "congestion pricing",
+        "congestion charge",
+        "low emission zone",
+        "restricted access zone"
+      ],
+      "proximity_clause": {
+        "operator": "W/20",
+        "action_terms": [
+          "law",
+          "laws",
+          "legislation",
+          "regulation",
+          "regulations",
+          "ordinance",
+          "ordinances",
+          "mandate",
+          "mandates",
+          "ban",
+          "bans",
+          "enforcement"
+        ],
+        "routing_terms": [
+          "routing",
+          "navigation",
+          "traffic",
+          "roads",
+          "streets",
+          "road access"
+        ]
+      }
+    },
+    "company_routing_rules_and_preferences": {
+      "description": "Policies governing how apps select, prioritize, or avoid routes",
+      "terms": [
+        "routing policy",
+        "routing policies",
+        "routing rule",
+        "routing rules",
+        "routing restriction",
+        "routing restrictions",
+        "routing algorithm",
+        "routing algorithms",
+        "routing criteria",
+        "routing preference",
+        "routing preferences",
+        "route preference",
+        "route preferences",
+        "route selection",
+        "route recommendation",
+        "route recommendations",
+        "route optimization",
+        "routing change",
+        "routing changes",
+        "routing update",
+        "routing updates",
+        "route avoidance",
+        "avoid tolls",
+        "avoid highways",
+        "avoid freeways",
+        "avoid unpaved roads",
+        "avoid residential streets",
+        "avoid residential roads",
+        "avoid local roads",
+        "avoid neighborhoods",
+        "eco-friendly routing",
+        "fuel-efficient routing",
+        "fuel-efficient route",
+        "fuel-efficient routes",
+        "safer route",
+        "safer routes",
+        "road eligibility"
+      ]
+    },
+    "government_company_coordination": {
+      "description": "Agreements, data exchanges, and requests through which public authorities influence routing",
+      "terms": [
+        "Waze for Cities",
+        "Connected Citizens Program"
+      ],
+      "proximity_clause": {
+        "operator": "W/20",
+        "coordination_terms": [
+          "partnership",
+          "partnerships",
+          "agreement",
+          "agreements",
+          "data sharing",
+          "data exchange",
+          "road closure reporting",
+          "map correction",
+          "map corrections",
+          "routing request",
+          "routing requests"
+        ],
+        "authority_terms": [
+          "government",
+          "federal",
+          "state",
+          "county",
+          "municipal",
+          "municipality",
+          "city",
+          "town",
+          "transportation department",
+          "transportation agency",
+          "public authority"
+        ]
+      }
+    }
+  },
+  "navigation_app_group": {
+    "mandatory": true,
+    "description": "Mandatory core app and routing software names and generic references",
+    "terms": [
+      "Waze",
+      "Google Maps",
+      "Apple Maps",
+      "MapQuest",
+      "HERE WeGo",
+      "navigation app",
+      "navigation apps",
+      "navigational app",
+      "navigational apps",
+      "routing app",
+      "routing apps",
+      "GPS navigation",
+      "navigation software",
+      "routing software"
+    ]
+  },
+  "governing_levels": {
+    "usage": "Use for supplementary searches or post-retrieval classification, not as mandatory query blocks to avoid excluding implicit authority references",
+    "levels": {
+      "Federal": [
+        "federal",
+        "federal government",
+        "U.S. Department of Transportation",
+        "Federal Highway Administration"
+      ],
+      "State": [
+        "state government",
+        "state legislature",
+        "state law",
+        "state transportation department",
+        "department of transportation"
+      ],
+      "Regional": [
+        "regional authority",
+        "regional transportation agency",
+        "metropolitan planning organization",
+        "transportation planning organization"
+      ],
+      "County": [
+        "county",
+        "county government",
+        "county ordinance",
+        "county commission",
+        "county commissioners",
+        "board of supervisors"
+      ],
+      "Municipal": [
+        "municipal",
+        "municipality",
+        "city council",
+        "town council",
+        "local government",
+        "city ordinance",
+        "township ordinance"
+      ],
+      "Company_Platform": [
+        "company policy",
+        "platform policy",
+        "routing policy",
+        "routing algorithm",
+        "routing preferences"
+      ]
+    }
+  },
+  "supplementary_searches": {
+    "community_feedback": {
+      "traffic_issue_terms": [
+        "cut-through traffic",
+        "through traffic",
+        "shortcut traffic",
+        "rat running",
+        "residential streets",
+        "residential roads",
+        "neighborhood traffic",
+        "traffic diversion",
+        "rerouted traffic",
+        "road access",
+        "traffic safety"
+      ],
+      "feedback_reaction_terms": [
+        "complaint",
+        "complaints",
+        "backlash",
+        "opposition",
+        "petition",
+        "petitions",
+        "protest",
+        "protests",
+        "public comment",
+        "public comments",
+        "community concerns",
+        "resident concerns",
+        "neighborhood association",
+        "quality of life",
+        "speeding",
+        "pedestrian safety"
+      ]
+    }
+  },
   "families": {
     "cut_through_synonyms": {
       "description": "Ways the phenomenon of through traffic on local streets is described.",
@@ -129,10 +380,13 @@
   "brand_terms": [
     "Waze",
     "Google Maps",
-    "Apple Maps"
+    "Apple Maps",
+    "MapQuest",
+    "HERE WeGo"
   ],
   "notes": [
     "Mechanisms are search hypotheses, not claims of implementation.",
-    "Textbook novelty unknown until a baseline is provided."
+    "Textbook novelty unknown until a baseline is provided.",
+    "Geography filter in Nexis must be set to United States; avoid requiring 'United States' or city names in query text."
   ]
 }

@@ -1,5 +1,6 @@
 """Tests for the research analysis module."""
 
+import csv
 import json
 import sqlite3
 import tempfile
@@ -155,6 +156,12 @@ class AnalysisUnitTests(unittest.TestCase):
             self.assertIn("Test City Council", csv_text)
             self.assertIn("target_location_type", csv_text)
             self.assertIn("Test City", csv_text)
+            self.assertIn("publication_year", csv_text)
+            self.assertIn("2026", csv_text)
+            with csv_file.open(encoding="utf-8", newline="") as handle:
+                exported = list(csv.DictReader(handle))
+            self.assertEqual(exported[0]["publication_year"], "2026")
+            self.assertEqual(exported[0]["location"], "Test City")
 
     def test_build_all_analyses(self):
         from news_importer.analysis import build_all_analyses

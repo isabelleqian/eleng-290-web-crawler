@@ -36,6 +36,10 @@ def main(argv: list[str] | None = None) -> int:
             return command_crawl(args)
         if args.command == "analyze":
             return command_analyze(args)
+        if args.command == "nexis":
+            return command_nexis(args)
+        if args.command == "keywords":
+            return command_keywords(args)
     except ImporterError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
@@ -64,6 +68,9 @@ def build_parser() -> argparse.ArgumentParser:
             "  python3 -m news_importer list --status failed\n"
             "  python3 -m news_importer crawl --retry --limit 5\n"
             "  python3 -m news_importer crawl --limit 5 --save-page-pdf\n"
+            "  python3 -m news_importer keywords save your-list.txt\n"
+            "  python3 -m news_importer keywords\n"
+            "  python3 -m news_importer nexis --dry-run\n"
         ),
     )
     parser.add_argument("--version", action="version", version=__version__)
@@ -267,6 +274,81 @@ def build_parser() -> argparse.ArgumentParser:
         default="data/exports",
         help="output directory for JSON and CSV exports (default: data/exports)",
     )
+
+    keywords_parser = subparsers.add_parser(
+        "keywords",
+        help="save or show the Nexis keyword list",
+        description=(
+            "Save a text file with one search per line. "
+            "The saved lines are remembered in queries/nexis_keywords.txt "
+            "and used by the nexis command."
+        ),
+    )
+    keywords_parser.add_argument(
+        "action",
+        nargs="?",
+        choices=("save", "show"),
+        default="show",
+        help="save a text list, or show the list already saved (default: show)",
+    )
+    keywords_parser.add_argument(
+        "path",
+        nargs="?",
+        help="text file to save. One search per line.",
+    )
+
+    nexis_parser = subparsers.add_parser(
+        "nexis",
+        help="search Nexis with a keyword list and store the hits",
+        description=(
+            "Send each keyword line to the Nexis API. Every word must appear. "
+            "A multi-word place, such as Los Angeles, is searched as one phrase. "
+            "With no file, nexis uses the keyword list saved earlier. "
+            "Hits are written under data/nexis and summarized in a CSV that keeps "
+            "the analysis columns, including measures, publication year, and location."
+        ),
+    )
+    nexis_parser.add_argument(
+        "keywords",
+        nargs="?",
+        help="optional text list to save and search. Omit to use the saved list.",
+    )
+    nexis_parser.add_argument(
+        "--query",
+        "-q",
+        help="raw Nexis Boolean / proximity search expression (e.g. quoted terms, AND, OR, W/20)",
+    )
+    nexis_parser.add_argument(
+        "--query-file",
+        help="path to a text file containing a raw Nexis Boolean / proximity query string",
+    )
+    nexis_parser.add_argument(
+        "--output-dir",
+        default="data/nexis",
+        help="folder for one directory per hit (default: data/nexis)",
+    )
+    nexis_parser.add_argument(
+        "--report",
+        default="data/exports/nexis_report.csv",
+        help="CSV report path (default: data/exports/nexis_report.csv)",
+    )
+    nexis_parser.add_argument(
+        "--limit",
+        type=_positive_int,
+        default=50,
+        help="maximum documents stored for each keyword line (default: 50)",
+    )
+    nexis_parser.add_argument(
+        "--timeout",
+        type=_positive_float,
+        default=60.0,
+        help="per-request timeout in seconds (default: 60)",
+    )
+    nexis_parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="print the Nexis query for each line without calling the API or writing files",
+    )
     return parser
 
 
@@ -355,6 +437,60 @@ def command_crawl(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_keywords(args: argparse.Namespace) -> int:
+    from news_importer.nexis_query import REMEMBERED_KEYWORDS, load_keyword_list, save_keyword_list
+
+    if args.action == "save":
+        if not args.path:
+            raise ImporterError("Give the text file to save: python3 -m news_importer keywords save your-list.txt")
+        lines = save_keyword_list(Path(args.path).expanduser())
+        print(f"saved {len(lines)} keyword searches to {REMEMBERED_KEYWORDS}")
+        return 0
+    lines = load_keyword_list()
+    print(f"{len(lines)} keyword searches in {REMEMBERED_KEYWORDS}")
+    for line in lines:
+        print(line)
+    return 0
+
+
+def command_nexis(args: argparse.Namespace) -> int:
+    from news_importer.nexis import NexisOptions, run_nexis
+    from news_importer.nexis_query import REMEMBERED_KEYWORDS, save_keyword_list
+
+    query_expression = getattr(args, "query", None)
+    query_path = Path(args.query_file).expanduser() if getattr(args, "query_file", None) else None
+
+    if query_expression or query_path:
+        keyword_path = None
+    elif args.keywords:
+        save_keyword_list(Path(args.keywords).expanduser())
+        keyword_path = REMEMBERED_KEYWORDS
+    else:
+        keyword_path = REMEMBERED_KEYWORDS
+
+    summary = run_nexis(
+        NexisOptions(
+            keyword_path=keyword_path,
+            query_expression=query_expression,
+            query_path=query_path,
+            output_dir=Path(args.output_dir).expanduser(),
+            report_path=Path(args.report).expanduser(),
+            limit=args.limit,
+            dry_run=args.dry_run,
+            timeout=args.timeout,
+        )
+    )
+    if summary.dry_run:
+        print("dry run: no Nexis request and no files written")
+    for query in summary.queries:
+        print(query.expression)
+    if not summary.dry_run:
+        print(f"stored: {summary.stored}")
+        print(f"folder: {summary.output_dir}")
+        print(f"report: {summary.report_path}")
+    return 0
+
+
 def command_analyze(args: argparse.Namespace) -> int:
     from news_importer.analysis import (
         build_all_analyses,
@@ -384,6 +520,21 @@ def command_analyze(args: argparse.Namespace) -> int:
     print(f"pass 1 analyzed: {len(p1_entries)} core sources -> {p1_json_path}")
 
     all_entries = build_all_analyses(db_path, base_dir)
+
+    nexis_dir = base_dir / "data" / "nexis"
+    if nexis_dir.is_dir():
+        try:
+            from news_importer.nexis_analysis import build_nexis_analyses, update_nexis_report
+            nexis_report_path = out_dir / "nexis_report.csv"
+            nexis_entries = update_nexis_report(nexis_dir, nexis_report_path)
+            combined_dict = {e.source_id: e for e in all_entries}
+            for ne in nexis_entries:
+                combined_dict[ne.source_id] = ne
+            all_entries = list(combined_dict.values())
+            print(f"nexis analyzed: {len(nexis_entries)} sources -> {nexis_report_path}")
+        except Exception as exc:
+            print(f"warning: nexis analysis skipped: {exc}", file=sys.stderr)
+
     all_json_path = out_dir / "research_analysis_all_sources.json"
     all_csv_path = out_dir / "research_analysis_all_sources.csv"
     export_analysis_json(all_entries, all_json_path)

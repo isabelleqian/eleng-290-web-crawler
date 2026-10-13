@@ -1,0 +1,12 @@
+# Supplementary Community Feedback Query for Nexis
+# Combines:
+# 1. Mandatory App Group
+# 2. Cut-through traffic and road safety phenomena
+# 3. Resident backlash, complaints, petitions, and public comment
+#
+# Filters to apply in Nexis Uni:
+# - Geography = United States (subject region)
+# - Date range = research date range
+# - Content type = News
+
+( Waze OR "Google Maps" OR "Apple Maps" OR MapQuest OR "HERE WeGo" OR "navigation app" OR "navigation apps" OR "navigational app" OR "navigational apps" OR "routing app" OR "routing apps" OR "GPS navigation" OR "navigation software" OR "routing software" ) AND ( "cut-through traffic" OR "through traffic" OR "shortcut traffic" OR "rat running" OR "residential streets" OR "residential roads" OR "neighborhood traffic" OR "traffic diversion" OR "rerouted traffic" OR "road access" OR "traffic safety" ) AND ( complaint OR complaints OR backlash OR opposition OR petition OR petitions OR protest OR protests OR "public comment" OR "public comments" OR "community concerns" OR "resident concerns" OR "neighborhood association" OR "quality of life" OR speeding OR "pedestrian safety" )

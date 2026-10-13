@@ -1,0 +1,2 @@
+# Saved Nexis keyword list. One search per line.
+# Fill this by running: python3 -m news_importer keywords save your-list.txt

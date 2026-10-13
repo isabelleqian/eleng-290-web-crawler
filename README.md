@@ -1,10 +1,13 @@
 # AI News Scraper: URL importer and archive
 
-This project collects, archives, and analyzes news and regulations about navigation-app traffic, access restrictions, routing-app rules, and community complaints. It has three local stages:
+This project collects, archives, and analyzes news and regulations about navigation-app traffic, access restrictions, routing-app rules, and community complaints. Collection goes through the Nexis API. A keyword list is searched so every word must appear, and a multi-word place such as Los Angeles is kept as one phrase.
 
+- `nexis` sends that keyword list to Nexis, stores each hit in a folder, and writes a CSV report.
 - `import`, `list`, and `export` store URLs you already collected. They do not search the web or download pages.
 - `crawl` reads that queue and archives each selected URL. It uses a direct HTTP request for the status, redirects, and original PDF bytes, then uses locally installed Crawl4AI to render HTML.
 - `analyze` audits archived sources and executes structured research analysis over retrieved articles, validating exact supporting evidence passages, classifying governance and target geographic scopes, and exporting research datasets to CSV and JSON.
+
+Google search collection is archived. `queries/search_queries.csv` keeps those older queries, including `OR` searches, and the importer still accepts a `google_first_page` row from an old file. New searches use `nexis` and a `keywords` list. An article matches only when every keyword hits, so `Los Angeles Waze` does not return a story that has Los in one place and Angeles in another.
 
 The sample URLs use `example.com` and are fictional. Do not crawl them as research articles.
 
@@ -13,11 +16,57 @@ The sample URLs use `example.com` and are fictional. Do not crawl them as resear
 Open a terminal in this project folder. Python 3.11 or newer is enough. There is nothing to install.
 
 ```bash
+python3 -m news_importer keywords save your-list.txt
+python3 -m news_importer keywords
+python3 -m news_importer nexis --dry-run
 python3 -m news_importer import samples/discoveries.csv
 python3 -m news_importer list --study-area SF
 python3 -m news_importer export --output data/exports/pending.csv
 python3 -m news_importer analyze
 ```
+
+Nexis uses the LexisNexis Web Services API. Put the library client id and secret in `.env` in this project folder (`NEXIS_CLIENT_ID` and `NEXIS_CLIENT_SECRET`). That file is gitignored. `keywords save` copies your text list into `queries/nexis_keywords.txt` and later `nexis` runs use that saved list. `--dry-run` only prints the query that would be sent. Each hit is stored at `data/nexis/<keywords>/<document-id>/` with `content.txt` and `metadata.json`. The report is `data/exports/nexis_report.csv`.
+
+`nexis_report.csv` and `research_analysis_all_sources.csv` share a 100% compatible 27-column schema (`ANALYSIS_EXPORT_COLUMNS`), including governance levels, authority names, target locations, measure actors/mechanisms/statuses, reported and causal effects, community feedback, and supporting passages. Running qualitative coding on retrieved Nexis sources (via `news_importer.nexis_analysis`) populates `nexis_report.csv` and expands `research_analysis_all_sources.csv` (and `.json`) across all 51 baseline crawled and Nexis U.S. sources.
+
+In Nexis, every document is globally identified by its Content Item URN (e.g., `urn:contentItem:6J9T-Y0C3-S3T5-M0JH-00000-00`). In our datasets, `archive_attempt_id` records this exact URN, while `source_id` is namespaced as `nexis_{urn}`. You can navigate directly and unambiguously to any article in Nexis Uni or the LexisNexis Web Services API by searching for this URN or Document ID.
+
+### Nexis Search Strategy (U.S. Overview & Taxonomy)
+
+To retrieve policy interventions shaping navigation-app recommendations across the United States, use the Boolean and proximity search queries defined in `queries/nexis_us_overview_query.txt` and `queries/search_queries.csv`.
+
+#### 1. Core Overview Query Architecture
+The primary search combines a mandatory navigation app block with three alternative policy families:
+- **Mandatory App Group**: `( Waze OR "Google Maps" OR "Apple Maps" OR MapQuest OR "HERE WeGo" OR "navigation app" OR "navigation apps" OR "navigational app" OR "navigational apps" OR "routing app" OR "routing apps" OR "GPS navigation" OR "navigation software" OR "routing software" )`
+- **Family 1: Government restrictions and requirements**: Policies governing which roads, turns, vehicles, or access conditions a recommended route must accommodate (turn restrictions, road closures, resident-only access, traffic calming, weight/height limits, low emission zones, plus regulatory terms within 20 words of transportation nouns: `(law OR regulations OR ordinance OR ...) W/20 (routing OR navigation OR traffic OR ...)`).
+- **Family 2: Company routing rules and preferences**: Policies governing how apps select, prioritize, or avoid routes (`"routing policy"`, `"routing algorithm"`, `"avoid residential streets"`, `"eco-friendly routing"`, `"safer route"`, `"road eligibility"`).
+- **Family 3: Government–company coordination**: Agreements, data exchanges, and requests through which public authorities influence routing (`"Waze for Cities"`, `"Connected Citizens Program"`, plus `(partnership OR agreement OR "data sharing" OR "routing request" OR ...) W/20 (government OR municipal OR city OR "transportation department" OR ...)`).
+
+The full query expression is saved in `queries/nexis_us_overview_query.txt` and registered in `queries/search_queries.csv` as `US-OVERVIEW-01`.
+
+#### 2. Nexis Uni Search Parameters
+When running searches in Nexis Uni:
+1. **Search Field**: Copy and paste the full Boolean expression directly into the search-term field.
+2. **Geography**: Apply `Geography = United States` (subject region of the article, distinct from publisher source location). Do not add city names or require the literal phrase "United States" in the text.
+3. **Date Range**: Apply your designated research date range.
+4. **Content Filter**: Filter by `News`.
+5. **Taxonomy Principles**: Do not require "pilot", "experiment", or complaints in the main overview query—the taxonomy requires established policies as well as experimental interventions.
+
+#### 3. Supplementary Searches & Classifiers
+- **Community Feedback Search**: Resident complaints and backlash are tracked via a dedicated supplementary search:
+  `App Group AND ( "cut-through traffic" OR ... OR "traffic safety" ) AND ( complaint OR backlash OR petition OR "public comment" OR ... )`. Ready to copy in `queries/nexis_feedback_query.txt` and logged as `US-FEEDBACK-01`.
+- **Governing-Level Classifiers**: Keyword patterns for Federal, State, Regional, County, Municipal, and Company/platform levels are defined in `queries/keyword_families.json` and `news_importer/analysis.py`. They are applied as post-retrieval classifiers and supplementary filters rather than mandatory query blocks (to prevent excluding articles that name a specific agency without explicitly stating its jurisdictional level).
+
+#### 4. Running Queries via the Importer CLI
+You can inspect or run raw Boolean/proximity queries using `--query` or `--query-file`:
+```bash
+# Preview the U.S. overview query
+python3 -m news_importer nexis --query-file queries/nexis_us_overview_query.txt --dry-run
+
+# Preview the community feedback supplementary query
+python3 -m news_importer nexis --query-file queries/nexis_feedback_query.txt --dry-run
+```
+
 
 The first command creates `data/news.sqlite` and a JSON report under `data/reports/`. For the sample CSV you should see:
 
@@ -426,30 +475,39 @@ To evaluate where policies originate and apply, every analyzed source includes:
 All analysis outputs are saved under `data/exports/`:
 
 - `archived_sources_inventory.csv`: Complete audit of all fetch attempts with diagnostic HTTP status and content-quality codes (`robots_disallow`, `needs_ocr`, `http_status`).
-- `research_analysis_all_sources.json` & `.csv`: Comprehensive dataset covering all unique retrieved sources with governance metadata, measures, feedback, and verified passages.
+- `research_analysis_all_sources.json` & `.csv`: Comprehensive dataset covering all unique retrieved sources with governance metadata, measures, feedback, and verified passages. `publication_year` is the year the article was published. `location` is the place the article is about.
+- `nexis_report.csv`: Hits from a Nexis keyword search. It has the same columns, plus `archive_dir` for the stored folder.
 - `research_analysis_pass1.json` & `.csv`: Benchmark sample covering initial core sources.
 
 ## Project layout
 
 ```text
-news_importer/          import, list, export, crawl, and research analysis
+news_importer/          import, list, export, crawl, Nexis search, and research analysis
   analysis.py           research analysis models, verification, and export tools
+  nexis.py              Nexis API search, folder storage, and report
+  nexis_query.py        keyword lines, with multi-word places kept as phrases
+  nexis_analysis.py     qualitative research coding and dataset expansion for Nexis sources
   all_analyses.py       comprehensive analysis builder for all retrieved sources
-  study_areas.json      the 12 study areas and aliases
-queries/                search query definitions and keyword families
+queries/                search queries, keyword families, and ready-to-use Nexis queries
+  search_queries.csv    catalog of study area and U.S. overview queries (US-OVERVIEW-01, US-FEEDBACK-01)
+  keyword_families.json taxonomy keyword families, governing-level mappings, and proximity rules
+  nexis_us_overview_query.txt  raw Boolean/proximity expression for U.S. overview search
+  nexis_feedback_query.txt     raw Boolean expression for community feedback supplementary search
+  nexis_keywords.txt    remembered simple keyword searches
 run_analysis.py         standalone research analysis runner and validator
 samples/discoveries.csv fictional CSV collected by hand and by research agents
 samples/discoveries.txt fictional one-URL-per-line file
 tests/test_importer.py  offline importer tests
 tests/test_analysis.py  offline analysis codebook, verification, and export tests
+tests/test_nexis.py     offline Nexis query building, storage, and analysis tests
 tests/test_crawl.py     crawl tests against a local HTTP server
 ```
 
 ## Tests
 
 ```bash
-# Run offline importer and research analysis tests
-python3 -m unittest tests/test_importer.py tests/test_analysis.py
+# Run offline importer, analysis, and Nexis test suites
+python3 -m unittest tests/test_importer.py tests/test_analysis.py tests/test_nexis.py
 
 # Run all test suites
 python3 -m unittest discover -s tests -v

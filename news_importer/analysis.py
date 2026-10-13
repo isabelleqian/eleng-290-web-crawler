@@ -61,6 +61,66 @@ ALLOWED_TARGET_LOCATION_TYPES = {
     "Country",
 }
 
+GOVERNING_LEVEL_KEYWORDS: dict[str, list[str]] = {
+    "Government: Federal": [
+        "federal",
+        "federal government",
+        "U.S. Department of Transportation",
+        "Federal Highway Administration",
+    ],
+    "Government: State": [
+        "state government",
+        "state legislature",
+        "state law",
+        "state transportation department",
+        "department of transportation",
+    ],
+    "Regional Authority": [
+        "regional authority",
+        "regional transportation agency",
+        "metropolitan planning organization",
+        "transportation planning organization",
+    ],
+    "Government: County": [
+        "county",
+        "county government",
+        "county ordinance",
+        "county commission",
+        "county commissioners",
+        "board of supervisors",
+    ],
+    "Government: City": [
+        "municipal",
+        "municipality",
+        "city council",
+        "town council",
+        "local government",
+        "city ordinance",
+        "township ordinance",
+    ],
+    "Company": [
+        "company policy",
+        "platform policy",
+        "routing policy",
+        "routing algorithm",
+        "routing preferences",
+    ],
+}
+
+
+def classify_governing_level_from_text(text: str) -> list[str]:
+    """Identify candidate governing levels from article or authority text without mandatory filtering."""
+    lower_text = text.lower()
+    matches: list[str] = []
+    for level, keywords in GOVERNING_LEVEL_KEYWORDS.items():
+        for kw in keywords:
+            pattern = r"\b" + re.escape(kw.lower()) + r"\b"
+            if re.search(pattern, lower_text):
+                matches.append(level)
+                break
+    return matches
+
+
 
 # ---------------------------------------------------------------------------
 # Data Models
@@ -133,6 +193,7 @@ class ResearchAnalysisEntry:
     quality_flags: list[dict[str, str]]
     unresolved_questions: list[str]
     discovery_records: list[DiscoveryReference] = field(default_factory=list)
+    archive_dir: str = ""
 
 
 # ---------------------------------------------------------------------------
@@ -149,6 +210,13 @@ def strip_markdown(text: str) -> str:
     # Strip images first so ! is not left behind
     t = re.sub(r"!\[([^\]]*)\]\([^)]+\)", r"", text)
     t = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", t)
+    return t
+
+
+def strip_markup(text: str) -> str:
+    """Strip markdown links, images, HTML/XML tags, and formatting to obtain plain text."""
+    t = strip_markdown(text)
+    t = re.sub(r"<[^>]+>", " ", t)
     return t
 
 
@@ -169,6 +237,11 @@ def verify_passage(verbatim_passage: str, archive_markdown: str) -> tuple[bool, 
 
     if norm_passage.lower() in norm_content.lower() or stripped_passage.lower() in stripped_content.lower():
         return True, "Case-insensitive normalized match"
+
+    markup_passage = normalize_whitespace(strip_markup(verbatim_passage))
+    markup_content = normalize_whitespace(strip_markup(archive_markdown))
+    if markup_passage.casefold() in markup_content.casefold():
+        return True, "Markup-stripped normalized match"
         
     return False, "Passage not found in archive content"
 
@@ -921,35 +994,58 @@ def export_analysis_json(entries: list[ResearchAnalysisEntry], output_path: Path
     output_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
+ANALYSIS_EXPORT_COLUMNS = [
+    "source_id",
+    "archive_attempt_id",
+    "title",
+    "publisher",
+    "publication_date",
+    "publication_year",
+    "actual_jurisdiction",
+    "governing_level",
+    "authority_names",
+    "target_location_type",
+    "target_location",
+    "location",
+    "source_type",
+    "category",
+    "measure_actors",
+    "measure_mechanisms",
+    "measure_statuses",
+    "measure_implementation_dates",
+    "reported_effects",
+    "demonstrated_causal_effects",
+    "feedback_stakeholders",
+    "feedback_concerns",
+    "quality_flag_codes",
+    "unresolved_questions",
+    "discovery_ids",
+    "requested_url",
+    "archive_dir",
+]
+
+
+def publication_year(value: str | None) -> str:
+    """Return the four-digit publication year, or a blank string."""
+    if not value:
+        return ""
+    match = re.search(r"\b(?:19|20)\d{2}\b", value)
+    return match.group(0) if match else ""
+
+
+def article_location(target_location: str | None, actual_jurisdiction: str | None) -> str:
+    """Place the article is about. Prefer the coded target, then the jurisdiction."""
+    if target_location and target_location.strip():
+        return target_location.strip()
+    if actual_jurisdiction and actual_jurisdiction.strip():
+        return actual_jurisdiction.strip()
+    return ""
+
+
 def export_analysis_csv(entries: list[ResearchAnalysisEntry], output_path: Path) -> None:
     """Export a flattened tabular summary of analysis findings to CSV."""
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    fieldnames = [
-        "source_id",
-        "archive_attempt_id",
-        "title",
-        "publisher",
-        "publication_date",
-        "actual_jurisdiction",
-        "governing_level",
-        "authority_names",
-        "target_location_type",
-        "target_location",
-        "source_type",
-        "category",
-        "measure_actors",
-        "measure_mechanisms",
-        "measure_statuses",
-        "measure_implementation_dates",
-        "reported_effects",
-        "demonstrated_causal_effects",
-        "feedback_stakeholders",
-        "feedback_concerns",
-        "quality_flag_codes",
-        "unresolved_questions",
-        "discovery_ids",
-        "requested_url",
-    ]
+    fieldnames = ANALYSIS_EXPORT_COLUMNS
     with output_path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
@@ -960,11 +1056,13 @@ def export_analysis_csv(entries: list[ResearchAnalysisEntry], output_path: Path)
                 "title": e.title,
                 "publisher": e.publisher,
                 "publication_date": e.publication_date or "",
+                "publication_year": publication_year(e.publication_date),
                 "actual_jurisdiction": e.actual_jurisdiction,
                 "governing_level": e.governing_level,
                 "authority_names": e.authority_names,
                 "target_location_type": e.target_location_type,
                 "target_location": e.target_location,
+                "location": article_location(e.target_location, e.actual_jurisdiction),
                 "source_type": e.source_type,
                 "category": e.category,
                 "measure_actors": "; ".join(m.actor for m in e.measures),
@@ -979,4 +1077,5 @@ def export_analysis_csv(entries: list[ResearchAnalysisEntry], output_path: Path)
                 "unresolved_questions": "; ".join(e.unresolved_questions),
                 "discovery_ids": "; ".join(d.discovery_id for d in e.discovery_records),
                 "requested_url": e.requested_url,
+                "archive_dir": getattr(e, "archive_dir", "") or "",
             })
