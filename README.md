@@ -27,7 +27,7 @@ python3 -m news_importer analyze
 
 Nexis uses the LexisNexis Web Services API. Put the library client id and secret in `.env` in this project folder (`NEXIS_CLIENT_ID` and `NEXIS_CLIENT_SECRET`). That file is gitignored. `keywords save` copies your text list into `queries/nexis_keywords.txt` and later `nexis` runs use that saved list. `--dry-run` only prints the query that would be sent. Each hit is stored at `data/nexis/<keywords>/<document-id>/` with `content.txt` and `metadata.json`. The report is `data/exports/nexis_report.csv`.
 
-`nexis_report.csv` and `research_analysis_all_sources.csv` share a 100% compatible 27-column schema (`ANALYSIS_EXPORT_COLUMNS`), including governance levels, authority names, target locations, measure actors/mechanisms/statuses, reported and causal effects, community feedback, and supporting passages. Running qualitative coding on retrieved Nexis sources (via `news_importer.nexis_analysis`) populates `nexis_report.csv` and expands `research_analysis_all_sources.csv` (and `.json`) across all 51 baseline crawled and Nexis U.S. sources.
+`nexis_report.csv` and `research_analysis_all_sources.csv` share a 100% compatible 27-column schema (`ANALYSIS_EXPORT_COLUMNS`), including governance levels, authority names, target locations, measure actors/mechanisms/statuses, reported and causal effects, community feedback, and supporting passages. The automated crawler and coding pipeline (`python3 -m news_importer.crawl_nexis_us --limit 100`) populates `nexis_report.csv` with 100 verified U.S. Nexis sources and expands `research_analysis_all_sources.csv` (and `.json`) across all 143 baseline crawled and Nexis U.S. sources.
 
 In Nexis, every document is globally identified by its Content Item URN (e.g., `urn:contentItem:6J9T-Y0C3-S3T5-M0JH-00000-00`). In our datasets, `archive_attempt_id` records this exact URN, while `source_id` is namespaced as `nexis_{urn}`. You can navigate directly and unambiguously to any article in Nexis Uni or the LexisNexis Web Services API by searching for this URN or Document ID.
 
@@ -487,6 +487,7 @@ news_importer/          import, list, export, crawl, Nexis search, and research 
   nexis.py              Nexis API search, folder storage, and report
   nexis_query.py        keyword lines, with multi-word places kept as phrases
   nexis_analysis.py     qualitative research coding and dataset expansion for Nexis sources
+  crawl_nexis_us.py     automated crawler and coder for 100 U.S. Nexis sources
   all_analyses.py       comprehensive analysis builder for all retrieved sources
 queries/                search queries, keyword families, and ready-to-use Nexis queries
   search_queries.csv    catalog of study area and U.S. overview queries (US-OVERVIEW-01, US-FEEDBACK-01)
