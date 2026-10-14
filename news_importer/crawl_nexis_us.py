@@ -56,8 +56,9 @@ OFF_TOPIC_TITLE_TERMS = [
     # Financial statements, institutional holdings & earnings
     "financial results", "third quarter", "fiscal year", "series a round",
     "$goog", "shares in alphabet", "stake in alphabet", "stock position in alphabet",
-    "shares sold by", "reduces holdings in", "holdings in alphabet",
-    # Violent crime, homicide, custody & domestic blotters
+    "shares sold by", "reduces holdings in", "holdings in alphabet", "takes $", "million position",
+    "releases report: $", "research and markets releases",
+    # Violent crime, homicide, custody, blotters & individual crashes
     "murder of minnesota", "stalking and murder", "pokmon thief", "pokmon",
     "busted for dui", "mother left her", "runs over her husband",
     "hurled 3 young kids", "drug manufacturing", "manslaughter",
@@ -65,10 +66,17 @@ OFF_TOPIC_TITLE_TERMS = [
     "san bruno police officers were met with a first", "shooting range",
     "mcdonald", "church deacon", "edgewood shooting", "tried to run over woman",
     "kicks 4 kids off bus", "e-motorcycle rider dies",
-    # Space & defense
+    "ex-girlfriend", "slammed into pedestrian", "threatened motorcyclist",
+    "runs over co-worker", "running naked", "caused car crashes",
+    "minor infractions scrutinized after shooting", "qanon", "popeyes",
+    "employee who was just fired", "man waited for", "teens in mercedes-benz",
+    "man slammed into", "garbage truck driver pulling forward", "child allegedly running",
+    "shooting", "homicide", "murder", "stabbed", "stabbing", "assaulted", "armed robbery",
+    # Space, maritime & defense
     "space junk", "space threats", "satellite security", "failure to launch",
-    "clear space junk", "space exploration",
-    # Unrelated tech, municipal awards, health & retail
+    "clear space junk", "space exploration", "boatus", "savvy navvy", "boat safety",
+    "house science, space, and technology committee hearing",
+    # Unrelated tech, municipal awards, health, weather & retail
     "chief information officer wins", "dodge durangos will join", "winter olympics",
     "stories from slate", "ice raids", "gemini on a road trip", "leaning traffic light",
     "crosswalks have been removed", "spring break travel tips",
@@ -77,7 +85,9 @@ OFF_TOPIC_TITLE_TERMS = [
     "bicyclists are treated like traffic", "director's update",
     "baseball facility", "ou board of regents", "mass surveillance",
     "north america drone market", "wipo publishes patent",
-    "shot dead", "father hurls",
+    "shot dead", "father hurls", "white cane safety day", "sea level rise",
+    "half marathon route", "marathon", "5k", "flight delay", "parking lot dings",
+    "incubator venture", "silberstein & miklos", "ask4sam",
     # Routine highway maintenance alerts (pure lane closures without navigation app policy context)
     "lane closure scheduled for", "weekend alert: i-17", "weekend alert: northbound i-17",
     "weekend alert: southbound i-17", "adot alert: northbound interstate 17",
@@ -133,6 +143,15 @@ US_CITIES = {
     "Nashville", "New Orleans", "New York", "Oakland", "Oklahoma City", "Omaha", "Philadelphia",
     "Phoenix", "Pittsburgh", "Portland", "Raleigh", "Sacramento", "Salt Lake City", "San Antonio",
     "San Diego", "San Francisco", "San Jose", "Seattle", "St. Louis", "Tampa", "Tucson", "Washington",
+    "Greensboro", "Baton Rouge", "Arlington", "Davis", "Norfolk", "Virginia Beach", "Knoxville",
+    "Providence", "Colorado Springs", "Carson City", "Lancaster", "Newark", "Fort Worth", "Naperville",
+    "Evanston", "Coral Gables", "Cary", "Asheville", "Des Moines", "New Haven", "Fairfield", "Augusta",
+    "Orlando", "Louisville", "Richmond", "Buffalo", "Albany", "Syracuse", "Rochester", "Hartford",
+    "Bridgeport", "Stamford", "Jersey City", "Paterson", "Trenton", "Allentown", "Erie", "Scranton",
+    "Reading", "Bethlehem", "Annapolis", "Bethesda", "Silver Spring", "Alexandria", "Fairfax",
+    "Reston", "McLean", "Leonia", "Mantoloking", "Fremont", "Palo Alto", "Berkeley", "Glendale",
+    "Pasadena", "Long Beach", "Anaheim", "Santa Ana", "Irvine", "Santa Monica", "Beverly Hills",
+    "Burbank", "Culver City", "Torrance", "Bellevue", "Tacoma", "Spokane", "Olympia", "Boise",
 }
 
 
@@ -179,7 +198,7 @@ def is_us_hit(hit: NexisHit) -> tuple[bool, str, str]:
         return False, "", ""
 
     # 2. Inspect XML classifications in raw hit document content
-    xml_content = str(raw.get("Document", {}).get("Content") or hit.body or "")
+    xml_content = str((raw.get("Document") or {}).get("Content") or hit.body or "")
     countries = [c.strip().upper() for c in extract_classifications(xml_content, "country")]
     states = [s.strip().upper() for s in extract_classifications(xml_content, "state")]
     cities = [ci.strip().upper() for ci in extract_classifications(xml_content, "city")]
@@ -262,13 +281,22 @@ def is_relevant_traffic_article(title: str, text: str) -> bool:
     if any(p in t_lower for p in OFF_TOPIC_TITLE_TERMS):
         return False
 
+    crime_patterns = [
+        r"\bmurder\b", r"\bhomicide\b", r"\bshot\b", r"\bshooting\b", r"\bstabbed\b", r"\bstabbing\b",
+        r"\bassault\b", r"\bthreatened\b", r"\barrested for\b", r"\bpleads guilty\b", r"\bindicted\b",
+        r"\bsentenced\b", r"\bfeces\b", r"\bnaked\b", r"\bex-girlfriend\b", r"\bhusband\b",
+        r"\brun over\b", r"\bruns over\b", r"\bslammed into\b", r"\bfired employee\b",
+        r"\bdeadly crash\b", r"\bfatal crash\b", r"\bdui crash\b", r"\bcar theft\b",
+    ]
+    if any(re.search(pat, t_lower) for pat in crime_patterns):
+        return False
+
     combined = f"{t_lower} {text.lower()}"
     has_app = any(app in combined for app in [
         "waze", "google maps", "apple maps", "mapquest", "here wego",
         "navigation app", "navigation apps", "routing app", "routing apps",
         "gps navigation", "gps app", "gps apps", "traffic app", "traffic apps",
-        "mapping app", "mapping apps", "map app", "map apps",
-        "connected citizens", "waze for cities", "smart city", "waymo", "turn-by-turn",
+        "connected citizens", "waze for cities",
     ])
     has_routing_topic = any(topic in combined for topic in [
         "routing", "traffic", "cut-through", "shortcut", "turn restriction",
@@ -503,14 +531,14 @@ def crawl_nexis_us_sources(
     client = NexisClient(client_id, client_secret)
 
     # Load search queries to execute in order:
-    queries: list[tuple[str, str]] = []
+    raw_queries: list[tuple[str, str]] = []
     overview_path = Path("queries/nexis_us_overview_query.txt")
     if overview_path.is_file():
-        queries.append(("US-OVERVIEW-01", read_raw_query(overview_path)))
+        raw_queries.append(("US-OVERVIEW-01", read_raw_query(overview_path)))
 
     feedback_path = Path("queries/nexis_feedback_query.txt")
     if feedback_path.is_file():
-        queries.append(("US-FEEDBACK-01", read_raw_query(feedback_path)))
+        raw_queries.append(("US-FEEDBACK-01", read_raw_query(feedback_path)))
 
     # Also check queries from search_queries.csv
     csv_queries = Path("queries/search_queries.csv")
@@ -520,7 +548,26 @@ def crawl_nexis_us_sources(
                 q_id = row.get("query_id", "")
                 q_text = row.get("query", "")
                 if q_text and q_id not in {"US-OVERVIEW-01", "US-FEEDBACK-01"}:
-                    queries.append((q_id, q_text))
+                    raw_queries.append((q_id, q_text))
+
+    # Priority ranking: Targeted US queries first to expand keyword variety
+    priority_order = [
+        "US-OVERVIEW-01",
+        "US-ACCESS-BANS-01",
+        "US-ROUTING-RULES-01",
+        "US-FEEDBACK-01",
+        "US-REGIONAL-01",
+        "US-COORDINATION-01",
+    ]
+    def _q_rank(item: tuple[str, str]) -> int:
+        qid = item[0]
+        if qid in priority_order:
+            return priority_order.index(qid)
+        if qid.startswith("US-"):
+            return 20
+        return 100
+
+    queries = sorted(raw_queries, key=_q_rank)
 
     # Pre-scan ALL existing downloaded Nexis sources and SQLite crawl records
     downloaded_doc_ids: set[str] = set()
@@ -596,114 +643,7 @@ def crawl_nexis_us_sources(
         except Exception:
             pass
 
-    if target_total is not None:
-        target_count = target_total
-    else:
-        target_count = len(stored_us_hits) + additional_count
-
-    print(f"Identified {len(downloaded_doc_ids)} existing downloaded Nexis doc IDs, {len(downloaded_urls)} URLs, and {len(downloaded_titles)} unique titles.")
-    print(f"Loaded {len(stored_us_hits)} existing verified, strictly relevant U.S. sources from disk.")
-    print(f"Beginning automated crawl to retrieve {additional_count} additional U.S. sources (targeting {target_count} total)...")
-
-    total_retrieved = 0
-
-    for query_id, expr in queries:
-        if len(stored_us_hits) >= target_count:
-            break
-
-        print(f"\nExecuting query {query_id} (Need {target_count - len(stored_us_hits)} more U.S. sources)...")
-        skip = 0
-        consecutive_empty = 0
-
-        while len(stored_us_hits) < target_count and consecutive_empty < 3:
-            top = 50
-            params = urlencode(
-                {
-                    "$search": expr,
-                    "$expand": "Document",
-                    "$top": str(top),
-                    "$skip": str(skip),
-                }
-            )
-            search_url = f"{client.search_url}?{params}"
-            try:
-                payload = client._get_json(search_url)
-                hits = parse_hits(payload)
-            except Exception as exc:
-                print(f"Error fetching batch at skip={skip}: {exc}")
-                break
-
-            if not hits:
-                consecutive_empty += 1
-                skip += top
-                continue
-
-            consecutive_empty = 0
-            new_us_in_batch = 0
-
-            for hit in hits:
-                if len(stored_us_hits) >= target_count:
-                    break
-                doc_id = hit.document_id
-                norm_title = normalize_title_for_dedup(hit.title or "")
-                norm_url = (hit.url or "").strip().casefold()
-
-                # Strict deduplication check:
-                if doc_id in stored_us_hits:
-                    continue
-                if doc_id in downloaded_doc_ids or doc_id.replace("urn:contentItem:", "") in downloaded_doc_ids:
-                    continue
-                if norm_url and norm_url in downloaded_urls:
-                    continue
-                if norm_title and norm_title in downloaded_titles:
-                    print(f"  [SKIP Duplicate Title] Already crawled: {hit.title[:50]}")
-                    continue
-
-                downloaded_doc_ids.add(doc_id)
-                downloaded_doc_ids.add(doc_id.replace("urn:contentItem:", ""))
-                if norm_title:
-                    downloaded_titles.add(norm_title)
-                if norm_url:
-                    downloaded_urls.add(norm_url)
-
-                # Quick title check before storing to disk
-                if any(p in (hit.title or "").lower() for p in OFF_TOPIC_TITLE_TERMS):
-                    print(f"  [SKIP Off-Topic Title] Not routing-related: {hit.title[:50]}")
-                    continue
-
-                is_us, target_loc, loc_type = is_us_hit(hit)
-                if not is_us:
-                    continue
-
-                query_obj = build_raw_nexis_query(expr)
-                folder = _store_hit(output_dir, query_obj, hit)
-                total_retrieved += 1
-
-                entry = analyze_us_hit(hit, folder, target_loc, loc_type)
-                if entry is None or entry.category == "Out of Scope":
-                    print(f"  [SKIP Off-Topic Content] Not routing-related: {hit.title[:50]}")
-                    continue
-
-                stored_us_hits[doc_id] = entry
-                new_us_in_batch += 1
-                print(f"  [{len(stored_us_hits)}/{target_count}] Coded U.S. source: {hit.title[:60]} ({target_loc})")
-
-            skip += len(hits)
-            if len(hits) < top:
-                break
-
-    print(f"\nAutomated crawl finished. Total unique relevant U.S. sources coded: {len(stored_us_hits)}")
-
-    # Clean up deprecated nexis_report.csv if it exists
-    rep_csv = Path("data/exports/nexis_report.csv")
-    if rep_csv.is_file():
-        try:
-            rep_csv.unlink()
-            print(f"Removed deprecated {rep_csv}")
-        except Exception:
-            pass
-
-    # Combine with clean baseline web crawler sources
+    # Load baseline entries before crawl loop for incremental export
     baseline_entries = []
     if all_json_path.is_file():
         try:
@@ -733,14 +673,146 @@ def crawl_nexis_us_sources(
         except Exception as exc:
             print(f"Warning: could not load baseline analyses: {exc}")
 
-    analysis_entries = list(stored_us_hits.values())
-    combined_dict = {e.source_id: e for e in baseline_entries}
-    for ne in analysis_entries:
-        combined_dict[ne.source_id] = ne
-    combined = list(combined_dict.values())
+    def _flush_dataset() -> list[ResearchAnalysisEntry]:
+        combined_dict = {e.source_id: e for e in baseline_entries}
+        for ne in stored_us_hits.values():
+            combined_dict[ne.source_id] = ne
+        combined = list(combined_dict.values())
+        export_analysis_csv(combined, all_csv_path)
+        export_analysis_json(combined, all_json_path)
+        return combined
 
-    export_analysis_csv(combined, all_csv_path)
-    export_analysis_json(combined, all_json_path)
+    if target_total is not None:
+        target_count = target_total
+    else:
+        target_count = len(stored_us_hits) + additional_count
+
+    print(f"Identified {len(downloaded_doc_ids)} existing downloaded Nexis doc IDs, {len(downloaded_urls)} URLs, and {len(downloaded_titles)} unique titles.")
+    print(f"Loaded {len(stored_us_hits)} existing verified, strictly relevant U.S. sources from disk.")
+    print(f"Beginning automated crawl to retrieve {additional_count} additional U.S. sources (targeting {target_count} total)...")
+
+    total_retrieved = 0
+    query_skips: dict[str, int] = {qid: 0 for qid, _ in queries}
+    exhausted_queries: set[str] = set()
+    pass_num = 0
+
+    while len(stored_us_hits) < target_count and len(exhausted_queries) < len(queries):
+        pass_num += 1
+        print(f"\n--- Starting Crawl Pass {pass_num} (Current U.S. sources: {len(stored_us_hits)}/{target_count}) ---")
+        added_in_pass = 0
+
+        for query_id, expr in queries:
+            if len(stored_us_hits) >= target_count:
+                break
+            if query_id in exhausted_queries:
+                continue
+
+            max_new_this_round = 80
+            new_from_this_query = 0
+            consecutive_empty = 0
+
+            print(f"\nExecuting query {query_id} (Need {target_count - len(stored_us_hits)} more U.S. sources)...")
+
+            while len(stored_us_hits) < target_count and consecutive_empty < 3 and new_from_this_query < max_new_this_round:
+                top = 50
+                skip = query_skips[query_id]
+                params = urlencode(
+                    {
+                        "$search": expr,
+                        "$expand": "Document",
+                        "$top": str(top),
+                        "$skip": str(skip),
+                    }
+                )
+                search_url = f"{client.search_url}?{params}"
+                try:
+                    payload = client._get_json(search_url)
+                    hits = parse_hits(payload)
+                except Exception as exc:
+                    print(f"Error fetching batch for {query_id} at skip={skip}: {exc}")
+                    exhausted_queries.add(query_id)
+                    break
+
+                if not hits:
+                    consecutive_empty += 1
+                    query_skips[query_id] += top
+                    if consecutive_empty >= 2:
+                        exhausted_queries.add(query_id)
+                    continue
+
+                consecutive_empty = 0
+                new_us_in_batch = 0
+
+                for hit in hits:
+                    if len(stored_us_hits) >= target_count:
+                        break
+                    doc_id = hit.document_id
+                    norm_title = normalize_title_for_dedup(hit.title or "")
+                    norm_url = (hit.url or "").strip().casefold()
+
+                    # Strict deduplication check:
+                    if doc_id in stored_us_hits:
+                        continue
+                    if doc_id in downloaded_doc_ids or doc_id.replace("urn:contentItem:", "") in downloaded_doc_ids:
+                        continue
+                    if norm_url and norm_url in downloaded_urls:
+                        continue
+                    if norm_title and norm_title in downloaded_titles:
+                        continue
+
+                    downloaded_doc_ids.add(doc_id)
+                    downloaded_doc_ids.add(doc_id.replace("urn:contentItem:", ""))
+                    if norm_title:
+                        downloaded_titles.add(norm_title)
+                    if norm_url:
+                        downloaded_urls.add(norm_url)
+
+                    # Quick title check before storing to disk
+                    if any(p in (hit.title or "").lower() for p in OFF_TOPIC_TITLE_TERMS):
+                        continue
+
+                    is_us, target_loc, loc_type = is_us_hit(hit)
+                    if not is_us:
+                        continue
+
+                    query_obj = build_raw_nexis_query(expr)
+                    folder = _store_hit(output_dir, query_obj, hit)
+                    total_retrieved += 1
+
+                    entry = analyze_us_hit(hit, folder, target_loc, loc_type)
+                    if entry is None or entry.category == "Out of Scope":
+                        continue
+
+                    stored_us_hits[doc_id] = entry
+                    new_us_in_batch += 1
+                    new_from_this_query += 1
+                    added_in_pass += 1
+                    print(f"  [{len(stored_us_hits)}/{target_count}] Coded U.S. source: {hit.title[:60]} ({target_loc})")
+
+                query_skips[query_id] += len(hits)
+                if new_us_in_batch > 0:
+                    _flush_dataset()
+
+                if len(hits) < top:
+                    exhausted_queries.add(query_id)
+                    break
+
+        if added_in_pass == 0 and len(exhausted_queries) == len(queries):
+            print("All queries exhausted or yielded no further new unique items.")
+            break
+
+    print(f"\nAutomated crawl finished. Total unique relevant U.S. sources coded: {len(stored_us_hits)}")
+
+    # Clean up deprecated nexis_report.csv if it exists
+    rep_csv = Path("data/exports/nexis_report.csv")
+    if rep_csv.is_file():
+        try:
+            rep_csv.unlink()
+            print(f"Removed deprecated {rep_csv}")
+        except Exception:
+            pass
+
+    combined = _flush_dataset()
     print(f"Updated {all_csv_path} and {all_json_path} with {len(combined)} total strictly relevant sources.")
 
     return combined
