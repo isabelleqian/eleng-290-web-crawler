@@ -367,9 +367,78 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
     }
 
 
+def render_keyword_audit_cards(keyword_audit: dict) -> str:
+    cards = []
+    family_colors = {
+        "App Brands & Platforms": ("text-blue-400", "bg-blue-500/10", "border-blue-500/20"),
+        "Family 1: Government Restrictions": ("text-amber-400", "bg-amber-500/10", "border-amber-500/20"),
+        "Family 2: Company Routing Rules": ("text-rose-400", "bg-rose-500/10", "border-rose-500/20"),
+        "Family 3: Government-Company Coordination": ("text-purple-400", "bg-purple-500/10", "border-purple-500/20"),
+        "Governing Level Keywords": ("text-cyan-400", "bg-cyan-500/10", "border-cyan-500/20"),
+        "Community Feedback & Backlash": ("text-orange-400", "bg-orange-500/10", "border-orange-500/20"),
+    }
+    family_insights = {
+        "App Brands & Platforms": "Journalists and public agencies predominantly name 'Waze' and 'Google Maps' directly, with 'navigation app' serving as the formal terminology.",
+        "Family 1: Government Restrictions": "Road closures and emergency diversions are widely documented, with growing municipal coverage of turn restrictions, truck routes, and traffic calming.",
+        "Family 2: Company Routing Rules": "Recent platform shifts feature algorithmic avoidance preferences (avoid tolls, avoid highways) and fuel-efficient eco-routing.",
+        "Family 3: Government-Company Coordination": "Formal bilateral frameworks like Connected Citizens Program and Waze for Cities dominate municipal data exchange reporting.",
+        "Governing Level Keywords": "City councils represent the primary legislative forum for residential traffic disputes, followed by state legislative hands-free and camera bills.",
+        "Community Feedback & Backlash": "Neighborhood cut-through traffic, shortcut rat-running, and pedestrian safety petitions are the primary drivers of public outcry.",
+    }
+    for fam_name, audit in keyword_audit.items():
+        used = audit["used"]
+        unused = audit["unused"]
+        color_class, badge_bg, badge_border = family_colors.get(fam_name, ("text-blue-400", "bg-blue-500/10", "border-blue-500/20"))
+        insight = family_insights.get(fam_name, "")
+
+        used_spans = "".join([
+            f'<span class="{badge_bg} {color_class} px-2 py-0.5 rounded border {badge_border}">{item["keyword"]} ({item["count"]} hits)</span> '
+            for item in used[:8]
+        ]) if used else '<span class="text-slate-500 text-xs">No active terms in current subset</span>'
+
+        unused_spans = "".join([
+            f'<span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">{kw}</span> '
+            for kw in unused[:12]
+        ]) if unused else '<span class="text-emerald-400 text-xs">All taxonomy keywords active</span>'
+
+        card = f"""
+        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-5 space-y-3">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <h4 class="font-bold text-white text-sm">{fam_name}</h4>
+            <span class="text-xs {color_class} font-medium">{audit["used_count"]} Active / {len(unused)} Zero Hits</span>
+          </div>
+          <div>
+            <div class="text-xs font-semibold text-emerald-400 mb-1.5">Dominant Active Terms in Corpus:</div>
+            <div class="flex flex-wrap gap-1.5 text-xs">
+              {used_spans}
+            </div>
+          </div>
+          <div>
+            <div class="text-xs font-semibold text-rose-400 mb-1.5">Zero Hits / Unused Terms in Taxonomy:</div>
+            <div class="flex flex-wrap gap-1.5 text-[11px] text-slate-400 font-mono max-h-24 overflow-y-auto">
+              {unused_spans}
+            </div>
+            {f'<p class="text-[11px] text-slate-500 mt-2">{insight}</p>' if insight else ''}
+          </div>
+        </div>
+        """
+        cards.append(card)
+    return "\n".join(cards)
+
+
 def generate_html_infographics(data_payload: dict) -> str:
     """Generate self-contained HTML/Tailwind CSS interactive dashboard with SVG Map & Timeline Slider."""
     json_str = json.dumps(data_payload)
+    meta = data_payload["metadata"]
+    total_sources = meta["total_sources"]
+    localized_sources = meta["localized_sources"]
+    nationwide_sources = meta["nationwide_sources"]
+    unique_locations = meta["unique_locations"]
+    year_range = meta["year_range"]
+    gov_counts = meta["gov_counts"]
+    top_gov = list(gov_counts.keys())[0] if gov_counts else "Company"
+    top_gov_pct = round((gov_counts[top_gov] / total_sources) * 100) if total_sources else 0
+    keyword_audit_html = render_keyword_audit_cards(data_payload["keyword_audit"])
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -447,7 +516,7 @@ def generate_html_infographics(data_payload: dict) -> str:
     <div class="flex items-center gap-3 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 shadow-inner">
       <div class="text-right">
         <div class="text-xs text-slate-400">Total Analyzed</div>
-        <div id="stat-total-header" class="text-base font-bold text-blue-400">195 Sources</div>
+        <div id="stat-total-header" class="text-base font-bold text-blue-400">{total_sources} Sources</div>
       </div>
       <label class="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium px-3 py-2 rounded-lg transition-all flex items-center gap-1.5 shadow-sm">
         <span>🔄 Update JSON</span>
@@ -479,23 +548,23 @@ def generate_html_infographics(data_payload: dict) -> str:
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
         <div class="text-xs text-slate-400 font-medium">Corpus Distribution</div>
-        <div id="stat-sources" class="text-2xl font-bold text-white mt-1">195 Sources</div>
-        <div class="text-[11px] text-emerald-400 mt-1">176 Localized + 19 Federal/National</div>
+        <div id="stat-sources" class="text-2xl font-bold text-white mt-1">{total_sources} Sources</div>
+        <div id="stat-sources-sub" class="text-[11px] text-emerald-400 mt-1">{localized_sources} Localized + {nationwide_sources} Federal/National</div>
       </div>
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
         <div class="text-xs text-slate-400 font-medium">Local Geographic Pins</div>
-        <div id="stat-locations" class="text-2xl font-bold text-blue-400 mt-1">36 Locations</div>
+        <div id="stat-locations" class="text-2xl font-bold text-blue-400 mt-1">{unique_locations} Locations</div>
         <div class="text-[11px] text-slate-400 mt-1">Cities & Counties Across U.S.</div>
       </div>
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
         <div class="text-xs text-slate-400 font-medium">Timeline Span</div>
-        <div id="stat-years" class="text-2xl font-bold text-amber-400 mt-1">2013 - 2026</div>
-        <div class="text-[11px] text-slate-400 mt-1">14-Year Policy Evolution</div>
+        <div id="stat-years" class="text-2xl font-bold text-amber-400 mt-1">{year_range}</div>
+        <div class="text-[11px] text-slate-400 mt-1">Policy Evolution Timeline</div>
       </div>
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
         <div class="text-xs text-slate-400 font-medium">Dominant Governance</div>
-        <div class="text-2xl font-bold text-indigo-400 mt-1">Municipal (42%)</div>
-        <div class="text-[11px] text-slate-400 mt-1">Local Street Access Ordinances</div>
+        <div id="stat-governance" class="text-2xl font-bold text-indigo-400 mt-1">{top_gov} ({top_gov_pct}%)</div>
+        <div class="text-[11px] text-slate-400 mt-1">Leading Policy Level in Corpus</div>
       </div>
     </div>
 
@@ -627,8 +696,8 @@ def generate_html_infographics(data_payload: dict) -> str:
           <div id="year-era-card" class="bg-slate-950/70 border border-slate-800/90 rounded-lg p-3 text-xs text-slate-300 flex items-start gap-2.5">
             <span class="text-base">📌</span>
             <div>
-              <span id="era-title" class="font-bold text-white">Full 14-Year Cumulative Overview</span>
-              <p id="era-description" class="text-slate-400 mt-0.5">Showing cumulative distribution of 195 navigation-app policy measures, street access regulations, and municipal coordination agreements across all years (2013–2026).</p>
+              <span id="era-title" class="font-bold text-white">Cumulative Corpus Overview ({year_range})</span>
+              <p id="era-description" class="text-slate-400 mt-0.5">Showing cumulative distribution of {total_sources} navigation-app policy measures, street access regulations, and municipal coordination agreements across all years ({year_range}).</p>
             </div>
           </div>
 
@@ -771,7 +840,7 @@ def generate_html_infographics(data_payload: dict) -> str:
             </div>
           </div>
           <div class="mt-4 pt-3 border-t border-slate-800/80 text-[11px] text-slate-400">
-            <strong>Deliverable:</strong> CSV + JSON (195 rows)
+            <strong>Deliverable:</strong> CSV + JSON ({total_sources} rows)
           </div>
         </div>
 
@@ -935,123 +1004,11 @@ def generate_html_infographics(data_payload: dict) -> str:
     <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-6 shadow-sm">
       <h2 class="text-xl font-bold text-white">Comprehensive Keyword Audit: Utilized vs. Unused Terms</h2>
       <p class="text-sm text-slate-400 mt-1">
-        Evaluation of term frequencies across all 195 clean articles in our corpus, highlighting which search terms were dominant and which niche keywords from your taxonomy yielded zero hits.
+        Evaluation of term frequencies across all {total_sources} clean articles in our corpus, highlighting which search terms were dominant and which niche keywords from your taxonomy yielded zero hits.
       </p>
 
       <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-        
-        <!-- App Group -->
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-5 space-y-3">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-            <h4 class="font-bold text-white text-sm">Navigation App Group</h4>
-            <span class="text-xs text-blue-400 font-medium">9 Used / 5 Unused</span>
-          </div>
-          <div>
-            <div class="text-xs font-semibold text-emerald-400 mb-1.5">Dominant Terms in Corpus:</div>
-            <div class="flex flex-wrap gap-1.5 text-xs">
-              <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">Waze (146 hits)</span>
-              <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">Google Maps (82 hits)</span>
-              <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">navigation app (28 hits)</span>
-              <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">Apple Maps (4 hits)</span>
-            </div>
-          </div>
-          <div>
-            <div class="text-xs font-semibold text-rose-400 mb-1.5">Zero Hits / Unused Terms:</div>
-            <div class="flex flex-wrap gap-1.5 text-xs text-slate-400 font-mono">
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">MapQuest</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">routing app(s)</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">navigation software</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">routing software</span>
-            </div>
-            <p class="text-[11px] text-slate-500 mt-2">Insight: Journalists almost exclusively name "Waze" or "Google Maps" directly, rarely using generic phrases like "routing software".</p>
-          </div>
-        </div>
-
-        <!-- Family 1: Gov Restrictions -->
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-5 space-y-3">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-            <h4 class="font-bold text-white text-sm">Family 1: Government Restrictions</h4>
-            <span class="text-xs text-amber-400 font-medium">6 Used / 21 Unused</span>
-          </div>
-          <div>
-            <div class="text-xs font-semibold text-emerald-400 mb-1.5">Active Terms in Corpus:</div>
-            <div class="flex flex-wrap gap-1.5 text-xs">
-              <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">road closure(s) (19)</span>
-              <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">traffic diverter(s) (6)</span>
-              <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">congestion pricing (3)</span>
-              <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">traffic calming (2)</span>
-            </div>
-          </div>
-          <div>
-            <div class="text-xs font-semibold text-rose-400 mb-1.5">Zero Hits / Unused Terms:</div>
-            <div class="flex flex-wrap gap-1.5 text-[11px] text-slate-400 font-mono max-h-24 overflow-y-auto">
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">turn restriction(s)</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">turn ban(s)</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">resident only</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">local access only</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">no through traffic</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">truck route</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">weight/height restriction</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">low emission zone</span>
-            </div>
-            <p class="text-[11px] text-slate-500 mt-2">Insight: Because these were grouped with "OR" in US-OVERVIEW-01, dominant wire items about "road closure" crowded out niche terms like "turn ban".</p>
-          </div>
-        </div>
-
-        <!-- Family 2: Company Routing Rules -->
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-5 space-y-3">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-            <h4 class="font-bold text-white text-sm">Family 2: Company Routing Rules</h4>
-            <span class="text-xs text-rose-400 font-medium">3 Used / 19 Unused</span>
-          </div>
-          <div>
-            <div class="text-xs font-semibold text-emerald-400 mb-1.5">Active Terms in Corpus:</div>
-            <div class="flex flex-wrap gap-1.5 text-xs">
-              <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">routing algorithm(s) (2)</span>
-              <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">avoid highways (1)</span>
-            </div>
-          </div>
-          <div>
-            <div class="text-xs font-semibold text-rose-400 mb-1.5">Zero Hits / Unused Terms:</div>
-            <div class="flex flex-wrap gap-1.5 text-[11px] text-slate-400 font-mono max-h-24 overflow-y-auto">
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">avoid tolls</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">avoid freeways</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">avoid unpaved roads</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">avoid residential streets</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">avoid local roads</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">eco-friendly routing</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">fuel-efficient route</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">routing preference</span>
-            </div>
-            <p class="text-[11px] text-slate-500 mt-2">Recommendation: Run targeted standalone searches for "avoid residential streets" and "eco-friendly routing" without broad closure terms.</p>
-          </div>
-        </div>
-
-        <!-- Family 3: Public-Private Coordination -->
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-5 space-y-3">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-            <h4 class="font-bold text-white text-sm">Family 3: Government Coordination</h4>
-            <span class="text-xs text-purple-400 font-medium">7 Used / 3 Unused</span>
-          </div>
-          <div>
-            <div class="text-xs font-semibold text-emerald-400 mb-1.5">Active Terms in Corpus:</div>
-            <div class="flex flex-wrap gap-1.5 text-xs">
-              <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">partnership(s) (26)</span>
-              <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">Connected Citizens Program (23)</span>
-              <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">agreement(s) (8)</span>
-              <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">Waze for Cities (5)</span>
-            </div>
-          </div>
-          <div>
-            <div class="text-xs font-semibold text-rose-400 mb-1.5">Zero Hits / Unused Terms:</div>
-            <div class="flex flex-wrap gap-1.5 text-xs text-slate-400 font-mono">
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">map correction(s)</span>
-              <span class="bg-slate-900 px-2 py-0.5 rounded border border-slate-800">routing request(s)</span>
-            </div>
-            <p class="text-[11px] text-slate-500 mt-2">Insight: "Connected Citizens Program" was the primary branding public agencies used; "routing request" rarely appears in press releases.</p>
-          </div>
-        </div>
-
+        {keyword_audit_html}
       </div>
 
     </div>
@@ -1121,6 +1078,15 @@ def generate_html_infographics(data_payload: dict) -> str:
     }};
 
     function initDashboard() {{
+      // Dynamically initialize header and top stats from DATA.metadata
+      if (DATA && DATA.metadata) {{
+        document.getElementById('stat-total-header').textContent = `${{DATA.metadata.total_sources}} Sources`;
+        document.getElementById('stat-sources').textContent = `${{DATA.metadata.total_sources}} Sources`;
+        document.getElementById('stat-sources-sub').textContent = `${{DATA.metadata.localized_sources}} Localized + ${{DATA.metadata.nationwide_sources}} Federal/National`;
+        document.getElementById('stat-locations').textContent = `${{DATA.metadata.unique_locations}} Locations`;
+        document.getElementById('stat-years').textContent = DATA.metadata.year_range;
+      }}
+
       initSliderTicks();
       initHighPrecisionMap();
       renderLeaderboard();
@@ -1307,8 +1273,8 @@ def generate_html_infographics(data_payload: dict) -> str:
       const desc = document.getElementById('era-description');
 
       if (year === 'ALL') {{
-        title.textContent = 'Cumulative Corpus Overview (2013 - 2026)';
-        desc.textContent = 'Displaying all 195 verified traffic and navigation policy sources across 36 geographic locations.';
+        title.textContent = `Cumulative Corpus Overview (${{DATA.metadata.year_range}})`;
+        desc.textContent = `Displaying all ${{DATA.metadata.total_sources}} verified traffic and navigation policy sources across ${{DATA.metadata.unique_locations}} geographic locations.`;
       }} else if (year <= '2016') {{
         title.textContent = `${{year}}: Initial Waze Expansion & Early City Pushback`;
         desc.textContent = 'Early municipal debates over shortcut traffic; Los Angeles and Boston pilot initial Connected Citizens data exchanges.';
