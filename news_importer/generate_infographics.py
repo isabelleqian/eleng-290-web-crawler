@@ -1249,7 +1249,10 @@ def generate_html_infographics(data_payload: dict) -> str:
       "Sioux Falls, SD": {{ fips: ["46099"], county: "Minnehaha County, SD" }},
       "Montgomery, AL": {{ fips: ["01101"], county: "Montgomery County, AL" }},
       "Augusta, ME": {{ fips: ["23011"], county: "Kennebec County, ME" }},
-      "Anchorage, AK": {{ fips: ["02020"], county: "Anchorage Municipality, AK" }}
+      "Anchorage, AK": {{ fips: ["02020"], county: "Anchorage Municipality, AK" }},
+      "Multi-City Transit Pilot": {{ fips: ["32003", "12057"], county: "Clark County, NV & Hillsborough County, FL" }},
+      "Multi-City AV Pilot": {{ fips: ["06075", "06037", "04013", "48453", "13121"], county: "Multi-City AV Consortium" }},
+      "Multi-City Metro Cohort": {{ fips: ["13121", "25025", "17031", "06037"], county: "Multi-City Metro Cohort" }}
     }};
 
     const FIPS_TO_LOCATIONS = {{}};
@@ -1416,6 +1419,7 @@ def generate_html_infographics(data_payload: dict) -> str:
       const cInfo = CITY_TO_COUNTY[loc.name];
       if (cInfo && cInfo.fips && usAtlasData) {{
         let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        let sumCentroidX = 0, sumCentroidY = 0, validCentroids = 0;
         let foundAny = false;
         const path = d3.geoPath();
         cInfo.fips.forEach(fips => {{
@@ -1429,16 +1433,23 @@ def generate_html_infographics(data_payload: dict) -> str:
               maxX = Math.max(maxX, bounds[1][0]);
               maxY = Math.max(maxY, bounds[1][1]);
             }}
+            const cent = path.centroid(feat);
+            if (cent && !isNaN(cent[0]) && !isNaN(cent[1])) {{
+              sumCentroidX += cent[0];
+              sumCentroidY += cent[1];
+              validCentroids++;
+            }}
           }}
         }});
         if (foundAny) {{
           const width = maxX - minX;
           const height = maxY - minY;
+          const cX = validCentroids > 0 ? (sumCentroidX / validCentroids) : ((minX + maxX) / 2);
+          const cY = validCentroids > 0 ? (sumCentroidY / validCentroids) : ((minY + maxY) / 2);
           return {{
-            centerX: (minX + maxX) / 2,
-            // Top-center: horizontally centered at (minX + maxX)/2, positioned right at top edge inside shaded region
-            // Top-center: upper 20% of shaded region
-            topY: minY + Math.max(2.5, height * 0.20),
+            centerX: cX,
+            // Positioned at top-center of the shaded region: upper 20-25% between minY and centroid
+            topY: minY + Math.max(2.2, (cY - minY) * 0.45),
             width: width,
             height: height
           }};
@@ -1450,7 +1461,7 @@ def generate_html_infographics(data_payload: dict) -> str:
       if (pt) {{
         return {{
           centerX: pt.x,
-          topY: pt.y - 10,
+          topY: pt.y - 8,
           width: 35,
           height: 25
         }};
@@ -1501,29 +1512,35 @@ def generate_html_infographics(data_payload: dict) -> str:
 
       // 3. Proportional Region Name Labels (Top-Center of Shaded Regions)
       const regionLabelsLayer = d3.select("#map-city-labels-layer");
-      if (regionLabelsLayer) {{
-        if (k < 2.2) {{
+      if (regionLabelsLayer && !regionLabelsLayer.empty()) {{
+        if (k < 2.0) {{
           regionLabelsLayer.style("opacity", "0");
         }} else {{
-          // Target screen font size between 8.5px and 13.0px
-          const targetScreenFs = Math.min(13.0, Math.max(8.5, 8.5 + (k - 2.2) * 0.9));
-          const targetSvgFs = targetScreenFs / k;
-          const targetStrokeWidth = Math.max(0.4, 2.0 / k);
+          // Smooth fade in as bubbles morph into shaded regions
+          const layerOpacity = Math.min(1, (k - 2.0) / 0.8);
+          regionLabelsLayer.style("opacity", `${{layerOpacity}}`);
+
+          // Target screen font size: smoothly scales from 9.0px up to 13.5px with zoom
+          const targetScreenFs = Math.min(13.5, Math.max(9.0, 8.5 + (k - 2.0) * 0.85));
+          const targetStrokeWidth = Math.max(0.4, 2.2 / k);
 
           regionLabelsLayer.selectAll(".region-name-label").each(function() {{
             const textEl = d3.select(this);
-            const maxFs = parseFloat(textEl.attr("data-max-fs") || 10);
-            const appliedFs = Math.min(targetSvgFs, maxFs);
-            const screenFs = appliedFs * k;
+            const geomW = parseFloat(textEl.attr("data-geom-width") || 20);
+            const nameLen = parseFloat(textEl.attr("data-name-len") || 8);
 
-            if (screenFs < 7.0) {{
-              textEl.style("opacity", "0");
-            }} else {{
-              const labelOpacity = Math.min(1, (k - 2.2) / 0.8) * Math.min(1, (screenFs - 7.0) / 2.0);
-              textEl.style("opacity", `${{labelOpacity}}`);
-              textEl.style("font-size", `${{appliedFs}}px`);
-              textEl.style("stroke-width", `${{targetStrokeWidth}}px`);
-            }}
+            // Screen width of the region at current zoom k
+            const regionScreenWidth = geomW * k;
+            // Font size that fits within 92% of region width
+            const fitScreenFs = (regionScreenWidth * 0.92) / (nameLen * 0.55);
+            // Proportional and legible: bounded between 8.5px minimum and targetScreenFs
+            const screenFs = Math.min(targetScreenFs, Math.max(8.5, fitScreenFs));
+            const svgFs = screenFs / k;
+
+            textEl
+              .style("font-size", `${{svgFs}}px`)
+              .style("stroke-width", `${{targetStrokeWidth}}px`)
+              .style("opacity", "1");
           }});
         }}
       }}
@@ -1990,6 +2007,7 @@ def generate_html_infographics(data_payload: dict) -> str:
       bubbleLabelsLayer.innerHTML = '';
       if (cityLabelsLayer) cityLabelsLayer.innerHTML = '';
       const activeYear = getActiveYear();
+      const coordUsageMap = {{}};
 
       DATA.locations.forEach(loc => {{
         let count = 0;
@@ -2070,16 +2088,19 @@ def generate_html_infographics(data_payload: dict) -> str:
           const geom = getLocationRegionGeom(loc);
           if (geom && geom.width > 0) {{
             const displayName = loc.name.split(',')[0].trim();
-            const L = Math.max(1, displayName.length);
 
-            // Calculate max font size that strictly fits within 80% of county width and 25% of height
-            const maxFitFs = Math.min((geom.width * 0.80) / (L * 0.55), geom.height * 0.25);
+            // Track duplicate coordinates to prevent overlapping labels
+            const coordKey = `${{geom.centerX.toFixed(1)}}_${{geom.topY.toFixed(1)}}`;
+            const dupIndex = coordUsageMap[coordKey] || 0;
+            coordUsageMap[coordKey] = dupIndex + 1;
+            const yOffset = dupIndex * Math.max(2.8, geom.height * 0.16);
 
             const labelText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
             labelText.setAttribute('x', geom.centerX);
-            labelText.setAttribute('y', geom.topY);
+            labelText.setAttribute('y', geom.topY + yOffset);
             labelText.setAttribute('class', 'region-name-label pointer-events-none select-none');
-            labelText.setAttribute('data-max-fs', maxFitFs);
+            labelText.setAttribute('data-geom-width', geom.width);
+            labelText.setAttribute('data-name-len', displayName.length);
             labelText.textContent = displayName;
 
             cityLabelsLayer.appendChild(labelText);
