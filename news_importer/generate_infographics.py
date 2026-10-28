@@ -523,6 +523,26 @@ def generate_html_infographics(data_payload: dict) -> str:
       stroke-width: 2.5;
       filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
     }}
+    /* Proportional Region Name Labels on Top-Center of Shaded Regions */
+    #map-city-labels-layer {{
+      transition: opacity 0.35s ease-out;
+      pointer-events: none;
+    }}
+    .region-name-label {{
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.35px;
+      fill: #ffffff;
+      paint-order: stroke fill;
+      stroke: rgba(2, 6, 23, 0.95);
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.85));
+      text-anchor: middle;
+      dominant-baseline: central;
+      pointer-events: none;
+      user-select: none;
+    }}
   </style>
 </head>
 <body class="bg-[#0f172a] text-slate-100 antialiased min-h-screen p-4 md:p-8 font-sans">
@@ -1382,6 +1402,54 @@ def generate_html_infographics(data_payload: dict) -> str:
         .call(zoomBehavior.transform, d3.zoomIdentity.translate(tx, ty).scale(targetK));
     }}
 
+    let fipsFeatureMap = {{}};
+
+    // Calculate the precise top-center and bounding dimensions of a location's shaded geographic region
+    function getLocationRegionGeom(loc) {{
+      const cInfo = CITY_TO_COUNTY[loc.name];
+      if (cInfo && cInfo.fips && usAtlasData) {{
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        let foundAny = false;
+        const path = d3.geoPath();
+        cInfo.fips.forEach(fips => {{
+          const feat = fipsFeatureMap[fips];
+          if (feat) {{
+            const bounds = path.bounds(feat);
+            if (bounds && bounds[0] && bounds[1]) {{
+              foundAny = true;
+              minX = Math.min(minX, bounds[0][0]);
+              minY = Math.min(minY, bounds[0][1]);
+              maxX = Math.max(maxX, bounds[1][0]);
+              maxY = Math.max(maxY, bounds[1][1]);
+            }}
+          }}
+        }});
+        if (foundAny) {{
+          const width = maxX - minX;
+          const height = maxY - minY;
+          return {{
+            centerX: (minX + maxX) / 2,
+            // Top-center: horizontally centered at (minX + maxX)/2, positioned right at top edge inside shaded region
+            topY: minY + Math.max(2.5, Math.min(8.5, height * 0.12)),
+            width: width,
+            height: height
+          }};
+        }}
+      }}
+
+      // Fallback to projected coordinates if atlas not yet loaded or not mapped to FIPS
+      const pt = projectCoords(loc.lat, loc.lon);
+      if (pt) {{
+        return {{
+          centerX: pt.x,
+          topY: pt.y - 10,
+          width: 40,
+          height: 30
+        }};
+      }}
+      return null;
+    }}
+
     // Dynamic County Region Shading & Bubble Cross-Fading Engine
     function updateCountyShading(k) {{
       // Smooth morphing threshold:
@@ -1449,14 +1517,27 @@ def generate_html_infographics(data_payload: dict) -> str:
         }}
       }});
 
-      // 3. Dynamic City & Municipality Name Badges
-      const cityLabelsLayer = d3.select("#map-city-labels-layer");
-      if (cityLabelsLayer) {{
-        if (k < 2.0) {{
-          cityLabelsLayer.style("opacity", "0");
+      // 3. Proportional Region Name Labels (Top-Center of Shaded Regions)
+      const regionLabelsLayer = d3.select("#map-city-labels-layer");
+      if (regionLabelsLayer) {{
+        if (k < 2.2) {{
+          regionLabelsLayer.style("opacity", "0");
         }} else {{
-          cityLabelsLayer.style("opacity", `${{Math.min(1, (k - 2.0) / 0.8)}}`);
-          cityLabelsLayer.selectAll("text").style("font-size", `${{Math.max(6.5, Math.min(10, 9 / Math.pow(k, 0.25)))}}px`);
+          const labelOpacity = Math.min(1, (k - 2.2) / 0.8);
+          regionLabelsLayer.style("opacity", `${{labelOpacity}}`);
+
+          // Proportional typography: scales smoothly with zoom factor k
+          // Screen size stays balanced between 11px and 15px
+          const targetSvgFs = Math.max(2.0, Math.min(10, 10.5 / Math.pow(k, 0.78)));
+          const targetStrokeWidth = Math.max(0.4, 2.4 / k);
+
+          regionLabelsLayer.selectAll(".region-name-label").each(function() {{
+            const textEl = d3.select(this);
+            const maxFs = parseFloat(textEl.attr("data-max-fs") || 12);
+            const appliedFs = Math.min(targetSvgFs, maxFs);
+            textEl.style("font-size", `${{appliedFs}}px`);
+            textEl.style("stroke-width", `${{targetStrokeWidth}}px`);
+          }});
         }}
       }}
 
@@ -1764,6 +1845,10 @@ def generate_html_infographics(data_payload: dict) -> str:
         // 1. Render all 3,142 U.S. Counties (Clickable & Hoverable down to municipal precision)
         if (us.objects.counties) {{
           const counties = topojson.feature(us, us.objects.counties).features;
+          fipsFeatureMap = {{}};
+          counties.forEach(f => {{
+            fipsFeatureMap[f.id] = f;
+          }});
           countiesLayer.selectAll("path")
             .data(counties)
             .join("path")
@@ -1996,44 +2081,24 @@ def generate_html_infographics(data_payload: dict) -> str:
           bubbleLabelsLayer.appendChild(text);
         }}
 
-        // Dynamic City / Municipality Name Label Badge (Revealed on zoom)
+        // Dynamic Shaded Region Name Label on Top-Center (revealed when morphed into shaded region)
         if (cityLabelsLayer) {{
-          const pillG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-          pillG.setAttribute('class', 'city-pill-group pointer-events-none select-none');
-          pillG.setAttribute('transform', `translate(${{coords.x + (baseRadius / Math.pow(currentZoomK, 0.42)) + 4}}, ${{coords.y + 3}})`);
+          const geom = getLocationRegionGeom(loc);
+          if (geom) {{
+            const labelText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            labelText.setAttribute('x', geom.centerX);
+            labelText.setAttribute('y', geom.topY);
+            labelText.setAttribute('class', 'region-name-label pointer-events-none select-none');
+            
+            // Calculate proportional max font size so label scales proportionally with the region
+            const maxAllowedFs = Math.max(2.2, (geom.width * 0.90) / (loc.name.length * 0.58));
+            labelText.setAttribute('data-max-fs', maxAllowedFs);
+            labelText.textContent = loc.name;
 
-          const pillBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-          const textWidth = Math.min(140, Math.max(55, loc.name.length * 6.0 + 8));
-          pillBg.setAttribute('x', -2);
-          pillBg.setAttribute('y', -9);
-          pillBg.setAttribute('width', textWidth);
-          pillBg.setAttribute('height', 14);
-          pillBg.setAttribute('rx', 3);
-          pillBg.setAttribute('ry', 3);
-          pillBg.setAttribute('fill', '#020617');
-          pillBg.setAttribute('fill-opacity', '0.85');
-          pillBg.setAttribute('stroke', '#334155');
-          pillBg.setAttribute('stroke-width', '0.5');
-
-          const pillText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-          pillText.setAttribute('x', 2);
-          pillText.setAttribute('y', 1.5);
-          pillText.setAttribute('fill', '#f8fafc');
-          pillText.setAttribute('font-size', `${{Math.max(6.5, Math.min(10, 9 / Math.pow(currentZoomK, 0.25)))}}px`);
-          pillText.setAttribute('font-weight', '600');
-          pillText.setAttribute('letter-spacing', '0.2px');
-          pillText.textContent = loc.name;
-
-          pillG.appendChild(pillBg);
-          pillG.appendChild(pillText);
-          cityLabelsLayer.appendChild(pillG);
+            cityLabelsLayer.appendChild(labelText);
+          }}
         }}
       }});
-
-      // Maintain current zoom opacity for city badges
-      if (cityLabelsLayer) {{
-        cityLabelsLayer.style.opacity = currentZoomK >= 2.0 ? Math.min(1, (currentZoomK - 2.0) / 0.8) : 0;
-      }}
 
       // Synchronize county shading & bubble cross-fade for active timeframe
       updateCountyShading(currentZoomK);
