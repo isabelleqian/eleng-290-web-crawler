@@ -1261,16 +1261,50 @@ def generate_html_infographics(data_payload: dict) -> str:
       }});
     }});
 
+    // Determine the intrinsic governing level for a location matching legend categories
+    function getLocationGov(loc) {{
+      if (!loc || !loc.name) return 'City';
+      const name = loc.name;
+
+      if (name.includes('(State)')) return 'State';
+      if (name.includes('County')) return 'County';
+      if (name.startsWith('Multi-City') || name === 'Silicon Valley, CA') return 'Company';
+
+      const govs = loc.gov_levels || {{}};
+      const countyCnt = (govs['Government: County'] || 0) + (govs['County'] || 0);
+      const cityCnt = (govs['Government: City'] || 0) + (govs['City'] || 0);
+      const compCnt = govs['Company'] || 0;
+      const stateCnt = (govs['Government: State'] || 0) + (govs['State'] || 0);
+
+      if (countyCnt > 0 && cityCnt === 0) return 'County';
+      if (compCnt > 0 && cityCnt === 0 && countyCnt === 0 && stateCnt === 0) return 'Company';
+      if (stateCnt > 0 && cityCnt === 0 && countyCnt === 0) return 'State';
+
+      return 'City';
+    }}
+
+    // Color by Governing Level strictly matching map legend
+    function getGovColor(gov) {{
+      if (!gov) return '#3b82f6';
+      if (gov.includes('City')) return '#3b82f6'; // Blue (City)
+      if (gov.includes('County')) return '#f43f5e'; // Rose (County)
+      if (gov.includes('State')) return '#f59e0b'; // Amber (State)
+      if (gov.includes('Company')) return '#10b981'; // Emerald (Company)
+      if (gov.includes('Federal')) return '#a855f7'; // Purple (Federal)
+      return '#3b82f6';
+    }}
+
     // Helper to evaluate active policy count and metadata for any county FIPS
     function getCountyActivePolicy(fipsCode) {{
       const activeYear = getActiveYear();
       const matchedCities = FIPS_TO_LOCATIONS[fipsCode] || [];
       let totalCount = 0;
-      let topGov = 'City';
-      let maxGovCnt = -1;
+      let dominantGov = 'City';
+      let dominantColor = '#3b82f6';
+      let maxCnt = -1;
       const matchedLocs = [];
 
-      // Check municipal/city policy coverage
+      // Check municipal/county policy coverage specifically mapped to this county
       if (matchedCities.length > 0) {{
         DATA.locations.forEach(loc => {{
           if (matchedCities.includes(loc.name)) {{
@@ -1286,37 +1320,20 @@ def generate_html_infographics(data_payload: dict) -> str:
             if (cnt > 0) {{
               totalCount += cnt;
               matchedLocs.push(loc);
-              Object.entries(loc.gov_levels || {{}}).forEach(([gov, c]) => {{
-                if (c > maxGovCnt) {{ maxGovCnt = c; topGov = gov; }}
-              }});
+              if (cnt > maxCnt) {{
+                maxCnt = cnt;
+                dominantGov = getLocationGov(loc);
+                dominantColor = getGovColor(dominantGov);
+              }}
             }}
           }}
         }});
       }}
 
-      // Check state-level policy coverage
-      let statewideCount = 0;
-      const stateCode = STATE_FIPS_MAP[fipsCode.slice(0, 2)];
-      const stateFullName = STATE_NAME_MAP[stateCode];
-      if (stateFullName) {{
-        const stateKey = `${{stateFullName}} (State)`;
-        const stateLoc = DATA.locations.find(l => l.name === stateKey);
-        if (stateLoc) {{
-          if (activeYear === 'ALL') {{
-            statewideCount = stateLoc.total_count;
-          }} else if (isCumulativeMode) {{
-            Object.keys(stateLoc.years).forEach(yr => {{ if (yr <= activeYear) statewideCount += stateLoc.years[yr]; }});
-          }} else {{
-            statewideCount = stateLoc.years[activeYear] || 0;
-          }}
-        }}
-      }}
-
       return {{
         count: totalCount,
-        statewideCount: statewideCount,
-        topGov: topGov,
-        color: getGovColor(topGov),
+        topGov: dominantGov,
+        color: dominantColor,
         cities: matchedCities,
         locations: matchedLocs
       }};
@@ -1343,16 +1360,6 @@ def generate_html_infographics(data_payload: dict) -> str:
       const x = ((lon - minLon) / (maxLon - minLon)) * 790 + 70;
       const y = ((maxLat - lat) / (maxLat - minLat)) * 490 + 50;
       return {{ x: Math.max(50, Math.min(925, x)), y: Math.max(40, Math.min(570, y)) }};
-    }}
-
-    // Color by Governing Level
-    function getGovColor(gov) {{
-      if (gov.includes('City')) return '#3b82f6'; // Blue
-      if (gov.includes('State')) return '#f59e0b'; // Amber
-      if (gov.includes('Federal')) return '#a855f7'; // Purple
-      if (gov.includes('Company')) return '#10b981'; // Emerald
-      if (gov.includes('County')) return '#f43f5e'; // Rose
-      return '#64748b'; // Slate
     }}
 
     // State 2-letter postal code coordinates for labels
@@ -1430,7 +1437,8 @@ def generate_html_infographics(data_payload: dict) -> str:
           return {{
             centerX: (minX + maxX) / 2,
             // Top-center: horizontally centered at (minX + maxX)/2, positioned right at top edge inside shaded region
-            topY: minY + Math.max(2.5, Math.min(8.5, height * 0.12)),
+            // Top-center: upper 20% of shaded region
+            topY: minY + Math.max(2.5, height * 0.20),
             width: width,
             height: height
           }};
@@ -1443,8 +1451,8 @@ def generate_html_infographics(data_payload: dict) -> str:
         return {{
           centerX: pt.x,
           topY: pt.y - 10,
-          width: 40,
-          height: 30
+          width: 35,
+          height: 25
         }};
       }}
       return null;
@@ -1466,48 +1474,22 @@ def generate_html_infographics(data_payload: dict) -> str:
       bubbleLabelsLayer.style("opacity", bubbleOpacity);
       bubbleLayer.style("pointer-events", bubbleOpacity <= 0.05 ? "none" : "auto");
 
-      // 2. Cross-fade county region shading
+      // 2. Cross-fade county region shading - strictly for active policy coverage
       d3.selectAll(".county-path").each(function(d) {{
         if (!d || !d.id) return;
         const countyEl = d3.select(this);
         const policy = getCountyActivePolicy(d.id);
 
-        if (policy.count > 0) {{
-          if (shadeFactor > 0) {{
-            // Shaded region with distinct municipal policy color
-            countyEl
-              .classed("county-shaded-active", true)
-              .style("fill", policy.color)
-              .style("fill-opacity", 0.72 * shadeFactor)
-              .style("stroke", shadeFactor > 0.4 ? policy.color : "#2a3a4f")
-              .style("stroke-width", `${{Math.max(0.4, (1.2 * shadeFactor + 0.3) / k)}}px`);
-          }} else {{
-            countyEl
-              .classed("county-shaded-active", false)
-              .style("fill", "#1e293b")
-              .style("fill-opacity", 1)
-              .style("stroke", "#2a3a4f")
-              .style("stroke-width", `${{Math.max(0.2, 0.45 / k)}}px`);
-          }}
-        }} else if (policy.statewideCount > 0) {{
-          // Subtle statewide policy background shading
-          if (shadeFactor > 0) {{
-            countyEl
-              .classed("county-shaded-active", false)
-              .style("fill", "#f59e0b")
-              .style("fill-opacity", 0.12 * shadeFactor)
-              .style("stroke", "#2a3a4f")
-              .style("stroke-width", `${{Math.max(0.2, 0.45 / k)}}px`);
-          }} else {{
-            countyEl
-              .classed("county-shaded-active", false)
-              .style("fill", "#1e293b")
-              .style("fill-opacity", 1)
-              .style("stroke", "#2a3a4f")
-              .style("stroke-width", `${{Math.max(0.2, 0.45 / k)}}px`);
-          }}
+        if (policy.count > 0 && shadeFactor > 0) {{
+          // Shaded region with distinct municipal policy color matching legend
+          countyEl
+            .classed("county-shaded-active", true)
+            .style("fill", policy.color)
+            .style("fill-opacity", 0.75 * shadeFactor)
+            .style("stroke", shadeFactor > 0.3 ? policy.color : "#2a3a4f")
+            .style("stroke-width", `${{Math.max(0.4, (1.2 * shadeFactor + 0.3) / k)}}px`);
         }} else {{
-          // Default unshaded county
+          // Default unshaded base county
           countyEl
             .classed("county-shaded-active", false)
             .style("fill", "#1e293b")
@@ -1523,20 +1505,25 @@ def generate_html_infographics(data_payload: dict) -> str:
         if (k < 2.2) {{
           regionLabelsLayer.style("opacity", "0");
         }} else {{
-          const labelOpacity = Math.min(1, (k - 2.2) / 0.8);
-          regionLabelsLayer.style("opacity", `${{labelOpacity}}`);
-
-          // Proportional typography: scales smoothly with zoom factor k
-          // Screen size stays balanced between 11px and 15px
-          const targetSvgFs = Math.max(2.0, Math.min(10, 10.5 / Math.pow(k, 0.78)));
-          const targetStrokeWidth = Math.max(0.4, 2.4 / k);
+          // Target screen font size between 8.5px and 13.0px
+          const targetScreenFs = Math.min(13.0, Math.max(8.5, 8.5 + (k - 2.2) * 0.9));
+          const targetSvgFs = targetScreenFs / k;
+          const targetStrokeWidth = Math.max(0.4, 2.0 / k);
 
           regionLabelsLayer.selectAll(".region-name-label").each(function() {{
             const textEl = d3.select(this);
-            const maxFs = parseFloat(textEl.attr("data-max-fs") || 12);
+            const maxFs = parseFloat(textEl.attr("data-max-fs") || 10);
             const appliedFs = Math.min(targetSvgFs, maxFs);
-            textEl.style("font-size", `${{appliedFs}}px`);
-            textEl.style("stroke-width", `${{targetStrokeWidth}}px`);
+            const screenFs = appliedFs * k;
+
+            if (screenFs < 7.0) {{
+              textEl.style("opacity", "0");
+            }} else {{
+              const labelOpacity = Math.min(1, (k - 2.2) / 0.8) * Math.min(1, (screenFs - 7.0) / 2.0);
+              textEl.style("opacity", `${{labelOpacity}}`);
+              textEl.style("font-size", `${{appliedFs}}px`);
+              textEl.style("stroke-width", `${{targetStrokeWidth}}px`);
+            }}
           }});
         }}
       }}
@@ -2022,13 +2009,9 @@ def generate_html_infographics(data_payload: dict) -> str:
         const coords = projectCoords(loc.lat, loc.lon);
         if (!coords) return;
         
-        // Find dominant governing level
-        let topGov = 'Company';
-        let maxGovCount = -1;
-        Object.entries(loc.gov_levels).forEach(([gov, cnt]) => {{
-          if (cnt > maxGovCount) {{ maxGovCount = cnt; topGov = gov; }}
-        }});
-        const color = getGovColor(topGov);
+        // Find dominant governing level matching legend
+        const govType = getLocationGov(loc);
+        const color = getGovColor(govType);
 
         // Radius calculation: calm, static, proportional
         const baseRadius = (activeYear === 'ALL') 
@@ -2057,7 +2040,7 @@ def generate_html_infographics(data_payload: dict) -> str:
 
         circle.onmouseenter = (e) => {{
           showTooltip(e, `<strong class="text-white">${{loc.name}}</strong>${{countyLabel}}`, 
-            `<span class="text-amber-400 font-bold">${{count}} Policies</span> (${{topGov}})<br/><span class="text-[11px] text-slate-400">Click to zoom and view policies</span>`);
+            `<span class="text-amber-400 font-bold">${{count}} Policies</span> (${{govType}})<br/><span class="text-[11px] text-slate-400">Click to zoom and view policies</span>`);
         }};
         circle.onmouseleave = hideTooltip;
 
@@ -2082,18 +2065,22 @@ def generate_html_infographics(data_payload: dict) -> str:
         }}
 
         // Dynamic Shaded Region Name Label on Top-Center (revealed when morphed into shaded region)
-        if (cityLabelsLayer) {{
+        // Only render labels for municipal and county regions (not whole-state entries)
+        if (cityLabelsLayer && !loc.name.includes('(State)')) {{
           const geom = getLocationRegionGeom(loc);
-          if (geom) {{
+          if (geom && geom.width > 0) {{
+            const displayName = loc.name.split(',')[0].trim();
+            const L = Math.max(1, displayName.length);
+
+            // Calculate max font size that strictly fits within 80% of county width and 25% of height
+            const maxFitFs = Math.min((geom.width * 0.80) / (L * 0.55), geom.height * 0.25);
+
             const labelText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
             labelText.setAttribute('x', geom.centerX);
             labelText.setAttribute('y', geom.topY);
             labelText.setAttribute('class', 'region-name-label pointer-events-none select-none');
-            
-            // Calculate proportional max font size so label scales proportionally with the region
-            const maxAllowedFs = Math.max(2.2, (geom.width * 0.90) / (loc.name.length * 0.58));
-            labelText.setAttribute('data-max-fs', maxAllowedFs);
-            labelText.textContent = loc.name;
+            labelText.setAttribute('data-max-fs', maxFitFs);
+            labelText.textContent = displayName;
 
             cityLabelsLayer.appendChild(labelText);
           }}
