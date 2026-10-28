@@ -450,23 +450,53 @@ def generate_html_infographics(data_payload: dict) -> str:
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
   <style>
-    /* Clean state boundary styles */
-    .state-path {{
+    /* Election Map County & State Styling */
+    .county-path {{
       fill: #1e293b;
-      stroke: #334155;
-      stroke-width: 1;
-      transition: fill 0.2s, stroke 0.2s, stroke-width 0.2s;
+      stroke: #2a3a4f;
+      stroke-width: 0.35px;
       cursor: pointer;
+      transition: fill 0.15s ease-out, stroke 0.15s ease-out;
     }}
-    .state-path:hover {{
-      fill: #2d3f59;
-      stroke: #60a5fa;
-      stroke-width: 1.5;
+    .county-path:hover {{
+      fill: #2d4366 !important;
+      stroke: #38bdf8 !important;
+      stroke-width: 1.2px !important;
+    }}
+    .county-has-policy {{
+      fill: #1d2c46;
+    }}
+    .county-has-policy:hover {{
+      fill: #2563eb !important;
+      fill-opacity: 0.45 !important;
+      stroke: #60a5fa !important;
+      stroke-width: 1.5px !important;
+    }}
+    .county-mesh {{
+      fill: none;
+      stroke: #2b394e;
+      stroke-width: 0.35px;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }}
+    .state-path {{
+      fill: none;
+      stroke: #475569;
+      stroke-width: 1.2px;
+      pointer-events: none;
+    }}
+    .state-mesh {{
+      fill: none;
+      stroke: #64748b;
+      stroke-width: 1.4px;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      pointer-events: none;
     }}
     /* Nationwide glow illumination across all states */
     .nationwide-active {{
       stroke: #38bdf8 !important;
-      stroke-width: 1.8px !important;
+      stroke-width: 1.4px !important;
       fill: #1a365d !important;
       filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.45));
     }}
@@ -482,7 +512,7 @@ def generate_html_infographics(data_payload: dict) -> str:
     }}
     /* Map bubble transitions - calm, clean, zero infinite pulsating */
     .city-bubble {{
-      transition: r 0.25s ease-out, opacity 0.25s ease-out, fill 0.25s;
+      transition: opacity 0.25s ease-out, fill 0.25s;
     }}
     .city-bubble:hover {{
       stroke: #ffffff;
@@ -621,10 +651,40 @@ def generate_html_infographics(data_payload: dict) -> str:
             </div>
           </div>
 
-          <!-- SVG United States Map Container -->
+          <!-- SVG United States Map Container with Zoom & Pan Dock -->
           <div class="relative w-full aspect-[16/10] bg-slate-950/70 rounded-xl border border-slate-800/80 overflow-hidden flex items-center justify-center p-2">
             
-            <svg id="us-map-svg" viewBox="0 0 960 600" class="w-full h-full select-none">
+            <!-- FLOATING ZOOM CONTROLS DOCK (TOP-LEFT) -->
+            <div class="absolute top-4 left-4 z-20 flex flex-col gap-1.5 bg-slate-900/90 backdrop-blur-md border border-slate-700/80 p-1.5 rounded-xl shadow-2xl">
+              <button onclick="zoomIn()" title="Zoom In (+)" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-blue-600 text-white font-bold text-base flex items-center justify-center transition border border-slate-700 hover:border-blue-500 shadow-sm active:scale-95">
+                +
+              </button>
+              <button onclick="zoomOut()" title="Zoom Out (−)" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-blue-600 text-white font-bold text-base flex items-center justify-center transition border border-slate-700 hover:border-blue-500 shadow-sm active:scale-95">
+                −
+              </button>
+              <div class="h-px bg-slate-700/80 my-0.5"></div>
+              <button onclick="resetZoom()" title="Reset to Continental USA (1.0x)" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-amber-600 text-white font-semibold text-xs flex items-center justify-center transition border border-slate-700 hover:border-amber-500 shadow-sm active:scale-95">
+                ⟲
+              </button>
+            </div>
+
+            <!-- ZOOM LEVEL & PRECISION BADGE (TOP-RIGHT) -->
+            <div class="absolute top-4 right-4 z-20 flex items-center gap-2 bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-3 py-1.5 rounded-xl shadow-xl text-xs">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span class="text-slate-400 font-medium">Zoom Tier:</span>
+              <span id="zoom-badge-text" class="font-bold text-white font-mono">1.0x (National View)</span>
+            </div>
+
+            <!-- GESTURE & INTERACTION HINT (BOTTOM) -->
+            <div class="absolute bottom-3 left-1/2 -translate-x-1/2 pointer-events-none z-10 bg-slate-950/85 backdrop-blur-sm border border-slate-800 px-3.5 py-1 rounded-full text-[11px] text-slate-400 shadow flex items-center gap-2">
+              <span>🔍 Scroll / pinch to zoom</span>
+              <span class="text-slate-600">•</span>
+              <span>✋ Drag to pan</span>
+              <span class="text-slate-600">•</span>
+              <span>📍 Click pin or county to focus</span>
+            </div>
+
+            <svg id="us-map-svg" viewBox="0 0 975 610" class="w-full h-full select-none cursor-grab active:cursor-grabbing">
               <defs>
                 <filter id="bubble-glow" x="-20%" y="-20%" width="140%" height="140%">
                   <feGaussianBlur stdDeviation="2.5" result="blur" />
@@ -632,17 +692,32 @@ def generate_html_infographics(data_payload: dict) -> str:
                 </filter>
               </defs>
 
-              <!-- High-Precision U.S. State Boundaries Layer -->
-              <g id="map-states-layer"></g>
+              <!-- Master Zoom Group transformed smoothly by D3 Zoom Engine -->
+              <g id="map-zoom-group">
+                <!-- 1. Counties Polygons Layer (Hoverable & Clickable) -->
+                <g id="map-counties-layer"></g>
 
-              <!-- State Abbreviations Labels Layer (CA, TX, NY, FL...) -->
-              <g id="map-state-labels-layer" pointer-events="none"></g>
+                <!-- 2. County Mesh Borders Layer (Crisp Interior Boundaries) -->
+                <g id="map-county-mesh-layer" pointer-events="none"></g>
 
-              <!-- Dynamic Map Bubbles Layer (Localized Points Only) -->
-              <g id="map-bubbles-layer"></g>
+                <!-- 3. States Polygons Layer -->
+                <g id="map-states-layer"></g>
 
-              <!-- Bubble Text Labels Layer (Entry counts inside bubbles) -->
-              <g id="map-bubble-labels-layer" pointer-events="none"></g>
+                <!-- 4. State Mesh Boundaries Layer -->
+                <g id="map-state-mesh-layer" pointer-events="none"></g>
+
+                <!-- 5. State 2-Letter Abbreviation Labels (CA, TX, NY...) -->
+                <g id="map-state-labels-layer" pointer-events="none"></g>
+
+                <!-- 6. Localized City Bubbles Layer -->
+                <g id="map-bubbles-layer"></g>
+
+                <!-- 7. Bubble Numeric Count Text Layer -->
+                <g id="map-bubble-labels-layer" pointer-events="none"></g>
+
+                <!-- 8. Dynamic City & Municipality Name Badges Layer (Fades in on zoom) -->
+                <g id="map-city-labels-layer" pointer-events="none"></g>
+              </g>
             </svg>
 
             <!-- Floating Hover Tooltip -->
@@ -1026,13 +1101,142 @@ def generate_html_infographics(data_payload: dict) -> str:
     let playInterval = null;
     let selectedLocation = null;
     let isNationwideSelected = false;
+    let zoomBehavior = null;
+    let currentZoomK = 1.0;
+    let usAtlasData = null;
 
-    // Albers USA Projection for city bubbles (960x600 viewBox)
-    // Uses standard D3 projection or fallback math
+    // Standard State FIPS Code Dictionary
+    const STATE_FIPS_MAP = {{
+      "01": "AL", "02": "AK", "04": "AZ", "05": "AR", "06": "CA",
+      "08": "CO", "09": "CT", "10": "DE", "11": "DC", "12": "FL",
+      "13": "GA", "15": "HI", "16": "ID", "17": "IL", "18": "IN",
+      "19": "IA", "20": "KS", "21": "KY", "22": "LA", "23": "ME",
+      "24": "MD", "25": "MA", "26": "MI", "27": "MN", "28": "MS",
+      "29": "MO", "30": "MT", "31": "NE", "32": "NV", "33": "NH",
+      "34": "NJ", "35": "NM", "36": "NY", "37": "NC", "38": "ND",
+      "39": "OH", "40": "OK", "41": "OR", "42": "PA", "44": "RI",
+      "45": "SC", "46": "SD", "47": "TN", "48": "TX", "49": "UT",
+      "50": "VT", "51": "VA", "53": "WA", "54": "WV", "55": "WI",
+      "56": "WY", "72": "PR"
+    }};
+
+    const STATE_NAME_MAP = {{
+      "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California",
+      "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "DC": "District of Columbia",
+      "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois",
+      "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana",
+      "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota",
+      "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada",
+      "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York",
+      "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon",
+      "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota",
+      "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia",
+      "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming"
+    }};
+
+    // City to County & FIPS mapping for empirical routing policy locations
+    const CITY_TO_COUNTY = {{
+      "Leonia, NJ": {{ fips: "34003", county: "Bergen County, NJ" }},
+      "Mantoloking, NJ": {{ fips: "34029", county: "Ocean County, NJ" }},
+      "Newark, NJ": {{ fips: "34013", county: "Essex County, NJ" }},
+      "Trenton, NJ": {{ fips: "34021", county: "Mercer County, NJ" }},
+      "Los Angeles, CA": {{ fips: "06037", county: "Los Angeles County, CA" }},
+      "San Francisco, CA": {{ fips: "06075", county: "San Francisco County, CA" }},
+      "San Jose, CA": {{ fips: "06085", county: "Santa Clara County, CA" }},
+      "Silicon Valley, CA": {{ fips: "06085", county: "Santa Clara County, CA" }},
+      "Oakland, CA": {{ fips: "06001", county: "Alameda County, CA" }},
+      "Sacramento, CA": {{ fips: "06067", county: "Sacramento County, CA" }},
+      "San Diego, CA": {{ fips: "06073", county: "San Diego County, CA" }},
+      "Fresno, CA": {{ fips: "06019", county: "Fresno County, CA" }},
+      "Davis, CA": {{ fips: "06113", county: "Yolo County, CA" }},
+      "Austin, TX": {{ fips: "48453", county: "Travis County, TX" }},
+      "Dallas, TX": {{ fips: "48113", county: "Dallas County, TX" }},
+      "Fort Worth, TX": {{ fips: "48439", county: "Tarrant County, TX" }},
+      "Arlington, TX": {{ fips: "48439", county: "Tarrant County, TX" }},
+      "Houston, TX": {{ fips: "48201", county: "Harris County, TX" }},
+      "San Antonio, TX": {{ fips: "48029", county: "Bexar County, TX" }},
+      "Amarillo, TX": {{ fips: "48375", county: "Potter County, TX" }},
+      "New York City, NY": {{ fips: "36061", county: "New York County, NY" }},
+      "Albany, NY": {{ fips: "36001", county: "Albany County, NY" }},
+      "Chicago, IL": {{ fips: "17031", county: "Cook County, IL" }},
+      "Evanston, IL": {{ fips: "17031", county: "Cook County, IL" }},
+      "Naperville, IL": {{ fips: "17043", county: "DuPage County, IL" }},
+      "Springfield, IL": {{ fips: "17167", county: "Sangamon County, IL" }},
+      "Atlanta, GA": {{ fips: "13121", county: "Fulton County, GA" }},
+      "Fulton County, GA": {{ fips: "13121", county: "Fulton County, GA" }},
+      "Boston, MA": {{ fips: "25025", county: "Suffolk County, MA" }},
+      "Seattle, WA": {{ fips: "53033", county: "King County, WA" }},
+      "Spokane, WA": {{ fips: "53063", county: "Spokane County, WA" }},
+      "Miami, FL": {{ fips: "12086", county: "Miami-Dade County, FL" }},
+      "Miami-Dade County, FL": {{ fips: "12086", county: "Miami-Dade County, FL" }},
+      "Coral Gables, FL": {{ fips: "12086", county: "Miami-Dade County, FL" }},
+      "Jacksonville, FL": {{ fips: "12031", county: "Duval County, FL" }},
+      "Tampa, FL": {{ fips: "12057", county: "Hillsborough County, FL" }},
+      "Tallahassee, FL": {{ fips: "12073", county: "Leon County, FL" }},
+      "Philadelphia, PA": {{ fips: "42101", county: "Philadelphia County, PA" }},
+      "Pittsburgh, PA": {{ fips: "42003", county: "Allegheny County, PA" }},
+      "Harrisburg, PA": {{ fips: "42043", county: "Dauphin County, PA" }},
+      "Lancaster, PA": {{ fips: "42071", county: "Lancaster County, PA" }},
+      "Phoenix, AZ": {{ fips: "04013", county: "Maricopa County, AZ" }},
+      "Denver, CO": {{ fips: "08031", county: "Denver County, CO" }},
+      "Colorado Springs, CO": {{ fips: "08041", county: "El Paso County, CO" }},
+      "Detroit, MI": {{ fips: "26163", county: "Wayne County, MI" }},
+      "Midland, MI": {{ fips: "26111", county: "Midland County, MI" }},
+      "Saint Paul, MN": {{ fips: "27123", county: "Ramsey County, MN" }},
+      "Saint Louis, MO": {{ fips: "29510", county: "St. Louis City, MO" }},
+      "Kansas City, MO": {{ fips: "29095", county: "Jackson County, MO" }},
+      "Raleigh, NC": {{ fips: "37183", county: "Wake County, NC" }},
+      "Cary, NC": {{ fips: "37183", county: "Wake County, NC" }},
+      "Charlotte, NC": {{ fips: "37119", county: "Mecklenburg County, NC" }},
+      "Greensboro, NC": {{ fips: "37081", county: "Guilford County, NC" }},
+      "Asheville, NC": {{ fips: "37021", county: "Buncombe County, NC" }},
+      "Nashville, TN": {{ fips: "47037", county: "Davidson County, TN" }},
+      "Knoxville, TN": {{ fips: "47093", county: "Knox County, TN" }},
+      "Norfolk, VA": {{ fips: "51710", county: "Norfolk City, VA" }},
+      "Virginia Beach, VA": {{ fips: "51810", county: "Virginia Beach City, VA" }},
+      "Richmond, VA": {{ fips: "51760", county: "Richmond City, VA" }},
+      "Loudoun County, VA": {{ fips: "51107", county: "Loudoun County, VA" }},
+      "Washington, DC": {{ fips: "11001", county: "District of Columbia" }},
+      "District of Columbia": {{ fips: "11001", county: "District of Columbia" }},
+      "Baltimore, MD": {{ fips: "24510", county: "Baltimore City, MD" }},
+      "Columbus, OH": {{ fips: "39049", county: "Franklin County, OH" }},
+      "Toledo, OH": {{ fips: "39095", county: "Lucas County, OH" }},
+      "Milwaukee, WI": {{ fips: "55079", county: "Milwaukee County, WI" }},
+      "Salt Lake City, UT": {{ fips: "49035", county: "Salt Lake County, UT" }},
+      "Portland, OR": {{ fips: "41051", county: "Multnomah County, OR" }},
+      "Albuquerque, NM": {{ fips: "35001", county: "Bernalillo County, NM" }},
+      "Santa Fe, NM": {{ fips: "35049", county: "Santa Fe County, NM" }},
+      "Reno, NV": {{ fips: "32031", county: "Washoe County, NV" }},
+      "Carson City, NV": {{ fips: "32510", county: "Carson City, NV" }},
+      "Boise, ID": {{ fips: "16001", county: "Ada County, ID" }},
+      "Hartford, CT": {{ fips: "09003", county: "Hartford County, CT" }},
+      "Bridgeport, CT": {{ fips: "09001", county: "Fairfield County, CT" }},
+      "Fairfield, CT": {{ fips: "09001", county: "Fairfield County, CT" }},
+      "New Haven, CT": {{ fips: "09009", county: "New Haven County, CT" }},
+      "Providence, RI": {{ fips: "44007", county: "Providence County, RI" }},
+      "Dover, DE": {{ fips: "10001", county: "Kent County, DE" }},
+      "Baton Rouge, LA": {{ fips: "22033", county: "East Baton Rouge Parish, LA" }},
+      "Louisville, KY": {{ fips: "21111", county: "Jefferson County, KY" }},
+      "Lexington, KY": {{ fips: "21067", county: "Fayette County, KY" }},
+      "Des Moines, IA": {{ fips: "19153", county: "Polk County, IA" }},
+      "Davenport, IA": {{ fips: "19163", county: "Scott County, IA" }},
+      "Lincoln, NE": {{ fips: "31109", county: "Lancaster County, NE" }},
+      "Sioux Falls, SD": {{ fips: "46099", county: "Minnehaha County, SD" }},
+      "Montgomery, AL": {{ fips: "01101", county: "Montgomery County, AL" }},
+      "Augusta, ME": {{ fips: "23011", county: "Kennebec County, ME" }}
+    }};
+
+    const FIPS_TO_LOCATIONS = {{}};
+    Object.entries(CITY_TO_COUNTY).forEach(([cName, info]) => {{
+      if (!FIPS_TO_LOCATIONS[info.fips]) FIPS_TO_LOCATIONS[info.fips] = [];
+      FIPS_TO_LOCATIONS[info.fips].push(cName);
+    }});
+
+    // Canonical Albers USA Projection matching us-atlas 975x610 viewport
     let albersProjection = null;
     try {{
       if (typeof d3 !== 'undefined' && d3.geoAlbersUsa) {{
-        albersProjection = d3.geoAlbersUsa().scale(1200).translate([480, 300]);
+        albersProjection = d3.geoAlbersUsa().scale(1300).translate([487.5, 305]);
       }}
     }} catch(e) {{
       console.warn("D3 projection init:", e);
@@ -1046,9 +1250,9 @@ def generate_html_infographics(data_payload: dict) -> str:
       // Fallback projection if point is outside contiguous US (e.g. Alaska)
       const minLon = -125.0, maxLon = -66.0;
       const minLat = 24.0, maxLat = 50.0;
-      const x = ((lon - minLon) / (maxLon - minLon)) * 780 + 70;
-      const y = ((maxLat - lat) / (maxLat - minLat)) * 480 + 50;
-      return {{ x: Math.max(50, Math.min(910, x)), y: Math.max(40, Math.min(550, y)) }};
+      const x = ((lon - minLon) / (maxLon - minLon)) * 790 + 70;
+      const y = ((maxLat - lat) / (maxLat - minLat)) * 490 + 50;
+      return {{ x: Math.max(50, Math.min(925, x)), y: Math.max(40, Math.min(570, y)) }};
     }}
 
     // Color by Governing Level
@@ -1076,6 +1280,99 @@ def generate_html_infographics(data_payload: dict) -> str:
       "VT": [-72.6, 44.1], "NH": [-71.6, 43.7], "MA": [-71.8, 42.2], "CT": [-72.7, 41.6],
       "NJ": [-74.5, 40.1], "MD": [-76.7, 39.0], "DE": [-75.5, 39.0]
     }};
+
+    // D3 Zoom Control Functions
+    function zoomIn() {{
+      if (zoomBehavior) {{
+        d3.select("#us-map-svg").transition().duration(300).call(zoomBehavior.scaleBy, 1.5);
+      }}
+    }}
+
+    function zoomOut() {{
+      if (zoomBehavior) {{
+        d3.select("#us-map-svg").transition().duration(300).call(zoomBehavior.scaleBy, 0.67);
+      }}
+    }}
+
+    function resetZoom() {{
+      if (zoomBehavior) {{
+        d3.select("#us-map-svg").transition().duration(600).ease(d3.easeCubicOut).call(zoomBehavior.transform, d3.zoomIdentity);
+      }}
+    }}
+
+    function zoomToCoords(x, y, targetK = 4.5) {{
+      if (!zoomBehavior) return;
+      const width = 975;
+      const height = 610;
+      const tx = width / 2 - x * targetK;
+      const ty = height / 2 - y * targetK;
+      d3.select("#us-map-svg").transition()
+        .duration(750)
+        .ease(d3.easeCubicOut)
+        .call(zoomBehavior.transform, d3.zoomIdentity.translate(tx, ty).scale(targetK));
+    }}
+
+    function handleZoom(event) {{
+      const {{ transform }} = event;
+      const k = transform.k;
+      currentZoomK = k;
+
+      // 1. Transform the master zoom group
+      d3.select("#map-zoom-group").attr("transform", transform);
+
+      // 2. Update Zoom Tier Badge
+      let tierName = "National View";
+      if (k >= 3.8) {{
+        tierName = "County Precision View";
+      }} else if (k >= 1.8) {{
+        tierName = "Regional / State View";
+      }}
+      const badgeEl = document.getElementById("zoom-badge-text");
+      if (badgeEl) badgeEl.textContent = `${{k.toFixed(1)}}x (${{tierName}})`;
+
+      // 3. Counter-scale state boundary & mesh stroke
+      d3.selectAll(".state-boundary").style("stroke-width", `${{Math.max(0.4, 1.2 / k)}}px`);
+      d3.selectAll(".state-mesh").style("stroke-width", `${{Math.max(0.5, 1.4 / k)}}px`);
+
+      // 4. Counties stroke & visibility counter-scale
+      d3.selectAll(".county-path").style("stroke-width", `${{Math.max(0.2, 0.45 / k)}}px`);
+      d3.selectAll(".county-mesh").style("stroke-width", `${{Math.max(0.15, 0.35 / k)}}px`);
+
+      // 5. State 2-letter labels fade out smoothly at regional/county zoom
+      const stateLabelsLayer = d3.select("#map-state-labels-layer");
+      if (k >= 2.8) {{
+        stateLabelsLayer.style("opacity", "0");
+      }} else if (k >= 1.8) {{
+        stateLabelsLayer.style("opacity", `${{Math.max(0, 1 - (k - 1.8) * 1.0)}}`);
+      }} else {{
+        stateLabelsLayer.style("opacity", "0.7");
+      }}
+
+      // 6. Dynamic City Name Badges fade in cleanly at k >= 2.0
+      const cityLabelsLayer = d3.select("#map-city-labels-layer");
+      if (k < 2.0) {{
+        cityLabelsLayer.style("opacity", "0");
+      }} else {{
+        cityLabelsLayer.style("opacity", `${{Math.min(1, (k - 2.0) / 0.8)}}`);
+        cityLabelsLayer.selectAll("text").style("font-size", `${{Math.max(6.5, Math.min(10, 9 / Math.pow(k, 0.25)))}}px`);
+      }}
+
+      // 7. Counter-scale bubble radius & stroke
+      d3.selectAll(".city-bubble").each(function() {{
+        const el = d3.select(this);
+        const baseR = parseFloat(el.attr("data-base-r") || el.attr("r"));
+        el.attr("r", baseR / Math.pow(k, 0.42));
+        el.style("stroke-width", `${{Math.max(0.6, 1.8 / k)}}px`);
+      }});
+
+      // 8. Counter-scale bubble numeric text
+      d3.selectAll(".bubble-count-text").each(function() {{
+        const el = d3.select(this);
+        const baseFs = parseFloat(el.attr("data-base-fs") || 10);
+        el.style("font-size", `${{Math.max(5.5, baseFs / Math.pow(k, 0.35))}}px`);
+      }});
+    }}
+
 
     function initDashboard() {{
       // Dynamically initialize header and top stats from DATA.metadata
@@ -1200,8 +1497,16 @@ def generate_html_infographics(data_payload: dict) -> str:
     }}
 
     function setNationwideHighlight(active) {{
-      const statePaths = document.querySelectorAll('.state-path');
-      statePaths.forEach(p => {{
+      const countyPaths = document.querySelectorAll('.county-path');
+      const stateBorders = document.querySelectorAll('.state-mesh, .state-boundary');
+      countyPaths.forEach(p => {{
+        if (active || isNationwideSelected) {{
+          p.classList.add('nationwide-active');
+        }} else {{
+          p.classList.remove('nationwide-active');
+        }}
+      }});
+      stateBorders.forEach(p => {{
         if (active || isNationwideSelected) {{
           p.classList.add('nationwide-active');
         }} else {{
@@ -1290,58 +1595,103 @@ def generate_html_infographics(data_payload: dict) -> str:
       }}
     }}
 
-    // High-Precision D3 TopoJSON State Map Initializer
+    // High-Precision D3 TopoJSON County & State Map Initializer
     function initHighPrecisionMap() {{
       const svg = d3.select("#us-map-svg");
+      const countiesLayer = svg.select("#map-counties-layer");
+      const countyMeshLayer = svg.select("#map-county-mesh-layer");
       const statesLayer = svg.select("#map-states-layer");
+      const stateMeshLayer = svg.select("#map-state-mesh-layer");
       const stateLabelsLayer = svg.select("#map-state-labels-layer");
 
-      // Load canonical TopoJSON US Atlas (Mike Bostock / US Census)
-      const usAtlasUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-albers-10m.json";
+      // Initialize D3 Zoom Behavior with trackpad, pinch & drag
+      zoomBehavior = d3.zoom()
+        .scaleExtent([1, 14])
+        .translateExtent([[-150, -100], [1125, 710]])
+        .on("zoom", handleZoom);
+
+      svg.call(zoomBehavior);
+
+      // Load canonical TopoJSON US Atlas with all 3,142 pre-projected counties
+      const usAtlasUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json";
 
       d3.json(usAtlasUrl).then(us => {{
-        if (!us || !us.objects || !us.objects.states) return;
+        if (!us || !us.objects) return;
+        usAtlasData = us;
 
-        const path = d3.geoPath(); // Pre-projected Albers coordinates
-        const states = topojson.feature(us, us.objects.states).features;
+        const path = d3.geoPath(); // Pre-projected Albers coordinates matching 975x610 viewport
 
-        // Render every individual state boundary
-        statesLayer.selectAll("path")
-          .data(states)
-          .join("path")
-          .attr("d", path)
-          .attr("class", "state-path")
-          .attr("id", d => "state-" + (d.id || ""))
-          .on("mouseenter", (event, d) => {{
-            showTooltip(event, d.properties.name, "U.S. State Jurisdiction");
-          }})
-          .on("mouseleave", hideTooltip);
+        // 1. Render all 3,142 U.S. Counties (Clickable & Hoverable down to municipal precision)
+        if (us.objects.counties) {{
+          const counties = topojson.feature(us, us.objects.counties).features;
+          countiesLayer.selectAll("path")
+            .data(counties)
+            .join("path")
+            .attr("d", path)
+            .attr("class", d => {{
+              const hasPolicy = FIPS_TO_LOCATIONS[d.id] ? "county-has-policy" : "";
+              return `county-path ${{hasPolicy}}`;
+            }})
+            .attr("id", d => "county-" + (d.id || ""))
+            .on("mouseenter", (event, d) => handleCountyHover(event, d))
+            .on("mouseleave", hideTooltip)
+            .on("click", (event, d) => handleCountyClick(event, d, path));
 
-        // Render 2-letter state abbreviation labels for geographic clarity
-        stateLabelsLayer.selectAll("text").remove();
-        Object.entries(STATE_CENTROIDS).forEach(([code, coords]) => {{
-          const pt = projectCoords(coords[1], coords[0]);
-          if (pt && pt.x > 60 && pt.x < 900 && pt.y > 60 && pt.y < 540) {{
-            stateLabelsLayer.append("text")
-              .attr("x", pt.x)
-              .attr("y", pt.y)
-              .attr("text-anchor", "middle")
-              .attr("dominant-baseline", "central")
-              .attr("fill", "#475569")
-              .attr("font-size", "10px")
-              .attr("font-weight", "600")
-              .attr("letter-spacing", "0.5px")
-              .attr("opacity", "0.65")
-              .text(code);
+          // Render Interior County Mesh (Crisp boundaries between adjacent counties)
+          countyMeshLayer.append("path")
+            .datum(topojson.mesh(us, us.objects.counties, (a, b) => a !== b))
+            .attr("d", path)
+            .attr("class", "county-mesh");
+        }}
+
+        // 2. Render State Boundaries & Outer Nation Outline
+        if (us.objects.states) {{
+          stateMeshLayer.append("path")
+            .datum(topojson.mesh(us, us.objects.states, (a, b) => a !== b))
+            .attr("d", path)
+            .attr("class", "state-mesh");
+
+          if (us.objects.nation) {{
+            statesLayer.append("path")
+              .datum(topojson.feature(us, us.objects.nation))
+              .attr("d", path)
+              .attr("class", "state-boundary")
+              .style("stroke", "#64748b")
+              .style("stroke-width", "1.6px")
+              .style("fill", "none");
           }}
-        }});
+        }}
 
-        // Render city bubbles now that base map is ready
+        // 3. Render 2-Letter State Postal Codes (CA, TX, NY...)
+        renderStateLabels();
+
+        // 4. Render Localized City Bubbles, Count Badges & City Name Badges
         renderMap();
       }}).catch(err => {{
         console.warn("Could not load online TopoJSON, drawing vector fallback:", err);
         drawFallbackStates(statesLayer);
         renderMap();
+      }});
+    }}
+
+    function renderStateLabels() {{
+      const stateLabelsLayer = d3.select("#map-state-labels-layer");
+      stateLabelsLayer.selectAll("text").remove();
+      Object.entries(STATE_CENTROIDS).forEach(([code, coords]) => {{
+        const pt = projectCoords(coords[1], coords[0]);
+        if (pt && pt.x > 50 && pt.x < 925 && pt.y > 40 && pt.y < 570) {{
+          stateLabelsLayer.append("text")
+            .attr("x", pt.x)
+            .attr("y", pt.y)
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "central")
+            .attr("fill", "#64748b")
+            .attr("font-size", "10px")
+            .attr("font-weight", "700")
+            .attr("letter-spacing", "0.6px")
+            .attr("opacity", "0.7")
+            .text(code);
+        }}
       }});
     }}
 
@@ -1353,11 +1703,98 @@ def generate_html_infographics(data_payload: dict) -> str:
       `);
     }}
 
+    function handleCountyHover(event, d) {{
+      const stateCode = STATE_FIPS_MAP[d.id.slice(0, 2)] || "";
+      const stateName = STATE_NAME_MAP[stateCode] || stateCode;
+      const rawName = (d.properties && d.properties.name) ? d.properties.name : "County";
+      const countyName = rawName + (rawName.toLowerCase().includes("city") || rawName.toLowerCase().includes("parish") || stateCode === "DC" ? "" : " County");
+
+      const matchedCityNames = FIPS_TO_LOCATIONS[d.id] || [];
+      let policyCount = 0;
+      const activeYear = getActiveYear();
+
+      if (matchedCityNames.length > 0) {{
+        DATA.locations.forEach(loc => {{
+          if (matchedCityNames.includes(loc.name)) {{
+            let cnt = 0;
+            if (activeYear === 'ALL') {{
+              cnt = loc.total_count;
+            }} else if (isCumulativeMode) {{
+              Object.keys(loc.years).forEach(yr => {{ if (yr <= activeYear) cnt += loc.years[yr]; }});
+            }} else {{
+              cnt = loc.years[activeYear] || 0;
+            }}
+            policyCount += cnt;
+          }}
+        }});
+      }}
+
+      const title = `${{countyName}}, ${{stateCode}}`;
+      let body = "";
+      if (policyCount > 0) {{
+        body = `<div class="text-amber-400 font-bold mb-1">${{policyCount}} Routing Policy Sources</div>` +
+               `<div class="text-slate-300">Municipalities: <strong class="text-white">${{matchedCityNames.join(", ")}}</strong></div>` +
+               `<div class="text-[11px] text-slate-400 mt-1">Click county to zoom and view policy records.</div>`;
+      }} else {{
+        body = `<div class="text-slate-400 font-medium">Jurisdiction: ${{stateName}}</div>` +
+               `<div class="text-slate-500 text-[11px] mt-0.5">Click to zoom and inspect regional routing policies.</div>`;
+      }}
+      showTooltip(event, title, body);
+    }}
+
+    function handleCountyClick(event, d, path) {{
+      const stateCode = STATE_FIPS_MAP[d.id.slice(0, 2)] || "";
+      const stateName = STATE_NAME_MAP[stateCode] || stateCode;
+      const rawName = (d.properties && d.properties.name) ? d.properties.name : "County";
+      const countyName = rawName + (rawName.toLowerCase().includes("city") || rawName.toLowerCase().includes("parish") || stateCode === "DC" ? "" : " County");
+
+      // Smoothly zoom in to the centroid of this county
+      const centroid = path.centroid(d);
+      if (centroid && !isNaN(centroid[0]) && !isNaN(centroid[1])) {{
+        zoomToCoords(centroid[0], centroid[1], 4.8);
+      }}
+
+      // Check if any research corpus city matches this county
+      const matchedCityNames = FIPS_TO_LOCATIONS[d.id] || [];
+      let foundLoc = null;
+      if (matchedCityNames.length > 0) {{
+        foundLoc = DATA.locations.find(loc => matchedCityNames.includes(loc.name));
+      }}
+
+      if (foundLoc) {{
+        selectLocation(foundLoc, false);
+      }} else {{
+        // Present county jurisdiction overview card
+        selectedLocation = null;
+        isNationwideSelected = false;
+        setNationwideHighlight(false);
+
+        document.getElementById('loc-badge-count').textContent = `County Jurisdiction`;
+        document.getElementById('loc-badge-count').className = 'text-xs font-bold text-slate-400 bg-slate-800 px-2.5 py-0.5 rounded-full border border-slate-700';
+
+        const detailDiv = document.getElementById('location-detail-content');
+        detailDiv.innerHTML = `
+          <div class="bg-slate-950 p-3.5 rounded-lg border border-slate-800 text-xs mb-3 space-y-2">
+            <div class="font-bold text-white text-sm flex items-center gap-2">
+              <span>🏛️</span> <span>${{countyName}}, ${{stateCode}}</span>
+            </div>
+            <div class="text-[11px] text-slate-400 font-mono">FIPS: ${{d.id}} • State Jurisdiction: ${{stateName}}</div>
+            <p class="text-slate-300 text-xs leading-relaxed mt-2">
+              No specific municipal street bans or local anti-shortcut ordinances were identified specifically inside this county in the research corpus.
+              Traffic management across this county is governed under ${{stateName}} DOT highway specifications and federal routing standards.
+            </p>
+          </div>
+        `;
+      }}
+    }}
+
     function renderMap() {{
       const bubbleLayer = document.getElementById('map-bubbles-layer');
       const bubbleLabelsLayer = document.getElementById('map-bubble-labels-layer');
+      const cityLabelsLayer = document.getElementById('map-city-labels-layer');
       bubbleLayer.innerHTML = '';
       bubbleLabelsLayer.innerHTML = '';
+      if (cityLabelsLayer) cityLabelsLayer.innerHTML = '';
       const activeYear = getActiveYear();
 
       DATA.locations.forEach(loc => {{
@@ -1376,6 +1813,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         if (count === 0) return;
 
         const coords = projectCoords(loc.lat, loc.lon);
+        if (!coords) return;
         
         // Find dominant governing level
         let topGov = 'Company';
@@ -1393,21 +1831,26 @@ def generate_html_infographics(data_payload: dict) -> str:
         // SVG Group for localized pin
         const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         g.setAttribute('class', 'cursor-pointer');
-        g.onclick = () => selectLocation(loc);
+        g.onclick = () => selectLocation(loc, true);
 
-        // Main Bubble Circle - Clean, static, high-contrast, zero pulsating loop
+        // Main Bubble Circle - Counter-scaled by currentZoomK
         const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         circle.setAttribute('cx', coords.x);
         circle.setAttribute('cy', coords.y);
-        circle.setAttribute('r', baseRadius);
+        circle.setAttribute('r', baseRadius / Math.pow(currentZoomK, 0.42));
+        circle.setAttribute('data-base-r', baseRadius);
         circle.setAttribute('fill', color);
         circle.setAttribute('fill-opacity', (activeYear !== 'ALL' && !isCumulativeMode) ? '0.9' : '0.75');
         circle.setAttribute('stroke', '#ffffff');
-        circle.setAttribute('stroke-width', (activeYear !== 'ALL' && !isCumulativeMode) ? '2.2' : '1.5');
+        circle.setAttribute('stroke-width', Math.max(0.6, 1.8 / currentZoomK));
         circle.setAttribute('class', 'city-bubble');
 
+        const countyInfo = CITY_TO_COUNTY[loc.name];
+        const countyLabel = countyInfo ? ` (${{countyInfo.county}})` : '';
+
         circle.onmouseenter = (e) => {{
-          showTooltip(e, loc.name, `${{count}} Policies (${{topGov}})`);
+          showTooltip(e, `<strong class="text-white">${{loc.name}}</strong>${{countyLabel}}`, 
+            `<span class="text-amber-400 font-bold">${{count}} Policies</span> (${{topGov}})<br/><span class="text-[11px] text-slate-400">Click to zoom and view policies</span>`);
         }};
         circle.onmouseleave = hideTooltip;
 
@@ -1416,18 +1859,59 @@ def generate_html_infographics(data_payload: dict) -> str:
 
         // Inner text count inside bubble for quick legibility
         if (baseRadius >= 9) {{
+          const baseFontSize = baseRadius > 14 ? 11 : 9;
           const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
           text.setAttribute('x', coords.x);
           text.setAttribute('y', coords.y + 1);
           text.setAttribute('text-anchor', 'middle');
           text.setAttribute('dominant-baseline', 'central');
           text.setAttribute('fill', '#ffffff');
-          text.setAttribute('font-size', baseRadius > 14 ? '11px' : '9px');
+          text.setAttribute('data-base-fs', baseFontSize);
+          text.setAttribute('font-size', `${{Math.max(5.5, baseFontSize / Math.pow(currentZoomK, 0.35))}}px`);
           text.setAttribute('font-weight', 'bold');
+          text.setAttribute('class', 'bubble-count-text pointer-events-none select-none');
           text.textContent = count;
           bubbleLabelsLayer.appendChild(text);
         }}
+
+        // Dynamic City / Municipality Name Label Badge (Revealed on zoom)
+        if (cityLabelsLayer) {{
+          const pillG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          pillG.setAttribute('class', 'city-pill-group pointer-events-none select-none');
+          pillG.setAttribute('transform', `translate(${{coords.x + (baseRadius / Math.pow(currentZoomK, 0.42)) + 4}}, ${{coords.y + 3}})`);
+
+          const pillBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          const textWidth = Math.min(140, Math.max(55, loc.name.length * 6.0 + 8));
+          pillBg.setAttribute('x', -2);
+          pillBg.setAttribute('y', -9);
+          pillBg.setAttribute('width', textWidth);
+          pillBg.setAttribute('height', 14);
+          pillBg.setAttribute('rx', 3);
+          pillBg.setAttribute('ry', 3);
+          pillBg.setAttribute('fill', '#020617');
+          pillBg.setAttribute('fill-opacity', '0.85');
+          pillBg.setAttribute('stroke', '#334155');
+          pillBg.setAttribute('stroke-width', '0.5');
+
+          const pillText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          pillText.setAttribute('x', 2);
+          pillText.setAttribute('y', 1.5);
+          pillText.setAttribute('fill', '#f8fafc');
+          pillText.setAttribute('font-size', `${{Math.max(6.5, Math.min(10, 9 / Math.pow(currentZoomK, 0.25)))}}px`);
+          pillText.setAttribute('font-weight', '600');
+          pillText.setAttribute('letter-spacing', '0.2px');
+          pillText.textContent = loc.name;
+
+          pillG.appendChild(pillBg);
+          pillG.appendChild(pillText);
+          cityLabelsLayer.appendChild(pillG);
+        }}
       }});
+
+      // Maintain current zoom opacity for city badges
+      if (cityLabelsLayer) {{
+        cityLabelsLayer.style.opacity = currentZoomK >= 2.0 ? Math.min(1, (currentZoomK - 2.0) / 0.8) : 0;
+      }}
     }}
 
     function renderLeaderboard() {{
@@ -1465,7 +1949,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         const pct = Math.min(100, Math.round((item.count / maxCount) * 100));
         const row = document.createElement('div');
         row.className = 'cursor-pointer p-1.5 rounded hover:bg-slate-800/60 transition text-xs';
-        row.onclick = () => selectLocation(item.raw);
+        row.onclick = () => selectLocation(item.raw, true);
 
         row.innerHTML = `
           <div class="flex items-center justify-between mb-1">
@@ -1482,10 +1966,15 @@ def generate_html_infographics(data_payload: dict) -> str:
       }});
     }}
 
-    function selectLocation(loc) {{
+    function selectLocation(loc, shouldZoom = true) {{
       selectedLocation = loc;
       isNationwideSelected = false;
       setNationwideHighlight(false);
+
+      if (shouldZoom !== false) {{
+        const coords = projectCoords(loc.lat, loc.lon);
+        if (coords) zoomToCoords(coords.x, coords.y, 4.8);
+      }}
 
       const activeYear = getActiveYear();
       let articles = [];
@@ -1497,14 +1986,20 @@ def generate_html_infographics(data_payload: dict) -> str:
         articles = loc.articles.filter(a => a.year === activeYear);
       }}
 
+      const countyInfo = CITY_TO_COUNTY[loc.name];
+      const countySubtitle = countyInfo ? `County Jurisdiction: ${{countyInfo.county}}` : 'Local municipal regulations and traffic interventions.';
+
       document.getElementById('loc-badge-count').textContent = `${{articles.length}} Articles`;
       document.getElementById('loc-badge-count').className = 'text-xs font-bold text-blue-400 bg-blue-500/10 px-2.5 py-0.5 rounded-full border border-blue-500/20';
 
       const detailDiv = document.getElementById('location-detail-content');
       detailDiv.innerHTML = `
         <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 text-xs mb-3">
-          <div class="font-bold text-white">${{loc.name}}</div>
-          <div class="text-[11px] text-slate-400 mt-0.5">Showing local municipal regulations and traffic interventions.</div>
+          <div class="font-bold text-white text-sm flex items-center justify-between">
+            <span>${{loc.name}}</span>
+            ${{countyInfo ? `<span class="text-[10px] text-blue-400 font-mono font-normal">FIPS: ${{countyInfo.fips}}</span>` : ''}}
+          </div>
+          <div class="text-[11px] text-slate-400 mt-0.5">${{countySubtitle}}</div>
         </div>
       `;
 
@@ -1531,8 +2026,8 @@ def generate_html_infographics(data_payload: dict) -> str:
 
     function showTooltip(event, title, body) {{
       const tip = document.getElementById('map-tooltip');
-      document.getElementById('tooltip-title').textContent = title;
-      document.getElementById('tooltip-body').textContent = body;
+      document.getElementById('tooltip-title').innerHTML = title;
+      document.getElementById('tooltip-body').innerHTML = body;
       tip.style.left = (event.pageX + 12) + 'px';
       tip.style.top = (event.pageY - 28) + 'px';
       tip.classList.remove('hidden');
