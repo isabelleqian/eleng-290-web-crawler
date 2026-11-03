@@ -7,6 +7,7 @@ later reimports of the same file.
 
 from __future__ import annotations
 
+import json
 import sqlite3
 from pathlib import Path
 from typing import Iterable
@@ -174,6 +175,25 @@ _SCHEMA = (
     )
     """,
     "CREATE INDEX IF NOT EXISTS idx_fetch_attempts_source_id ON fetch_attempts(source_id)",
+    """
+    CREATE TABLE IF NOT EXISTS crawled_documents (
+        id TEXT PRIMARY KEY,
+        origin TEXT NOT NULL,
+        title TEXT NOT NULL,
+        publisher TEXT NOT NULL,
+        publication_date TEXT NOT NULL,
+        location TEXT NOT NULL,
+        url TEXT NOT NULL,
+        archive_dir TEXT NOT NULL,
+        measure_codes TEXT NOT NULL,
+        governing_level TEXT NOT NULL,
+        category TEXT NOT NULL,
+        target_location_type TEXT NOT NULL,
+        factual_summary TEXT NOT NULL,
+        in_research_set INTEGER NOT NULL
+    )
+    """,
+    "CREATE INDEX IF NOT EXISTS idx_crawled_documents_origin ON crawled_documents(origin)",
 )
 
 _DISCOVERY_COLUMNS = {
@@ -625,3 +645,224 @@ def _csv_cell(value: object) -> str:
     if value is None:
         return ""
     return str(value)
+
+
+_US_STATES = {
+    "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut",
+    "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
+    "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
+    "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire",
+    "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
+    "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
+    "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia",
+    "Wisconsin", "Wyoming", "District of Columbia",
+}
+_NATIONWIDE = {"united states", "usa", "u.s.", "u.s.a.", "us", "international", "global"}
+
+
+def sync_crawled_documents(db_path: Path, tags_path: Path, analysis_path: Path) -> int:
+    """Store every tagged archive page and Nexis hit in the project database.
+
+    The research-analysis file is a coded subset. Rows from that file keep their
+    coded fields. Every other crawled article is stored too.
+    """
+    articles = []
+    if tags_path.is_file():
+        payload = json.loads(tags_path.read_text(encoding="utf-8"))
+        articles = payload.get("articles") or []
+    coded: dict[str, dict] = {}
+    if analysis_path.is_file():
+        for item in json.loads(analysis_path.read_text(encoding="utf-8")):
+            source_id = str(item.get("source_id") or "")
+            if source_id:
+                coded[source_id] = item
+    if not articles:
+        articles = [
+            {
+                "article_id": source_id,
+                "origin": "nexis" if source_id.startswith("nexis_") else "archive",
+                "title": item.get("title") or "",
+                "publisher": item.get("publisher") or "",
+                "publication_date": item.get("publication_date") or "",
+                "location": item.get("target_location") or item.get("location") or "",
+                "url": item.get("requested_url") or "",
+                "archive_dir": item.get("archive_dir") or "",
+                "measures": [],
+            }
+            for source_id, item in coded.items()
+        ]
+    else:
+        seen = {str(article.get("article_id") or "") for article in articles}
+        title_index: dict[str, dict] = {}
+        for article in articles:
+            title = str(article.get("title") or "").casefold().strip()
+            if title and title not in title_index:
+                title_index[title] = article
+        aliases: dict[str, dict] = {}
+        for source_id, item in coded.items():
+            if source_id in seen:
+                continue
+            title = str(item.get("title") or "").casefold().strip()
+            match = title_index.get(title)
+            if match is None and len(title) >= 40:
+                for other, candidate in title_index.items():
+                    short, long = (title, other) if len(title) <= len(other) else (other, title)
+                    if len(short) >= 40 and long.startswith(short):
+                        match = candidate
+                        break
+            if match is not None:
+                match_id = str(match.get("article_id") or "")
+                if match_id and match_id not in coded and match_id not in aliases:
+                    aliases[match_id] = item
+                continue
+            articles.append({
+                "article_id": source_id,
+                "origin": "nexis" if source_id.startswith("nexis_") else "archive",
+                "title": item.get("title") or "",
+                "publisher": item.get("publisher") or "",
+                "publication_date": item.get("publication_date") or "",
+                "location": item.get("target_location") or "",
+                "url": item.get("requested_url") or "",
+                "archive_dir": item.get("archive_dir") or "",
+                "measures": [],
+            })
+        coded.update(aliases)
+    rows = [_document_row(article, coded.get(str(article.get("article_id") or ""))) for article in articles]
+    unique: dict[str, tuple] = {}
+    for row in rows:
+        if row[0]:
+            unique[row[0]] = row
+    rows = list(unique.values())
+    connection = connect(db_path)
+    try:
+        ensure_schema(connection)
+        connection.execute("BEGIN")
+        connection.execute("DELETE FROM crawled_documents")
+        connection.executemany(
+            """
+            INSERT INTO crawled_documents (
+                id, origin, title, publisher, publication_date, location, url,
+                archive_dir, measure_codes, governing_level, category,
+                target_location_type, factual_summary, in_research_set
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            rows,
+        )
+        connection.execute("COMMIT")
+    except sqlite3.Error as exc:
+        connection.execute("ROLLBACK")
+        raise ImporterError(f"database error ({db_path}): {exc}") from exc
+    finally:
+        connection.close()
+    return len(rows)
+
+
+def load_crawled_documents(db_path: Path) -> list[dict[str, str]]:
+    """Return dashboard rows for every document in the unified table."""
+    if not db_path.is_file():
+        return []
+    connection = connect(db_path)
+    try:
+        ensure_schema(connection)
+        found = connection.execute(
+            """
+            SELECT id, origin, title, publisher, publication_date, location, url,
+                   archive_dir, governing_level, category, target_location_type,
+                   factual_summary
+            FROM crawled_documents
+            ORDER BY publication_date DESC, title
+            """
+        ).fetchall()
+    finally:
+        connection.close()
+    rows = []
+    for item in found:
+        location = item["location"] or "United States"
+        location_type = item["target_location_type"] or "Country"
+        rows.append({
+            "source_id": item["id"],
+            "origin": item["origin"] or "",
+            "title": item["title"],
+            "publisher": item["publisher"],
+            "publication_date": item["publication_date"],
+            "target_location": location,
+            "target_location_type": location_type,
+            "governing_level": item["governing_level"] or "Not coded",
+            "category": item["category"] or "Unlabeled",
+            "factual_summary": item["factual_summary"] or "",
+            "authority_names": item["publisher"],
+            "supporting_passage": "",
+            "url": item["url"] or "",
+            "archive_dir": item["archive_dir"] or "",
+        })
+    return rows
+
+
+def load_database_rows(db_path: Path) -> list[dict[str, str]]:
+    """Return every column of crawled_documents for the database page."""
+    if not db_path.is_file():
+        return []
+    connection = connect(db_path)
+    try:
+        ensure_schema(connection)
+        found = connection.execute(
+            """
+            SELECT id, origin, title, publisher, publication_date, location, url,
+                   archive_dir, measure_codes, governing_level, category,
+                   target_location_type, factual_summary, in_research_set
+            FROM crawled_documents
+            ORDER BY publication_date DESC, title
+            """
+        ).fetchall()
+    finally:
+        connection.close()
+    return [{key: item[key] if item[key] is not None else "" for key in item.keys()} for item in found]
+
+
+def _document_row(article: dict, coded: dict | None) -> tuple:
+    source_id = str(article.get("article_id") or "")
+    location = (article.get("location") or "").strip()
+    publication_date = str(article.get("publication_date") or "")
+    location_type = ""
+    governing = ""
+    category = ""
+    summary = ""
+    if coded:
+        coded_location = str(coded.get("target_location") or "").strip()
+        if coded_location:
+            location = coded_location
+        coded_date = str(coded.get("publication_date") or "").strip()
+        if coded_date:
+            publication_date = coded_date
+        location_type = str(coded.get("target_location_type") or "")
+        governing = str(coded.get("governing_level") or "")
+        category = str(coded.get("category") or "")
+        summary = str(coded.get("factual_summary") or "")
+    if not location:
+        location = "United States"
+        location_type = location_type or "Country"
+    elif location.casefold() in _NATIONWIDE:
+        location_type = location_type or "Country"
+    elif not location_type:
+        location_type = "State" if location in _US_STATES else "City"
+    measures = article.get("measures") or []
+    if not category:
+        category = "Unlabeled"
+    if not governing:
+        governing = "Not coded"
+    return (
+        source_id,
+        str(article.get("origin") or ""),
+        str(article.get("title") or source_id),
+        str(article.get("publisher") or ""),
+        publication_date,
+        location,
+        str(article.get("url") or ""),
+        str(article.get("archive_dir") or ""),
+        "; ".join(str(code) for code in measures),
+        governing,
+        category,
+        location_type,
+        summary,
+        1 if coded else 0,
+    )

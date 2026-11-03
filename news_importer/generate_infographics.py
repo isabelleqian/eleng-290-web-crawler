@@ -24,7 +24,8 @@ COORDINATES_MAP: dict[str, dict[str, float | str]] = {
     "Boston, MA": {"lat": 42.3601, "lon": -71.0589, "name": "Boston, MA"},
     "Chicago": {"lat": 41.8781, "lon": -87.6298, "name": "Chicago, IL"},
     "Chicago, Il": {"lat": 41.8781, "lon": -87.6298, "name": "Chicago, IL"},
-    "New York": {"lat": 40.7128, "lon": -74.0060, "name": "New York City, NY"},
+    "New York City": {"lat": 40.7128, "lon": -74.0060, "name": "New York City, NY"},
+    "New York": {"lat": 42.9538, "lon": -75.5268, "name": "New York (State)"},
     "New York, Ny": {"lat": 40.7128, "lon": -74.0060, "name": "New York City, NY"},
     "New York City, Ny": {"lat": 40.7128, "lon": -74.0060, "name": "New York City, NY"},
     "Leonia": {"lat": 40.8654, "lon": -73.9876, "name": "Leonia, NJ"},
@@ -212,8 +213,13 @@ KEYWORD_AUDIT_DEFINITIONS: dict[str, list[str]] = {
 
 
 def build_infographic_dataset(input_json_path: Path) -> dict:
-    """Read research analysis json and construct processed metrics for dynamic infographics."""
-    raw_data = json.loads(input_json_path.read_text(encoding="utf-8"))
+    """Read every crawled document, falling back to the coded research file."""
+    from news_importer.db import load_crawled_documents
+
+    database = input_json_path.parent.parent / "news.sqlite"
+    raw_data = load_crawled_documents(database)
+    if not raw_data:
+        raw_data = json.loads(input_json_path.read_text(encoding="utf-8"))
 
     # Localized geographic entities only (Cities, Counties, States)
     locations_dict: dict[str, dict] = defaultdict(lambda: {
@@ -239,13 +245,14 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
     category_counts: Counter[str] = Counter()
 
     corpus_text = []
+    database_rows = []
 
     for item in raw_data:
         raw_loc = item.get("target_location", "").strip()
-        pub_date = item.get("publication_date", "")
-        year = pub_date[:4] if pub_date else "2024"
+        pub_date = str(item.get("publication_date") or "")
+        year = pub_date[:4]
         if not (year.isdigit() and len(year) == 4):
-            year = "2024"
+            year = "Undated"
 
         gov = item.get("governing_level", "Company")
         cat = item.get("category", "Experimented Measures")
@@ -267,7 +274,22 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
             "summary": summary[:160] + ("..." if len(summary) > 160 else ""),
             "location": raw_loc,
             "location_type": loc_type,
+            "url": item.get("url") or item.get("requested_url") or item.get("final_url") or "",
+            "origin": item.get("origin") or "",
+            "source_id": item.get("source_id") or "",
+            "archive_dir": item.get("archive_dir") or "",
         }
+        database_rows.append({
+            "title": title,
+            "date": pub_date,
+            "publisher": item.get("publisher") or item.get("authority_names") or "",
+            "location": raw_loc,
+            "url": article_obj["url"],
+            "origin": article_obj["origin"],
+            "source_id": article_obj["source_id"],
+            "archive_dir": article_obj["archive_dir"],
+            "category": cat,
+        })
 
         # Check if genuinely nationwide or federal macro scope
         is_nationwide = (
@@ -290,18 +312,21 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
                         geo = v
                         break
             if not geo:
-                geo = {"lat": 38.0, "lon": -97.0, "name": raw_loc}
-
-            cname = str(geo["name"])
-            loc_entry = locations_dict[cname]
-            loc_entry["name"] = cname
-            loc_entry["lat"] = float(geo["lat"])
-            loc_entry["lon"] = float(geo["lon"])
-            loc_entry["count"] += 1
-            loc_entry["years"][year] += 1
-            loc_entry["gov_levels"][gov] += 1
-            loc_entry["categories"][cat] += 1
-            loc_entry["articles"].append(article_obj)
+                nationwide_articles.append(article_obj)
+                nationwide_years[year] += 1
+                nationwide_gov[gov] += 1
+                nationwide_categories[cat] += 1
+            else:
+                cname = str(geo["name"])
+                loc_entry = locations_dict[cname]
+                loc_entry["name"] = cname
+                loc_entry["lat"] = float(geo["lat"])
+                loc_entry["lon"] = float(geo["lon"])
+                loc_entry["count"] += 1
+                loc_entry["years"][year] += 1
+                loc_entry["gov_levels"][gov] += 1
+                loc_entry["categories"][cat] += 1
+                loc_entry["articles"].append(article_obj)
 
         corpus_text.append(f"{title} {summary} {item.get('supporting_passage', '')} {item.get('authority_names', '')}".lower())
 
@@ -339,7 +364,7 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
             "articles": loc_info["articles"]
         })
 
-    all_years = sorted(list(year_counts.keys()))
+    all_years = sorted(year for year in year_counts if year.isdigit())
 
     return {
         "metadata": {
@@ -364,6 +389,149 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
             "articles": nationwide_articles,
         },
         "keyword_audit": keyword_audit,
+        "measures": load_measure_panel(input_json_path.parent / "measure_tags.json"),
+        "outside": load_outside_codebook(input_json_path.parent / "measure_tags.json"),
+        "database": database_rows,
+        "search": load_search_note(input_json_path.parent / "measure_search.json"),
+    }
+
+
+_OUTSIDE_THEMES: tuple[tuple[str, str, str], ...] = (
+    ("City partnerships with Waze", "Titles about Connected Citizens or a city joining Waze.", r"connected citizens|waze for cities|partnership with waze|joins waze"),
+    ("Waymo and automated vehicles", "Titles about Waymo, robotaxis, or self-driving vehicles.", r"\bwaymo\b|robotaxi|self-driving|driverless|autonomous vehicle"),
+    ("Cameras and automated enforcement", "Titles about cameras, license-plate readers, or photo enforcement.", r"camera|red-light|red light|license plate|\bflock\b|photo enforcement|speed camera"),
+    ("Market-report wires", "Repeated market-research and stock-wire headlines.", r"software industry|briefing\.com|hourly in play|nyse:"),
+    ("Traffic alerts", "Repeated road-alert headlines, including district traffic alerts.", r"traffic alert|traffic advisory"),
+    ("Road-safety campaigns", "Titles about traffic-safety programs or distracted driving.", r"traffic safety|distracted driving|roadway safety"),
+    ("Exit renumbering", "Repeated stories about parkway exit numbers changing.", r"exit number"),
+    ("Police, crime, and crashes", "Titles about police action, crime, or a crash.", r"\bpolice\b|sheriff|\barrest\b|suspect|\bkilled\b|\bfatal\b|\bcrash\b|\baccident\b|shooting"),
+    ("Bills, laws, and hearings", "Titles about a bill, law, legislature, or hearing.", r"\bbill\b|\blaw\b|senate|congress|legislation|hearing"),
+    ("Construction closures and detours", "Titles about a closure, detour, or construction.", r"closure|detour|construction|resurfac|lane reduction"),
+    ("Traffic signals and intersections", "Titles about a signal, traffic light, or intersection.", r"traffic light|traffic signal|intersection"),
+    ("Routine commute reports", "Titles that only describe the day's traffic.", r"morning traffic|rush hour|traffic pattern|usual .*traffic|heavy traffic|moderate .*traffic"),
+    ("Neighborhood speeding and cut-through complaints", "Titles about speeding, diverters, one-way streets, or traffic through a neighborhood.", r"speed|speeder|diverter|one-way|cut-through|cut through|traffic through"),
+    ("Transit, walking, and cycling", "Titles about transit, buses, bicycles, or pedestrians.", r"\btransit\b|\bbus\b|bicycle|bike|cyclist|pedestrian|scooter"),
+    ("Navigation app products", "Titles about Google Maps, Apple Maps, MapQuest, Waze, or GPS as a product.", r"google maps|apple maps|mapquest|\bwaze\b|navigation app|\bgps\b"),
+    ("Company filings and market reports", "Titles about earnings, trademarks, or a market report.", r"earnings|trademark|market report|research and markets|alphabet inc"),
+    ("Mapping data and software", "Titles about GIS, mapping software, or map data.", r"\bgis\b|mapping software|digital map"),
+)
+
+
+def load_outside_codebook(tags_path: Path) -> dict:
+    """Group articles that matched no codebook measure, by recurring title pattern."""
+    empty = {"total": 0, "unlabeled_count": 0, "themes": []}
+    if not tags_path.is_file():
+        return empty
+    try:
+        raw = json.loads(tags_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return empty
+    articles = raw.get("articles") or []
+    compiled = [(name, note, re.compile(pattern)) for name, note, pattern in _OUTSIDE_THEMES]
+    buckets: dict[str, list[str]] = {name: [] for name, _, _ in _OUTSIDE_THEMES}
+    buckets["No shared title pattern"] = []
+    unlabeled = 0
+    for article in articles:
+        if article.get("measures"):
+            continue
+        unlabeled += 1
+        title = str(article.get("title") or "")
+        source_id = str(article.get("article_id") or "")
+        matched = "No shared title pattern"
+        for name, _, pattern in compiled:
+            if pattern.search(title.casefold()):
+                matched = name
+                break
+        buckets[matched].append(source_id)
+    notes = {name: note for name, note, _ in _OUTSIDE_THEMES}
+    notes["No shared title pattern"] = "The title does not repeat one of the patterns above."
+    ranked = sorted(
+        ((name, ids) for name, ids in buckets.items() if name != "No shared title pattern" and ids),
+        key=lambda item: (-len(item[1]), item[0]),
+    )
+    if buckets["No shared title pattern"]:
+        ranked.append(("No shared title pattern", buckets["No shared title pattern"]))
+    return {
+        "total": len(articles),
+        "unlabeled_count": unlabeled,
+        "themes": [
+            {"name": name, "note": notes[name], "count": len(ids), "ids": ids}
+            for name, ids in ranked
+        ],
+    }
+
+
+def load_search_note(path: Path) -> dict:
+    """Latest codebook search counts. An empty dict leaves that sentence off the page."""
+    if not path.is_file():
+        return {}
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    return {
+        "queries": int(raw.get("queries") or 0),
+        "stored": int(raw.get("stored") or 0),
+        "already_saved": int(raw.get("already_saved") or 0),
+        "outside_us": int(raw.get("outside_us") or 0),
+    }
+
+
+def load_measure_panel(tags_path: Path) -> dict:
+    """Codebook ranking shown on the measures tab. Missing tags leave the tab empty."""
+    empty = {
+        "categories": [],
+        "measures": [],
+        "articles": [],
+        "article_count": 0,
+        "labeled_count": 0,
+        "unlabeled_count": 0,
+        "measure_count": 0,
+    }
+    if not tags_path.is_file():
+        return empty
+    raw = json.loads(tags_path.read_text(encoding="utf-8"))
+    categories = raw.get("categories") or []
+    category_names = {item.get("code"): item.get("name", "") for item in categories}
+    measures = [
+        {
+            "code": item.get("code", ""),
+            "category": item.get("category", ""),
+            "category_name": category_names.get(item.get("category"), item.get("category", "")),
+            "name": item.get("name", ""),
+            "definition": item.get("definition", ""),
+            "count": item.get("count", 0),
+        }
+        for item in (raw.get("measures") or [])
+    ]
+    measures.sort(key=lambda item: (-int(item["count"]), item["code"]))
+    articles = []
+    labeled = 0
+    for article in raw.get("articles") or []:
+        codes = article.get("measures") or []
+        if not codes:
+            continue
+        labeled += 1
+        articles.append({
+            "title": article.get("title") or article.get("article_id") or "Untitled",
+            "publication_date": article.get("publication_date") or "",
+            "publisher": article.get("publisher") or "",
+            "location": article.get("location") or "",
+            "url": article.get("url") or "",
+            "origin": article.get("origin") or "",
+            "source_id": article.get("article_id") or "",
+            "archive_dir": article.get("archive_dir") or "",
+            "measures": codes,
+        })
+    total = len(raw.get("articles") or [])
+    return {
+        "categories": [{"code": item.get("code", ""), "name": item.get("name", "")} for item in categories],
+        "measures": measures,
+        "articles": articles,
+        "article_count": total,
+        "labeled_count": labeled,
+        "unlabeled_count": total - labeled,
+        "measure_count": len(measures),
     }
 
 
@@ -439,13 +607,28 @@ def generate_html_infographics(data_payload: dict) -> str:
     top_gov = list(gov_counts.keys())[0] if gov_counts else "Company"
     top_gov_pct = round((gov_counts[top_gov] / total_sources) * 100) if total_sources else 0
     keyword_audit_html = render_keyword_audit_cards(data_payload["keyword_audit"])
+    measures = data_payload.get("measures") or {}
+    phrase_labeled = int(measures.get("labeled_count") or 0)
+    phrase_unlabeled = int(measures.get("unlabeled_count") or 0)
+    unlabeled_category = int(meta.get("category_counts", {}).get("Unlabeled") or 0)
+    coded_sources = total_sources - unlabeled_category
+    search = data_payload.get("search") or {}
+    if search.get("queries"):
+        search_line = (
+            f"The latest Nexis pass sent {search['queries']} codebook phrases "
+            f"and stored {search['stored']} new United States documents. "
+            f"{search['already_saved']} hits were already saved, and "
+            f"{search['outside_us']} were outside the United States."
+        )
+    else:
+        search_line = ""
 
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Navigation & Routing Policy News Crawler: Interactive Research Dashboard</title>
+  <title>Routing app measures</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
@@ -545,54 +728,58 @@ def generate_html_infographics(data_payload: dict) -> str:
     }}
   </style>
 </head>
-<body class="bg-[#0f172a] text-slate-100 antialiased min-h-screen p-4 md:p-8 font-sans">
-  
-  <!-- Header Bar -->
-  <header class="max-w-7xl mx-auto mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+<body class="bg-[#141816] text-slate-100 antialiased min-h-screen px-4 py-6 md:px-8 font-sans">
+  <header class="max-w-7xl mx-auto mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800 pb-5">
     <div>
-      <div class="flex items-center gap-2 mb-1">
-        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
-          Empirical Research Pipeline
-        </span>
-        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-          Live Data-Driven
-        </span>
-      </div>
-      <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-white flex items-center gap-3">
-        Navigation Apps & Traffic Policy Intelligence
-      </h1>
-      <p class="text-sm text-slate-400 mt-1">
-        Interactive visualization of municipal restrictions, platform routing algorithms, and public-private coordination across the United States.
-      </p>
+      <p class="text-xs uppercase tracking-wide text-slate-500">ELENG 290 · United States news corpus</p>
+      <h1 class="text-3xl font-serif font-semibold tracking-tight text-white mt-1">Routing app measures</h1>
+      <p class="text-sm text-slate-400 mt-2 max-w-2xl">Saved news and archive pages about navigation apps, labeled with the codebook on sheet 1012_codebook. A document can match more than one measure. A document that contains none of the phrases stays unlabeled.</p>
     </div>
-
-    <!-- Live Data Refresh & Re-load Controls -->
-    <div class="flex items-center gap-3 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 shadow-inner">
+    <div class="flex items-center gap-4">
       <div class="text-right">
-        <div class="text-xs text-slate-400">Total Analyzed</div>
-        <div id="stat-total-header" class="text-base font-bold text-blue-400">{total_sources} Sources</div>
+        <div class="text-xs text-slate-500">Saved documents</div>
+        <div id="stat-total-header" class="text-lg font-semibold text-white">{total_sources}</div>
       </div>
-      <label class="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium px-3 py-2 rounded-lg transition-all flex items-center gap-1.5 shadow-sm">
-        <span>🔄 Update JSON</span>
+      <label class="cursor-pointer text-xs text-slate-400 underline underline-offset-2 hover:text-white">
+        Load file
         <input type="file" id="json-file-input" accept=".json" class="hidden" />
       </label>
     </div>
   </header>
 
-  <!-- Navigation Tabs -->
-  <nav class="max-w-7xl mx-auto mb-6 flex flex-wrap gap-2 border-b border-slate-800 pb-2">
-    <button onclick="switchTab('map-view')" id="tab-btn-map" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 text-white shadow">
-      🗺️ Geographic Map & Timeline Slider
-    </button>
-    <button onclick="switchTab('methodology-view')" id="tab-btn-methodology" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800">
-      ⚡ Methodology Flowchart & Tools
-    </button>
-    <button onclick="switchTab('artifacts-view')" id="tab-btn-artifacts" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800">
-      🔍 Artifacts Deep Dive (Query to Data)
-    </button>
-    <button onclick="switchTab('keywords-view')" id="tab-btn-keywords" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800">
-      📊 Keyword Audit & Unused Terms
-    </button>
+  <section class="max-w-7xl mx-auto mb-6 border border-slate-800 bg-slate-900/60">
+    <div class="px-4 py-3 border-b border-slate-800">
+      <h2 class="text-sm font-semibold text-white">How this corpus was built</h2>
+      <p class="text-xs text-slate-400 mt-1">{search_line}</p>
+    </div>
+    <ol class="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-800">
+      <li class="p-4">
+        <p class="text-xs text-slate-500">1 · Collect</p>
+        <p class="text-sm text-slate-200 mt-1">Archive pages and Nexis hits are stored together in <span class="font-mono text-xs">data/news.sqlite</span>. Identical headlines share one row, so the count above is one row per story.</p>
+      </li>
+      <li class="p-4">
+        <p class="text-xs text-slate-500">2 · Search the codebook</p>
+        <p class="text-sm text-slate-200 mt-1">Each measure name, quoted definition term, and example phrase is searched with the routing-app group. United States hits are kept.</p>
+      </li>
+      <li class="p-4">
+        <p class="text-xs text-slate-500">3 · Label by phrase</p>
+        <p class="text-sm text-slate-200 mt-1">{phrase_labeled} documents contain at least one codebook phrase. {phrase_unlabeled} do not, so they stay unlabeled.</p>
+      </li>
+      <li class="p-4">
+        <p class="text-xs text-slate-500">4 · Qualitative categories</p>
+        <p class="text-sm text-slate-200 mt-1">{coded_sources} documents also have a qualitative category, place, and summary, assigned from what each article says. The other {unlabeled_category} are marked Unlabeled on the map.</p>
+      </li>
+    </ol>
+  </section>
+
+  <nav class="max-w-7xl mx-auto mb-6 flex flex-wrap gap-1 border-b border-slate-800">
+    <button onclick="switchTab('map-view')" id="tab-btn-map" class="tab-btn px-3 py-2 text-sm text-white border-b-2 border-white">Map</button>
+    <button onclick="switchTab('methodology-view')" id="tab-btn-methodology" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">Process</button>
+    <button onclick="switchTab('artifacts-view')" id="tab-btn-artifacts" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">Example</button>
+    <button onclick="switchTab('keywords-view')" id="tab-btn-keywords" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">Keywords</button>
+    <button onclick="switchTab('measures-view')" id="tab-btn-measures" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">Measures</button>
+    <button onclick="switchTab('outside-view')" id="tab-btn-outside" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">Outside codebook</button>
+    <button onclick="switchTab('database-view')" id="tab-btn-database" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">Database</button>
   </nav>
 
   <!-- MAIN TAB 1: GEOGRAPHIC MAP & TIMELINE SLIDER -->
@@ -601,24 +788,24 @@ def generate_html_infographics(data_payload: dict) -> str:
     <!-- Top Stats Row -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
-        <div class="text-xs text-slate-400 font-medium">Corpus Distribution</div>
-        <div id="stat-sources" class="text-2xl font-bold text-white mt-1">{total_sources} Sources</div>
-        <div id="stat-sources-sub" class="text-[11px] text-emerald-400 mt-1">{localized_sources} Localized + {nationwide_sources} Federal/National</div>
+        <div class="text-xs text-slate-500">Saved documents</div>
+        <div id="stat-sources" class="text-2xl font-semibold text-white mt-1">{total_sources}</div>
+        <div id="stat-sources-sub" class="text-[11px] text-slate-400 mt-1">{localized_sources} on the map · {nationwide_sources} filed to the United States</div>
       </div>
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
-        <div class="text-xs text-slate-400 font-medium">Local Geographic Pins</div>
-        <div id="stat-locations" class="text-2xl font-bold text-blue-400 mt-1">{unique_locations} Locations</div>
-        <div class="text-[11px] text-slate-400 mt-1">Cities & Counties Across U.S.</div>
+        <div class="text-xs text-slate-500">Places on the map</div>
+        <div id="stat-locations" class="text-2xl font-semibold text-white mt-1">{unique_locations}</div>
+        <div class="text-[11px] text-slate-400 mt-1">Cities, counties, and states</div>
       </div>
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
-        <div class="text-xs text-slate-400 font-medium">Timeline Span</div>
-        <div id="stat-years" class="text-2xl font-bold text-amber-400 mt-1">{year_range}</div>
-        <div class="text-[11px] text-slate-400 mt-1">Policy Evolution Timeline</div>
+        <div class="text-xs text-slate-500">Publication years</div>
+        <div id="stat-years" class="text-2xl font-semibold text-white mt-1">{year_range}</div>
+        <div class="text-[11px] text-slate-400 mt-1">Undated documents stay in the full-corpus view</div>
       </div>
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
-        <div class="text-xs text-slate-400 font-medium">Dominant Governance</div>
-        <div id="stat-governance" class="text-2xl font-bold text-indigo-400 mt-1">{top_gov} ({top_gov_pct}%)</div>
-        <div class="text-[11px] text-slate-400 mt-1">Leading Policy Level in Corpus</div>
+        <div class="text-xs text-slate-500">Most common governing level</div>
+        <div id="stat-governance" class="text-2xl font-semibold text-white mt-1">{top_gov} ({top_gov_pct}%)</div>
+        <div class="text-[11px] text-slate-400 mt-1">Documents with a qualitative category keep their level. The rest are Not coded.</div>
       </div>
     </div>
 
@@ -632,10 +819,8 @@ def generate_html_infographics(data_payload: dict) -> str:
           <!-- Header and Legend -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-3 border-b border-slate-800 gap-2">
             <div>
-              <h2 class="text-lg font-semibold text-white flex items-center gap-2">
-                <span>📍 Localized Policy Interventions Across U.S. Jurisdictions</span>
-              </h2>
-              <p class="text-xs text-slate-400">National view displays proportional bubbles. Zoom in close (2.2x+) to smoothly morph bubbles into shaded county & municipal coverage regions.</p>
+              <h2 class="text-lg font-semibold text-white">Where the articles are filed</h2>
+              <p class="text-xs text-slate-400">Bubble size is the number of articles. Articles with no mappable place stay in the United States list.</p>
             </div>
             
             <!-- Map Legend -->
@@ -644,7 +829,6 @@ def generate_html_infographics(data_payload: dict) -> str:
               <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> State</span>
               <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span> County</span>
               <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> Company</span>
-              <span class="hidden sm:inline text-[11px] text-slate-500 border-l border-slate-700 pl-2">🔍 Zoom in to shade coverage regions</span>
             </div>
           </div>
 
@@ -657,20 +841,20 @@ def generate_html_infographics(data_payload: dict) -> str:
               </div>
               <div>
                 <div class="flex items-center gap-2">
-                  <span class="text-xs font-bold text-white uppercase tracking-wider">Federal & Nationwide Scope</span>
+                  <span class="text-xs font-semibold text-white">United States list</span>
                   <span id="nationwide-badge-count" class="px-2 py-0.5 rounded-full text-xs font-bold bg-sky-500/20 text-sky-400 border border-sky-500/30">
-                    19 Policies (All 50 States)
+                    19 Sources (United States)
                   </span>
                 </div>
                 <p id="nationwide-hud-desc" class="text-xs text-slate-400 mt-0.5">
-                  USDOT/NHTSA app mandates, Latimer bridge strike legislation, and nationwide Google Maps eco-routing algorithms that apply coast-to-coast.
+                  Articles scoped to the United States, or to a place this map cannot pin. That includes federal rules, platform-wide features, and crawled stories with no city or state.
                 </p>
               </div>
             </div>
             
             <div class="flex items-center gap-2">
-              <button onclick="selectNationwideScope()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-600 hover:bg-sky-500 text-white transition flex items-center gap-1.5 shadow-sm">
-                <span>View Federal Policies</span>
+              <button onclick="selectNationwideScope()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-600 hover:bg-sky-500 text-white transition flex items-center gap-1.5 shadow-sm whitespace-nowrap">
+                <span>View U.S. sources</span>
                 <span>→</span>
               </button>
             </div>
@@ -698,15 +882,6 @@ def generate_html_infographics(data_payload: dict) -> str:
               <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
               <span class="text-slate-400 font-medium">Zoom Tier:</span>
               <span id="zoom-badge-text" class="font-bold text-white font-mono">1.0x (National View)</span>
-            </div>
-
-            <!-- GESTURE & INTERACTION HINT (BOTTOM) -->
-            <div class="absolute bottom-3 left-1/2 -translate-x-1/2 pointer-events-none z-10 bg-slate-950/85 backdrop-blur-sm border border-slate-800 px-3.5 py-1 rounded-full text-[11px] text-slate-400 shadow flex items-center gap-2">
-              <span>🔍 Scroll / pinch to zoom into shaded regions</span>
-              <span class="text-slate-600">•</span>
-              <span>✋ Drag to pan</span>
-              <span class="text-slate-600">•</span>
-              <span>📍 Click shaded county or pin to focus</span>
             </div>
 
             <svg id="us-map-svg" viewBox="0 0 975 610" class="w-full h-full select-none cursor-grab active:cursor-grabbing">
@@ -793,11 +968,10 @@ def generate_html_infographics(data_payload: dict) -> str:
           </div>
 
           <!-- Milestone / Policy Era Description -->
-          <div id="year-era-card" class="bg-slate-950/70 border border-slate-800/90 rounded-lg p-3 text-xs text-slate-300 flex items-start gap-2.5">
-            <span class="text-base">📌</span>
+          <div id="year-era-card" class="bg-slate-950/70 border border-slate-800/90 rounded-lg p-3 text-xs text-slate-300">
             <div>
-              <span id="era-title" class="font-bold text-white">Cumulative Corpus Overview ({year_range})</span>
-              <p id="era-description" class="text-slate-400 mt-0.5">Showing cumulative distribution of {total_sources} navigation-app policy measures, street access regulations, and municipal coordination agreements across all years ({year_range}).</p>
+              <span id="era-title" class="font-semibold text-white">All saved documents ({year_range})</span>
+              <p id="era-description" class="text-slate-400 mt-0.5">Showing {total_sources} documents. Choose a year to limit the map to articles published in that year.</p>
             </div>
           </div>
 
@@ -811,9 +985,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         <!-- Selected Location Details Card -->
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-sm">
           <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-            <h3 class="text-sm font-semibold text-white flex items-center gap-1.5">
-              <span>📍 Policy Drill-Down</span>
-            </h3>
+            <h3 class="text-sm font-semibold text-white">Articles</h3>
             <span id="loc-badge-count" class="text-xs font-bold text-blue-400 bg-blue-500/10 px-2.5 py-0.5 rounded-full border border-blue-500/20">
               Select pin or federal card
             </span>
@@ -821,7 +993,7 @@ def generate_html_infographics(data_payload: dict) -> str:
 
           <div id="location-detail-content" class="mt-4 space-y-3 max-h-[380px] overflow-y-auto pr-1 text-xs">
             <div class="text-slate-400 text-center py-8">
-              Click any city bubble on the map or click the "View Federal Policies" dock above to explore specific ordinances, authorities, and supporting news reporting.
+              Click any city bubble on the map or open the United States dock to read the articles filed there.
             </div>
           </div>
         </div>
@@ -829,7 +1001,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         <!-- Top Locations Ranking Card -->
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-sm">
           <h3 class="text-sm font-semibold text-white pb-2.5 border-b border-slate-800 mb-3 flex items-center justify-between">
-            <span>🏆 Geographic Leaderboard</span>
+            <span>Places</span>
             <span class="text-[11px] text-slate-400 font-normal">Active Timeframe</span>
           </h3>
 
@@ -847,110 +1019,23 @@ def generate_html_infographics(data_payload: dict) -> str:
     
     <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-6 shadow-sm">
       <div class="max-w-3xl">
-        <h2 class="text-xl font-bold text-white">End-to-End News Ingestion & Research Architecture</h2>
-        <p class="text-sm text-slate-400 mt-1">
-          Detailed data pipeline tracking how search queries, catalog entries, and raw LexisNexis news feeds are transformed into 100% verified, deduplicated research analysis records.
+        <h2 class="text-xl font-serif font-semibold text-white">What was done</h2>
+        <p class="text-sm text-slate-400 mt-2 max-w-3xl">
+          The map reads every saved document. Qualitative categories cover {coded_sources} of them, assigned from what each article says. Phrase labels come from sheet 1012_codebook and do not replace those coded fields. {phrase_unlabeled} documents never used a codebook phrase.
         </p>
       </div>
-
-      <!-- Flowchart SVG / Cards Representation -->
-      <div class="mt-8 grid grid-cols-1 md:grid-cols-5 gap-4 relative">
-        
-        <!-- Step 1 -->
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between relative">
-          <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 font-bold flex items-center justify-center text-sm border border-blue-500/20 mb-3">01</div>
-          <div>
-            <h4 class="font-bold text-white text-sm">Inputs & Queries</h4>
-            <p class="text-xs text-slate-400 mt-1">Targeted search strategies across 3 keyword families and 10 study areas.</p>
-            <div class="mt-3 space-y-1 text-[11px] text-slate-300 font-mono bg-slate-900 p-2 rounded border border-slate-800">
-              <div>• US-OVERVIEW-01</div>
-              <div>• US-FEEDBACK-01</div>
-              <div>• Regional Study Catalogs</div>
-            </div>
-          </div>
-          <div class="mt-4 pt-3 border-t border-slate-800/80 text-[11px] text-slate-400">
-            <strong>Tools:</strong> Python `re`, CSV Catalogs
-          </div>
-        </div>
-
-        <!-- Step 2 -->
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between relative">
-          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 font-bold flex items-center justify-center text-sm border border-emerald-500/20 mb-3">02</div>
-          <div>
-            <h4 class="font-bold text-white text-sm">Dual Ingestion</h4>
-            <p class="text-xs text-slate-400 mt-1">Dual-engine pipeline collecting archival web documents and news wires.</p>
-            <div class="mt-3 space-y-1 text-[11px] text-slate-300 font-mono bg-slate-900 p-2 rounded border border-slate-800">
-              <div>• LexisNexis API (WS)</div>
-              <div>• Crawl4AI (HTML/DOM)</div>
-              <div>• Direct HTTP (PDF/raw)</div>
-            </div>
-          </div>
-          <div class="mt-4 pt-3 border-t border-slate-800/80 text-[11px] text-slate-400">
-            <strong>Models:</strong> LexisNexis Web Services
-          </div>
-        </div>
-
-        <!-- Step 3 -->
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between relative">
-          <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 font-bold flex items-center justify-center text-sm border border-amber-500/20 mb-3">03</div>
-          <div>
-            <h4 class="font-bold text-white text-sm">4-Tier Deduplication</h4>
-            <p class="text-xs text-slate-400 mt-1">Multi-stage gatekeeping collapsing syndicated wire copy clusters.</p>
-            <div class="mt-3 space-y-1 text-[11px] text-slate-300 font-mono bg-slate-900 p-2 rounded border border-slate-800">
-              <div>• Tier 1: Global URN</div>
-              <div>• Tier 2: URL Normalizer</div>
-              <div>• Tier 3: Wire Normalizer</div>
-              <div>• Tier 4: DB In-Memory Key</div>
-            </div>
-          </div>
-          <div class="mt-4 pt-3 border-t border-slate-800/80 text-[11px] text-slate-400">
-            <strong>Logic:</strong> `normalize_title_for_dedup`
-          </div>
-        </div>
-
-        <!-- Step 4 -->
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between relative">
-          <div class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 font-bold flex items-center justify-center text-sm border border-rose-500/20 mb-3">04</div>
-          <div>
-            <h4 class="font-bold text-white text-sm">Scope Filtering</h4>
-            <p class="text-xs text-slate-400 mt-1">Rejection of off-topic noise (crimes, SEC stock filings, repaving).</p>
-            <div class="mt-3 space-y-1 text-[11px] text-slate-300 font-mono bg-slate-900 p-2 rounded border border-slate-800">
-              <div>• Crime blotters: PURGED</div>
-              <div>• Space bills: PURGED</div>
-              <div>• Stock positions: PURGED</div>
-              <div>• Non-US: PURGED</div>
-            </div>
-          </div>
-          <div class="mt-4 pt-3 border-t border-slate-800/80 text-[11px] text-slate-400">
-            <strong>Rules:</strong> `OFF_TOPIC_TITLE_TERMS`
-          </div>
-        </div>
-
-        <!-- Step 5 -->
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between relative">
-          <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 font-bold flex items-center justify-center text-sm border border-indigo-500/20 mb-3">05</div>
-          <div>
-            <h4 class="font-bold text-white text-sm">Qualitative Coding</h4>
-            <p class="text-xs text-slate-400 mt-1">Schema synthesis & verbatim quotation evidence verification.</p>
-            <div class="mt-3 space-y-1 text-[11px] text-slate-300 font-mono bg-slate-900 p-2 rounded border border-slate-800">
-              <div>• 27-Column Schema</div>
-              <div>• Governing Levels (5)</div>
-              <div>• Target Geographies</div>
-              <div>• Verbatim Proof Match</div>
-            </div>
-          </div>
-          <div class="mt-4 pt-3 border-t border-slate-800/80 text-[11px] text-slate-400">
-            <strong>Deliverable:</strong> CSV + JSON ({total_sources} rows)
-          </div>
-        </div>
-
-      </div>
-
+      <ol class="mt-6 space-y-3 text-sm text-slate-300">
+        <li class="border border-slate-800 p-4"><span class="text-slate-500">1.</span> URL lists were fetched into the archive. Nexis was searched with the saved United States overview query, then again with each codebook phrase plus the routing-app group.</li>
+        <li class="border border-slate-800 p-4"><span class="text-slate-500">2.</span> United States hits were saved. Hits from outside the United States were counted and skipped. A document already on disk was not stored twice.</li>
+        <li class="border border-slate-800 p-4"><span class="text-slate-500">3.</span> Identical headlines were combined. All remaining documents were written to <span class="font-mono text-xs">crawled_documents</span> in <span class="font-mono text-xs">data/news.sqlite</span>.</li>
+        <li class="border border-slate-800 p-4"><span class="text-slate-500">4.</span> Phrase labeling checks the measure name, quoted definition terms, and example phrases. A miss stays unlabeled. It is not forced into a category.</li>
+        <li class="border border-slate-800 p-4"><span class="text-slate-500">5.</span> {coded_sources} documents have a qualitative category, governing level, place, and summary taken from the article. Those fields are kept. The other {unlabeled_category} appear as Unlabeled.</li>
+      </ol>
     </div>
 
     <!-- Models and Tools Table -->
     <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-6 shadow-sm">
-      <h3 class="text-base font-bold text-white mb-4">Technical Stack & Infrastructure Reference</h3>
+      <h3 class="text-base font-semibold text-white mb-4">Where the files live</h3>
       
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs text-slate-300">
@@ -984,13 +1069,13 @@ def generate_html_infographics(data_payload: dict) -> str:
             <tr>
               <td class="py-3 px-4 font-medium text-white">Data Storage & Lineage</td>
               <td class="py-3 px-4 font-mono text-purple-400">SQLite 3 (`data/news.sqlite`)</td>
-              <td class="py-3 px-4">Tracks discovery origins, fetch attempts, HTTP status codes, and raw responses.</td>
+              <td class="py-3 px-4">Holds the URL importer tables and the crawled_documents table used by this page.</td>
               <td class="py-3 px-4 font-mono text-slate-400">news_importer/db.py</td>
             </tr>
             <tr>
               <td class="py-3 px-4 font-medium text-white">Evidence Verification</td>
               <td class="py-3 px-4 font-mono text-indigo-400">Verbatim Passage Validator (`verify_passage`)</td>
-              <td class="py-3 px-4">Validates that 100% of cited supporting passages exist verbatim in raw disk files.</td>
+              <td class="py-3 px-4">Checks that a coded quotation appears in the saved text.</td>
               <td class="py-3 px-4 font-mono text-slate-400">news_importer/analysis.py</td>
             </tr>
           </tbody>
@@ -1004,9 +1089,9 @@ def generate_html_infographics(data_payload: dict) -> str:
   <section id="artifacts-view" class="tab-pane max-w-7xl mx-auto space-y-6 hidden">
     
     <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-6 shadow-sm">
-      <h2 class="text-xl font-bold text-white">Zoom-In: Anatomy of a Research Analysis Artifact</h2>
+      <h2 class="text-xl font-serif font-semibold text-white">One example, from search to coded row</h2>
       <p class="text-sm text-slate-400 mt-1">
-        Trace a single real-world policy intervention from raw keyword expansion, through Boolean query execution, to raw document retrieval, and into the final 27-column research coding.
+        Leonia, New Jersey closed streets to non-local drivers after navigation apps sent traffic through town. These are the query, the saved hit, and the coded row.
       </p>
 
       <!-- Step-by-step example cards -->
@@ -1015,7 +1100,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         <!-- Artifact 1: Keyword Expansion -->
         <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-5">
           <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-            <span class="text-xs font-bold text-blue-400 uppercase tracking-wider">Artifact Phase A • Keyword Expansion</span>
+            <span class="text-xs font-semibold text-slate-300">Search terms</span>
             <span class="text-xs text-slate-400 font-mono">Taxonomy Design</span>
           </div>
           <p class="text-xs text-slate-300 mt-3">
@@ -1031,7 +1116,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         <!-- Artifact 2: The Executed Nexis Query -->
         <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-5">
           <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Artifact Phase B • Live Query Object</span>
+            <span class="text-xs font-semibold text-slate-300">Overview query sent to Nexis</span>
             <span class="text-xs text-slate-400 font-mono">queries/nexis_us_overview_query.txt (US-OVERVIEW-01)</span>
           </div>
           <div class="mt-3 bg-slate-900 p-3 rounded-lg border border-slate-800 text-xs font-mono text-slate-300 max-h-32 overflow-y-auto">
@@ -1042,7 +1127,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         <!-- Artifact 3: Raw Search Hit & NITF Record -->
         <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-5">
           <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-            <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">Artifact Phase C • Raw Ingested Hit & Metadata</span>
+            <span class="text-xs font-semibold text-slate-300">Saved document</span>
             <span class="text-xs text-slate-400 font-mono">URN: urn:contentItem:5YD5-NK31-JC65-51MB-00000-00</span>
           </div>
           <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
@@ -1063,7 +1148,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         <!-- Artifact 4: Final 27-Column Analysis Row -->
         <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-5">
           <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Artifact Phase D • Final Coded Qualitative Row</span>
+            <span class="text-xs font-semibold text-slate-300">Coded row</span>
             <span class="text-xs text-slate-400 font-mono">data/exports/research_analysis_all_sources.csv</span>
           </div>
           <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
@@ -1102,9 +1187,9 @@ def generate_html_infographics(data_payload: dict) -> str:
   <section id="keywords-view" class="tab-pane max-w-7xl mx-auto space-y-6 hidden">
     
     <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-6 shadow-sm">
-      <h2 class="text-xl font-bold text-white">Comprehensive Keyword Audit: Utilized vs. Unused Terms</h2>
+      <h2 class="text-xl font-serif font-semibold text-white">Which search terms show up in the saved text</h2>
       <p class="text-sm text-slate-400 mt-1">
-        Evaluation of term frequencies across all {total_sources} clean articles in our corpus, highlighting which search terms were dominant and which niche keywords from your taxonomy yielded zero hits.
+        Counts are title and summary matches across {total_sources} documents. A term with zero hits was in the search list and did not appear in the saved text.
       </p>
 
       <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1113,6 +1198,54 @@ def generate_html_infographics(data_payload: dict) -> str:
 
     </div>
 
+  </section>
+
+  <!-- TAB 5: CODEBOOK MEASURES -->
+  <section id="measures-view" class="tab-pane max-w-7xl mx-auto space-y-6 hidden">
+    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-6 shadow-sm">
+      <h2 class="text-xl font-bold text-white">Codebook measures</h2>
+      <p id="measures-summary" class="text-sm text-slate-400 mt-1"></p>
+      <div id="measures-filters" class="flex flex-wrap gap-2 mt-4"></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <ol id="measures-list" class="space-y-2"></ol>
+      <div id="measures-detail" class="bg-slate-900/90 border border-slate-800 rounded-xl p-6 max-h-[70vh] overflow-y-auto"></div>
+    </div>
+  </section>
+
+  <section id="outside-view" class="tab-pane max-w-7xl mx-auto space-y-6 hidden">
+    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-6 shadow-sm">
+      <h2 class="text-xl font-bold text-white">Outside the codebook</h2>
+      <p id="outside-summary" class="text-sm text-slate-400 mt-1"></p>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <ol id="outside-list" class="space-y-2"></ol>
+      <div id="outside-detail" class="bg-slate-900/90 border border-slate-800 rounded-xl p-6 max-h-[70vh] overflow-y-auto"></div>
+    </div>
+  </section>
+
+  <section id="database-view" class="tab-pane max-w-7xl mx-auto space-y-4 hidden">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+      <div>
+        <h2 class="text-xl font-bold text-white">All saved documents</h2>
+        <p id="database-count" class="text-sm text-slate-400 mt-1"></p>
+      </div>
+      <input id="database-search" type="search" placeholder="Search title, publisher, place, category" class="w-full sm:w-80 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-500" />
+    </div>
+    <div class="overflow-auto border border-slate-800 rounded-xl max-h-[75vh]">
+      <table class="w-full text-left text-sm">
+        <thead class="sticky top-0 bg-slate-900 text-slate-400 text-xs uppercase tracking-wide">
+          <tr>
+            <th class="px-3 py-2 font-medium">Title</th>
+            <th class="px-3 py-2 font-medium">Date</th>
+            <th class="px-3 py-2 font-medium">Publisher</th>
+            <th class="px-3 py-2 font-medium">Place</th>
+            <th class="px-3 py-2 font-medium">Category</th>
+          </tr>
+        </thead>
+        <tbody id="database-body"></tbody>
+      </table>
+    </div>
   </section>
 
   <!-- Script block injecting data and dynamic timeline/map logic -->
@@ -1604,7 +1737,7 @@ def generate_html_infographics(data_payload: dict) -> str:
       if (DATA && DATA.metadata) {{
         document.getElementById('stat-total-header').textContent = `${{DATA.metadata.total_sources}} Sources`;
         document.getElementById('stat-sources').textContent = `${{DATA.metadata.total_sources}} Sources`;
-        document.getElementById('stat-sources-sub').textContent = `${{DATA.metadata.localized_sources}} Localized + ${{DATA.metadata.nationwide_sources}} Federal/National`;
+        document.getElementById('stat-sources-sub').textContent = `${{DATA.metadata.localized_sources}} on the map · ${{DATA.metadata.nationwide_sources}} filed to the United States`;
         document.getElementById('stat-locations').textContent = `${{DATA.metadata.unique_locations}} Locations`;
         document.getElementById('stat-years').textContent = DATA.metadata.year_range;
       }}
@@ -1704,20 +1837,20 @@ def generate_html_infographics(data_payload: dict) -> str:
       let count = 0;
       if (year === 'ALL') {{
         count = nw.total_count;
-        badge.textContent = `${{count}} Policies (All 50 States)`;
-        desc.textContent = "USDOT/NHTSA app safety mandates, Latimer bridge strike legislation, and nationwide Google Maps eco-routing algorithms that apply coast-to-coast.";
+        badge.textContent = `${{count}} Sources (United States)`;
+        desc.textContent = "Articles scoped to the United States, or to a place this map cannot pin. That includes federal rules, platform-wide features, and crawled stories with no city or state.";
       }} else if (isCumulativeMode) {{
         Object.keys(nw.years).forEach(yr => {{
           if (yr <= year) count += nw.years[yr];
         }});
-        badge.textContent = `${{count}} Policies Thru ${{year}}`;
-        desc.textContent = `Cumulative federal rules and nationwide platform routing rollouts deployed up to ${{year}}.`;
+        badge.textContent = `${{count}} Sources Thru ${{year}}`;
+        desc.textContent = `United States and unpinned articles dated through ${{year}}. Undated articles stay in the full-corpus view.`;
       }} else {{
         count = nw.years[year] || 0;
-        badge.textContent = `${{count}} Policies in ${{year}}`;
-        desc.textContent = count > 0 
-          ? `Federal regulations and platform features announced nationwide during ${{year}}.`
-          : `No new nationwide/federal policy mandates launched in ${{year}} (local municipal activity continued).`;
+        badge.textContent = `${{count}} Sources in ${{year}}`;
+        desc.textContent = count > 0
+          ? `United States and unpinned articles dated ${{year}}.`
+          : `No United States or unpinned articles dated ${{year}}.`;
       }}
     }}
 
@@ -1740,6 +1873,90 @@ def generate_html_infographics(data_payload: dict) -> str:
       }});
     }}
 
+    function articleAnchor(sourceId) {{
+      return 'doc-' + String(sourceId || 'row').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    }}
+
+    function articleSourceUrl(art) {{
+      const url = String((art && art.url) || '');
+      if (url.startsWith('http://') || url.startsWith('https://')) return url;
+      const id = String((art && art.source_id) || '');
+      const match = id.match(/urn:contentItem:[A-Za-z0-9-]+/);
+      if (!match) return '';
+      return 'https://www.nexisuni.com/document/?pddocfullpath=' + encodeURIComponent('/shared/document/news/' + match[0]);
+    }}
+
+    function openRecord(sourceId) {{
+      switchTab('database-view');
+      const anchor = articleAnchor(sourceId);
+      const search = document.getElementById('database-search');
+      if (search && search.value) {{
+        search.value = '';
+        renderDatabase('');
+      }}
+      requestAnimationFrame(() => {{
+        document.querySelectorAll('#database-body tr.marked').forEach(row => row.classList.remove('marked', 'bg-amber-500/10'));
+        const row = document.getElementById(anchor);
+        if (!row) return;
+        row.classList.add('marked', 'bg-amber-500/10');
+        row.scrollIntoView({{ block: 'center' }});
+      }});
+    }}
+
+    function appendSourceLine(parent, art) {{
+      const source = document.createElement('div');
+      source.className = 'text-[11px] text-slate-400';
+      const publisher = art.publisher || art.authority || '';
+      if (publisher) source.appendChild(document.createTextNode(publisher));
+      if (art.source_id) {{
+        if (publisher) source.appendChild(document.createTextNode(' · '));
+        const record = document.createElement('button');
+        record.type = 'button';
+        record.className = 'text-blue-400 hover:text-blue-300 underline';
+        record.textContent = 'Record';
+        record.addEventListener('click', () => openRecord(art.source_id));
+        source.appendChild(record);
+      }}
+      parent.appendChild(source);
+    }}
+
+    function appendArticleCard(parent, art) {{
+      const card = document.createElement('div');
+      card.className = 'bg-slate-950/80 border border-slate-800 rounded-lg p-3 space-y-1.5 transition hover:border-slate-700';
+      const top = document.createElement('div');
+      top.className = 'flex items-center justify-between gap-2';
+      const year = document.createElement('span');
+      year.className = 'text-[11px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded';
+      year.textContent = art.year || '';
+      const gov = document.createElement('span');
+      gov.className = 'text-[11px] text-blue-400 font-semibold text-right';
+      gov.textContent = art.gov || '';
+      top.append(year, gov);
+      const title = document.createElement('div');
+      title.className = 'font-bold text-white text-xs leading-snug';
+      const sourceUrl = articleSourceUrl(art);
+      const titleLink = sourceUrl ? document.createElement('a') : document.createElement('span');
+      titleLink.className = sourceUrl
+        ? 'hover:text-blue-300 underline decoration-slate-600 underline-offset-2'
+        : '';
+      titleLink.textContent = art.title || 'Untitled';
+      if (sourceUrl) {{
+        titleLink.href = sourceUrl;
+        titleLink.target = '_blank';
+        titleLink.rel = 'noreferrer';
+      }}
+      title.appendChild(titleLink);
+      card.append(top, title);
+      appendSourceLine(card, art);
+      if (art.summary) {{
+        const summary = document.createElement('p');
+        summary.className = 'text-slate-300 text-[11px] leading-relaxed';
+        summary.textContent = art.summary;
+        card.appendChild(summary);
+      }}
+      parent.appendChild(card);
+    }}
+
     function selectNationwideScope() {{
       isNationwideSelected = true;
       setNationwideHighlight(true);
@@ -1757,17 +1974,17 @@ def generate_html_infographics(data_payload: dict) -> str:
         articles = nw.articles.filter(a => a.year === year);
       }}
 
-      document.getElementById('loc-badge-count').textContent = `${{articles.length}} Federal Policies`;
+      document.getElementById('loc-badge-count').textContent = `${{articles.length}} Sources`;
       document.getElementById('loc-badge-count').className = 'text-xs font-bold text-sky-400 bg-sky-500/10 px-2.5 py-0.5 rounded-full border border-sky-500/20';
 
       const detailDiv = document.getElementById('location-detail-content');
       detailDiv.innerHTML = `
         <div class="bg-sky-950/40 border border-sky-800/60 rounded-lg p-3 text-xs mb-3">
           <div class="font-bold text-sky-300 flex items-center gap-1.5">
-            <span>🇺🇸 Federal & Nationwide Scope</span>
+            <span>United States</span>
           </div>
           <p class="text-slate-300 mt-1">
-            These policies are systemic federal mandates (USDOT, NHTSA, Congress) or platform-wide routing algorithm rollouts (Google Maps, Waze for Cities, Esri GIS) that apply across all 50 states simultaneously.
+            These articles are scoped to the United States, or to a place this map cannot pin. Coded federal rules and platform-wide features are in this list with crawled stories that have no city or state.
           </p>
         </div>
       `;
@@ -1775,26 +1992,13 @@ def generate_html_infographics(data_payload: dict) -> str:
       if (articles.length === 0) {{
         detailDiv.innerHTML += `
           <div class="text-slate-500 text-center py-6">
-            No nationwide federal policies enacted in ${{year}}.
+            No United States or unpinned articles dated ${{year}}.
           </div>
         `;
         return;
       }}
 
-      articles.forEach(art => {{
-        const card = document.createElement('div');
-        card.className = 'bg-slate-950/80 border border-slate-800 rounded-lg p-3 space-y-1.5 transition hover:border-slate-700';
-        card.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="text-[11px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded">${{art.year}}</span>
-            <span class="text-[11px] text-purple-400 font-semibold">${{art.gov}}</span>
-          </div>
-          <div class="font-bold text-white text-xs leading-snug">${{art.title}}</div>
-          <div class="text-[11px] text-slate-400 font-mono"><strong>Authority:</strong> ${{art.authority || 'U.S. Federal / Platform'}}</div>
-          <p class="text-slate-300 text-[11px] leading-relaxed">${{art.summary}}</p>
-        `;
-        detailDiv.appendChild(card);
-      }});
+      articles.forEach(art => appendArticleCard(detailDiv, art));
     }}
 
     function updateSelectedEraCard() {{
@@ -1803,20 +2007,14 @@ def generate_html_infographics(data_payload: dict) -> str:
       const desc = document.getElementById('era-description');
 
       if (year === 'ALL') {{
-        title.textContent = `Cumulative Corpus Overview (${{DATA.metadata.year_range}})`;
-        desc.textContent = `Displaying all ${{DATA.metadata.total_sources}} verified traffic and navigation policy sources across ${{DATA.metadata.unique_locations}} geographic locations.`;
-      }} else if (year <= '2016') {{
-        title.textContent = `${{year}}: Initial Waze Expansion & Early City Pushback`;
-        desc.textContent = 'Early municipal debates over shortcut traffic; Los Angeles and Boston pilot initial Connected Citizens data exchanges.';
-      }} else if (year <= '2019') {{
-        title.textContent = `${{year}}: The Leonia Commuter Ban & Judicial Review`;
-        desc.textContent = 'Peak residential street access bans (Leonia, NJ closes 60 streets); NYC congestion studies and congressional hearings.';
-      }} else if (year <= '2022') {{
-        title.textContent = `${{year}}: COVID Slow Streets & Cloud Data Synchronization`;
-        desc.textContent = 'Waze for Cities integrates with Google Cloud; pandemic neighborhood greenway diverters implemented in Seattle and Chicago.';
+        title.textContent = `All saved documents (${{DATA.metadata.year_range}})`;
+        desc.textContent = `Showing ${{DATA.metadata.total_sources}} documents across ${{DATA.metadata.unique_locations}} mapped places.`;
+      }} else if (isCumulativeMode) {{
+        title.textContent = `Documents through ${{year}}`;
+        desc.textContent = `Articles dated ${{year}} or earlier. Undated articles stay in the full-corpus view.`;
       }} else {{
-        title.textContent = `${{year}}: Eco-Routing, Speed Cameras & Autonomous Vehicle Pilots`;
-        desc.textContent = 'Google Maps defaults to fuel-efficient routing; Waymo robotaxis crowdsource potholes with Waze; automated camera enforcement.';
+        title.textContent = `Documents from ${{year}}`;
+        desc.textContent = `Articles dated ${{year}}.`;
       }}
     }}
 
@@ -2058,7 +2256,7 @@ def generate_html_infographics(data_payload: dict) -> str:
 
         circle.onmouseenter = (e) => {{
           showTooltip(e, `<strong class="text-white">${{loc.name}}</strong>${{countyLabel}}`, 
-            `<span class="text-amber-400 font-bold">${{count}} Policies</span> (${{govType}})<br/><span class="text-[11px] text-slate-400">Click to zoom and view policies</span>`);
+            `<span class="text-amber-400 font-semibold">${{count}} articles</span> (${{govType}})`);
         }};
         circle.onmouseleave = hideTooltip;
 
@@ -2206,20 +2404,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         return;
       }}
 
-      articles.forEach(art => {{
-        const card = document.createElement('div');
-        card.className = 'bg-slate-950/80 border border-slate-800 rounded-lg p-3 space-y-1.5 transition hover:border-slate-700';
-        card.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="text-[11px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded">${{art.year}}</span>
-            <span class="text-[11px] text-blue-400 font-semibold">${{art.gov}}</span>
-          </div>
-          <div class="font-bold text-white text-xs leading-snug">${{art.title}}</div>
-          <div class="text-[11px] text-slate-400 font-mono"><strong>Authority:</strong> ${{art.authority || 'Local Jurisdiction'}}</div>
-          <p class="text-slate-300 text-[11px] leading-relaxed">${{art.summary}}</p>
-        `;
-        detailDiv.appendChild(card);
-      }});
+      articles.forEach(art => appendArticleCard(detailDiv, art));
     }}
 
     function showTooltip(event, title, body) {{
@@ -2238,13 +2423,13 @@ def generate_html_infographics(data_payload: dict) -> str:
     function switchTab(tabId) {{
       document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.tab-btn').forEach(btn => {{
-        btn.className = 'tab-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800';
+        btn.className = 'tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white';
       }});
 
       document.getElementById(tabId).classList.remove('hidden');
       const activeBtn = document.querySelector(`button[onclick="switchTab('${{tabId}}')"]`);
       if (activeBtn) {{
-        activeBtn.className = 'tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 text-white shadow';
+        activeBtn.className = 'tab-btn px-3 py-2 text-sm text-white border-b-2 border-white';
       }}
     }}
 
@@ -2266,8 +2451,395 @@ def generate_html_infographics(data_payload: dict) -> str:
       reader.readAsText(file);
     }}
 
+    function initMeasures() {{
+      const panel = DATA.measures || {{ measures: [], articles: [], categories: [] }};
+      const summary = document.getElementById('measures-summary');
+      const filters = document.getElementById('measures-filters');
+      const list = document.getElementById('measures-list');
+      const detail = document.getElementById('measures-detail');
+      if (!summary || !filters || !list || !detail) return;
+      summary.textContent = `${{panel.article_count || 0}} articles read. ${{panel.labeled_count || 0}} matched a measure. ${{panel.unlabeled_count || 0}} stayed unlabeled because the text did not contain that measure's name or example phrases.`;
+      let category = 'all';
+      let selected = panel.measures[0] ? panel.measures[0].code : '';
+      const maxCount = Math.max(1, ...(panel.measures || []).map(item => item.count || 0));
+
+      function addFilter(code, label) {{
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = label;
+        button.dataset.code = code;
+        button.className = 'px-3 py-1.5 rounded-full text-xs font-medium border border-slate-700 text-slate-300 hover:text-white';
+        button.addEventListener('click', () => {{
+          category = code;
+          drawMeasures();
+        }});
+        filters.appendChild(button);
+      }}
+
+      addFilter('all', 'All categories');
+      (panel.categories || []).forEach(item => addFilter(item.code, item.code + '. ' + item.name));
+
+      function drawMeasures() {{
+        filters.querySelectorAll('button').forEach(button => {{
+          const on = button.dataset.code === category;
+          button.className = on
+            ? 'px-3 py-1.5 rounded-full text-xs font-medium bg-blue-600 text-white'
+            : 'px-3 py-1.5 rounded-full text-xs font-medium border border-slate-700 text-slate-300 hover:text-white';
+        }});
+        list.replaceChildren();
+        const visible = (panel.measures || []).filter(item => category === 'all' || item.category === category);
+        if (!visible.some(item => item.code === selected) && visible[0]) selected = visible[0].code;
+        visible.forEach((item, index) => {{
+          const row = document.createElement('li');
+          const on = item.code === selected;
+          row.className = on
+            ? 'bg-slate-900 border border-blue-500 rounded-xl p-3 cursor-pointer'
+            : 'bg-slate-900/80 border border-slate-800 rounded-xl p-3 cursor-pointer hover:border-slate-600';
+          const width = Math.round(((item.count || 0) / maxCount) * 100);
+          row.innerHTML = '<div class="flex justify-between gap-3"><span class="measure-name text-sm text-white"></span><b class="text-blue-400"></b></div><div class="measure-category text-[11px] text-slate-400 mt-1"></div><div class="h-1.5 bg-slate-800 rounded mt-2"><span class="measure-bar block h-full bg-orange-500 rounded"></span></div>';
+          row.querySelector('.measure-name').textContent = (index + 1) + '. ' + item.code + '. ' + item.name;
+          row.querySelector('b').textContent = String(item.count || 0);
+          row.querySelector('.measure-category').textContent = item.category + '. ' + item.category_name;
+          row.querySelector('.measure-bar').style.width = width + '%';
+          row.addEventListener('click', () => {{
+            selected = item.code;
+            drawMeasures();
+          }});
+          list.appendChild(row);
+        }});
+        drawMeasureArticles();
+      }}
+
+      function drawMeasureArticles() {{
+        const measure = (panel.measures || []).find(item => item.code === selected);
+        detail.replaceChildren();
+        if (!measure) {{
+          detail.textContent = 'Select a measure.';
+          return;
+        }}
+        const heading = document.createElement('h3');
+        heading.className = 'text-lg font-bold text-white';
+        heading.textContent = measure.code + '. ' + measure.name;
+        const definition = document.createElement('p');
+        definition.className = 'text-sm text-slate-400 mt-2 mb-4';
+        definition.textContent = measure.definition || '';
+        detail.appendChild(heading);
+        detail.appendChild(definition);
+        const found = (panel.articles || []).filter(item => (item.measures || []).includes(measure.code));
+        found.sort((a, b) => (b.publication_date || '').localeCompare(a.publication_date || ''));
+        if (!found.length) {{
+          const note = document.createElement('p');
+          note.className = 'text-slate-500 text-sm';
+          note.textContent = 'No saved article matched this measure.';
+          detail.appendChild(note);
+          return;
+        }}
+        found.forEach(item => {{
+          const card = document.createElement('article');
+          card.className = 'border-t border-slate-800 py-3';
+          const title = document.createElement('h4');
+          title.className = 'text-sm font-semibold text-white';
+          const sourceUrl = articleSourceUrl(item);
+          const link = sourceUrl ? document.createElement('a') : document.createElement('span');
+          link.className = sourceUrl
+            ? 'hover:text-blue-400 underline decoration-slate-600 underline-offset-2'
+            : '';
+          link.textContent = item.title;
+          if (sourceUrl) {{
+            link.href = sourceUrl;
+            link.target = '_blank';
+            link.rel = 'noreferrer';
+          }}
+          title.appendChild(link);
+          const meta = document.createElement('p');
+          meta.className = 'text-[11px] text-slate-400 mt-1';
+          meta.textContent = [item.publication_date, item.publisher, item.location].filter(Boolean).join(' · ');
+          card.appendChild(title);
+          card.appendChild(meta);
+          appendSourceLine(card, item);
+          detail.appendChild(card);
+        }});
+      }}
+
+      drawMeasures();
+    }}
+
+    function renderDatabase(query) {{
+      const rows = DATA.database || [];
+      const needle = String(query || '').trim().toLowerCase();
+      const body = document.getElementById('database-body');
+      const count = document.getElementById('database-count');
+      body.replaceChildren();
+      const shown = needle
+        ? rows.filter(row => [row.title, row.publisher, row.location, row.category, row.date].join(' ').toLowerCase().includes(needle))
+        : rows;
+      if (count) count.textContent = shown.length + ' of ' + rows.length + ' documents';
+      const fragment = document.createDocumentFragment();
+      shown.forEach(row => {{
+        const tr = document.createElement('tr');
+        tr.id = articleAnchor(row.source_id);
+        tr.className = 'border-t border-slate-800 align-top';
+        const titleCell = document.createElement('td');
+        titleCell.className = 'px-3 py-2 text-white';
+        const sourceUrl = articleSourceUrl(row);
+        if (sourceUrl) {{
+          const link = document.createElement('a');
+          link.href = sourceUrl;
+          link.target = '_blank';
+          link.rel = 'noreferrer';
+          link.className = 'hover:text-blue-300 underline decoration-slate-600 underline-offset-2';
+          link.textContent = row.title || 'Untitled';
+          titleCell.appendChild(link);
+        }} else {{
+          titleCell.textContent = row.title || 'Untitled';
+        }}
+        const cells = [row.date, row.publisher, row.location, row.category];
+        tr.appendChild(titleCell);
+        cells.forEach(value => {{
+          const td = document.createElement('td');
+          td.className = 'px-3 py-2 text-slate-300 whitespace-nowrap';
+          td.textContent = value || '';
+          tr.appendChild(td);
+        }});
+        fragment.appendChild(tr);
+      }});
+      body.appendChild(fragment);
+    }}
+
+    function initDatabase() {{
+      const search = document.getElementById('database-search');
+      renderDatabase('');
+      if (search) search.addEventListener('input', () => renderDatabase(search.value));
+    }}
+
+    function initOutside() {{
+      const panel = DATA.outside || {{ themes: [], unlabeled_count: 0, total: 0 }};
+      const summary = document.getElementById('outside-summary');
+      const list = document.getElementById('outside-list');
+      const detail = document.getElementById('outside-detail');
+      const byId = new Map((DATA.database || []).map(row => [row.source_id, row]));
+      if (summary) {{
+        summary.textContent = panel.unlabeled_count + ' of ' + panel.total
+          + ' saved documents contain none of the codebook measure names or example phrases. Each of those documents is counted once, under the first title pattern it matches.';
+      }}
+      function showTheme(theme) {{
+        detail.replaceChildren();
+        const heading = document.createElement('h3');
+        heading.className = 'text-lg font-semibold text-white';
+        heading.textContent = theme.name;
+        const note = document.createElement('p');
+        note.className = 'text-sm text-slate-400 mt-1 mb-4';
+        note.textContent = theme.count + ' articles. ' + (theme.note || '');
+        detail.append(heading, note);
+        const ids = theme.ids || [];
+        let shown = 0;
+        const more = document.createElement('button');
+        more.type = 'button';
+        more.className = 'mt-3 text-sm text-blue-400 hover:text-blue-300 underline';
+        function renderSlice() {{
+          ids.slice(shown, shown + 40).forEach(sourceId => {{
+            const row = byId.get(sourceId) || {{ source_id: sourceId, title: sourceId }};
+            appendArticleCard(detail, {{
+              ...row,
+              year: row.date || '',
+              gov: row.location || '',
+            }});
+          }});
+          shown = Math.min(ids.length, shown + 40);
+          if (shown < ids.length) {{
+            more.textContent = 'Show more (' + shown + ' of ' + ids.length + ')';
+            detail.appendChild(more);
+          }} else if (more.parentNode) {{
+            more.remove();
+          }}
+        }}
+        more.addEventListener('click', () => {{
+          more.remove();
+          renderSlice();
+        }});
+        renderSlice();
+      }}
+      (panel.themes || []).forEach((theme, index) => {{
+        const item = document.createElement('li');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'w-full text-left bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-3 hover:border-slate-600';
+        const rank = document.createElement('div');
+        rank.className = 'text-sm font-semibold text-white';
+        rank.textContent = (index + 1) + '. ' + theme.name;
+        const meta = document.createElement('div');
+        meta.className = 'text-xs text-slate-400 mt-1';
+        meta.textContent = theme.count + ' articles';
+        button.append(rank, meta);
+        button.addEventListener('click', () => showTheme(theme));
+        item.appendChild(button);
+        list.appendChild(item);
+      }});
+      if (panel.themes && panel.themes.length) showTheme(panel.themes[0]);
+    }}
+
     // Boot on page load
-    window.addEventListener('DOMContentLoaded', initDashboard);
+    window.addEventListener('DOMContentLoaded', () => {{
+      initDashboard();
+      initMeasures();
+      initDatabase();
+      initOutside();
+    }});
+  </script>
+</body>
+</html>
+"""
+
+
+def document_anchor(source_id: str) -> str:
+    """Match the anchor used by the map and measures links."""
+    slug = re.sub(r"[^A-Za-z0-9]+", "-", source_id or "row").strip("-")
+    return "doc-" + (slug or "row")
+
+
+def generate_database_html(rows: list[dict]) -> str:
+    """A standalone page for every row in crawled_documents."""
+    payload = []
+    for row in rows:
+        summary = " ".join(str(row.get("factual_summary") or "").split())
+        if summary.startswith("urn:") or summary.startswith("<") or "xmlns=" in summary[:80]:
+            summary = ""
+        source_id = str(row.get("id") or "")
+        url = str(row.get("url") or "")
+        nexis_match = re.search(r"urn:contentItem:[A-Za-z0-9-]+", source_id)
+        payload.append({
+            "anchor": document_anchor(source_id),
+            "id": source_id,
+            "origin": str(row.get("origin") or ""),
+            "title": str(row.get("title") or ""),
+            "publisher": str(row.get("publisher") or ""),
+            "date": str(row.get("publication_date") or ""),
+            "location": str(row.get("location") or ""),
+            "url": url,
+            "nexis_id": nexis_match.group(0) if nexis_match and not url.startswith("http") else "",
+            "archive_dir": str(row.get("archive_dir") or ""),
+            "measures": str(row.get("measure_codes") or ""),
+            "governing_level": str(row.get("governing_level") or ""),
+            "category": str(row.get("category") or ""),
+            "summary": summary[:280],
+        })
+    data = json.dumps(payload, ensure_ascii=False).replace("<", "\\u003c")
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>News database</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    tr.marked {{ background: #1e293b; outline: 1px solid #93c5fd; }}
+  </style>
+</head>
+<body class="bg-[#141816] text-slate-100 antialiased min-h-screen px-4 py-6 md:px-8 font-sans">
+  <header class="max-w-7xl mx-auto mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800 pb-5">
+    <div>
+      <p class="text-xs uppercase tracking-wide text-slate-500">ELENG 290 · data/news.sqlite</p>
+      <h1 class="text-3xl font-serif font-semibold tracking-tight text-white mt-1">News database</h1>
+      <p class="text-sm text-slate-400 mt-2 max-w-3xl">Every saved archive page and Nexis document. A Nexis title opens that document in Nexis Uni. An archive title opens the original page. The saved folder is the local copy.</p>
+    </div>
+    <a href="research_infographics.html" class="text-sm text-slate-300 underline underline-offset-2 hover:text-white">Back to the map</a>
+  </header>
+  <div class="max-w-7xl mx-auto mb-4 flex flex-col sm:flex-row gap-3 sm:items-center">
+    <input id="query" type="search" placeholder="Search title, publisher, place, or document id" class="flex-1 bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-white" />
+    <p id="count" class="text-sm text-slate-400 whitespace-nowrap"></p>
+  </div>
+  <div class="max-w-7xl mx-auto overflow-x-auto border border-slate-800">
+    <table class="w-full text-left text-xs">
+      <thead class="bg-slate-950 text-slate-400 uppercase sticky top-0">
+        <tr>
+          <th class="py-3 px-3">Title</th>
+          <th class="py-3 px-3">Date</th>
+          <th class="py-3 px-3">Publisher</th>
+          <th class="py-3 px-3">Place</th>
+          <th class="py-3 px-3">Category</th>
+          <th class="py-3 px-3">Saved file</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <script>
+    const ROWS = {data};
+    const body = document.getElementById('rows');
+    const query = document.getElementById('query');
+    const count = document.getElementById('count');
+
+    function sourceUrl(row) {{
+      if (row.url && (row.url.startsWith('http://') || row.url.startsWith('https://'))) return row.url;
+      if (!row.nexis_id) return '';
+      return 'https://www.nexisuni.com/document/?pddocfullpath=' + encodeURIComponent('/shared/document/news/' + row.nexis_id);
+    }}
+
+    function render(list) {{
+      body.replaceChildren();
+      list.forEach(row => {{
+        const tr = document.createElement('tr');
+        tr.id = row.anchor;
+        tr.className = 'border-t border-slate-800 align-top hover:bg-slate-900/80';
+        const titleCell = document.createElement('td');
+        titleCell.className = 'py-3 px-3 max-w-md';
+        const link = document.createElement('a');
+        const href = sourceUrl(row);
+        link.className = 'text-sm text-white hover:text-blue-300 underline decoration-slate-600 underline-offset-2';
+        link.textContent = row.title || row.id;
+        if (href) {{
+          link.href = href;
+          link.target = '_blank';
+          link.rel = 'noreferrer';
+        }} else {{
+          link.href = '#' + row.anchor;
+        }}
+        titleCell.appendChild(link);
+        const meta = document.createElement('div');
+        meta.className = 'text-[11px] text-slate-500 mt-1 break-all';
+        meta.textContent = row.nexis_id || row.id;
+        titleCell.appendChild(meta);
+        if (row.summary) {{
+          const summary = document.createElement('p');
+          summary.className = 'text-[11px] text-slate-400 mt-1';
+          summary.textContent = row.summary;
+          titleCell.appendChild(summary);
+        }}
+        function cell(text) {{
+          const td = document.createElement('td');
+          td.className = 'py-3 px-3 text-slate-300';
+          td.textContent = text || '';
+          return td;
+        }}
+        const file = cell(row.archive_dir);
+        file.className = 'py-3 px-3 text-slate-500 font-mono break-all max-w-xs';
+        file.title = row.archive_dir || '';
+        tr.append(titleCell, cell(row.date), cell(row.publisher), cell(row.location), cell(row.category), file);
+        body.appendChild(tr);
+      }});
+      count.textContent = list.length + ' of ' + ROWS.length + ' documents';
+    }}
+
+    function applyFilter() {{
+      const needle = query.value.trim().toLowerCase();
+      const list = needle
+        ? ROWS.filter(row => [row.title, row.publisher, row.location, row.id, row.nexis_id, row.category, row.archive_dir].join(' ').toLowerCase().includes(needle))
+        : ROWS;
+      render(list);
+      revealHash();
+    }}
+
+    function revealHash() {{
+      const id = decodeURIComponent(location.hash || '').replace(/^#/, '');
+      if (!id) return;
+      const row = document.getElementById(id);
+      if (!row) return;
+      row.classList.add('marked');
+      row.scrollIntoView({{ block: 'center' }});
+    }}
+
+    query.addEventListener('input', applyFilter);
+    applyFilter();
   </script>
 </body>
 </html>
@@ -2310,6 +2882,12 @@ def main() -> int:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html_content, encoding="utf-8")
     print(f"Saved interactive infographics to {output_path}")
+    from news_importer.db import load_database_rows
+
+    database_path = output_path.parent / "news_database.html"
+    database_rows = load_database_rows(input_path.parent.parent / "news.sqlite")
+    database_path.write_text(generate_database_html(database_rows), encoding="utf-8")
+    print(f"Saved news database page to {database_path}")
 
     # Mirror to antigravity brain artifact directory
     artifact_dir = Path("/Users/isabelle/.gemini/antigravity/brain/b83e007b-8917-4635-8cf5-17130e87b3c1")
