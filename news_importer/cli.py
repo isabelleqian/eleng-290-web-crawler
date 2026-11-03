@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from collections import Counter
 from pathlib import Path
@@ -42,6 +43,8 @@ def main(argv: list[str] | None = None) -> int:
             return command_keywords(args)
         if args.command == "infographics":
             return command_infographics(args)
+        if args.command == "measures":
+            return command_measures(args)
     except ImporterError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
@@ -73,6 +76,8 @@ def build_parser() -> argparse.ArgumentParser:
             "  python3 -m news_importer keywords save your-list.txt\n"
             "  python3 -m news_importer keywords\n"
             "  python3 -m news_importer nexis --dry-run\n"
+            "  python3 -m news_importer measures\n"
+            "  python3 -m news_importer measures --dry-run\n"
         ),
     )
     parser.add_argument("--version", action="version", version=__version__)
@@ -371,6 +376,62 @@ def build_parser() -> argparse.ArgumentParser:
         default="data/exports/research_infographics.html",
         help="path for generated interactive HTML dashboard (default: data/exports/research_infographics.html)",
     )
+
+    measures_parser = subparsers.add_parser(
+        "measures",
+        help="tag articles with codebook measures and open a ranked measures page",
+        description=(
+            "Read sheet 1012_codebook. Match saved archive pages and Nexis hits "
+            "to those measures, search Nexis for each measure name, and write a "
+            "page that ranks measures by article count."
+        ),
+    )
+    measures_parser.add_argument(
+        "--codebook",
+        help="workbook path (default: the codebook workbook beside this project)",
+    )
+    measures_parser.add_argument(
+        "--archive",
+        default="data/archive",
+        help="saved page archive (default: data/archive)",
+    )
+    measures_parser.add_argument(
+        "--nexis-dir",
+        default="data/nexis",
+        help="folder of stored Nexis hits (default: data/nexis)",
+    )
+    measures_parser.add_argument(
+        "--tags",
+        default="data/exports/measure_tags.json",
+        help="JSON file for the measure tags (default: data/exports/measure_tags.json)",
+    )
+    measures_parser.add_argument(
+        "--dashboard",
+        default="data/exports/measures_dashboard.html",
+        help="ranked measures page (default: data/exports/measures_dashboard.html)",
+    )
+    measures_parser.add_argument(
+        "--limit",
+        type=_positive_int,
+        default=20,
+        help="maximum new documents requested for each measure (default: 20)",
+    )
+    measures_parser.add_argument(
+        "--timeout",
+        type=_positive_float,
+        default=60.0,
+        help="per-request timeout in seconds (default: 60)",
+    )
+    measures_parser.add_argument(
+        "--no-search",
+        action="store_true",
+        help="tag articles already saved and skip the Nexis API",
+    )
+    measures_parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="print each measure search without calling the API",
+    )
     return parser
 
 
@@ -513,6 +574,68 @@ def command_nexis(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_measures(args: argparse.Namespace) -> int:
+    from news_importer.codebook import load_codebook
+    from news_importer.measures import search_measures, tag_articles, write_dashboard, write_tags
+
+    codebook = load_codebook(Path(args.codebook).expanduser() if args.codebook else None)
+    nexis_dir = Path(args.nexis_dir).expanduser()
+    search_note = None
+    if args.no_search:
+        print(f"measures: {len(codebook.measures)} from sheet 1012_codebook")
+    else:
+        result = search_measures(
+            codebook,
+            output_dir=nexis_dir,
+            limit=args.limit,
+            timeout=args.timeout,
+            dry_run=args.dry_run,
+        )
+        print(f"measure searches: {len(result.queries)}")
+        for query in result.queries:
+            print(f"  {query.keywords}")
+        if args.dry_run:
+            print("dry run: no Nexis request and no new hits written")
+        else:
+            print(f"stored: {result.stored}")
+            print(f"already saved: {result.skipped_existing}")
+            print(f"outside the United States: {result.skipped_outside_us}")
+            search_note = {
+                "queries": len(result.queries),
+                "stored": result.stored,
+                "already_saved": result.skipped_existing,
+                "outside_us": result.skipped_outside_us,
+            }
+
+    articles = tag_articles(
+        codebook,
+        archive_dir=Path(args.archive).expanduser(),
+        nexis_dir=nexis_dir,
+    )
+    tags_path = Path(args.tags).expanduser()
+    dashboard_path = Path(args.dashboard).expanduser()
+    write_tags(articles, codebook, tags_path)
+    if search_note is not None:
+        note_path = tags_path.parent / "measure_search.json"
+        note_path.write_text(json.dumps(search_note, indent=2) + "\n", encoding="utf-8")
+        print(f"search note: {note_path}")
+    write_dashboard(articles, codebook, dashboard_path)
+    labeled = sum(1 for article in articles if article.measures)
+    print(f"articles: {len(articles)}")
+    print(f"matched: {labeled}")
+    print(f"unlabeled: {len(articles) - labeled}")
+    print(f"tags: {tags_path}")
+    print(f"dashboard: {dashboard_path}")
+    ranked = sorted(
+        ((measure.code, measure.name, sum(1 for article in articles if measure.code in article.measures))
+         for measure in codebook.measures),
+        key=lambda item: (-item[2], item[0]),
+    )
+    for code, name, count in ranked[:10]:
+        print(f"  {code} {name}: {count}")
+    return 0
+
+
 def command_analyze(args: argparse.Namespace) -> int:
     from news_importer.analysis import (
         build_all_analyses,
@@ -575,18 +698,39 @@ def command_infographics(args: argparse.Namespace) -> int:
     if not input_path.exists():
         raise ImporterError(f"input dataset not found: {input_path}")
 
+    from news_importer.db import sync_crawled_documents
+
+    stored = sync_crawled_documents(
+        input_path.parent.parent / "news.sqlite",
+        input_path.parent / "measure_tags.json",
+        input_path,
+    )
+    print(f"database: {stored} crawled documents in {input_path.parent.parent / 'news.sqlite'}")
+
     dataset = build_infographic_dataset(input_path)
     html_content = generate_html_infographics(dataset)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html_content, encoding="utf-8")
     print(f"saved interactive infographics to {output_path}")
 
+    from news_importer.db import load_database_rows
+    from news_importer.generate_infographics import generate_database_html
+
+    database_path = output_path.parent / "news_database.html"
+    database_rows = load_database_rows(input_path.parent.parent / "news.sqlite")
+    database_path.write_text(generate_database_html(database_rows), encoding="utf-8")
+    print(f"saved news database page to {database_path}")
+
     # Mirror to antigravity brain artifact directory if accessible
     artifact_dir = Path("/Users/isabelle/.gemini/antigravity/brain/b83e007b-8917-4635-8cf5-17130e87b3c1")
     if artifact_dir.exists():
         mirror_path = artifact_dir / "research_infographics_dashboard.html"
-        mirror_path.write_text(html_content, encoding="utf-8")
-        print(f"mirrored artifact dashboard to {mirror_path}")
+        try:
+            mirror_path.write_text(html_content, encoding="utf-8")
+        except OSError as exc:
+            print(f"warning: could not mirror the dashboard: {exc.strerror}", file=sys.stderr)
+        else:
+            print(f"mirrored artifact dashboard to {mirror_path}")
 
     return 0
 
