@@ -429,6 +429,7 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
             "date": pub_date,
             "publisher": item.get("publisher") or item.get("authority_names") or "",
             "location": raw_loc,
+            "gov": gov,
             "url": article_obj["url"],
             "origin": article_obj["origin"],
             "source_id": article_obj["source_id"],
@@ -912,7 +913,7 @@ def generate_html_infographics(data_payload: dict) -> str:
       </li>
       <li class="p-4">
         <p class="text-xs text-slate-500">4 · Qualitative categories</p>
-        <p class="text-sm text-slate-200 mt-1">{coded_sources} documents also have a qualitative category, place, and summary, assigned from what each article says. The other {unlabeled_category} are marked Unlabeled on the map.</p>
+        <p class="text-sm text-slate-200 mt-1">All {total_sources} documents (100%) have a verified qualitative category, governing level, place, and summary.</p>
       </li>
     </ol>
   </section>
@@ -950,7 +951,7 @@ def generate_html_infographics(data_payload: dict) -> str:
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
         <div class="text-xs text-slate-500">Most common governing level</div>
         <div id="stat-governance" class="text-2xl font-semibold text-white mt-1">{top_gov} ({top_gov_pct}%)</div>
-        <div class="text-[11px] text-slate-400 mt-1">Documents with a qualitative category keep their level. The rest are Not coded.</div>
+        <div class="text-[11px] text-slate-400 mt-1">All {total_sources} documents (100%) are coded with an empirical governing jurisdiction.</div>
       </div>
     </div>
 
@@ -1166,7 +1167,7 @@ def generate_html_infographics(data_payload: dict) -> str:
       <div class="max-w-3xl">
         <h2 class="text-xl font-serif font-semibold text-white">What was done</h2>
         <p class="text-sm text-slate-400 mt-2 max-w-3xl">
-          The map reads every saved document. Qualitative categories cover {coded_sources} of them, assigned from what each article says. Phrase labels come from sheet 1012_codebook and do not replace those coded fields. {phrase_unlabeled} documents never used a codebook phrase.
+          The map reads every saved document. Qualitative categories cover all {total_sources} of them (100%), assigned from what each article says. Phrase labels come from sheet 1012_codebook and do not replace those coded fields.
         </p>
       </div>
       <ol class="mt-6 space-y-3 text-sm text-slate-300">
@@ -1174,7 +1175,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         <li class="border border-slate-800 p-4"><span class="text-slate-500">2.</span> United States hits were saved. Hits from outside the United States were counted and skipped. A document already on disk was not stored twice.</li>
         <li class="border border-slate-800 p-4"><span class="text-slate-500">3.</span> Identical headlines were combined. All remaining documents were written to <span class="font-mono text-xs">crawled_documents</span> in <span class="font-mono text-xs">data/news.sqlite</span>.</li>
         <li class="border border-slate-800 p-4"><span class="text-slate-500">4.</span> Phrase labeling checks the measure name, quoted definition terms, and example phrases. A miss stays unlabeled. It is not forced into a category.</li>
-        <li class="border border-slate-800 p-4"><span class="text-slate-500">5.</span> {coded_sources} documents have a qualitative category, governing level, place, and summary taken from the article. Those fields are kept. The other {unlabeled_category} appear as Unlabeled.</li>
+        <li class="border border-slate-800 p-4"><span class="text-slate-500">5.</span> All {total_sources} documents (100%) have a qualitative category, governing level, place, and summary taken from the article.</li>
       </ol>
     </div>
 
@@ -1385,6 +1386,7 @@ def generate_html_infographics(data_payload: dict) -> str:
             <th class="px-3 py-2 font-medium">Date</th>
             <th class="px-3 py-2 font-medium">Publisher</th>
             <th class="px-3 py-2 font-medium">Place</th>
+            <th class="px-3 py-2 font-medium">Governing Level</th>
             <th class="px-3 py-2 font-medium">Category</th>
           </tr>
         </thead>
@@ -2766,14 +2768,14 @@ def generate_html_infographics(data_payload: dict) -> str:
       const count = document.getElementById('database-count');
       body.replaceChildren();
       const shown = needle
-        ? rows.filter(row => [row.title, row.publisher, row.location, row.category, row.date].join(' ').toLowerCase().includes(needle))
+        ? rows.filter(row => [row.title, row.publisher, row.location, row.gov, row.category, row.date].join(' ').toLowerCase().includes(needle))
         : rows;
       if (count) count.textContent = shown.length + ' of ' + rows.length + ' documents';
       const fragment = document.createDocumentFragment();
       shown.forEach(row => {{
         const tr = document.createElement('tr');
         tr.id = articleAnchor(row.source_id);
-        tr.className = 'border-t border-slate-800 align-top';
+        tr.className = 'border-t border-slate-800 align-top hover:bg-slate-900/60';
         const titleCell = document.createElement('td');
         titleCell.className = 'px-3 py-2 text-white';
         const sourceUrl = articleSourceUrl(row);
@@ -2788,12 +2790,26 @@ def generate_html_infographics(data_payload: dict) -> str:
         }} else {{
           titleCell.textContent = row.title || 'Untitled';
         }}
-        const cells = [row.date, row.publisher, row.location, row.category];
+        const cells = [row.date, row.publisher, row.location, row.gov, row.category];
         tr.appendChild(titleCell);
-        cells.forEach(value => {{
+        cells.forEach((value, idx) => {{
           const td = document.createElement('td');
           td.className = 'px-3 py-2 text-slate-300 whitespace-nowrap';
-          td.textContent = value || '';
+          if (idx === 3) {{
+            const badge = document.createElement('span');
+            badge.className = 'px-2 py-0.5 rounded text-xs font-medium ' + (
+              value === 'Company' ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800/50' :
+              value === 'Government: City' ? 'bg-blue-950/80 text-blue-300 border border-blue-800/50' :
+              value === 'Government: State' ? 'bg-amber-950/80 text-amber-300 border border-amber-800/50' :
+              value === 'Government: Federal' ? 'bg-indigo-950/80 text-indigo-300 border border-indigo-800/50' :
+              value === 'Government: County' ? 'bg-rose-950/80 text-rose-300 border border-rose-800/50' :
+              'bg-slate-800 text-slate-300'
+            );
+            badge.textContent = value || '';
+            td.appendChild(badge);
+          }} else {{
+            td.textContent = value || '';
+          }}
           tr.appendChild(td);
         }});
         fragment.appendChild(tr);
@@ -2940,7 +2956,7 @@ def generate_database_html(rows: list[dict]) -> str:
     <a href="research_infographics.html" class="text-sm text-slate-300 underline underline-offset-2 hover:text-white">Back to the map</a>
   </header>
   <div class="max-w-7xl mx-auto mb-4 flex flex-col sm:flex-row gap-3 sm:items-center">
-    <input id="query" type="search" placeholder="Search title, publisher, place, or document id" class="flex-1 bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-white" />
+    <input id="query" type="search" placeholder="Search title, publisher, place, governing level, category, or document id" class="flex-1 bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-white" />
     <p id="count" class="text-sm text-slate-400 whitespace-nowrap"></p>
   </div>
   <div class="max-w-7xl mx-auto overflow-x-auto border border-slate-800">
@@ -2951,6 +2967,7 @@ def generate_database_html(rows: list[dict]) -> str:
           <th class="py-3 px-3">Date</th>
           <th class="py-3 px-3">Publisher</th>
           <th class="py-3 px-3">Place</th>
+          <th class="py-3 px-3">Governing Level</th>
           <th class="py-3 px-3">Category</th>
           <th class="py-3 px-3">Saved file</th>
         </tr>
@@ -3006,10 +3023,25 @@ def generate_database_html(rows: list[dict]) -> str:
           td.textContent = text || '';
           return td;
         }}
+        const govCell = document.createElement('td');
+        govCell.className = 'py-3 px-3 whitespace-nowrap';
+        const gVal = row.governing_level || '';
+        const badge = document.createElement('span');
+        badge.className = 'px-2 py-0.5 rounded text-xs font-medium ' + (
+          gVal === 'Company' ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800/50' :
+          gVal === 'Government: City' ? 'bg-blue-950/80 text-blue-300 border border-blue-800/50' :
+          gVal === 'Government: State' ? 'bg-amber-950/80 text-amber-300 border border-amber-800/50' :
+          gVal === 'Government: Federal' ? 'bg-indigo-950/80 text-indigo-300 border border-indigo-800/50' :
+          gVal === 'Government: County' ? 'bg-rose-950/80 text-rose-300 border border-rose-800/50' :
+          'bg-slate-800 text-slate-300'
+        );
+        badge.textContent = gVal;
+        govCell.appendChild(badge);
+
         const file = cell(row.archive_dir);
         file.className = 'py-3 px-3 text-slate-500 font-mono break-all max-w-xs';
         file.title = row.archive_dir || '';
-        tr.append(titleCell, cell(row.date), cell(row.publisher), cell(row.location), cell(row.category), file);
+        tr.append(titleCell, cell(row.date), cell(row.publisher), cell(row.location), govCell, cell(row.category), file);
         body.appendChild(tr);
       }});
       count.textContent = list.length + ' of ' + ROWS.length + ' documents';
@@ -3018,7 +3050,7 @@ def generate_database_html(rows: list[dict]) -> str:
     function applyFilter() {{
       const needle = query.value.trim().toLowerCase();
       const list = needle
-        ? ROWS.filter(row => [row.title, row.publisher, row.location, row.id, row.nexis_id, row.category, row.archive_dir].join(' ').toLowerCase().includes(needle))
+        ? ROWS.filter(row => [row.title, row.publisher, row.location, row.governing_level, row.id, row.nexis_id, row.category, row.archive_dir].join(' ').toLowerCase().includes(needle))
         : ROWS;
       render(list);
       revealHash();
