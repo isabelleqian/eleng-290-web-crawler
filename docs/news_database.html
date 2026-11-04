@@ -18,9 +18,29 @@
     </div>
     <a href="research_infographics.html" class="text-sm text-slate-300 underline underline-offset-2 hover:text-white">Back to the map</a>
   </header>
-  <div class="max-w-7xl mx-auto mb-4 flex flex-col sm:flex-row gap-3 sm:items-center">
-    <input id="query" type="search" placeholder="Search title, publisher, place, governing level, category, or document id" class="flex-1 bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-white" />
-    <p id="count" class="text-sm text-slate-400 whitespace-nowrap"></p>
+  <div class="max-w-7xl mx-auto mb-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-900/90 border border-slate-800 rounded-xl p-4">
+    <div>
+      <h2 class="text-lg font-semibold text-white">Filter documents</h2>
+      <p id="count" class="text-xs text-slate-400 mt-0.5"></p>
+    </div>
+    <div class="flex flex-wrap items-center gap-3">
+      <!-- Governing Level Filter Pills -->
+      <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs" id="gov-pills">
+        <button type="button" data-gov="" class="gov-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white">All</button>
+        <button type="button" data-gov="City" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">City</button>
+        <button type="button" data-gov="State" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">State</button>
+        <button type="button" data-gov="County" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">County</button>
+        <button type="button" data-gov="Company" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">Company</button>
+      </div>
+
+      <!-- Place Filter Dropdown -->
+      <select id="place-filter" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500 max-w-[210px]">
+        <option value="">All Places</option>
+      </select>
+
+      <!-- Search Input -->
+      <input id="query" type="search" placeholder="Search title, publisher, place..." class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-64" />
+    </div>
   </div>
   <div class="max-w-7xl mx-auto overflow-x-auto border border-slate-800">
     <table class="w-full text-left text-xs">
@@ -43,6 +63,22 @@
     const body = document.getElementById('rows');
     const query = document.getElementById('query');
     const count = document.getElementById('count');
+    const placeSelect = document.getElementById('place-filter');
+    const govPills = document.querySelectorAll('#gov-pills .gov-pill');
+
+    let activeGov = '';
+    let activePlace = '';
+
+    function matchesGov(rowGov, filterGov) {
+      if (!filterGov) return true;
+      const g = String(rowGov || '').toLowerCase();
+      const f = filterGov.toLowerCase();
+      if (f === 'city') return g.includes('city');
+      if (f === 'state') return g.includes('state');
+      if (f === 'county') return g.includes('county');
+      if (f === 'company') return g.includes('company');
+      return g.includes(f);
+    }
 
     function sourceUrl(row) {
       if (row.url && (row.url.startsWith('http://') || row.url.startsWith('https://'))) return row.url;
@@ -107,14 +143,30 @@
         tr.append(titleCell, cell(row.date), cell(row.publisher), cell(row.location), govCell, cell(row.category), file);
         body.appendChild(tr);
       });
-      count.textContent = list.length + ' of ' + ROWS.length + ' documents';
+
+      const filterParts = [];
+      if (activeGov) filterParts.push(activeGov);
+      if (activePlace) filterParts.push(activePlace);
+      const needle = query.value.trim();
+      if (needle) filterParts.push('"' + needle + '"');
+      if (filterParts.length > 0) {
+        count.textContent = list.length + ' of ' + ROWS.length + ' documents (' + filterParts.join(' · ') + ')';
+      } else {
+        count.textContent = list.length + ' of ' + ROWS.length + ' documents';
+      }
     }
 
     function applyFilter() {
       const needle = query.value.trim().toLowerCase();
-      const list = needle
-        ? ROWS.filter(row => [row.title, row.publisher, row.location, row.governing_level, row.id, row.nexis_id, row.category, row.archive_dir].join(' ').toLowerCase().includes(needle))
-        : ROWS;
+      const list = ROWS.filter(row => {
+        if (activeGov && !matchesGov(row.governing_level, activeGov)) return false;
+        if (activePlace && String(row.location || '').trim() !== activePlace) return false;
+        if (needle) {
+          const haystack = [row.title, row.publisher, row.location, row.governing_level, row.id, row.nexis_id, row.category, row.archive_dir].join(' ').toLowerCase();
+          if (!haystack.includes(needle)) return false;
+        }
+        return true;
+      });
       render(list);
       revealHash();
     }
@@ -126,6 +178,45 @@
       if (!row) return;
       row.classList.add('marked');
       row.scrollIntoView({ block: 'center' });
+    }
+
+    // Populate place dropdown
+    if (placeSelect) {
+      const placeCounts = new Map();
+      ROWS.forEach(r => {
+        const loc = String(r.location || '').trim();
+        if (loc) {
+          placeCounts.set(loc, (placeCounts.get(loc) || 0) + 1);
+        }
+      });
+      const sortedPlaces = Array.from(placeCounts.keys()).sort((a, b) => a.localeCompare(b));
+      sortedPlaces.forEach(place => {
+        const opt = document.createElement('option');
+        opt.value = place;
+        opt.textContent = place + ' (' + placeCounts.get(place) + ')';
+        placeSelect.appendChild(opt);
+      });
+      placeSelect.addEventListener('change', () => {
+        activePlace = placeSelect.value;
+        applyFilter();
+      });
+    }
+
+    // Setup gov pills
+    if (govPills) {
+      govPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          activeGov = pill.dataset.gov || '';
+          govPills.forEach(p => {
+            if ((p.dataset.gov || '') === activeGov) {
+              p.className = 'gov-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white';
+            } else {
+              p.className = 'gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white';
+            }
+          });
+          applyFilter();
+        });
+      });
     }
 
     query.addEventListener('input', applyFilter);
