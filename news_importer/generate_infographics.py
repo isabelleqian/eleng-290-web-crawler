@@ -1371,12 +1371,29 @@ def generate_html_infographics(data_payload: dict) -> str:
   </section>
 
   <section id="database-view" class="tab-pane max-w-7xl mx-auto space-y-4 hidden">
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-900/90 border border-slate-800 rounded-xl p-4">
       <div>
         <h2 class="text-xl font-bold text-white">All saved documents</h2>
         <p id="database-count" class="text-sm text-slate-400 mt-1"></p>
       </div>
-      <input id="database-search" type="search" placeholder="Search title, publisher, place, category" class="w-full sm:w-80 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-500" />
+      <div class="flex flex-wrap items-center gap-3">
+        <!-- Governing Level Filter Pills -->
+        <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs" id="database-gov-pills">
+          <button type="button" data-gov="" class="gov-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white">All</button>
+          <button type="button" data-gov="City" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">City</button>
+          <button type="button" data-gov="State" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">State</button>
+          <button type="button" data-gov="County" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">County</button>
+          <button type="button" data-gov="Company" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">Company</button>
+        </div>
+
+        <!-- Place Filter Dropdown -->
+        <select id="database-place-filter" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500 max-w-[210px]">
+          <option value="">All Places</option>
+        </select>
+
+        <!-- Search Input -->
+        <input id="database-search" type="search" placeholder="Search title, publisher, place..." class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-56" />
+      </div>
     </div>
     <div class="overflow-auto border border-slate-800 rounded-xl max-h-[75vh]">
       <table class="w-full text-left text-sm">
@@ -2761,16 +2778,50 @@ def generate_html_infographics(data_payload: dict) -> str:
       drawMeasures();
     }}
 
-    function renderDatabase(query) {{
+    let dbActiveGov = '';
+    let dbActivePlace = '';
+    let dbSearchQuery = '';
+
+    function matchesGov(rowGov, filterGov) {{
+      if (!filterGov) return true;
+      const g = String(rowGov || '').toLowerCase();
+      const f = filterGov.toLowerCase();
+      if (f === 'city') return g.includes('city');
+      if (f === 'state') return g.includes('state');
+      if (f === 'county') return g.includes('county');
+      if (f === 'company') return g.includes('company');
+      return g.includes(f);
+    }}
+
+    function renderDatabase() {{
       const rows = DATA.database || [];
-      const needle = String(query || '').trim().toLowerCase();
+      const needle = String(dbSearchQuery || '').trim().toLowerCase();
       const body = document.getElementById('database-body');
       const count = document.getElementById('database-count');
       body.replaceChildren();
-      const shown = needle
-        ? rows.filter(row => [row.title, row.publisher, row.location, row.gov, row.category, row.date].join(' ').toLowerCase().includes(needle))
-        : rows;
-      if (count) count.textContent = shown.length + ' of ' + rows.length + ' documents';
+
+      const shown = rows.filter(row => {{
+        if (dbActiveGov && !matchesGov(row.gov, dbActiveGov)) return false;
+        if (dbActivePlace && String(row.location || '').trim() !== dbActivePlace) return false;
+        if (needle) {{
+          const haystack = [row.title, row.publisher, row.location, row.gov, row.category, row.date].join(' ').toLowerCase();
+          if (!haystack.includes(needle)) return false;
+        }}
+        return true;
+      }});
+
+      if (count) {{
+        const filterParts = [];
+        if (dbActiveGov) filterParts.push(dbActiveGov);
+        if (dbActivePlace) filterParts.push(dbActivePlace);
+        if (needle) filterParts.push('"' + needle + '"');
+        if (filterParts.length > 0) {{
+          count.textContent = shown.length + ' of ' + rows.length + ' documents (' + filterParts.join(' · ') + ')';
+        }} else {{
+          count.textContent = shown.length + ' of ' + rows.length + ' documents';
+        }}
+      }}
+
       const fragment = document.createDocumentFragment();
       shown.forEach(row => {{
         const tr = document.createElement('tr');
@@ -2819,8 +2870,57 @@ def generate_html_infographics(data_payload: dict) -> str:
 
     function initDatabase() {{
       const search = document.getElementById('database-search');
-      renderDatabase('');
-      if (search) search.addEventListener('input', () => renderDatabase(search.value));
+      const placeSelect = document.getElementById('database-place-filter');
+      const govPills = document.querySelectorAll('#database-gov-pills .gov-pill');
+      const rows = DATA.database || [];
+
+      // Populate place dropdown
+      if (placeSelect) {{
+        const placeCounts = new Map();
+        rows.forEach(r => {{
+          const loc = String(r.location || '').trim();
+          if (loc) {{
+            placeCounts.set(loc, (placeCounts.get(loc) || 0) + 1);
+          }}
+        }});
+        const sortedPlaces = Array.from(placeCounts.keys()).sort((a, b) => a.localeCompare(b));
+        sortedPlaces.forEach(place => {{
+          const opt = document.createElement('option');
+          opt.value = place;
+          opt.textContent = place + ' (' + placeCounts.get(place) + ')';
+          placeSelect.appendChild(opt);
+        }});
+        placeSelect.addEventListener('change', () => {{
+          dbActivePlace = placeSelect.value;
+          renderDatabase();
+        }});
+      }}
+
+      // Setup gov pills
+      if (govPills) {{
+        govPills.forEach(pill => {{
+          pill.addEventListener('click', () => {{
+            dbActiveGov = pill.dataset.gov || '';
+            govPills.forEach(p => {{
+              if ((p.dataset.gov || '') === dbActiveGov) {{
+                p.className = 'gov-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white';
+              }} else {{
+                p.className = 'gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white';
+              }}
+            }});
+            renderDatabase();
+          }});
+        }});
+      }}
+
+      if (search) {{
+        search.addEventListener('input', () => {{
+          dbSearchQuery = search.value;
+          renderDatabase();
+        }});
+      }}
+
+      renderDatabase();
     }}
 
     function initOutside() {{
@@ -2955,9 +3055,29 @@ def generate_database_html(rows: list[dict]) -> str:
     </div>
     <a href="research_infographics.html" class="text-sm text-slate-300 underline underline-offset-2 hover:text-white">Back to the map</a>
   </header>
-  <div class="max-w-7xl mx-auto mb-4 flex flex-col sm:flex-row gap-3 sm:items-center">
-    <input id="query" type="search" placeholder="Search title, publisher, place, governing level, category, or document id" class="flex-1 bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-white" />
-    <p id="count" class="text-sm text-slate-400 whitespace-nowrap"></p>
+  <div class="max-w-7xl mx-auto mb-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-900/90 border border-slate-800 rounded-xl p-4">
+    <div>
+      <h2 class="text-lg font-semibold text-white">Filter documents</h2>
+      <p id="count" class="text-xs text-slate-400 mt-0.5"></p>
+    </div>
+    <div class="flex flex-wrap items-center gap-3">
+      <!-- Governing Level Filter Pills -->
+      <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs" id="gov-pills">
+        <button type="button" data-gov="" class="gov-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white">All</button>
+        <button type="button" data-gov="City" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">City</button>
+        <button type="button" data-gov="State" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">State</button>
+        <button type="button" data-gov="County" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">County</button>
+        <button type="button" data-gov="Company" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">Company</button>
+      </div>
+
+      <!-- Place Filter Dropdown -->
+      <select id="place-filter" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500 max-w-[210px]">
+        <option value="">All Places</option>
+      </select>
+
+      <!-- Search Input -->
+      <input id="query" type="search" placeholder="Search title, publisher, place..." class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-64" />
+    </div>
   </div>
   <div class="max-w-7xl mx-auto overflow-x-auto border border-slate-800">
     <table class="w-full text-left text-xs">
@@ -2980,6 +3100,22 @@ def generate_database_html(rows: list[dict]) -> str:
     const body = document.getElementById('rows');
     const query = document.getElementById('query');
     const count = document.getElementById('count');
+    const placeSelect = document.getElementById('place-filter');
+    const govPills = document.querySelectorAll('#gov-pills .gov-pill');
+
+    let activeGov = '';
+    let activePlace = '';
+
+    function matchesGov(rowGov, filterGov) {{
+      if (!filterGov) return true;
+      const g = String(rowGov || '').toLowerCase();
+      const f = filterGov.toLowerCase();
+      if (f === 'city') return g.includes('city');
+      if (f === 'state') return g.includes('state');
+      if (f === 'county') return g.includes('county');
+      if (f === 'company') return g.includes('company');
+      return g.includes(f);
+    }}
 
     function sourceUrl(row) {{
       if (row.url && (row.url.startsWith('http://') || row.url.startsWith('https://'))) return row.url;
@@ -3044,14 +3180,30 @@ def generate_database_html(rows: list[dict]) -> str:
         tr.append(titleCell, cell(row.date), cell(row.publisher), cell(row.location), govCell, cell(row.category), file);
         body.appendChild(tr);
       }});
-      count.textContent = list.length + ' of ' + ROWS.length + ' documents';
+
+      const filterParts = [];
+      if (activeGov) filterParts.push(activeGov);
+      if (activePlace) filterParts.push(activePlace);
+      const needle = query.value.trim();
+      if (needle) filterParts.push('"' + needle + '"');
+      if (filterParts.length > 0) {{
+        count.textContent = list.length + ' of ' + ROWS.length + ' documents (' + filterParts.join(' · ') + ')';
+      }} else {{
+        count.textContent = list.length + ' of ' + ROWS.length + ' documents';
+      }}
     }}
 
     function applyFilter() {{
       const needle = query.value.trim().toLowerCase();
-      const list = needle
-        ? ROWS.filter(row => [row.title, row.publisher, row.location, row.governing_level, row.id, row.nexis_id, row.category, row.archive_dir].join(' ').toLowerCase().includes(needle))
-        : ROWS;
+      const list = ROWS.filter(row => {{
+        if (activeGov && !matchesGov(row.governing_level, activeGov)) return false;
+        if (activePlace && String(row.location || '').trim() !== activePlace) return false;
+        if (needle) {{
+          const haystack = [row.title, row.publisher, row.location, row.governing_level, row.id, row.nexis_id, row.category, row.archive_dir].join(' ').toLowerCase();
+          if (!haystack.includes(needle)) return false;
+        }}
+        return true;
+      }});
       render(list);
       revealHash();
     }}
@@ -3063,6 +3215,45 @@ def generate_database_html(rows: list[dict]) -> str:
       if (!row) return;
       row.classList.add('marked');
       row.scrollIntoView({{ block: 'center' }});
+    }}
+
+    // Populate place dropdown
+    if (placeSelect) {{
+      const placeCounts = new Map();
+      ROWS.forEach(r => {{
+        const loc = String(r.location || '').trim();
+        if (loc) {{
+          placeCounts.set(loc, (placeCounts.get(loc) || 0) + 1);
+        }}
+      }});
+      const sortedPlaces = Array.from(placeCounts.keys()).sort((a, b) => a.localeCompare(b));
+      sortedPlaces.forEach(place => {{
+        const opt = document.createElement('option');
+        opt.value = place;
+        opt.textContent = place + ' (' + placeCounts.get(place) + ')';
+        placeSelect.appendChild(opt);
+      }});
+      placeSelect.addEventListener('change', () => {{
+        activePlace = placeSelect.value;
+        applyFilter();
+      }});
+    }}
+
+    // Setup gov pills
+    if (govPills) {{
+      govPills.forEach(pill => {{
+        pill.addEventListener('click', () => {{
+          activeGov = pill.dataset.gov || '';
+          govPills.forEach(p => {{
+            if ((p.dataset.gov || '') === activeGov) {{
+              p.className = 'gov-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white';
+            }} else {{
+              p.className = 'gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white';
+            }}
+          }});
+          applyFilter();
+        }});
+      }});
     }}
 
     query.addEventListener('input', applyFilter);
