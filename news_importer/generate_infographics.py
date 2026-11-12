@@ -435,6 +435,9 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
             "source_id": article_obj["source_id"],
             "archive_dir": article_obj["archive_dir"],
             "category": cat,
+            "is_relevant": int(item.get("is_project_relevant", 1)),
+            "tier": str(item.get("relevance_tier") or "In-Scope"),
+            "exclusion_reason": str(item.get("exclusion_reason") or ""),
         })
 
         # Check if genuinely nationwide or federal macro scope
@@ -1373,7 +1376,13 @@ def generate_html_infographics(data_payload: dict) -> str:
   <section id="database-view" class="tab-pane max-w-7xl mx-auto space-y-4 hidden">
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-900/90 border border-slate-800 rounded-xl p-4">
       <div>
-        <h2 class="text-xl font-bold text-white">All saved documents</h2>
+        <div class="flex flex-wrap items-center gap-3">
+          <h2 class="text-xl font-bold text-white">Document database</h2>
+          <div class="inline-flex rounded-lg border border-slate-800 bg-slate-950 p-0.5 text-xs font-medium" id="database-corpus-pills">
+            <button type="button" data-corpus="filtered" class="corpus-pill px-2.5 py-1 rounded bg-blue-600 text-white">Filtered Project Corpus</button>
+            <button type="button" data-corpus="all" class="corpus-pill px-2.5 py-1 rounded text-slate-400 hover:text-white">Complete Archive (1,605)</button>
+          </div>
+        </div>
         <p id="database-count" class="text-sm text-slate-400 mt-1"></p>
       </div>
       <div class="flex flex-wrap items-center gap-3">
@@ -2778,6 +2787,7 @@ def generate_html_infographics(data_payload: dict) -> str:
       drawMeasures();
     }}
 
+    let dbActiveCorpus = 'filtered';
     let dbActiveGov = '';
     let dbActivePlace = '';
     let dbSearchQuery = '';
@@ -2794,17 +2804,20 @@ def generate_html_infographics(data_payload: dict) -> str:
     }}
 
     function renderDatabase() {{
-      const rows = DATA.database || [];
+      const allRows = DATA.database || [];
+      const corpusRows = dbActiveCorpus === 'filtered'
+        ? allRows.filter(r => r.is_relevant === 1)
+        : allRows;
       const needle = String(dbSearchQuery || '').trim().toLowerCase();
       const body = document.getElementById('database-body');
       const count = document.getElementById('database-count');
       body.replaceChildren();
 
-      const shown = rows.filter(row => {{
+      const shown = corpusRows.filter(row => {{
         if (dbActiveGov && !matchesGov(row.gov, dbActiveGov)) return false;
         if (dbActivePlace && String(row.location || '').trim() !== dbActivePlace) return false;
         if (needle) {{
-          const haystack = [row.title, row.publisher, row.location, row.gov, row.category, row.date].join(' ').toLowerCase();
+          const haystack = [row.title, row.publisher, row.location, row.gov, row.category, row.date, row.exclusion_reason].join(' ').toLowerCase();
           if (!haystack.includes(needle)) return false;
         }}
         return true;
@@ -2812,21 +2825,19 @@ def generate_html_infographics(data_payload: dict) -> str:
 
       if (count) {{
         const filterParts = [];
+        if (dbActiveCorpus === 'filtered') filterParts.push('Filtered In-Scope Corpus');
+        else filterParts.push('Complete Archive Corpus');
         if (dbActiveGov) filterParts.push(dbActiveGov);
         if (dbActivePlace) filterParts.push(dbActivePlace);
         if (needle) filterParts.push('"' + needle + '"');
-        if (filterParts.length > 0) {{
-          count.textContent = shown.length + ' of ' + rows.length + ' documents (' + filterParts.join(' · ') + ')';
-        }} else {{
-          count.textContent = shown.length + ' of ' + rows.length + ' documents';
-        }}
+        count.textContent = shown.length + ' of ' + corpusRows.length + ' documents (' + filterParts.join(' · ') + ')';
       }}
 
       const fragment = document.createDocumentFragment();
       shown.forEach(row => {{
         const tr = document.createElement('tr');
         tr.id = articleAnchor(row.source_id);
-        tr.className = 'border-t border-slate-800 align-top hover:bg-slate-900/60';
+        tr.className = 'border-t border-slate-800 align-top hover:bg-slate-900/60' + (row.is_relevant === 0 ? ' opacity-80' : '');
         const titleCell = document.createElement('td');
         titleCell.className = 'px-3 py-2 text-white';
         const sourceUrl = articleSourceUrl(row);
@@ -2840,6 +2851,12 @@ def generate_html_infographics(data_payload: dict) -> str:
           titleCell.appendChild(link);
         }} else {{
           titleCell.textContent = row.title || 'Untitled';
+        }}
+        if (row.is_relevant === 0 && row.exclusion_reason) {{
+          const exBadge = document.createElement('span');
+          exBadge.className = 'ml-2 inline-block px-1.5 py-0.5 rounded text-[10px] font-medium bg-rose-950/80 text-rose-300 border border-rose-800/50 align-middle';
+          exBadge.textContent = 'Excluded: ' + row.exclusion_reason;
+          titleCell.appendChild(exBadge);
         }}
         const cells = [row.date, row.publisher, row.location, row.gov, row.category];
         tr.appendChild(titleCell);
@@ -2868,35 +2885,69 @@ def generate_html_infographics(data_payload: dict) -> str:
       body.appendChild(fragment);
     }}
 
+    function populatePlaceDropdown() {{
+      const placeSelect = document.getElementById('database-place-filter');
+      if (!placeSelect) return;
+      const allRows = DATA.database || [];
+      const corpusRows = dbActiveCorpus === 'filtered' 
+        ? allRows.filter(r => r.is_relevant === 1)
+        : allRows;
+      const currentVal = placeSelect.value;
+      placeSelect.replaceChildren();
+      const defaultOpt = document.createElement('option');
+      defaultOpt.value = '';
+      defaultOpt.textContent = 'All Places';
+      placeSelect.appendChild(defaultOpt);
+
+      const placeCounts = new Map();
+      corpusRows.forEach(r => {{
+        const loc = String(r.location || '').trim();
+        if (loc) {{
+          placeCounts.set(loc, (placeCounts.get(loc) || 0) + 1);
+        }}
+      }});
+      const sortedPlaces = Array.from(placeCounts.keys()).sort((a, b) => a.localeCompare(b));
+      sortedPlaces.forEach(place => {{
+        const opt = document.createElement('option');
+        opt.value = place;
+        opt.textContent = place + ' (' + placeCounts.get(place) + ')';
+        if (place === currentVal) opt.selected = true;
+        placeSelect.appendChild(opt);
+      }});
+    }}
+
     function initDatabase() {{
       const search = document.getElementById('database-search');
       const placeSelect = document.getElementById('database-place-filter');
       const govPills = document.querySelectorAll('#database-gov-pills .gov-pill');
-      const rows = DATA.database || [];
+      const corpusPills = document.querySelectorAll('#database-corpus-pills .corpus-pill');
 
-      // Populate place dropdown
+      populatePlaceDropdown();
+
       if (placeSelect) {{
-        const placeCounts = new Map();
-        rows.forEach(r => {{
-          const loc = String(r.location || '').trim();
-          if (loc) {{
-            placeCounts.set(loc, (placeCounts.get(loc) || 0) + 1);
-          }}
-        }});
-        const sortedPlaces = Array.from(placeCounts.keys()).sort((a, b) => a.localeCompare(b));
-        sortedPlaces.forEach(place => {{
-          const opt = document.createElement('option');
-          opt.value = place;
-          opt.textContent = place + ' (' + placeCounts.get(place) + ')';
-          placeSelect.appendChild(opt);
-        }});
         placeSelect.addEventListener('change', () => {{
           dbActivePlace = placeSelect.value;
           renderDatabase();
         }});
       }}
 
-      // Setup gov pills
+      if (corpusPills) {{
+        corpusPills.forEach(pill => {{
+          pill.addEventListener('click', () => {{
+            dbActiveCorpus = pill.dataset.corpus || 'filtered';
+            corpusPills.forEach(p => {{
+              if ((p.dataset.corpus || 'filtered') === dbActiveCorpus) {{
+                p.className = 'corpus-pill px-2.5 py-1 rounded bg-blue-600 text-white';
+              }} else {{
+                p.className = 'corpus-pill px-2.5 py-1 rounded text-slate-400 hover:text-white';
+              }}
+            }});
+            populatePlaceDropdown();
+            renderDatabase();
+          }});
+        }});
+      }}
+
       if (govPills) {{
         govPills.forEach(pill => {{
           pill.addEventListener('click', () => {{
@@ -3008,7 +3059,7 @@ def document_anchor(source_id: str) -> str:
     return "doc-" + (slug or "row")
 
 
-def generate_database_html(rows: list[dict]) -> str:
+def generate_database_html(rows: list[dict], is_archive: bool = False) -> str:
     """A standalone page for every row in crawled_documents."""
     payload = []
     for row in rows:
@@ -3033,14 +3084,30 @@ def generate_database_html(rows: list[dict]) -> str:
             "governing_level": str(row.get("governing_level") or ""),
             "category": str(row.get("category") or ""),
             "summary": summary[:280],
+            "is_relevant": int(row.get("is_project_relevant") if row.get("is_project_relevant") is not None else 1),
+            "tier": str(row.get("relevance_tier") or "In-Scope"),
+            "exclusion_reason": str(row.get("exclusion_reason") or ""),
         })
     data = json.dumps(payload, ensure_ascii=False).replace("<", "\\u003c")
+    page_title = "News database (Complete Archive)" if is_archive else "News database (Filtered Project Corpus)"
+    header_tag = "ELENG 290 · Complete Raw Archive" if is_archive else "ELENG 290 · Active Research Corpus"
+    header_heading = "News database (Complete Archive · 1,605 Documents)" if is_archive else "News database (Filtered Project Corpus)"
+    header_desc = (
+        "Every saved archive page and raw Nexis document retrieved during crawling. Items marked with an exclusion tag have been filtered out of the active project database."
+        if is_archive
+        else "Curated news, government actions, and research articles directly matching the routing app research scope. Excludes off-topic search hits (distracted driving phone bans, police blotters, corporate earnings, routine paving)."
+    )
+    switch_button = (
+        '<a href="news_database.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-700 bg-blue-950/60 text-xs text-blue-300 hover:text-white">&larr; Back to Filtered Project Database</a>'
+        if is_archive
+        else '<a href="news_database_archive.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900 text-xs text-slate-300 hover:text-white hover:border-slate-500">View Complete Archive (1,605 docs) &rarr;</a>'
+    )
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>News database</title>
+  <title>{page_title}</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
     tr.marked {{ background: #1e293b; outline: 1px solid #93c5fd; }}
@@ -3049,11 +3116,14 @@ def generate_database_html(rows: list[dict]) -> str:
 <body class="bg-[#141816] text-slate-100 antialiased min-h-screen px-4 py-6 md:px-8 font-sans">
   <header class="max-w-7xl mx-auto mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800 pb-5">
     <div>
-      <p class="text-xs uppercase tracking-wide text-slate-500">ELENG 290 · data/news.sqlite</p>
-      <h1 class="text-3xl font-serif font-semibold tracking-tight text-white mt-1">News database</h1>
-      <p class="text-sm text-slate-400 mt-2 max-w-3xl">Every saved archive page and Nexis document. A Nexis title opens that document in Nexis Uni. An archive title opens the original page. The saved folder is the local copy.</p>
+      <p class="text-xs uppercase tracking-wide text-slate-500">{header_tag}</p>
+      <h1 class="text-3xl font-serif font-semibold tracking-tight text-white mt-1">{header_heading}</h1>
+      <p class="text-sm text-slate-400 mt-2 max-w-3xl">{header_desc}</p>
     </div>
-    <a href="research_infographics.html" class="text-sm text-slate-300 underline underline-offset-2 hover:text-white">Back to the map</a>
+    <div class="flex items-center gap-3">
+      {switch_button}
+      <a href="research_infographics.html" class="text-sm text-slate-300 underline underline-offset-2 hover:text-white">Back to the map</a>
+    </div>
   </header>
   <div class="max-w-7xl mx-auto mb-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-900/90 border border-slate-800 rounded-xl p-4">
     <div>
@@ -3128,7 +3198,7 @@ def generate_database_html(rows: list[dict]) -> str:
       list.forEach(row => {{
         const tr = document.createElement('tr');
         tr.id = row.anchor;
-        tr.className = 'border-t border-slate-800 align-top hover:bg-slate-900/80';
+        tr.className = 'border-t border-slate-800 align-top hover:bg-slate-900/80' + (row.is_relevant === 0 ? ' opacity-80' : '');
         const titleCell = document.createElement('td');
         titleCell.className = 'py-3 px-3 max-w-md';
         const link = document.createElement('a');
@@ -3143,6 +3213,12 @@ def generate_database_html(rows: list[dict]) -> str:
           link.href = '#' + row.anchor;
         }}
         titleCell.appendChild(link);
+        if (row.is_relevant === 0 && row.exclusion_reason) {{
+          const exBadge = document.createElement('span');
+          exBadge.className = 'ml-2 inline-block px-1.5 py-0.5 rounded text-[10px] font-medium bg-rose-950/80 text-rose-300 border border-rose-800/50 align-middle';
+          exBadge.textContent = 'Excluded: ' + row.exclusion_reason;
+          titleCell.appendChild(exBadge);
+        }}
         const meta = document.createElement('div');
         meta.className = 'text-[11px] text-slate-500 mt-1 break-all';
         meta.textContent = row.nexis_id || row.id;
@@ -3199,7 +3275,7 @@ def generate_database_html(rows: list[dict]) -> str:
         if (activeGov && !matchesGov(row.governing_level, activeGov)) return false;
         if (activePlace && String(row.location || '').trim() !== activePlace) return false;
         if (needle) {{
-          const haystack = [row.title, row.publisher, row.location, row.governing_level, row.id, row.nexis_id, row.category, row.archive_dir].join(' ').toLowerCase();
+          const haystack = [row.title, row.publisher, row.location, row.governing_level, row.id, row.nexis_id, row.category, row.archive_dir, row.exclusion_reason].join(' ').toLowerCase();
           if (!haystack.includes(needle)) return false;
         }}
         return true;
@@ -3300,12 +3376,19 @@ def main() -> int:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html_content, encoding="utf-8")
     print(f"Saved interactive infographics to {output_path}")
+
     from news_importer.db import load_database_rows
 
     database_path = output_path.parent / "news_database.html"
-    database_rows = load_database_rows(input_path.parent.parent / "news.sqlite")
-    database_path.write_text(generate_database_html(database_rows), encoding="utf-8")
-    print(f"Saved news database page to {database_path}")
+    database_archive_path = output_path.parent / "news_database_archive.html"
+
+    filtered_db_rows = load_database_rows(input_path.parent.parent / "news.sqlite", only_filtered=True)
+    all_db_rows = load_database_rows(input_path.parent.parent / "news.sqlite", only_filtered=False)
+
+    database_path.write_text(generate_database_html(filtered_db_rows, is_archive=False), encoding="utf-8")
+    database_archive_path.write_text(generate_database_html(all_db_rows, is_archive=True), encoding="utf-8")
+    print(f"Saved filtered news database page to {database_path}")
+    print(f"Saved complete news database archive page to {database_archive_path}")
 
     # Mirror to antigravity brain artifact directory
     artifact_dir = Path("/Users/isabelle/.gemini/antigravity/brain/b83e007b-8917-4635-8cf5-17130e87b3c1")

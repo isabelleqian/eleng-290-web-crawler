@@ -190,7 +190,10 @@ _SCHEMA = (
         category TEXT NOT NULL,
         target_location_type TEXT NOT NULL,
         factual_summary TEXT NOT NULL,
-        in_research_set INTEGER NOT NULL
+        in_research_set INTEGER NOT NULL,
+        is_project_relevant INTEGER NOT NULL DEFAULT 1,
+        relevance_tier TEXT,
+        exclusion_reason TEXT
     )
     """,
     "CREATE INDEX IF NOT EXISTS idx_crawled_documents_origin ON crawled_documents(origin)",
@@ -229,6 +232,14 @@ def ensure_schema(connection: sqlite3.Connection) -> None:
     for name, declaration in _DISCOVERY_COLUMNS.items():
         if name not in columns:
             connection.execute(f"ALTER TABLE discoveries ADD COLUMN {name} {declaration}")
+    crawled_cols = {row[1] for row in connection.execute("PRAGMA table_info(crawled_documents)")}
+    for name, declaration in [
+        ("is_project_relevant", "INTEGER DEFAULT 1"),
+        ("relevance_tier", "TEXT DEFAULT 'In-Scope'"),
+        ("exclusion_reason", "TEXT DEFAULT NULL"),
+    ]:
+        if name not in crawled_cols:
+            connection.execute(f"ALTER TABLE crawled_documents ADD COLUMN {name} {declaration}")
 
 
 def read_existing_normalized_urls(path: Path) -> set[str]:
@@ -743,8 +754,9 @@ def sync_crawled_documents(db_path: Path, tags_path: Path, analysis_path: Path) 
             INSERT INTO crawled_documents (
                 id, origin, title, publisher, publication_date, location, url,
                 archive_dir, measure_codes, governing_level, category,
-                target_location_type, factual_summary, in_research_set
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                target_location_type, factual_summary, in_research_set,
+                is_project_relevant, relevance_tier, exclusion_reason
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             rows,
         )
@@ -798,19 +810,22 @@ def load_crawled_documents(db_path: Path) -> list[dict[str, str]]:
     return rows
 
 
-def load_database_rows(db_path: Path) -> list[dict[str, str]]:
-    """Return every column of crawled_documents for the database page."""
+def load_database_rows(db_path: Path, only_filtered: bool = False) -> list[dict[str, str]]:
+    """Return crawled_documents for the database page."""
     if not db_path.is_file():
         return []
     connection = connect(db_path)
     try:
         ensure_schema(connection)
+        where = "WHERE in_research_set = 1 AND is_project_relevant = 1" if only_filtered else "WHERE in_research_set = 1"
         found = connection.execute(
-            """
+            f"""
             SELECT id, origin, title, publisher, publication_date, location, url,
                    archive_dir, measure_codes, governing_level, category,
-                   target_location_type, factual_summary, in_research_set
+                   target_location_type, factual_summary, in_research_set,
+                   is_project_relevant, relevance_tier, exclusion_reason
             FROM crawled_documents
+            {where}
             ORDER BY publication_date DESC, title
             """
         ).fetchall()
@@ -827,6 +842,9 @@ def _document_row(article: dict, coded: dict | None) -> tuple:
     governing = ""
     category = ""
     summary = ""
+    is_relevant = 1
+    tier = "In-Scope"
+    reason = None
     if coded:
         coded_location = str(coded.get("target_location") or "").strip()
         if coded_location:
@@ -838,6 +856,12 @@ def _document_row(article: dict, coded: dict | None) -> tuple:
         governing = str(coded.get("governing_level") or "")
         category = str(coded.get("category") or "")
         summary = str(coded.get("factual_summary") or "")
+        if "is_project_relevant" in coded:
+            is_relevant = int(coded["is_project_relevant"])
+        if "relevance_tier" in coded:
+            tier = str(coded["relevance_tier"] or "In-Scope")
+        if "exclusion_reason" in coded:
+            reason = coded["exclusion_reason"]
     if not location:
         location = "United States"
         location_type = location_type or "Country"
@@ -865,4 +889,7 @@ def _document_row(article: dict, coded: dict | None) -> tuple:
         location_type,
         summary,
         1 if coded else 0,
+        is_relevant,
+        tier,
+        reason,
     )
