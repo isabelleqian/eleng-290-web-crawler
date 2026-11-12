@@ -12,16 +12,18 @@ This executive research summary classifies United States statutes, administrativ
 * **E1: Routing restrictions for designated streets or areas**
   * **California** — Enacted (signed Sept 22, 2026): Cal. Stats. 2026, Ch. 207 (Assembly Bill 2015, Caltrans Third-Party Navigation Applications Study, adding Sts. & Hy. Code § 155.8) [ID: CA-03]
   * **New Jersey** — Bill – Pending (referred to Assembly Transportation Committee Jan 9, 2024): NJ A3036 (Smart App Freight Enforcement and Rerouting / SAFER APP Act) [ID: NJ-01]
-    * *Sub-bullet (Pending):* NJ S2322 (companion Senate bill establishing civil penalty of up to $1,000 per violation for routing providers directing commercial carriers onto restricted local roads)
+    * *Sub-bullet (Withdrawn):* NJ S756 (2024–2025) — Senate companion to A3036 authorizing AG to order navigation systems to reroute traffic from emergency-congested local roads; substituted by A3036 on Dec. 18, 2025 [ID: NJ-05]
 
 * **E3: Route guidance and routing criteria**
   * **Connecticut** — Bill – Pending (referred to Joint Committee on Transportation Jan 15, 2025): CT HB 5071 (An Act Prohibiting Commercial Motor Vehicles on Parkways and Requiring GPS Navigation Notifications) [ID: CT-01]
     * *Sub-bullet (Stalled/Pending):* CT SB 338 (prohibiting passenger-car navigation app routing for heavy motor vehicles on Merritt and Wilbur Cross Parkways)
 
 * **D1: Information standards and clearance disclosures**
-  * **Federal (United States)** — Bill – Pending (introduced in 119th Congress): H.R. 6531 (Bridges Not Bumpers Act of 2025, directing DOT to establish commercial GPS bridge-clearance regulations) [ID: FED-05]
   * **New York** — Bill – Pending (referred to Senate Transportation Committee): 2023 NY Senate Bill S6197 (Electronic Mapping and GPS Navigation Bridge Clearance Disclosure) [ID: NY-02]
-    * *Sub-bullet (Pending):* NY Assembly Bill A4167 (requiring commercial GPS navigation systems to provide audible and visual clearance warnings for trucks)
+    * *Sub-bullet (Pending):* NY A4167 (2025 Session) — Commercial GPS mandate for trucks with height/weight/width route warnings [ID: NY-05]
+
+* **F1: Government-platform data exchange and official data feeds**
+  * **Federal (United States)** — Bill – Pending (introduced in 119th Congress): H.R. 6531 (Bridges Not Bumpers Act of 2025, mandating GPS navigation provider data-sharing with federal DOT bridge clearance clearinghouse) [ID: FED-05]
 
 ---
 
@@ -60,6 +62,9 @@ This executive research summary classifies United States statutes, administrativ
 * **A4: Resident-only permit access**
   * **New Jersey (Municipal)** — Struck down: Borough of Leonia Ordinance No. 2017-18 (Rush-hour non-resident permit closure of 60 residential side streets to stop Waze diversion) [ID: NJ-LEONIA-01]
     * *Judicial Holding:* Rosa v. Borough of Leonia, Docket No. BER-L-1024-18 (N.J. Super. Ct. Law Div. 2018) invalidated non-resident rush-hour closures without formal N.J. DOT Commissioner approval under N.J.S.A. § 39:4-8.
+
+* **C4: Speed management and harmonization**
+  * **Arkansas** — In force: Ark. Act 707 of 2023 / Ark. Code Ann. § 27-52-110 (Automated Speed Enforcement Devices in Highway Work Zones; affects navigation app speed-zone routing) [ID: AR-01]
 
 * **B1: Traffic filters, diverters, and physical closures**
   * **California State Law** — In force: Cal. Veh. Code § 21101 (Local traffic regulation) and § 21101.6 (Explicit statutory prohibition against gates and selective selective devices barring public access, codifying City of Lafayette) [ID: CA-04]
