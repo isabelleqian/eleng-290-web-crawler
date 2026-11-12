@@ -362,9 +362,12 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
     from news_importer.db import load_crawled_documents
 
     database = input_json_path.parent.parent / "news.sqlite"
-    raw_data = load_crawled_documents(database)
-    if not raw_data:
-        raw_data = json.loads(input_json_path.read_text(encoding="utf-8"))
+    all_raw_data = load_crawled_documents(database, only_filtered=False)
+    if not all_raw_data:
+        all_raw_data = json.loads(input_json_path.read_text(encoding="utf-8"))
+
+    filtered_raw_data = [item for item in all_raw_data if int(item.get("is_project_relevant", 1)) == 1]
+    filtered_ids = {str(item.get("source_id") or "") for item in filtered_raw_data}
 
     # Localized geographic entities only (Cities, Counties, States)
     locations_dict: dict[str, dict] = defaultdict(lambda: {
@@ -392,7 +395,7 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
     corpus_text = []
     database_rows = []
 
-    for item in raw_data:
+    for item in all_raw_data:
         raw_loc = item.get("target_location", "").strip()
         pub_date = str(item.get("publication_date") or "")
         year = pub_date[:4]
@@ -404,11 +407,7 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
         loc_type = item.get("target_location_type", "City")
         title = item.get("title", "")
         summary = item.get("factual_summary", "")
-
-        year_counts[year] += 1
-        gov_counts[gov] += 1
-        loc_type_counts[loc_type] += 1
-        category_counts[cat] += 1
+        is_relevant = int(item.get("is_project_relevant", 1))
 
         article_obj = {
             "title": title,
@@ -423,6 +422,7 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
             "origin": item.get("origin") or "",
             "source_id": item.get("source_id") or "",
             "archive_dir": item.get("archive_dir") or "",
+            "is_relevant": is_relevant,
         }
         database_rows.append({
             "title": title,
@@ -435,10 +435,20 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
             "source_id": article_obj["source_id"],
             "archive_dir": article_obj["archive_dir"],
             "category": cat,
-            "is_relevant": int(item.get("is_project_relevant", 1)),
+            "is_relevant": is_relevant,
             "tier": str(item.get("relevance_tier") or "In-Scope"),
             "exclusion_reason": str(item.get("exclusion_reason") or ""),
         })
+
+        # All dashboard visual elements (Geographic Map, Timeline, Measures, Keywords,
+        # Governing Level Cards, and Summary Stats) MUST be computed strictly from in-scope filtered documents
+        if is_relevant != 1:
+            continue
+
+        year_counts[year] += 1
+        gov_counts[gov] += 1
+        loc_type_counts[loc_type] += 1
+        category_counts[cat] += 1
 
         # Check if genuinely nationwide or federal macro scope
         is_nationwide = (
@@ -517,8 +527,9 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
 
     return {
         "metadata": {
-            "total_sources": len(raw_data),
-            "localized_sources": len(raw_data) - len(nationwide_articles),
+            "total_sources": len(filtered_raw_data),
+            "archive_total_sources": len(all_raw_data),
+            "localized_sources": len(filtered_raw_data) - len(nationwide_articles),
             "nationwide_sources": len(nationwide_articles),
             "unique_locations": len(serialized_locations),
             "year_range": f"{all_years[0]} - {all_years[-1]}" if all_years else "N/A",
@@ -538,8 +549,8 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
             "articles": nationwide_articles,
         },
         "keyword_audit": keyword_audit,
-        "measures": load_measure_panel(input_json_path.parent / "measure_tags.json"),
-        "outside": load_outside_codebook(input_json_path.parent / "measure_tags.json"),
+        "measures": load_measure_panel(input_json_path.parent / "measure_tags.json", allowed_ids=filtered_ids),
+        "outside": load_outside_codebook(input_json_path.parent / "measure_tags.json", allowed_ids=filtered_ids),
         "database": database_rows,
         "search": load_search_note(input_json_path.parent / "measure_search.json"),
     }
@@ -566,7 +577,7 @@ _OUTSIDE_THEMES: tuple[tuple[str, str, str], ...] = (
 )
 
 
-def load_outside_codebook(tags_path: Path) -> dict:
+def load_outside_codebook(tags_path: Path, allowed_ids: set[str] | None = None) -> dict:
     """Group articles that matched no codebook measure, by recurring title pattern."""
     empty = {"total": 0, "unlabeled_count": 0, "themes": []}
     if not tags_path.is_file():
@@ -576,6 +587,9 @@ def load_outside_codebook(tags_path: Path) -> dict:
     except json.JSONDecodeError:
         return empty
     articles = raw.get("articles") or []
+    if allowed_ids is not None:
+        articles = [a for a in articles if str(a.get("article_id") or "") in allowed_ids]
+
     compiled = [(name, note, re.compile(pattern)) for name, note, pattern in _OUTSIDE_THEMES]
     buckets: dict[str, list[str]] = {name: [] for name, _, _ in _OUTSIDE_THEMES}
     buckets["No shared title pattern"] = []
@@ -626,7 +640,7 @@ def load_search_note(path: Path) -> dict:
     }
 
 
-def load_measure_panel(tags_path: Path) -> dict:
+def load_measure_panel(tags_path: Path, allowed_ids: set[str] | None = None) -> dict:
     """Codebook ranking shown on the measures tab. Missing tags leave the tab empty."""
     empty = {
         "categories": [],
@@ -642,25 +656,21 @@ def load_measure_panel(tags_path: Path) -> dict:
     raw = json.loads(tags_path.read_text(encoding="utf-8"))
     categories = raw.get("categories") or []
     category_names = {item.get("code"): item.get("name", "") for item in categories}
-    measures = [
-        {
-            "code": item.get("code", ""),
-            "category": item.get("category", ""),
-            "category_name": category_names.get(item.get("category"), item.get("category", "")),
-            "name": item.get("name", ""),
-            "definition": item.get("definition", ""),
-            "count": item.get("count", 0),
-        }
-        for item in (raw.get("measures") or [])
-    ]
-    measures.sort(key=lambda item: (-int(item["count"]), item["code"]))
+
+    raw_articles = raw.get("articles") or []
+    if allowed_ids is not None:
+        raw_articles = [a for a in raw_articles if str(a.get("article_id") or "") in allowed_ids]
+
+    measure_counts: Counter[str] = Counter()
     articles = []
     labeled = 0
-    for article in raw.get("articles") or []:
+    for article in raw_articles:
         codes = article.get("measures") or []
         if not codes:
             continue
         labeled += 1
+        for code in codes:
+            measure_counts[str(code)] += 1
         articles.append({
             "title": article.get("title") or article.get("article_id") or "Untitled",
             "publication_date": article.get("publication_date") or "",
@@ -672,7 +682,21 @@ def load_measure_panel(tags_path: Path) -> dict:
             "archive_dir": article.get("archive_dir") or "",
             "measures": codes,
         })
-    total = len(raw.get("articles") or [])
+
+    measures = [
+        {
+            "code": item.get("code", ""),
+            "category": item.get("category", ""),
+            "category_name": category_names.get(item.get("category"), item.get("category", "")),
+            "name": item.get("name", ""),
+            "definition": item.get("definition", ""),
+            "count": measure_counts.get(item.get("code", ""), 0),
+        }
+        for item in (raw.get("measures") or [])
+    ]
+    measures.sort(key=lambda item: (-int(item["count"]), item["code"]))
+
+    total = len(raw_articles)
     return {
         "categories": [{"code": item.get("code", ""), "name": item.get("name", "")} for item in categories],
         "measures": measures,
@@ -992,7 +1016,7 @@ def generate_html_infographics(data_payload: dict) -> str:
                 <div class="flex items-center gap-2">
                   <span class="text-xs font-semibold text-white">United States list</span>
                   <span id="nationwide-badge-count" class="px-2 py-0.5 rounded-full text-xs font-bold bg-sky-500/20 text-sky-400 border border-sky-500/30">
-                    19 Sources (United States)
+                    {nationwide_sources} Sources (United States)
                   </span>
                 </div>
                 <p id="nationwide-hud-desc" class="text-xs text-slate-400 mt-0.5">
@@ -3059,7 +3083,7 @@ def document_anchor(source_id: str) -> str:
     return "doc-" + (slug or "row")
 
 
-def generate_database_html(rows: list[dict], is_archive: bool = False) -> str:
+def generate_database_html(rows: list[dict], is_archive: bool = False, total_archive_count: int | None = None) -> str:
     """A standalone page for every row in crawled_documents."""
     payload = []
     for row in rows:
@@ -3089,9 +3113,11 @@ def generate_database_html(rows: list[dict], is_archive: bool = False) -> str:
             "exclusion_reason": str(row.get("exclusion_reason") or ""),
         })
     data = json.dumps(payload, ensure_ascii=False).replace("<", "\\u003c")
-    page_title = "News database (Complete Archive)" if is_archive else "News database (Filtered Project Corpus)"
+    archive_total = total_archive_count or (len(payload) if is_archive else 1605)
+    filtered_count = len(payload) if not is_archive else (sum(1 for r in payload if r.get("is_relevant") == 1) or len(payload))
+    page_title = f"News database (Complete Archive · {len(payload):,} docs)" if is_archive else f"News database (Filtered Project Corpus · {filtered_count:,} docs)"
     header_tag = "ELENG 290 · Complete Raw Archive" if is_archive else "ELENG 290 · Active Research Corpus"
-    header_heading = "News database (Complete Archive · 1,605 Documents)" if is_archive else "News database (Filtered Project Corpus)"
+    header_heading = f"News database (Complete Archive · {len(payload):,} Documents)" if is_archive else f"News database (Filtered Project Corpus · {filtered_count:,} Documents)"
     header_desc = (
         "Every saved archive page and raw Nexis document retrieved during crawling. Items marked with an exclusion tag have been filtered out of the active project database."
         if is_archive
@@ -3100,13 +3126,13 @@ def generate_database_html(rows: list[dict], is_archive: bool = False) -> str:
     switch_button = (
         '<a href="news_database.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-700 bg-blue-950/60 text-xs text-blue-300 hover:text-white">&larr; Back to Filtered Project Database</a>'
         if is_archive
-        else '<a href="news_database_archive.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900 text-xs text-slate-300 hover:text-white hover:border-slate-500">View Complete Archive (1,605 docs) &rarr;</a>'
+        else f'<a href="news_database_archive.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900 text-xs text-slate-300 hover:text-white hover:border-slate-500">View Complete Archive ({archive_total:,} docs) &rarr;</a>'
     )
     nav_bar = (
         '<nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">'
         '<a href="index.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Overview Map</a>'
-        f'<a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium {"bg-blue-600 text-white shadow-sm" if not is_archive else "text-slate-400 hover:text-white transition"}">News Database (1,476)</a>'
-        '<a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (129)</a>'
+        f'<a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium {"bg-blue-600 text-white shadow-sm" if not is_archive else "text-slate-400 hover:text-white transition"}">News Database ({filtered_count:,})</a>'
+        '<a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (131)</a>'
         '<a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk</a>'
         '</nav>'
     )
@@ -3393,8 +3419,8 @@ def main() -> int:
     filtered_db_rows = load_database_rows(input_path.parent.parent / "news.sqlite", only_filtered=True)
     all_db_rows = load_database_rows(input_path.parent.parent / "news.sqlite", only_filtered=False)
 
-    database_path.write_text(generate_database_html(filtered_db_rows, is_archive=False), encoding="utf-8")
-    database_archive_path.write_text(generate_database_html(all_db_rows, is_archive=True), encoding="utf-8")
+    database_path.write_text(generate_database_html(filtered_db_rows, is_archive=False, total_archive_count=len(all_db_rows)), encoding="utf-8")
+    database_archive_path.write_text(generate_database_html(all_db_rows, is_archive=True, total_archive_count=len(all_db_rows)), encoding="utf-8")
     print(f"Saved filtered news database page to {database_path}")
     print(f"Saved complete news database archive page to {database_archive_path}")
 
