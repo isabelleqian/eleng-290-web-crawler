@@ -3102,6 +3102,14 @@ def generate_database_html(rows: list[dict], is_archive: bool = False) -> str:
         if is_archive
         else '<a href="news_database_archive.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900 text-xs text-slate-300 hover:text-white hover:border-slate-500">View Complete Archive (1,605 docs) &rarr;</a>'
     )
+    nav_bar = (
+        '<nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">'
+        '<a href="index.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Overview Map</a>'
+        f'<a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium {"bg-blue-600 text-white shadow-sm" if not is_archive else "text-slate-400 hover:text-white transition"}">News Database (1,476)</a>'
+        '<a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (129)</a>'
+        '<a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk</a>'
+        '</nav>'
+    )
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3120,9 +3128,9 @@ def generate_database_html(rows: list[dict], is_archive: bool = False) -> str:
       <h1 class="text-3xl font-serif font-semibold tracking-tight text-white mt-1">{header_heading}</h1>
       <p class="text-sm text-slate-400 mt-2 max-w-3xl">{header_desc}</p>
     </div>
-    <div class="flex items-center gap-3">
+    <div class="flex flex-wrap items-center gap-3">
       {switch_button}
-      <a href="index.html" class="text-sm text-slate-300 underline underline-offset-2 hover:text-white">Back to the map</a>
+      {nav_bar}
     </div>
   </header>
   <div class="max-w-7xl mx-auto mb-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-900/90 border border-slate-800 rounded-xl p-4">
