@@ -790,7 +790,8 @@ def load_crawled_documents(db_path: Path, only_filtered: bool = True) -> list[di
             SELECT id, origin, title, publisher, publication_date, location, url,
                    archive_dir, governing_level, category, target_location_type,
                    factual_summary, is_project_relevant, relevance_tier, exclusion_reason,
-                   relevance_score, relevance_rationale
+                   relevance_score, relevance_rationale, topic_category,
+                   crosswalk_instrument_id, crosswalk_instrument_name
             FROM crawled_documents
             {where}
             ORDER BY publication_date DESC, title
@@ -822,6 +823,9 @@ def load_crawled_documents(db_path: Path, only_filtered: bool = True) -> list[di
             "exclusion_reason": item["exclusion_reason"] or "",
             "relevance_score": item["relevance_score"] if item["relevance_score"] is not None else 85,
             "relevance_rationale": item["relevance_rationale"] or "",
+            "topic_category": item["topic_category"] or "",
+            "crosswalk_instrument_id": item["crosswalk_instrument_id"] or "",
+            "crosswalk_instrument_name": item["crosswalk_instrument_name"] or "",
         })
     return rows
 
@@ -840,7 +844,8 @@ def load_database_rows(db_path: Path, only_filtered: bool = False) -> list[dict[
                    archive_dir, measure_codes, governing_level, category,
                    target_location_type, factual_summary, in_research_set,
                    is_project_relevant, relevance_tier, exclusion_reason,
-                   relevance_score, relevance_rationale
+                   relevance_score, relevance_rationale, topic_category,
+                   crosswalk_instrument_id, crosswalk_instrument_name
             FROM crawled_documents
             {where}
             ORDER BY publication_date DESC, title
