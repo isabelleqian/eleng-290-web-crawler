@@ -38,9 +38,9 @@
     </div>
     <nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">
       <a href="index.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Overview Map</a>
-      <a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News Database (1,605)</a>
+      <a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News Database (189)</a>
       <a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium bg-blue-600 text-white shadow-sm">Law & Precedents (166)</a>
-      <a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk</a>
+      <a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk (189)</a>
     </nav>
   </header>
 
@@ -157,11 +157,16 @@
               </ul>
             </div>
           </div>
-          <div class="mt-5 pt-3 border-t border-purple-800/40 flex items-center justify-between">
+          <div class="mt-5 pt-3 border-t border-purple-800/40 flex flex-wrap items-center justify-between gap-2">
             <span class="text-[10px] text-purple-300 font-mono">Constitutional: 1st Amend. & Commerce Clause</span>
-            <button onclick="filterByLayer('Layer 1: Direct')" class="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-medium transition shadow-sm">
-              View in Database (10) &rarr;
-            </button>
+            <div class="flex items-center gap-2">
+              <a href="news_database.html?layer=1" class="px-3 py-1.5 rounded-lg bg-purple-900/60 border border-purple-500/60 hover:bg-purple-600 text-purple-200 hover:text-white text-xs font-medium transition shadow-sm inline-flex items-center gap-1">
+                <span>📰</span> View Filtered News (26) &rarr;
+              </a>
+              <button onclick="filterByLayer('Layer 1: Direct')" class="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-medium transition shadow-sm">
+                View in Law Database (10) &rarr;
+              </button>
+            </div>
           </div>
         </div>
 
@@ -188,11 +193,16 @@
               </ul>
             </div>
           </div>
-          <div class="mt-5 pt-3 border-t border-blue-800/40 flex items-center justify-between">
+          <div class="mt-5 pt-3 border-t border-blue-800/40 flex flex-wrap items-center justify-between gap-2">
             <span class="text-[10px] text-blue-300 font-mono">Constitutional: FAAAA Preemption (§ 14501)</span>
-            <button onclick="filterByLayer('Layer 2: Indirect')" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition shadow-sm">
-              View in Database (75) &rarr;
-            </button>
+            <div class="flex items-center gap-2">
+              <a href="news_database.html?layer=2" class="px-3 py-1.5 rounded-lg bg-blue-900/60 border border-blue-500/60 hover:bg-blue-600 text-blue-200 hover:text-white text-xs font-medium transition shadow-sm inline-flex items-center gap-1">
+                <span>📰</span> View Filtered News (Trucks) &rarr;
+              </a>
+              <button onclick="filterByLayer('Layer 2: Indirect')" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition shadow-sm">
+                View in Law Database (75) &rarr;
+              </button>
+            </div>
           </div>
         </div>
 
@@ -221,11 +231,16 @@
               </ul>
             </div>
           </div>
-          <div class="mt-5 pt-3 border-t border-emerald-800/40 flex items-center justify-between">
+          <div class="mt-5 pt-3 border-t border-emerald-800/40 flex flex-wrap items-center justify-between gap-2">
             <span class="text-[10px] text-emerald-300 font-mono">Constitutional: State Preemption & Rumford</span>
-            <button onclick="filterByLayer('Layer 3: Background')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium transition shadow-sm">
-              View in Database (71) &rarr;
-            </button>
+            <div class="flex items-center gap-2">
+              <a href="news_database.html?layer=3" class="px-3 py-1.5 rounded-lg bg-emerald-900/60 border border-emerald-500/60 hover:bg-emerald-600 text-emerald-200 hover:text-white text-xs font-medium transition shadow-sm inline-flex items-center gap-1">
+                <span>📰</span> View Filtered News (Calming/Bans) &rarr;
+              </a>
+              <button onclick="filterByLayer('Layer 3: Background')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium transition shadow-sm">
+                View in Law Database (71) &rarr;
+              </button>
+            </div>
           </div>
         </div>
       </div>
