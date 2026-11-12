@@ -769,19 +769,24 @@ def sync_crawled_documents(db_path: Path, tags_path: Path, analysis_path: Path) 
     return len(rows)
 
 
-def load_crawled_documents(db_path: Path) -> list[dict[str, str]]:
-    """Return dashboard rows for every document in the unified table."""
+def load_crawled_documents(db_path: Path, only_filtered: bool = True) -> list[dict[str, str]]:
+    """Return dashboard rows for documents in the unified table.
+    
+    If only_filtered=True, returns only in-scope research documents matching the project aim.
+    """
     if not db_path.is_file():
         return []
     connection = connect(db_path)
     try:
         ensure_schema(connection)
+        where = "WHERE is_project_relevant = 1" if only_filtered else ""
         found = connection.execute(
-            """
+            f"""
             SELECT id, origin, title, publisher, publication_date, location, url,
                    archive_dir, governing_level, category, target_location_type,
-                   factual_summary
+                   factual_summary, is_project_relevant, relevance_tier, exclusion_reason
             FROM crawled_documents
+            {where}
             ORDER BY publication_date DESC, title
             """
         ).fetchall()
@@ -806,6 +811,9 @@ def load_crawled_documents(db_path: Path) -> list[dict[str, str]]:
             "supporting_passage": "",
             "url": item["url"] or "",
             "archive_dir": item["archive_dir"] or "",
+            "is_project_relevant": item["is_project_relevant"] if item["is_project_relevant"] is not None else 1,
+            "relevance_tier": item["relevance_tier"] or "In-Scope",
+            "exclusion_reason": item["exclusion_reason"] or "",
         })
     return rows
 
@@ -835,6 +843,8 @@ def load_database_rows(db_path: Path, only_filtered: bool = False) -> list[dict[
 
 
 def _document_row(article: dict, coded: dict | None) -> tuple:
+    from news_importer.filter_rules import evaluate_document
+
     source_id = str(article.get("article_id") or "")
     location = (article.get("location") or "").strip()
     publication_date = str(article.get("publication_date") or "")
@@ -842,9 +852,6 @@ def _document_row(article: dict, coded: dict | None) -> tuple:
     governing = ""
     category = ""
     summary = ""
-    is_relevant = 1
-    tier = "In-Scope"
-    reason = None
     if coded:
         coded_location = str(coded.get("target_location") or "").strip()
         if coded_location:
@@ -856,12 +863,15 @@ def _document_row(article: dict, coded: dict | None) -> tuple:
         governing = str(coded.get("governing_level") or "")
         category = str(coded.get("category") or "")
         summary = str(coded.get("factual_summary") or "")
-        if "is_project_relevant" in coded:
-            is_relevant = int(coded["is_project_relevant"])
-        if "relevance_tier" in coded:
-            tier = str(coded["relevance_tier"] or "In-Scope")
-        if "exclusion_reason" in coded:
-            reason = coded["exclusion_reason"]
+
+    eval_target = coded if coded else {
+        "title": article.get("title") or source_id,
+        "publisher": article.get("publisher") or "",
+        "factual_summary": summary,
+        "supporting_passages": [],
+    }
+    is_relevant, tier, reason = evaluate_document(eval_target)
+
     if not location:
         location = "United States"
         location_type = location_type or "Country"

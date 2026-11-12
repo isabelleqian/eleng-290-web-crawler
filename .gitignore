@@ -1,5 +1,5 @@
 # Generated databases and SQLite sidecars
-data/
+/data/
 *.sqlite
 *.sqlite-journal
 *.sqlite-wal
