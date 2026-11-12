@@ -19,9 +19,9 @@
     </div>
     <nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">
       <a href="index.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Overview Map</a>
-      <a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News Database (1,605)</a>
-      <a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents</a>
-      <a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium bg-blue-600 text-white shadow-sm">News ↔ Law Crosswalk</a>
+      <a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News Database (189)</a>
+      <a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (166)</a>
+      <a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium bg-blue-600 text-white shadow-sm">News ↔ Law Crosswalk (189)</a>
     </nav>
   </header>
 
@@ -225,7 +225,14 @@
         else if (ev === "company response") evColor = "bg-purple-900/40 text-purple-300 border border-purple-800/40";
 
         const headlineText = r.headline || r.article_title || "Untitled";
-        const urlLink = r.url ? `<a href="${r.url}" target="_blank" rel="noopener" class="text-white hover:text-blue-300 font-medium underline-offset-2 hover:underline">${headlineText}</a>` : `<span class="text-white font-medium">${headlineText}</span>`;
+        const docLink = r.source_id ? `news_database.html#doc-${r.source_id}` : (r.url || "#");
+        const urlLink = `<a href="${docLink}" target="_blank" rel="noopener" class="text-white hover:text-blue-300 font-medium underline-offset-2 hover:underline">${headlineText}</a>`;
+
+        let layerTarget = "1";
+        if ((r.layer_and_tier || "").includes("Direct")) layerTarget = "1";
+        else if ((r.layer_and_tier || "").includes("Route-linked") || (r.category_code === "A5")) layerTarget = "2";
+        else layerTarget = "3";
+        const tierBadge = `<a href="news_database.html?layer=${layerTarget}" class="px-2 py-0.5 rounded text-[10px] font-semibold border ${tierColor} hover:opacity-80 transition inline-block">${r.layer_and_tier || "Unspecified"} &rarr;</a>`;
 
         tr.innerHTML = `
           <td class="py-3 px-3">
@@ -234,8 +241,9 @@
               <span class="text-[11px] text-slate-400">${r.date || "Undated"}</span>
             </div>
             <div class="text-xs leading-snug">${urlLink}</div>
-            <div class="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+            <div class="text-[11px] text-slate-400 mt-1 flex flex-wrap items-center gap-2">
               <span class="font-medium text-slate-300">${r.source_and_type || r.news_jurisdiction || "News source"}</span>
+              ${r.source_id ? `<a href="news_database.html#doc-${r.source_id}" target="_blank" class="text-[10px] text-blue-400 hover:text-blue-300 underline font-mono">View in Filtered DB &rarr;</a>` : ""}
             </div>
           </td>
           <td class="py-3 px-3 whitespace-nowrap">
@@ -249,7 +257,7 @@
           </td>
           <td class="py-3 px-3 whitespace-nowrap">
             <div class="flex flex-col gap-1 items-start">
-              <span class="px-2 py-0.5 rounded text-[10px] font-semibold border ${tierColor}">${r.layer_and_tier || "Unspecified"}</span>
+              ${tierBadge}
               <div class="flex items-center gap-1">
                 <span class="px-1.5 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300 font-mono font-bold">${r.maturity || "M1"}</span>
                 <span class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${prioColor}">${r.priority ? "Priority " + r.priority : "N/A"}</span>

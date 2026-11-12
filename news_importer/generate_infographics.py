@@ -357,6 +357,67 @@ KEYWORD_AUDIT_DEFINITIONS: dict[str, list[str]] = {
 }
 
 
+def load_crosswalk_layer_map() -> dict[str, int]:
+    """Map source_ids to regulatory governance layers (1=Direct, 2=Indirect Commercial, 3=Background)."""
+    candidates = [
+        Path("Law_Crawler/exports/news_to_law_crosswalk_filtered_189.json"),
+        Path("../Law_Crawler/exports/news_to_law_crosswalk_filtered_189.json"),
+        Path(__file__).resolve().parent.parent.parent / "Law_Crawler" / "exports" / "news_to_law_crosswalk_filtered_189.json",
+    ]
+    mapping: dict[str, int] = {}
+    for p in candidates:
+        if p.exists():
+            try:
+                data = json.loads(p.read_text(encoding="utf-8"))
+                for row in data:
+                    sid = str(row.get("source_id") or "")
+                    tier = str(row.get("applicability_tier") or row.get("layer_and_tier") or "")
+                    cat = str(row.get("category_code") or "")
+                    if "Direct" in tier or "Layer 1" in tier or cat.startswith("E"):
+                        layer = 1
+                    elif cat == "A5":
+                        layer = 2
+                    else:
+                        layer = 3
+                    if sid:
+                        mapping[sid] = layer
+                if mapping:
+                    return mapping
+            except Exception:
+                pass
+    return mapping
+
+
+def classify_document_layer(source_id: str, title: str, category: str, rationale: str, crosswalk_map: dict[str, int]) -> int:
+    if source_id and source_id in crosswalk_map:
+        return crosswalk_map[source_id]
+    s_title = (title + " " + rationale).lower()
+    cat = (category or "").upper()
+    if "ab 2015" in s_title or "safer app" in s_title or "waze" in s_title or "google maps" in s_title or "navigation app" in s_title or cat.startswith("E"):
+        return 1
+    if "truck" in s_title or "freight" in s_title or "bridge strike" in s_title or cat == "A5":
+        return 2
+    return 3
+
+
+def classify_score_tier(score: int) -> str:
+    if score >= 98:
+        return "98-99"
+    if score >= 96:
+        return "96-97"
+    if score >= 94:
+        return "94-95"
+    if score >= 92:
+        return "92-93"
+    if score >= 90:
+        return "90-91"
+    if score >= 87:
+        return "87-89"
+    if score >= 85:
+        return "85-86"
+    return "excluded"
+
+
 def build_infographic_dataset(input_json_path: Path) -> dict:
     """Read every crawled document, falling back to the coded research file."""
     from news_importer.db import load_crawled_documents
@@ -394,6 +455,7 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
 
     corpus_text = []
     database_rows = []
+    crosswalk_layer_map = load_crosswalk_layer_map()
 
     for item in all_raw_data:
         raw_loc = item.get("target_location", "").strip()
@@ -424,6 +486,9 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
             "archive_dir": item.get("archive_dir") or "",
             "is_relevant": is_relevant,
         }
+        score = int(item.get("relevance_score") or (85 if is_relevant == 1 else 10))
+        score_tier = classify_score_tier(score)
+        layer = classify_document_layer(article_obj["source_id"], title, cat, str(item.get("relevance_rationale") or ""), crosswalk_layer_map)
         database_rows.append({
             "title": title,
             "date": pub_date,
@@ -438,8 +503,10 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
             "is_relevant": is_relevant,
             "tier": str(item.get("relevance_tier") or "In-Scope"),
             "exclusion_reason": str(item.get("exclusion_reason") or ""),
-            "relevance_score": int(item.get("relevance_score") or (85 if is_relevant == 1 else 10)),
+            "relevance_score": score,
             "relevance_rationale": str(item.get("relevance_rationale") or ""),
+            "layer": layer,
+            "score_tier": score_tier,
         })
 
         # All dashboard visual elements (Geographic Map, Timeline, Measures, Keywords,
@@ -914,8 +981,8 @@ def generate_html_infographics(data_payload: dict) -> str:
       <nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">
         <a href="index.html" class="px-3 py-1.5 rounded-lg font-medium bg-blue-600 text-white shadow-sm">Overview Map</a>
         <a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News Database ({total_sources:,})</a>
-        <a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (131)</a>
-        <a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk</a>
+        <a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (166)</a>
+        <a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk (189)</a>
       </nav>
       <div class="text-right pl-3 border-l border-slate-800 hidden sm:block">
         <div class="text-xs text-slate-500">Saved documents</div>
@@ -1406,20 +1473,55 @@ def generate_html_infographics(data_payload: dict) -> str:
   </section>
 
   <section id="database-view" class="tab-pane max-w-7xl mx-auto space-y-4 hidden">
-    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-900/90 border border-slate-800 rounded-xl p-4">
-      <div>
+    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3">
+      <!-- Top Row: Title, Corpus Pills, Actions -->
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
         <div class="flex flex-wrap items-center gap-3">
           <h2 class="text-xl font-bold text-white">Document database</h2>
           <div class="inline-flex rounded-lg border border-slate-800 bg-slate-950 p-0.5 text-xs font-medium" id="database-corpus-pills">
-            <button type="button" data-corpus="filtered" class="corpus-pill px-2.5 py-1 rounded bg-blue-600 text-white">Filtered Project Corpus</button>
-            <button type="button" data-corpus="all" class="corpus-pill px-2.5 py-1 rounded text-slate-400 hover:text-white">Complete Archive (1,605)</button>
+            <button type="button" data-corpus="filtered" class="corpus-pill px-2.5 py-1 rounded bg-blue-600 text-white shadow-sm">Filtered Project Corpus (189)</button>
+            <button type="button" data-corpus="all" class="corpus-pill px-2.5 py-1 rounded text-slate-400 hover:text-white">Complete Raw Archive (1,605)</button>
           </div>
         </div>
-        <p id="database-count" class="text-sm text-slate-400 mt-1"></p>
+        <div class="flex items-center gap-2">
+          <button type="button" id="database-reset-filters" class="px-2.5 py-1 rounded-lg text-xs font-medium text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition">Reset Filters</button>
+          <a href="news_database.html" target="_blank" class="px-3 py-1 rounded-lg border border-blue-600 bg-blue-950/60 text-xs text-blue-300 hover:text-white transition inline-flex items-center gap-1">
+            <span>Open Standalone Database Page</span> &nearr;
+          </a>
+        </div>
       </div>
-      <div class="flex flex-wrap items-center gap-3">
-        <!-- Governing Level Filter Pills -->
+      <p id="database-count" class="text-xs text-slate-400"></p>
+
+      <!-- Governance Layer Pills -->
+      <div class="pt-2 border-t border-slate-800/80">
+        <div class="flex flex-wrap items-center gap-1.5 text-xs" id="database-layer-pills">
+          <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1.5">Governance Layer:</span>
+          <button type="button" data-layer="" class="db-layer-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Layers</button>
+          <button type="button" data-layer="1" class="db-layer-pill px-2.5 py-1 rounded font-medium text-purple-300 hover:text-white border border-purple-800/60 hover:bg-purple-950/60 transition">Layer 1: Direct (Apps & Platforms · 26)</button>
+          <button type="button" data-layer="2" class="db-layer-pill px-2.5 py-1 rounded font-medium text-blue-300 hover:text-white border border-blue-800/60 hover:bg-blue-950/60 transition">Layer 2: Indirect (Trucks · 14)</button>
+          <button type="button" data-layer="3" class="db-layer-pill px-2.5 py-1 rounded font-medium text-emerald-300 hover:text-white border border-emerald-800/60 hover:bg-emerald-950/60 transition">Layer 3: Background (Road Laws · 149)</button>
+        </div>
+      </div>
+
+      <!-- Relevance Score Tier Pills -->
+      <div class="pt-2 border-t border-slate-800/80">
+        <div class="flex flex-wrap items-center gap-1.5 text-xs" id="database-score-pills">
+          <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1.5">Relevance Tier:</span>
+          <button type="button" data-score="" class="db-score-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Scores</button>
+          <button type="button" data-score="98-99" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">98–99% Statutory</button>
+          <button type="button" data-score="96-97" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">96–97% Resistance</button>
+          <button type="button" data-score="94-95" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">94–95% Partnerships</button>
+          <button type="button" data-score="92-93" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">92–93% Diverters</button>
+          <button type="button" data-score="90-91" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">90–91% Freight</button>
+          <button type="button" data-score="87-89" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">87–89% Calming</button>
+          <button type="button" data-score="85-86" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">85–86% Studies</button>
+        </div>
+      </div>
+
+      <!-- Governing Level, Place Filter, Search -->
+      <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
         <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs" id="database-gov-pills">
+          <span class="text-[11px] uppercase tracking-wider font-bold text-slate-500 px-1">Governing:</span>
           <button type="button" data-gov="" class="gov-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white">All</button>
           <button type="button" data-gov="City" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">City</button>
           <button type="button" data-gov="State" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">State</button>
@@ -1427,13 +1529,15 @@ def generate_html_infographics(data_payload: dict) -> str:
           <button type="button" data-gov="Company" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">Company</button>
         </div>
 
-        <!-- Place Filter Dropdown -->
-        <select id="database-place-filter" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500 max-w-[210px]">
-          <option value="">All Places</option>
-        </select>
+        <div class="flex flex-wrap items-center gap-3">
+          <!-- Place Filter Dropdown -->
+          <select id="database-place-filter" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500 max-w-[210px]">
+            <option value="">All Places</option>
+          </select>
 
-        <!-- Search Input -->
-        <input id="database-search" type="search" placeholder="Search title, publisher, place..." class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-56" />
+          <!-- Search Input -->
+          <input id="database-search" type="search" placeholder="Search title, publisher, place..." class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-56" />
+        </div>
       </div>
     </div>
     <div class="overflow-auto border border-slate-800 rounded-xl max-h-[75vh]">
@@ -2145,23 +2249,34 @@ def generate_html_infographics(data_payload: dict) -> str:
     function openRecord(sourceId) {{
       switchTab('database-view');
       const anchor = articleAnchor(sourceId);
+      dbSearchQuery = '';
+      dbActiveGov = '';
+      dbActivePlace = '';
+      dbActiveLayer = '';
+      dbActiveScore = '';
       const search = document.getElementById('database-search');
-      if (search && search.value) {{
-        search.value = '';
-        renderDatabase('');
+      if (search) search.value = '';
+      const place = document.getElementById('database-place-filter');
+      if (place) place.value = '';
+      const allRows = DATA.database || [];
+      const item = allRows.find(r => r.source_id === sourceId || articleAnchor(r.source_id) === anchor);
+      if (item && item.is_relevant === 0) {{
+        dbActiveCorpus = 'all';
       }}
+      if (typeof updateDbPillsUI === 'function') updateDbPillsUI();
+      renderDatabase();
       requestAnimationFrame(() => {{
         document.querySelectorAll('#database-body tr.marked').forEach(row => row.classList.remove('marked', 'bg-amber-500/10'));
         const row = document.getElementById(anchor);
         if (!row) return;
         row.classList.add('marked', 'bg-amber-500/10');
-        row.scrollIntoView({{ block: 'center' }});
+        row.scrollIntoView({{ block: 'center', behavior: 'smooth' }});
       }});
     }}
 
     function appendSourceLine(parent, art) {{
       const source = document.createElement('div');
-      source.className = 'text-[11px] text-slate-400';
+      source.className = 'text-[11px] text-slate-400 flex flex-wrap items-center gap-1.5';
       const publisher = art.publisher || art.authority || '';
       if (publisher) source.appendChild(document.createTextNode(publisher));
       if (art.source_id) {{
@@ -2172,6 +2287,13 @@ def generate_html_infographics(data_payload: dict) -> str:
         record.textContent = 'Record';
         record.addEventListener('click', () => openRecord(art.source_id));
         source.appendChild(record);
+
+        const extLink = document.createElement('a');
+        extLink.href = 'news_database.html#' + articleAnchor(art.source_id);
+        extLink.target = '_blank';
+        extLink.className = 'text-slate-400 hover:text-white underline text-[10px] ml-1';
+        extLink.textContent = 'DB ↗';
+        source.appendChild(extLink);
       }}
       parent.appendChild(source);
     }}
@@ -2823,7 +2945,40 @@ def generate_html_infographics(data_payload: dict) -> str:
     let dbActiveCorpus = 'filtered';
     let dbActiveGov = '';
     let dbActivePlace = '';
+    let dbActiveLayer = '';
+    let dbActiveScore = '';
     let dbSearchQuery = '';
+
+    function updateDbPillsUI() {{
+      document.querySelectorAll('#database-corpus-pills .corpus-pill').forEach(p => {{
+        if ((p.dataset.corpus || 'filtered') === dbActiveCorpus) {{
+          p.className = 'corpus-pill px-2.5 py-1 rounded bg-blue-600 text-white shadow-sm';
+        }} else {{
+          p.className = 'corpus-pill px-2.5 py-1 rounded text-slate-400 hover:text-white';
+        }}
+      }});
+      document.querySelectorAll('#database-layer-pills .db-layer-pill').forEach(p => {{
+        if ((p.dataset.layer || '') === dbActiveLayer) {{
+          p.className = 'db-layer-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition';
+        }} else {{
+          p.className = 'db-layer-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition';
+        }}
+      }});
+      document.querySelectorAll('#database-score-pills .db-score-pill').forEach(p => {{
+        if ((p.dataset.score || '') === dbActiveScore) {{
+          p.className = 'db-score-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition';
+        }} else {{
+          p.className = 'db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition';
+        }}
+      }});
+      document.querySelectorAll('#database-gov-pills .gov-pill').forEach(p => {{
+        if ((p.dataset.gov || '') === dbActiveGov) {{
+          p.className = 'gov-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white';
+        }} else {{
+          p.className = 'gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white';
+        }}
+      }});
+    }}
 
     function matchesGov(rowGov, filterGov) {{
       if (!filterGov) return true;
@@ -2847,6 +3002,8 @@ def generate_html_infographics(data_payload: dict) -> str:
       body.replaceChildren();
 
       const shown = corpusRows.filter(row => {{
+        if (dbActiveLayer && String(row.layer) !== String(dbActiveLayer)) return false;
+        if (dbActiveScore && row.score_tier !== dbActiveScore) return false;
         if (dbActiveGov && !matchesGov(row.gov, dbActiveGov)) return false;
         if (dbActivePlace && String(row.location || '').trim() !== dbActivePlace) return false;
         if (needle) {{
@@ -2860,6 +3017,8 @@ def generate_html_infographics(data_payload: dict) -> str:
         const filterParts = [];
         if (dbActiveCorpus === 'filtered') filterParts.push('Filtered In-Scope Corpus');
         else filterParts.push('Complete Archive Corpus');
+        if (dbActiveLayer) filterParts.push('Layer ' + dbActiveLayer);
+        if (dbActiveScore) filterParts.push(dbActiveScore + '%');
         if (dbActiveGov) filterParts.push(dbActiveGov);
         if (dbActivePlace) filterParts.push(dbActivePlace);
         if (needle) filterParts.push('"' + needle + '"');
@@ -2884,6 +3043,23 @@ def generate_html_infographics(data_payload: dict) -> str:
           titleCell.appendChild(link);
         }} else {{
           titleCell.textContent = row.title || 'Untitled';
+        }}
+        if (row.layer) {{
+          const layerBadge = document.createElement('button');
+          layerBadge.type = 'button';
+          const lCol = row.layer === 1 ? 'bg-purple-950/80 text-purple-300 border-purple-800/60' :
+                       row.layer === 2 ? 'bg-blue-950/80 text-blue-300 border-blue-800/60' :
+                       'bg-emerald-950/80 text-emerald-300 border-emerald-800/60';
+          layerBadge.className = 'ml-2 inline-block px-1.5 py-0.5 rounded text-[10px] font-mono border align-middle transition hover:opacity-80 ' + lCol;
+          layerBadge.textContent = 'Layer ' + row.layer;
+          layerBadge.title = 'Filter by Layer ' + row.layer;
+          layerBadge.addEventListener('click', (e) => {{
+            e.stopPropagation();
+            dbActiveLayer = String(row.layer);
+            updateDbPillsUI();
+            renderDatabase();
+          }});
+          titleCell.appendChild(layerBadge);
         }}
         if (row.is_relevant === 0 && row.exclusion_reason) {{
           const exBadge = document.createElement('span');
@@ -2974,8 +3150,45 @@ def generate_html_infographics(data_payload: dict) -> str:
       const placeSelect = document.getElementById('database-place-filter');
       const govPills = document.querySelectorAll('#database-gov-pills .gov-pill');
       const corpusPills = document.querySelectorAll('#database-corpus-pills .corpus-pill');
+      const layerPills = document.querySelectorAll('#database-layer-pills .db-layer-pill');
+      const scorePills = document.querySelectorAll('#database-score-pills .db-score-pill');
+      const resetBtn = document.getElementById('database-reset-filters');
 
       populatePlaceDropdown();
+
+      if (resetBtn) {{
+        resetBtn.addEventListener('click', () => {{
+          dbActiveLayer = '';
+          dbActiveScore = '';
+          dbActiveGov = '';
+          dbActivePlace = '';
+          dbSearchQuery = '';
+          if (search) search.value = '';
+          if (placeSelect) placeSelect.value = '';
+          updateDbPillsUI();
+          renderDatabase();
+        }});
+      }}
+
+      if (layerPills) {{
+        layerPills.forEach(pill => {{
+          pill.addEventListener('click', () => {{
+            dbActiveLayer = pill.dataset.layer || '';
+            updateDbPillsUI();
+            renderDatabase();
+          }});
+        }});
+      }}
+
+      if (scorePills) {{
+        scorePills.forEach(pill => {{
+          pill.addEventListener('click', () => {{
+            dbActiveScore = pill.dataset.score || '';
+            updateDbPillsUI();
+            renderDatabase();
+          }});
+        }});
+      }}
 
       if (placeSelect) {{
         placeSelect.addEventListener('change', () => {{
@@ -2988,13 +3201,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         corpusPills.forEach(pill => {{
           pill.addEventListener('click', () => {{
             dbActiveCorpus = pill.dataset.corpus || 'filtered';
-            corpusPills.forEach(p => {{
-              if ((p.dataset.corpus || 'filtered') === dbActiveCorpus) {{
-                p.className = 'corpus-pill px-2.5 py-1 rounded bg-blue-600 text-white';
-              }} else {{
-                p.className = 'corpus-pill px-2.5 py-1 rounded text-slate-400 hover:text-white';
-              }}
-            }});
+            updateDbPillsUI();
             populatePlaceDropdown();
             renderDatabase();
           }});
@@ -3005,17 +3212,44 @@ def generate_html_infographics(data_payload: dict) -> str:
         govPills.forEach(pill => {{
           pill.addEventListener('click', () => {{
             dbActiveGov = pill.dataset.gov || '';
-            govPills.forEach(p => {{
-              if ((p.dataset.gov || '') === dbActiveGov) {{
-                p.className = 'gov-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white';
-              }} else {{
-                p.className = 'gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white';
-              }}
-            }});
+            updateDbPillsUI();
             renderDatabase();
           }});
         }});
       }}
+
+      if (search) {{
+        search.addEventListener('input', () => {{
+          dbSearchQuery = search.value;
+          renderDatabase();
+        }});
+      }}
+
+      // Parse URL query parameters if navigated directly
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('tab') === 'database' || urlParams.get('tab') === 'database-view' || urlParams.has('layer') || urlParams.has('score') || urlParams.has('tier')) {{
+        if (typeof switchTab === 'function') switchTab('database-view');
+        if (urlParams.has('layer')) {{
+          const l = urlParams.get('layer');
+          if (l === '1' || l.toLowerCase().includes('direct')) dbActiveLayer = '1';
+          else if (l === '2' || l.toLowerCase().includes('indirect') || l.toLowerCase().includes('truck')) dbActiveLayer = '2';
+          else if (l === '3' || l.toLowerCase().includes('background')) dbActiveLayer = '3';
+        }}
+        if (urlParams.has('score') || urlParams.has('tier')) {{
+          const s = (urlParams.get('score') || urlParams.get('tier')).toLowerCase();
+          if (s.includes('98') || s.includes('99')) dbActiveScore = '98-99';
+          else if (s.includes('96') || s.includes('97')) dbActiveScore = '96-97';
+          else if (s.includes('94') || s.includes('95')) dbActiveScore = '94-95';
+          else if (s.includes('92') || s.includes('93')) dbActiveScore = '92-93';
+          else if (s.includes('90') || s.includes('91')) dbActiveScore = '90-91';
+          else if (s.includes('87') || s.includes('88') || s.includes('89')) dbActiveScore = '87-89';
+          else if (s.includes('85') || s.includes('86')) dbActiveScore = '85-86';
+        }}
+        updateDbPillsUI();
+      }}
+
+      renderDatabase();
+    }}
 
       if (search) {{
         search.addEventListener('input', () => {{
@@ -3114,6 +3348,7 @@ def document_anchor(source_id: str) -> str:
 
 def generate_database_html(rows: list[dict], is_archive: bool = False, total_archive_count: int | None = None) -> str:
     """A standalone page for every row in crawled_documents."""
+    crosswalk_layer_map = load_crosswalk_layer_map()
     payload = []
     for row in rows:
         summary = " ".join(str(row.get("factual_summary") or "").split())
@@ -3122,6 +3357,9 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         source_id = str(row.get("id") or "")
         url = str(row.get("url") or "")
         nexis_match = re.search(r"urn:contentItem:[A-Za-z0-9-]+", source_id)
+        score = int(row.get("relevance_score") or (85 if int(row.get("is_project_relevant") if row.get("is_project_relevant") is not None else 1) == 1 else 10))
+        score_tier = classify_score_tier(score)
+        layer = classify_document_layer(source_id, str(row.get("title") or ""), str(row.get("category") or ""), str(row.get("relevance_rationale") or ""), crosswalk_layer_map)
         payload.append({
             "anchor": document_anchor(source_id),
             "id": source_id,
@@ -3140,8 +3378,10 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
             "is_relevant": int(row.get("is_project_relevant") if row.get("is_project_relevant") is not None else 1),
             "tier": str(row.get("relevance_tier") or "In-Scope"),
             "exclusion_reason": str(row.get("exclusion_reason") or ""),
-            "relevance_score": int(row.get("relevance_score") or (85 if int(row.get("is_project_relevant") if row.get("is_project_relevant") is not None else 1) == 1 else 10)),
+            "relevance_score": score,
             "relevance_rationale": str(row.get("relevance_rationale") or ""),
+            "layer": layer,
+            "score_tier": score_tier,
         })
     data = json.dumps(payload, ensure_ascii=False).replace("<", "\\u003c")
     archive_total = total_archive_count or (len(payload) if is_archive else 1605)
@@ -3155,16 +3395,16 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         else "Curated news, government actions, and research articles directly matching the routing app research scope. Excludes off-topic search hits (distracted driving phone bans, police blotters, corporate earnings, routine paving)."
     )
     switch_button = (
-        '<a href="news_database.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-700 bg-blue-950/60 text-xs text-blue-300 hover:text-white">&larr; Back to Filtered Project Database</a>'
+        '<a href="news_database.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-700 bg-blue-950/60 text-xs text-blue-300 hover:text-white">&larr; Back to Filtered Project Database (189 docs)</a>'
         if is_archive
-        else f'<a href="news_database_archive.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900 text-xs text-slate-300 hover:text-white hover:border-slate-500">View Complete Archive ({archive_total:,} docs) &rarr;</a>'
+        else f'<a href="news_database_archive.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900 text-xs text-slate-300 hover:text-white hover:border-slate-500">View Complete Raw Archive ({archive_total:,} docs) &rarr;</a>'
     )
     nav_bar = (
         '<nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">'
         '<a href="index.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Overview Map</a>'
         f'<a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium {"bg-blue-600 text-white shadow-sm" if not is_archive else "text-slate-400 hover:text-white transition"}">News Database ({filtered_count:,})</a>'
-        '<a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (131)</a>'
-        '<a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk</a>'
+        '<a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (166)</a>'
+        '<a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk (189)</a>'
         '</nav>'
     )
     return f"""<!DOCTYPE html>
@@ -3175,7 +3415,7 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
   <title>{page_title}</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
-    tr.marked {{ background: #1e293b; outline: 1px solid #93c5fd; }}
+    tr.marked {{ background: #1e293b; outline: 2px solid #60a5fa; }}
   </style>
 </head>
 <body class="bg-[#141816] text-slate-100 antialiased min-h-screen px-4 py-6 md:px-8 font-sans">
@@ -3190,14 +3430,49 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
       {nav_bar}
     </div>
   </header>
-  <div class="max-w-7xl mx-auto mb-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-900/90 border border-slate-800 rounded-xl p-4">
-    <div>
-      <h2 class="text-lg font-semibold text-white">Filter documents</h2>
-      <p id="count" class="text-xs text-slate-400 mt-0.5"></p>
+  <div class="max-w-7xl mx-auto mb-4 bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3">
+    <!-- Top Row: Heading, Count, and Action Buttons -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div>
+        <h2 class="text-lg font-semibold text-white">Filter documents</h2>
+        <p id="count" class="text-xs text-slate-400 mt-0.5"></p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button type="button" id="reset-filters" class="px-2.5 py-1 rounded-lg text-xs font-medium text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition">Reset All Filters</button>
+        {switch_button}
+      </div>
     </div>
-    <div class="flex flex-wrap items-center gap-3">
-      <!-- Governing Level Filter Pills -->
+
+    <!-- Governance Layer Pills -->
+    <div class="pt-2 border-t border-slate-800/80">
+      <div class="flex flex-wrap items-center gap-1.5 text-xs" id="layer-pills">
+        <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1.5">Governance Layer:</span>
+        <button type="button" data-layer="" class="layer-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Layers</button>
+        <button type="button" data-layer="1" class="layer-pill px-2.5 py-1 rounded font-medium text-purple-300 hover:text-white border border-purple-800/60 hover:bg-purple-950/60 transition">Layer 1: Direct (Apps & Platforms · 26)</button>
+        <button type="button" data-layer="2" class="layer-pill px-2.5 py-1 rounded font-medium text-blue-300 hover:text-white border border-blue-800/60 hover:bg-blue-950/60 transition">Layer 2: Indirect (Trucks · 14)</button>
+        <button type="button" data-layer="3" class="layer-pill px-2.5 py-1 rounded font-medium text-emerald-300 hover:text-white border border-emerald-800/60 hover:bg-emerald-950/60 transition">Layer 3: Background (Road Laws · 149)</button>
+      </div>
+    </div>
+
+    <!-- Relevance Score Tier Pills -->
+    <div class="pt-2 border-t border-slate-800/80">
+      <div class="flex flex-wrap items-center gap-1.5 text-xs" id="score-pills">
+        <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1.5">Relevance Tier:</span>
+        <button type="button" data-score="" class="score-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Scores</button>
+        <button type="button" data-score="98-99" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">98–99% Statutory</button>
+        <button type="button" data-score="96-97" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">96–97% Resistance</button>
+        <button type="button" data-score="94-95" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">94–95% Partnerships</button>
+        <button type="button" data-score="92-93" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">92–93% Diverters</button>
+        <button type="button" data-score="90-91" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">90–91% Freight</button>
+        <button type="button" data-score="87-89" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">87–89% Calming</button>
+        <button type="button" data-score="85-86" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">85–86% Studies</button>
+      </div>
+    </div>
+
+    <!-- Governing Level, Place Filter, Search -->
+    <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs" id="gov-pills">
+        <span class="text-[11px] uppercase tracking-wider font-bold text-slate-500 px-1">Governing:</span>
         <button type="button" data-gov="" class="gov-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white">All</button>
         <button type="button" data-gov="City" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">City</button>
         <button type="button" data-gov="State" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">State</button>
@@ -3205,16 +3480,18 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         <button type="button" data-gov="Company" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">Company</button>
       </div>
 
-      <!-- Place Filter Dropdown -->
-      <select id="place-filter" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500 max-w-[210px]">
-        <option value="">All Places</option>
-      </select>
+      <div class="flex flex-wrap items-center gap-3">
+        <!-- Place Filter Dropdown -->
+        <select id="place-filter" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500 max-w-[210px]">
+          <option value="">All Places</option>
+        </select>
 
-      <!-- Search Input -->
-      <input id="query" type="search" placeholder="Search title, publisher, place..." class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-64" />
+        <!-- Search Input -->
+        <input id="query" type="search" placeholder="Search title, publisher, place..." class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-64" />
+      </div>
     </div>
   </div>
-  <div class="max-w-7xl mx-auto overflow-x-auto border border-slate-800">
+  <div class="max-w-7xl mx-auto overflow-x-auto border border-slate-800 rounded-xl bg-slate-950">
     <table class="w-full text-left text-xs">
       <thead class="bg-slate-950 text-slate-400 uppercase sticky top-0">
         <tr>
@@ -3238,9 +3515,44 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
     const count = document.getElementById('count');
     const placeSelect = document.getElementById('place-filter');
     const govPills = document.querySelectorAll('#gov-pills .gov-pill');
+    const layerPills = document.querySelectorAll('#layer-pills .layer-pill');
+    const scorePills = document.querySelectorAll('#score-pills .score-pill');
+    const resetBtn = document.getElementById('reset-filters');
 
+    let activeLayer = '';
+    let activeScore = '';
     let activeGov = '';
     let activePlace = '';
+
+    function updatePillsUI() {{
+      if (layerPills) {{
+        layerPills.forEach(p => {{
+          if ((p.dataset.layer || '') === activeLayer) {{
+            p.className = 'layer-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition';
+          }} else {{
+            p.className = 'layer-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition';
+          }}
+        }});
+      }}
+      if (scorePills) {{
+        scorePills.forEach(p => {{
+          if ((p.dataset.score || '') === activeScore) {{
+            p.className = 'score-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition';
+          }} else {{
+            p.className = 'score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition';
+          }}
+        }});
+      }}
+      if (govPills) {{
+        govPills.forEach(p => {{
+          if ((p.dataset.gov || '') === activeGov) {{
+            p.className = 'gov-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white';
+          }} else {{
+            p.className = 'gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white';
+          }}
+        }});
+      }}
+    }}
 
     function matchesGov(rowGov, filterGov) {{
       if (!filterGov) return true;
@@ -3264,7 +3576,7 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
       list.forEach(row => {{
         const tr = document.createElement('tr');
         tr.id = row.anchor;
-        tr.className = 'border-t border-slate-800 align-top hover:bg-slate-900/80' + (row.is_relevant === 0 ? ' opacity-80' : '');
+        tr.className = 'border-t border-slate-800 align-top hover:bg-slate-900/80 transition' + (row.is_relevant === 0 ? ' opacity-80' : '');
         const titleCell = document.createElement('td');
         titleCell.className = 'py-3 px-3 max-w-md';
         const link = document.createElement('a');
@@ -3279,6 +3591,22 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
           link.href = '#' + row.anchor;
         }}
         titleCell.appendChild(link);
+        if (row.layer) {{
+          const layerBadge = document.createElement('button');
+          layerBadge.type = 'button';
+          const lCol = row.layer === 1 ? 'bg-purple-950/80 text-purple-300 border-purple-800/60' :
+                       row.layer === 2 ? 'bg-blue-950/80 text-blue-300 border-blue-800/60' :
+                       'bg-emerald-950/80 text-emerald-300 border-emerald-800/60';
+          layerBadge.className = 'ml-2 inline-block px-1.5 py-0.5 rounded text-[10px] font-mono border align-middle transition hover:opacity-80 ' + lCol;
+          layerBadge.textContent = 'Layer ' + row.layer;
+          layerBadge.title = 'Filter by Layer ' + row.layer;
+          layerBadge.addEventListener('click', (e) => {{
+            e.stopPropagation();
+            activeLayer = String(row.layer);
+            applyFilter();
+          }});
+          titleCell.appendChild(layerBadge);
+        }}
         if (row.is_relevant === 0 && row.exclusion_reason) {{
           const exBadge = document.createElement('span');
           exBadge.className = 'ml-2 inline-block px-1.5 py-0.5 rounded text-[10px] font-medium bg-rose-950/80 text-rose-300 border border-rose-800/50 align-middle';
@@ -3341,6 +3669,8 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
       }});
 
       const filterParts = [];
+      if (activeLayer) filterParts.push('Layer ' + activeLayer);
+      if (activeScore) filterParts.push(activeScore + '%');
       if (activeGov) filterParts.push(activeGov);
       if (activePlace) filterParts.push(activePlace);
       const needle = query.value.trim();
@@ -3352,9 +3682,11 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
       }}
     }}
 
-    function applyFilter() {{
+    function applyFilter(triggerHash = true) {{
       const needle = query.value.trim().toLowerCase();
       const list = ROWS.filter(row => {{
+        if (activeLayer && String(row.layer) !== String(activeLayer)) return false;
+        if (activeScore && row.score_tier !== activeScore) return false;
         if (activeGov && !matchesGov(row.governing_level, activeGov)) return false;
         if (activePlace && String(row.location || '').trim() !== activePlace) return false;
         if (needle) {{
@@ -3364,16 +3696,61 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         return true;
       }});
       render(list);
-      revealHash();
+      updatePillsUI();
+      if (triggerHash) revealHash();
     }}
 
     function revealHash() {{
       const id = decodeURIComponent(location.hash || '').replace(/^#/, '');
       if (!id) return;
-      const row = document.getElementById(id);
+      let row = document.getElementById(id);
+      if (!row) {{
+        const item = ROWS.find(r => r.anchor === id || r.id === id);
+        if (item) {{
+          activeLayer = '';
+          activeScore = '';
+          activeGov = '';
+          activePlace = '';
+          if (placeSelect) placeSelect.value = '';
+          query.value = '';
+          applyFilter(false);
+          row = document.getElementById(id);
+        }}
+      }}
       if (!row) return;
+      document.querySelectorAll('#rows tr.marked').forEach(r => r.classList.remove('marked'));
       row.classList.add('marked');
-      row.scrollIntoView({{ block: 'center' }});
+      row.scrollIntoView({{ block: 'center', behavior: 'smooth' }});
+    }}
+
+    function parseUrlParams() {{
+      const p = new URLSearchParams(window.location.search);
+      if (p.has('layer')) {{
+        const val = p.get('layer');
+        if (val === '1' || val.toLowerCase().includes('direct')) activeLayer = '1';
+        else if (val === '2' || val.toLowerCase().includes('indirect') || val.toLowerCase().includes('truck')) activeLayer = '2';
+        else if (val === '3' || val.toLowerCase().includes('background')) activeLayer = '3';
+      }}
+      if (p.has('score') || p.has('tier')) {{
+        const s = (p.get('score') || p.get('tier')).toLowerCase();
+        if (s.includes('98') || s.includes('99') || s.includes('statut') || s.includes('landmark')) activeScore = '98-99';
+        else if (s.includes('96') || s.includes('97') || s.includes('gam') || s.includes('resist')) activeScore = '96-97';
+        else if (s.includes('94') || s.includes('95') || s.includes('partner') || s.includes('signal')) activeScore = '94-95';
+        else if (s.includes('92') || s.includes('93') || s.includes('divert') || s.includes('geom')) activeScore = '92-93';
+        else if (s.includes('90') || s.includes('91') || s.includes('freight') || s.includes('bridge') || s.includes('truck')) activeScore = '90-91';
+        else if (s.includes('87') || s.includes('88') || s.includes('89') || s.includes('calm') || s.includes('eco')) activeScore = '87-89';
+        else if (s.includes('85') || s.includes('86') || s.includes('stud') || s.includes('congest')) activeScore = '85-86';
+      }}
+      if (p.has('gov')) {{
+        activeGov = p.get('gov');
+      }}
+      if (p.has('place')) {{
+        activePlace = p.get('place');
+        if (placeSelect) placeSelect.value = activePlace;
+      }}
+      if (p.has('q')) {{
+        query.value = p.get('q');
+      }}
     }}
 
     // Populate place dropdown
@@ -3403,19 +3780,49 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
       govPills.forEach(pill => {{
         pill.addEventListener('click', () => {{
           activeGov = pill.dataset.gov || '';
-          govPills.forEach(p => {{
-            if ((p.dataset.gov || '') === activeGov) {{
-              p.className = 'gov-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white';
-            }} else {{
-              p.className = 'gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white';
-            }}
-          }});
           applyFilter();
         }});
       }});
     }}
 
-    query.addEventListener('input', applyFilter);
+    // Setup layer pills
+    if (layerPills) {{
+      layerPills.forEach(pill => {{
+        pill.addEventListener('click', () => {{
+          activeLayer = pill.dataset.layer || '';
+          applyFilter();
+        }});
+      }});
+    }}
+
+    // Setup score pills
+    if (scorePills) {{
+      scorePills.forEach(pill => {{
+        pill.addEventListener('click', () => {{
+          activeScore = pill.dataset.score || '';
+          applyFilter();
+        }});
+      }});
+    }}
+
+    // Reset button
+    if (resetBtn) {{
+      resetBtn.addEventListener('click', () => {{
+        activeLayer = '';
+        activeScore = '';
+        activeGov = '';
+        activePlace = '';
+        if (placeSelect) placeSelect.value = '';
+        query.value = '';
+        applyFilter();
+      }});
+    }}
+
+    query.addEventListener('input', () => applyFilter());
+    window.addEventListener('hashchange', revealHash);
+
+    // Boot
+    parseUrlParams();
     applyFilter();
   </script>
 </body>
