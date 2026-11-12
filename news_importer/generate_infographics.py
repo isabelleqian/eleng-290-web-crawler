@@ -3122,7 +3122,7 @@ def generate_database_html(rows: list[dict], is_archive: bool = False) -> str:
     </div>
     <div class="flex items-center gap-3">
       {switch_button}
-      <a href="research_infographics.html" class="text-sm text-slate-300 underline underline-offset-2 hover:text-white">Back to the map</a>
+      <a href="index.html" class="text-sm text-slate-300 underline underline-offset-2 hover:text-white">Back to the map</a>
     </div>
   </header>
   <div class="max-w-7xl mx-auto mb-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-900/90 border border-slate-800 rounded-xl p-4">
