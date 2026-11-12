@@ -54,7 +54,7 @@ This executive research summary classifies United States statutes, administrativ
   * **Texas** — In force: Tex. Transp. Code § 542.202 (Powers of Local Authorities to Regulate or Prohibit Turns at Intersections) [ID: TX-01]
 
 * **A2: Through-traffic restrictions and residential cut-through management**
-  * **Virginia** — In force / Administrative: VDOT Residential Cut-Through Traffic Policy (24 VAC 30-151 / CTB Guidelines) authorizing county RTAP peak-hour turn restrictions and residential permit decals [ID: VA-02]
+  * **Virginia (Town of Vienna)** — In force: Town of Vienna Code § 8-40 / VDOT Cut-Through Policy (Peak-hour residential through-traffic prohibitions to curb navigation app commuter diversion) [ID: VA-02]
   * **Pennsylvania** — In force: 75 Pa.C.S. § 6109(a)(9) (Municipal Authority to Regulate or Prohibit Turning Movements at Intersections to Protect Residential Streets) [ID: PA-02]
 
 * **A4: Resident-only permit access**
