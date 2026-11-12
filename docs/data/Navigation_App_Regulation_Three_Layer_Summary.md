@@ -2,11 +2,11 @@
 **Research As-Of Date:** November 3, 2026  
 **Notice:** Current status, amendments, and codified texts must be confirmed on official government legislative or regulatory websites prior to legal reliance.
 
-This executive research summary classifies United States statutes, administrative regulations, and legislative instruments governing traffic management, routing, and vehicular mobility into the project Three-Layer Governance Framework and Six-Category Codebook. Full records, verbatim text offsets, and character boundaries are cataloged in the accompanying database.
+This executive research summary classifies United States statutes, administrative regulations, and legislative instruments governing traffic management, routing, and vehicular mobility into the project Three-Layer Governance Framework (Layer 1: Direct, Layer 2: Indirect, Layer 3: Background) and Six-Category Codebook. Full records, verbatim text offsets, and character boundaries are cataloged in the accompanying database.
 
 ---
 
-# Layer 1: Laws directly governing navigation apps
+# Layer 1: Direct (Laws directly governing navigation apps)
 
 * **E1 Routing restrictions for designated streets and slow streets**
   * **Enacted:** California AB 2015 (Ch. 207, Stats. 2026). Localities with slow-streets programs may require apps to exclude those streets.
@@ -28,7 +28,7 @@ This executive research summary classifies United States statutes, administrativ
 
 ---
 
-# Layer 2: Laws applicable to apps through commercial vehicle rules
+# Layer 2: Indirect (Laws applicable to apps through commercial vehicle rules)
 
 * **A5 Vehicle-based restrictions: commercial routing standards**
   * **In force:** 23 CFR Part 658 (FED-06). National Network for truck size and weight; reasonable access to services within 1 road-mile.
@@ -43,7 +43,7 @@ This executive research summary classifies United States statutes, administrativ
 
 ---
 
-# Layer 3: Indirectly applicable road and traffic laws
+# Layer 3: Background (Background road and traffic laws)
 
 * **A1 Turn restrictions**
   * **In force:** California local authority to regulate turning movements and prohibit turns at designated intersections (CA-01, CA-02).
