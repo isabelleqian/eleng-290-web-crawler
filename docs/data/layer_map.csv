@@ -113,7 +113,7 @@ FED-04,Layer 2,A5,
 FED-05,Layer 3,D1,
 CA-89,Layer 2,A5,
 VA-01,Layer 2,A5,Layer 3
-VA-02,Layer 2,A5,Layer 3
+VA-02,Layer 3,A2,
 WA-01,Layer 3,B1,
 WA-02,Layer 3,B1,
 CA-90,Layer 2,A5,
