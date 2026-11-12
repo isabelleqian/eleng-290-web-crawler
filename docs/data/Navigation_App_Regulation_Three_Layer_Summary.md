@@ -6,82 +6,108 @@ This executive research summary classifies United States statutes, administrativ
 
 ---
 
-# Layer 1: Laws Directly Governing Navigation Apps
-*Statutory provisions and legislative instruments that explicitly name navigation applications, GPS routing providers, digital mapping services, or algorithm route outputs, or impose affirmative statutory obligations, study charters, or civil liability.*
+# Layer 1: Laws directly governing navigation apps
 
-* **E1: Routing restrictions for designated streets or areas**
-  * **California** — Enacted (signed Sept 22, 2026): Cal. Stats. 2026, Ch. 207 (Assembly Bill 2015, Caltrans Third-Party Navigation Applications Study, adding Sts. & Hy. Code § 155.8) [ID: CA-03]
-  * **New Jersey** — Bill – Pending (referred to Assembly Transportation Committee Jan 9, 2024): NJ A3036 (Smart App Freight Enforcement and Rerouting / SAFER APP Act) [ID: NJ-01]
-    * *Sub-bullet (Withdrawn):* NJ S756 (2024–2025) — Senate companion to A3036 authorizing AG to order navigation systems to reroute traffic from emergency-congested local roads; substituted by A3036 on Dec. 18, 2025 [ID: NJ-05]
+* **E1 Routing restrictions for designated streets and slow streets**
+  * **Enacted:** California AB 2015 (Ch. 207, Stats. 2026). Localities with slow-streets programs may require apps to exclude those streets.
+  * **Failed:** Connecticut HB 5071 (2025). Would bar apps from routing heavy trucks onto local roads; dead at session end.
+  * **Stalled:** Massachusetts HD.4949 (2025–2026). Heavy-vehicle routing; in House Rules since July 2025.
 
-* **E3: Route guidance and routing criteria**
-  * **Connecticut** — Bill – Pending (referred to Joint Committee on Transportation Jan 15, 2025): CT HB 5071 (An Act Prohibiting Commercial Motor Vehicles on Parkways and Requiring GPS Navigation Notifications) [ID: CT-01]
-    * *Sub-bullet (Stalled/Pending):* CT SB 338 (prohibiting passenger-car navigation app routing for heavy motor vehicles on Merritt and Wilbur Cross Parkways)
+* **E2 Official traffic restriction recognition and emergency rerouting**
+  * **Enacted:** New Jersey A3036 (SAFER APP). Attorney General may order turn-by-turn apps to reroute traffic in emergencies; signed January 20, 2026.
 
-* **D1: Information standards and clearance disclosures**
-  * **New York** — Bill – Pending (referred to Senate Transportation Committee): 2023 NY Senate Bill S6197 (Electronic Mapping and GPS Navigation Bridge Clearance Disclosure) [ID: NY-02]
-    * *Sub-bullet (Pending):* NY A4167 (2025 Session) — Commercial GPS mandate for trucks with height/weight/width route warnings [ID: NY-05]
+* **E3 Route guidance and commercial vehicle routing criteria**
+  * **Pending:** New York A4167 and A5717 (2025–2026). Commercial GPS for trucks and buses; in Assembly Transportation since January 2026.
+  * **Pending:** Federal H.R. 6531, Bridges Not Bumpers Act of 2025. Working group and clearinghouse on bridge strikes and GPS routing; introduced December 9, 2025.
 
-* **F1: Government-platform data exchange and official data feeds**
-  * **Federal (United States)** — Bill – Pending (introduced in 119th Congress): H.R. 6531 (Bridges Not Bumpers Act of 2025, mandating GPS navigation provider data-sharing with federal DOT bridge clearance clearinghouse) [ID: FED-05]
+* **E4 Routing information correction and updating (bridge clearance)**
+  * **Pending:** New York S6197 / A3536 (2025–2026). Apps must show bridge legal clearance; in Senate Consumer Protection.
 
----
-
-# Layer 2: Laws Applicable Through Commercial Vehicle & Hazardous Materials Routing
-*Statutory provisions and administrative regulations not specific to consumer digital applications, but legally binding upon routing providers and motor carriers through mandatory commercial vehicle routing, gross vehicle weight caps, National Network access, or hazardous materials routing.*
-
-* **A5: Vehicle- or trip-purpose-based access restrictions (Commercial Truck Routes)**
-  * **Federal (United States)** — In force: 49 CFR § 397.67 / 49 U.S.C. § 5112 (Motor Carrier Responsibilities for Hazardous Materials Routing) [ID: FED-01]
-  * **Federal (United States)** — In force: 23 CFR § 658.19 (National Network Reasonable Access for Commercial Motor Vehicles) [ID: FED-04]
-  * **Federal (United States)** — In force: 23 U.S.C. § 127 (Vehicle Weight Limitations on the Interstate Highway System) [ID: FED-02]
-  * **California** — In force: Cal. Veh. Code § 35701 (Municipal and County Police Power to Restrict Commercial Vehicles >6,000 lbs and Designate Alternate Truck Routes) [ID: CA-01]
-  * **Virginia** — In force: Code of Virginia § 46.2-809 (Commonwealth Transportation Board Regulation of Through-Truck Traffic on Secondary Highways) [ID: VA-01]
-  * **Pennsylvania** — In force: 75 Pa.C.S. § 6109(a)(7) (Specific Municipal Powers: Prohibiting or Restricting Highway Use by Particular Classes of Vehicles) [ID: PA-01]
-  * **New Jersey** — In force: N.J. Stat. Ann. § 39:4-197 (Municipal Traffic Ordinances and Commercial Route Exclusions) [ID: NJ-02]
-  * **New York** — In force: N.Y. Veh. & Traf. Law § 385 (Dimensions and Weights of Vehicles & Local Truck Routes) [ID: NY-01]
-  * **Massachusetts** — In force: Mass. Gen. Laws ch. 85, § 2 (Municipal Regulation of Heavy Commercial Vehicles) [ID: MA-01]
-  * *California County Coverage (Phase 2):* 58 California County Code chapters establishing commercial vehicle routing and weight restrictions (Alameda County Title 10 through Yuba County Title 9).
+* **F3 Routing-impact monitoring and traffic analysis**
+  * **Enacted:** California AB 2015 (see E1). Caltrans study of third-party navigation apps and their effect on state highways and local streets.
 
 ---
 
-# Layer 3: Indirectly Applicable Road and Traffic Laws
-*General statutory and municipal laws governing public road use, intersection turn movements, physical traffic calming, speed management, through-traffic bans, parking, and tolling. Navigation applications are affected parties or passive network followers whose cost-distance routing algorithms respond to these legal constraints.*
+# Layer 2: Laws applicable to apps through commercial vehicle rules
 
-* **A1: Turn restrictions at intersections**
-  * **California** — In force: Cal. Veh. Code § 21101(f) (Delegated Municipal Authority to Prohibit Turning Movements for Traffic Management Plans) [ID: CA-02]
-  * **Florida** — In force: Fla. Stat. § 316.008(1) (Powers of Local Authorities to Prohibit Turning Movements at Intersections) [ID: FL-01]
-  * **Connecticut** — In force: Conn. Gen. Stat. § 14-298 (Office of the State Traffic Administration Jurisdiction over Turning Movements and Highway Use) [ID: CT-02]
-  * **Colorado** — In force: Colo. Rev. Stat. § 42-4-111 (Powers of Local Authorities to Regulate Turning Movements and One-Way Streets) [ID: CO-01]
-  * **Maryland** — In force: Md. Code Ann., Transp. § 25-102 (Local Powers to Regulate Traffic and Prohibit Turning Movements) [ID: MD-01]
-  * **Texas** — In force: Tex. Transp. Code § 542.202 (Powers of Local Authorities to Regulate or Prohibit Turns at Intersections) [ID: TX-01]
+* **A5 Vehicle-based restrictions: commercial routing standards**
+  * **In force:** 23 CFR Part 658 (FED-06). National Network for truck size and weight; reasonable access to services within 1 road-mile.
+  * **In force:** 23 U.S.C. §127 (FED-06 basis). Federal Interstate weight limits and bridge formula.
+  * **In force:** 49 CFR Part 397, Subparts C–D (not in workbook; from framework). Hazardous materials routing; binds carriers and drivers to state routing designations.
 
-* **A2: Through-traffic restrictions and residential cut-through management**
-  * **Virginia (Town of Vienna)** — In force: Town of Vienna Code § 8-40 / VDOT Cut-Through Policy (Peak-hour residential through-traffic prohibitions to curb navigation app commuter diversion) [ID: VA-02]
-  * **Pennsylvania** — In force: 75 Pa.C.S. § 6109(a)(9) (Municipal Authority to Regulate or Prohibit Turning Movements at Intersections to Protect Residential Streets) [ID: PA-02]
+* **A5 Truck size and weight changes**
+  * **Enacted:** Alabama SB 110 (2025). Truck weight exemptions and portable scale procedures; enacted May 6, 2025.
+  * **Failed:** Federal H.R. 3372 (118th Congress). 91,000-pound six-axle pilot; not enacted. A similar pilot was added to a 2026 House highway bill in committee (not yet verified).
 
-* **A4: Resident-only permit access**
-  * **New Jersey (Municipal)** — Struck down: Borough of Leonia Ordinance No. 2017-18 (Rush-hour non-resident permit closure of 60 residential side streets to stop Waze diversion) [ID: NJ-LEONIA-01]
-    * *Judicial Holding:* Rosa v. Borough of Leonia, Docket No. BER-L-1024-18 (N.J. Super. Ct. Law Div. 2018) invalidated non-resident rush-hour closures without formal N.J. DOT Commissioner approval under N.J.S.A. § 39:4-8.
+* *Note:* F1, F2, and F6 (data exchange, government-platform pilots, traveler information) have no workbook entries and are not covered in this layer.
 
-* **C4: Speed management and harmonization**
-  * **Arkansas** — In force: Ark. Act 707 of 2023 / Ark. Code Ann. § 27-52-110 (Automated Speed Enforcement Devices in Highway Work Zones; affects navigation app speed-zone routing) [ID: AR-01]
+---
 
-* **B1: Traffic filters, diverters, and physical closures**
-  * **California State Law** — In force: Cal. Veh. Code § 21101 (Local traffic regulation) and § 21101.6 (Explicit statutory prohibition against gates and selective selective devices barring public access, codifying City of Lafayette) [ID: CA-04]
-  * **California (Municipal)** — In force: S.F. Transportation Code Div. I, § 7.2.70 & Div. II, § 501 (SFMTA Municipal Traffic Calming & Modal Filters) [ID: CA-SF-01]
-  * **California (Municipal)** — In force: Berkeley Municipal Code Chapter 14.56 (Commercial Truck Routes and Neighborhood Weight Limits) [ID: CA-BERK-01]
-  * **Washington (Municipal)** — In force: Seattle Municipal Code § 11.16.120 (Director of Transportation Authority for Neighborhood Traffic Calming and Home Zones) [ID: WA-02]
+# Layer 3: Indirectly applicable road and traffic laws
+
+* **A1 Turn restrictions**
+  * **In force:** California local authority to regulate turning movements and prohibit turns at designated intersections (CA-01, CA-02).
+  * **In force:** California MUTCD 2026, CVC §21400 (CA-08). Standards for turn and other traffic control signs and markings.
+  * **In force:** Berkeley left-turn restrictions between intersections (BK-01).
+
+* **A2 Through-traffic restrictions and street closures**
+  * **In force:** California Vehicle Code §21101 (CA-09). Local closures and traffic rules by ordinance or resolution.
+  * **In force:** California AB 773 (CA-04). Slow streets closures and designations; amends §21101.
+
+* **A4 Permit-based access and exemptions**
+  * **In force:** California Vehicle Code §22507 (CA-03). Residential preferential parking.
+  * **In force:** Berkeley Preferential Parking Program (BK-05). Residential permit districts.
+
+* **A5 Vehicle- and trip-purpose-based restrictions (local)**
+  * **In force:** California Vehicle Code §22507.5 (CA-11). Commercial vehicle parking in residential districts.
+  * **In force:** Berkeley truck route system and streets closed to vehicles over 3 tons (BK-02, BK-03).
+
+* **B1 Traffic filters, diverters, and closures (project review)**
+  * **In force where federal funds or approval apply:** NEPA review (FED-04).
+
+* **B3 Street narrowing and accessibility of pedestrian facilities**
+  * **Partly in force:** PROWAG under ADA Title II (FED-02). DOT standards for transit stops in effect; DOJ adoption pending.
+
+* **C1 Traffic signal control and red-light enforcement**
+  * **In force:** Texas Transportation Code Chapter 707 (TX-01). Prohibits red-light cameras.
+
+* **C4 Automated speed enforcement**
+  * **In force:** Arkansas Act 707 (2023, AR-01). Work zone speed cameras, effective August 1, 2023.
+  * **In force:** Washington RCW 46.63.220 (ESHB 2384, Ch. 307, Laws of 2024; WA-01). School and work zone cameras, effective June 6, 2024.
+  * **Enacted:** Colorado SB 26-152 (2026, CO-02). Speed camera rules; signed June 2, 2026. Adds a 6 mph minimum for fines and notice requirements.
+  * **Approved by voters:** Arizona Proposition 319 (November 3, 2026, AZ-01). Bars new photo enforcement unless contracted by December 31, 2026; official canvass pending.
+
+* **C4 Speed limits and vetoed camera bans**
+  * **In force:** California Vehicle Code §22358 (CA-10). Speed limits set by ordinance after an engineering and traffic survey.
+  * **Vetoed:** Arizona SB 1624 (2026, AZ-02), vetoed June 19, 2026. Arizona SB 1019 (2025, AZ-03), vetoed July 1, 2025.
+
+* **C5 Dynamic lane and roadway allocation**
+  * **In force:** 23 U.S.C. §166 (FED-09). HOV and HOT lane rules; text not yet verified.
+
+* **D2 Road or facility tolling**
+  * **In force:** 23 U.S.C. §129 (FED-07). Tolling on federal-aid highways; text not yet verified.
+
+* **D3 Dynamic, time-, or distance-based pricing**
+  * **In force:** Berkeley BMC Chapter 14.52 (BK-08). Demand-responsive parking meter rates.
+  * **In process:** Oakland OakPark+ demand-responsive rates (OK-07).
+
+* **F4 Integration into transportation and land-use planning**
+  * **In force:** federal metropolitan planning requirements (FED-03).
+  * **In force:** California general plan circulation element and Complete Streets (CA-07).
+  * **In force:** California SB 743, vehicle miles traveled as the CEQA transportation metric (CA-12).
+
+* **F5 Transportation demand management and mode shift**
+  * **In force:** 23 U.S.C. §149, CMAQ program (FED-08).
+  * **In force:** BAAQMD Regulation 13, Rule 1, trip reduction for large employers (RG-01).
+  * **In force:** Berkeley Trip Reduction Information Program, BMC Chapter 14.92 (BK-09).
+
+* **F7 Development and subdivision design requirements**
+  * **In force:** Berkeley TDM requirements for development, BMC Chapter 23.334 (BK-10; pending verification).
+  * **In force:** California Government Code §65089.3, trip reduction ordinances (CA-06; pending verification).
 
 ---
 
 # Notes on Scope, Coverage, and Verification
-1. **Jurisdictional Coverage:**
-   - **Federal Level:** Fully searched and verified (Title 23 U.S.C., Title 49 U.S.C., Title 23 CFR, Title 49 CFR).
-   - **Priority State Jurisdictions (Phase 1):** California, Connecticut, Colorado, Florida, Georgia, Illinois, Maryland, Massachusetts, New Jersey, New York, Pennsylvania, Texas, Virginia, Washington, and District of Columbia.
-   - **California Local Jurisdictions (Phase 2):** 58 California Counties (complete county code coverage) and verified municipal codes (Los Angeles, San Francisco, Berkeley, Fremont, Oakland, San Jose, San Diego, Beverly Hills, Burbank, Palo Alto, Mountain View, Pasadena, Santa Monica).
-   - **Standard States (Remaining 36 States):** State-level legislative tracking conducted; states lacking direct Layer 1 or Layer 2 routing legislation rely on Uniform Vehicle Code delegated powers (cataloged as gap/no_direct_statute).
-2. **Verification Standard:**
-   - Enacted statutes and chaptered laws carry official citations verified against state legislative websites (leginfo.legislature.ca.gov, uscode.house.gov, njleg.state.nj.us, cga.ct.gov, nysenate.gov, palegis.us, law.lis.virginia.gov).
-   - Unenacted bills carry exact status dates and chamber committee assignments.
-3. **Database Consistency:**
-   - Every instrument cited in this Three-Layer Summary corresponds to a unique persistent ID in `accepted_legislation.csv`, `layer_map.csv`, and `detailed_database_19_col.csv`.
+* Two to three representative laws per topic. The full list, with citations, links, and verification status, is in the v3 workbook.
+* Pending items are not yet law. Verify final status on the legislature or official code site before use.
+* Unverified items: Colorado HB26-1071 (interstate cameras), Connecticut HB 5464 (speed camera provision removed in House), Alabama SB 295 (2026), and the 2026 federal highway bill with the 91,000-pound pilot.
