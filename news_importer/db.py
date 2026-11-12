@@ -193,7 +193,9 @@ _SCHEMA = (
         in_research_set INTEGER NOT NULL,
         is_project_relevant INTEGER NOT NULL DEFAULT 1,
         relevance_tier TEXT,
-        exclusion_reason TEXT
+        exclusion_reason TEXT,
+        relevance_score INTEGER DEFAULT 85,
+        relevance_rationale TEXT
     )
     """,
     "CREATE INDEX IF NOT EXISTS idx_crawled_documents_origin ON crawled_documents(origin)",
@@ -237,6 +239,8 @@ def ensure_schema(connection: sqlite3.Connection) -> None:
         ("is_project_relevant", "INTEGER DEFAULT 1"),
         ("relevance_tier", "TEXT DEFAULT 'In-Scope'"),
         ("exclusion_reason", "TEXT DEFAULT NULL"),
+        ("relevance_score", "INTEGER DEFAULT 85"),
+        ("relevance_rationale", "TEXT DEFAULT NULL"),
     ]:
         if name not in crawled_cols:
             connection.execute(f"ALTER TABLE crawled_documents ADD COLUMN {name} {declaration}")
@@ -755,8 +759,9 @@ def sync_crawled_documents(db_path: Path, tags_path: Path, analysis_path: Path) 
                 id, origin, title, publisher, publication_date, location, url,
                 archive_dir, measure_codes, governing_level, category,
                 target_location_type, factual_summary, in_research_set,
-                is_project_relevant, relevance_tier, exclusion_reason
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                is_project_relevant, relevance_tier, exclusion_reason,
+                relevance_score, relevance_rationale
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             rows,
         )
@@ -784,7 +789,8 @@ def load_crawled_documents(db_path: Path, only_filtered: bool = True) -> list[di
             f"""
             SELECT id, origin, title, publisher, publication_date, location, url,
                    archive_dir, governing_level, category, target_location_type,
-                   factual_summary, is_project_relevant, relevance_tier, exclusion_reason
+                   factual_summary, is_project_relevant, relevance_tier, exclusion_reason,
+                   relevance_score, relevance_rationale
             FROM crawled_documents
             {where}
             ORDER BY publication_date DESC, title
@@ -814,6 +820,8 @@ def load_crawled_documents(db_path: Path, only_filtered: bool = True) -> list[di
             "is_project_relevant": item["is_project_relevant"] if item["is_project_relevant"] is not None else 1,
             "relevance_tier": item["relevance_tier"] or "In-Scope",
             "exclusion_reason": item["exclusion_reason"] or "",
+            "relevance_score": item["relevance_score"] if item["relevance_score"] is not None else 85,
+            "relevance_rationale": item["relevance_rationale"] or "",
         })
     return rows
 
@@ -831,7 +839,8 @@ def load_database_rows(db_path: Path, only_filtered: bool = False) -> list[dict[
             SELECT id, origin, title, publisher, publication_date, location, url,
                    archive_dir, measure_codes, governing_level, category,
                    target_location_type, factual_summary, in_research_set,
-                   is_project_relevant, relevance_tier, exclusion_reason
+                   is_project_relevant, relevance_tier, exclusion_reason,
+                   relevance_score, relevance_rationale
             FROM crawled_documents
             {where}
             ORDER BY publication_date DESC, title
@@ -870,7 +879,7 @@ def _document_row(article: dict, coded: dict | None) -> tuple:
         "factual_summary": summary,
         "supporting_passages": [],
     }
-    is_relevant, tier, reason = evaluate_document(eval_target)
+    is_relevant, tier, reason, score, rationale = evaluate_document(eval_target)
 
     if not location:
         location = "United States"
@@ -902,4 +911,6 @@ def _document_row(article: dict, coded: dict | None) -> tuple:
         is_relevant,
         tier,
         reason,
+        score,
+        rationale,
     )

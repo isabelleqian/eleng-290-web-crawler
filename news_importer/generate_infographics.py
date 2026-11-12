@@ -438,6 +438,8 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
             "is_relevant": is_relevant,
             "tier": str(item.get("relevance_tier") or "In-Scope"),
             "exclusion_reason": str(item.get("exclusion_reason") or ""),
+            "relevance_score": int(item.get("relevance_score") or (85 if is_relevant == 1 else 10)),
+            "relevance_rationale": str(item.get("relevance_rationale") or ""),
         })
 
         # All dashboard visual elements (Geographic Map, Timeline, Measures, Keywords,
@@ -1439,6 +1441,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         <thead class="sticky top-0 bg-slate-900 text-slate-400 text-xs uppercase tracking-wide">
           <tr>
             <th class="px-3 py-2 font-medium">Title</th>
+            <th class="px-3 py-2 font-medium min-w-[240px]">Relevance & Score</th>
             <th class="px-3 py-2 font-medium">Date</th>
             <th class="px-3 py-2 font-medium">Publisher</th>
             <th class="px-3 py-2 font-medium">Place</th>
@@ -2847,7 +2850,7 @@ def generate_html_infographics(data_payload: dict) -> str:
         if (dbActiveGov && !matchesGov(row.gov, dbActiveGov)) return false;
         if (dbActivePlace && String(row.location || '').trim() !== dbActivePlace) return false;
         if (needle) {{
-          const haystack = [row.title, row.publisher, row.location, row.gov, row.category, row.date, row.exclusion_reason].join(' ').toLowerCase();
+          const haystack = [row.title, row.publisher, row.location, row.gov, row.category, row.date, row.exclusion_reason, row.relevance_rationale].join(' ').toLowerCase();
           if (!haystack.includes(needle)) return false;
         }}
         return true;
@@ -2888,8 +2891,28 @@ def generate_html_infographics(data_payload: dict) -> str:
           exBadge.textContent = 'Excluded: ' + row.exclusion_reason;
           titleCell.appendChild(exBadge);
         }}
-        const cells = [row.date, row.publisher, row.location, row.gov, row.category];
+
+        const relCell = document.createElement('td');
+        relCell.className = 'px-3 py-2 min-w-[240px]';
+        const score = Number(row.relevance_score != null ? row.relevance_score : (row.is_relevant === 1 ? 85 : 10));
+        const scoreBadge = document.createElement('span');
+        const badgeColor = score >= 95 ? 'bg-emerald-950/90 text-emerald-300 border-emerald-700/60' :
+                           score >= 90 ? 'bg-teal-950/90 text-teal-300 border-teal-700/60' :
+                           score >= 85 ? 'bg-blue-950/90 text-blue-300 border-blue-700/60' :
+                           'bg-slate-800 text-slate-400 border-slate-700';
+        scoreBadge.className = 'inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold border mr-2 mb-1 ' + badgeColor;
+        scoreBadge.textContent = score + '%';
+        relCell.appendChild(scoreBadge);
+
+        const ratText = document.createElement('span');
+        ratText.className = 'text-xs ' + (row.is_relevant === 0 ? 'text-slate-400 italic' : 'text-slate-300');
+        ratText.textContent = row.relevance_rationale || (row.is_relevant === 1 ? 'Relevant to municipal routing algorithm governance.' : ('Excluded: ' + (row.exclusion_reason || 'Off-topic')));
+        relCell.appendChild(ratText);
+
         tr.appendChild(titleCell);
+        tr.appendChild(relCell);
+
+        const cells = [row.date, row.publisher, row.location, row.gov, row.category];
         cells.forEach((value, idx) => {{
           const td = document.createElement('td');
           td.className = 'px-3 py-2 text-slate-300 whitespace-nowrap';
@@ -3117,6 +3140,8 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
             "is_relevant": int(row.get("is_project_relevant") if row.get("is_project_relevant") is not None else 1),
             "tier": str(row.get("relevance_tier") or "In-Scope"),
             "exclusion_reason": str(row.get("exclusion_reason") or ""),
+            "relevance_score": int(row.get("relevance_score") or (85 if int(row.get("is_project_relevant") if row.get("is_project_relevant") is not None else 1) == 1 else 10)),
+            "relevance_rationale": str(row.get("relevance_rationale") or ""),
         })
     data = json.dumps(payload, ensure_ascii=False).replace("<", "\\u003c")
     archive_total = total_archive_count or (len(payload) if is_archive else 1605)
@@ -3194,6 +3219,7 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
       <thead class="bg-slate-950 text-slate-400 uppercase sticky top-0">
         <tr>
           <th class="py-3 px-3">Title</th>
+          <th class="py-3 px-3 min-w-[260px]">Relevance & Score</th>
           <th class="py-3 px-3">Date</th>
           <th class="py-3 px-3">Publisher</th>
           <th class="py-3 px-3">Place</th>
@@ -3290,10 +3316,27 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         badge.textContent = gVal;
         govCell.appendChild(badge);
 
+        const relCell = document.createElement('td');
+        relCell.className = 'py-3 px-3 min-w-[260px]';
+        const score = Number(row.relevance_score != null ? row.relevance_score : (row.is_relevant === 1 ? 85 : 10));
+        const scoreBadge = document.createElement('span');
+        const badgeColor = score >= 95 ? 'bg-emerald-950/90 text-emerald-300 border-emerald-700/60' :
+                           score >= 90 ? 'bg-teal-950/90 text-teal-300 border-teal-700/60' :
+                           score >= 85 ? 'bg-blue-950/90 text-blue-300 border-blue-700/60' :
+                           'bg-slate-800 text-slate-400 border-slate-700';
+        scoreBadge.className = 'inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold border mr-2 mb-1 ' + badgeColor;
+        scoreBadge.textContent = score + '%';
+        relCell.appendChild(scoreBadge);
+
+        const ratText = document.createElement('span');
+        ratText.className = 'text-xs ' + (row.is_relevant === 0 ? 'text-slate-400 italic' : 'text-slate-300');
+        ratText.textContent = row.relevance_rationale || (row.is_relevant === 1 ? 'Relevant to municipal routing algorithm governance.' : ('Excluded: ' + (row.exclusion_reason || 'Off-topic')));
+        relCell.appendChild(ratText);
+
         const file = cell(row.archive_dir);
         file.className = 'py-3 px-3 text-slate-500 font-mono break-all max-w-xs';
         file.title = row.archive_dir || '';
-        tr.append(titleCell, cell(row.date), cell(row.publisher), cell(row.location), govCell, cell(row.category), file);
+        tr.append(titleCell, relCell, cell(row.date), cell(row.publisher), cell(row.location), govCell, cell(row.category), file);
         body.appendChild(tr);
       }});
 
@@ -3315,7 +3358,7 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         if (activeGov && !matchesGov(row.governing_level, activeGov)) return false;
         if (activePlace && String(row.location || '').trim() !== activePlace) return false;
         if (needle) {{
-          const haystack = [row.title, row.publisher, row.location, row.governing_level, row.id, row.nexis_id, row.category, row.archive_dir, row.exclusion_reason].join(' ').toLowerCase();
+          const haystack = [row.title, row.publisher, row.location, row.governing_level, row.id, row.nexis_id, row.category, row.archive_dir, row.exclusion_reason, row.relevance_rationale].join(' ').toLowerCase();
           if (!haystack.includes(needle)) return false;
         }}
         return true;
