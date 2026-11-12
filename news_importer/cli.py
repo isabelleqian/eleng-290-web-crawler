@@ -721,8 +721,8 @@ def command_infographics(args: argparse.Namespace) -> int:
     filtered_db_rows = load_database_rows(input_path.parent.parent / "news.sqlite", only_filtered=True)
     all_db_rows = load_database_rows(input_path.parent.parent / "news.sqlite", only_filtered=False)
 
-    database_path.write_text(generate_database_html(filtered_db_rows, is_archive=False), encoding="utf-8")
-    database_archive_path.write_text(generate_database_html(all_db_rows, is_archive=True), encoding="utf-8")
+    database_path.write_text(generate_database_html(filtered_db_rows, is_archive=False, total_archive_count=len(all_db_rows)), encoding="utf-8")
+    database_archive_path.write_text(generate_database_html(all_db_rows, is_archive=True, total_archive_count=len(all_db_rows)), encoding="utf-8")
     print(f"saved filtered news database page to {database_path}")
     print(f"saved complete news database archive page to {database_archive_path}")
 
