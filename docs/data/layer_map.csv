@@ -1,157 +1,157 @@
 ID,Primary Layer,Primary Category Code,Also Layer,Notes
-CA-AB2015,Layer 1: Direct (App-Targeted),E1,"Layer 3: Indirect (Road Conditions, Pricing & Planning))",ID: CA-AB2015; Layer 1: Direct; human-reviewed and accepted; Secondary category: F3 (Routing-impact monitoring and traffic analysis); AB 2015 adding Sts. & Hy. Code § 155.8.
-CT-HB5071,Layer 1: Direct (App-Targeted),E1,,ID: CT-HB5071; Layer 1: Direct; human-reviewed and accepted; Connecticut HB 5071 (2025); bill died at session end.
-FED-13,Layer 1: Direct (App-Targeted),E3,,ID: FED-13; Layer 1: Direct; human-reviewed and accepted; Federal H.R. 6531 Bridges Not Bumpers Act of 2025.
-MA-HD4949,Layer 1: Direct (App-Targeted),E1,,ID: MA-HD4949; Layer 1: Direct; human-reviewed and accepted; Massachusetts HD.4949 (2025–2026); currently in House Rules.
-NJ-A3036,Layer 1: Direct (App-Targeted),E2,,"ID: NJ-A3036; Layer 1: Direct; human-reviewed and accepted; New Jersey A3036 (SAFER APP Act); enacted January 20, 2026."
-NJ-S756,Layer 1: Direct (App-Targeted),E6,,ID: NJ-S756; Layer 1: Direct; human-reviewed and accepted; Senate companion substituted by A3036.
-NY-A3536,Layer 1: Direct (App-Targeted),E4,,ID: NY-A3536; Layer 1: Direct; human-reviewed and accepted; companion to S6197.
-NY-A4167,Layer 1: Direct (App-Targeted),E3,,ID: NY-A4167; Layer 1: Direct; human-reviewed and accepted; New York A4167 (2025–2026); pending in Assembly Transportation.
-NY-A5717,Layer 1: Direct (App-Targeted),E3,,ID: NY-A5717; Layer 1: Direct; human-reviewed and accepted; New York A5717 (2025–2026); in Assembly Transportation.
-NY-S6197,Layer 1: Direct (App-Targeted),E4,,ID: NY-S6197; Layer 1: Direct; human-reviewed and accepted; New York S6197 / A3536 (2025–2026); in Senate Consumer Protection.
-AL-01,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,ID: AL-01; Layer 2: Indirect; human-reviewed and accepted; Alabama SB 110 (2025) truck weight exemptions and portable scales.
-CTY-01,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-02,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-03,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-04,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-05,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CA-35701,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,ID: CA-35701; Layer 2: Indirect; human-reviewed and accepted; Foundational enabling act for California municipal truck bans.
-CTY-06,Layer 2: Route-Linked (Vehicle & Road Restrictions),B1,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-OK-03,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,ID: OK-03; Layer 2: Indirect; human-reviewed and accepted; from project v3 workbook.
-CTY-07,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-08,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-09,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-10,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-FED-06,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,ID: FED-06; Layer 2: Indirect; human-reviewed and accepted; from project v3 workbook.
-FED-10,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,ID: FED-10; Layer 2: Indirect; human-reviewed and accepted; 49 CFR Part 397 Subparts C–D hazmat routing rules.
-FED-11,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,ID: FED-11; Layer 2: Indirect; human-reviewed and accepted; Federal statutory basis for hazmat routing preemption.
-FED-12,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,ID: FED-12; Layer 2: Indirect; human-reviewed and accepted; Federal H.R. 3372 91k-lb pilot (failed).
-CTY-11,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-12,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-13,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-14,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-15,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-16,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-17,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-18,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-19,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-20,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-21,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-22,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-23,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-MA-01,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,ID: MA-01; Layer 2: Indirect; human-reviewed and accepted; Massachusetts statutory heavy truck exclusion.
-CTY-24,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-25,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-26,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-27,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-28,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-29,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-30,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-NJ-02,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,ID: NJ-02; Layer 2: Indirect; human-reviewed and accepted; New Jersey closed-list municipal traffic enabling statute.
-NY-01,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,ID: NY-01; Layer 2: Indirect; human-reviewed and accepted; New York commercial vehicle dimensions and weight limits.
-CTY-31,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-PA-01,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,ID: PA-01; Layer 2: Indirect; human-reviewed and accepted; Pennsylvania statutory exclusion authority.
-CTY-32,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-33,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-34,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-35,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-36,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-37,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-38,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-39,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-40,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-41,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-42,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-43,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-44,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-45,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-46,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-47,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-48,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-49,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-50,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-51,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-52,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-53,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-54,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-55,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-56,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-VA-02,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,ID: VA-02; Layer 2: Indirect; human-reviewed and accepted; Virginia through-truck restriction model.
-CTY-57,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-CTY-58,Layer 2: Route-Linked (Vehicle & Road Restrictions),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
-AZ-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",C4,,ID: AZ-01; Layer 3: Background; human-reviewed and accepted; Arizona Proposition 319 photo enforcement prohibition.
-AZ-02,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",C4,,"ID: AZ-02; Layer 3: Background; human-reviewed and accepted; Vetoed: Arizona SB 1624 (2026, AZ-02)."
-AZ-03,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",C4,,"ID: AZ-03; Layer 3: Background; human-reviewed and accepted; Vetoed: Arizona SB 1019 (2025, AZ-03)."
-AR-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",C4,,"ID: AR-01; Layer 3: Background; human-reviewed and accepted; Arkansas Act 707 (2023 Reg. Sess.) work zone speed cameras, effective August 1, 2023."
-RG-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",F5,,ID: RG-01; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-CA-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A1,,ID: CA-01; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-CA-02,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A1,,ID: CA-02; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-CA-03,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A4,,ID: CA-03; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-CA-04,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A2,,ID: CA-04; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-CA-05,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",C4,,ID: CA-05; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-CA-06,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",F5,,ID: CA-06; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: F7.
-CA-07,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",F4,,ID: CA-07; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-CA-08,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A1,,"ID: CA-08; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: A2, A3, C2, C4."
-CA-09,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A2,,ID: CA-09; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: B1.
-CA-10,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",C4,,ID: CA-10; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-CA-11,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A5,,ID: CA-11; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-CA-12,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",F4,,ID: CA-12; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: F7.
-CA-13,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A2,,ID: CA-13; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-BK-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A1,,ID: BK-01; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-BK-02,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A5,,ID: BK-02; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-BK-03,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A5,,ID: BK-03; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-BK-04,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A5,,ID: BK-04; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-BK-05,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A4,,ID: BK-05; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-BK-06,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A4,,ID: BK-06; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-BK-07,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A4,,ID: BK-07; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-BK-08,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",D3,,ID: BK-08; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: D6.
-BK-09,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",F5,,ID: BK-09; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-BK-10,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",F7,,ID: BK-10; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-MUNI-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
-MUNI-02,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
-MUNI-03,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
-MUNI-04,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
-MUNI-05,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
-MUNI-06,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
-MUNI-07,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
-MUNI-08,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
-MUNI-09,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
-MUNI-10,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
-OK-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A4,,ID: OK-01; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-OK-02,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A4,,ID: OK-02; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-OK-04,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A5,,ID: OK-04; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-OK-05,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A2,,ID: OK-05; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-OK-06,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",C4,,ID: OK-06; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
-OK-07,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",D3,,ID: OK-07; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: D6.
-MUNI-11,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
-MUNI-12,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
-MUNI-13,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
-MUNI-14,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
-MUNI-15,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
-CO-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A1,,ID: CO-01; Layer 3: Background; human-reviewed and accepted; Colorado local traffic regulation authority.
-CO-02,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",C4,,ID: CO-02; Layer 3: Background; human-reviewed and accepted; Colorado SB 26-152 (2026) speed camera standards.
-CT-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A1,,ID: CT-01; Layer 3: Background; human-reviewed and accepted; Connecticut State Traffic Commission regulatory authority.
-CT-02,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A1,,ID: CT-02; Layer 3: Background; human-reviewed and accepted; Greenwich peak-hour I-95 bypass turn bans.
-DC-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,ID: DC-01; Layer 3: Background; human-reviewed and accepted; DC neighborhood traffic management regulations.
-FED-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A1,,"ID: FED-01; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: A2, A3, C2, C4."
-FED-02,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B3,,"ID: FED-02; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: B4, B5, B6."
-FED-03,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",F4,,ID: FED-03; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: F5.
-FED-04,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,"ID: FED-04; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: B4, B5, C1."
-FED-05,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",F4,,ID: FED-05; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: F5.
-FED-07,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",D2,,ID: FED-07; Layer 3: Background; human-reviewed and accepted; In force: 23 U.S.C. §129 (FED-07).
-FED-08,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",F5,,ID: FED-08; Layer 3: Background; human-reviewed and accepted; Federal CMAQ program (FED-08).
-FED-09,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",C5,,ID: FED-09; Layer 3: Background; human-reviewed and accepted; In force: 23 U.S.C. §166 (FED-09).
-FL-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A1,,ID: FL-01; Layer 3: Background; human-reviewed and accepted; Florida local traffic regulation authority.
-FL-02,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A1,,ID: FL-02; Layer 3: Background; human-reviewed and accepted; Coral Gables peak-hour turn restrictions.
-GA-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A1,,ID: GA-01; Layer 3: Background; human-reviewed and accepted; Georgia local traffic regulation authority.
-IL-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,ID: IL-01; Layer 3: Background; human-reviewed and accepted; Illinois local traffic regulation powers.
-MD-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A1,,ID: MD-01; Layer 3: Background; human-reviewed and accepted; Maryland local traffic regulation powers.
-NJ-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A4,,ID: NJ-01; Layer 3: Background; human-reviewed and accepted; Landmark Leonia peak-hour resident permit ban struck down in court.
-NJ-03,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,ID: NJ-03; Layer 3: Background; human-reviewed and accepted; State preemption statute at issue in Leonia.
-NY-02,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,ID: NY-02; Layer 3: Background; human-reviewed and accepted; New York municipal traffic regulation powers.
-TX-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",C1,,ID: TX-01; Layer 3: Background; human-reviewed and accepted; Texas Chapter 707 red-light camera ban.
-TX-02,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,ID: TX-02; Layer 3: Background; human-reviewed and accepted; Texas local traffic regulation authority.
-VA-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",A2,,ID: VA-01; Layer 3: Background; human-reviewed and accepted; Vienna residential cut-through management.
-WA-01,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",C4,,"ID: WA-01; Layer 3: Background; human-reviewed and accepted; Washington RCW 46.63.220 school and work zone cameras, effective June 6, 2024."
-WA-02,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,ID: WA-02; Layer 3: Background; human-reviewed and accepted; Washington traffic diversion authority.
-WA-03,"Layer 3: Indirect (Road Conditions, Pricing & Planning)",B1,,ID: WA-03; Layer 3: Background; human-reviewed and accepted; Seattle Home Zones physical modal filters.
+CA-AB2015,Layer 1: Direct (App-Targeted Laws),E1,"Layer 3: Indirect (Road, Traffic & Operational Laws)))",ID: CA-AB2015; Layer 1: Direct; human-reviewed and accepted; Secondary category: F3 (Routing-impact monitoring and traffic analysis); AB 2015 adding Sts. & Hy. Code § 155.8.
+CT-HB5071,Layer 1: Direct (App-Targeted Laws),E1,,ID: CT-HB5071; Layer 1: Direct; human-reviewed and accepted; Connecticut HB 5071 (2025); bill died at session end.
+FED-13,Layer 1: Direct (App-Targeted Laws),E3,,ID: FED-13; Layer 1: Direct; human-reviewed and accepted; Federal H.R. 6531 Bridges Not Bumpers Act of 2025.
+MA-HD4949,Layer 1: Direct (App-Targeted Laws),E1,,ID: MA-HD4949; Layer 1: Direct; human-reviewed and accepted; Massachusetts HD.4949 (2025–2026); currently in House Rules.
+NJ-A3036,Layer 1: Direct (App-Targeted Laws),E2,,"ID: NJ-A3036; Layer 1: Direct; human-reviewed and accepted; New Jersey A3036 (SAFER APP Act); enacted January 20, 2026."
+NJ-S756,Layer 1: Direct (App-Targeted Laws),E6,,ID: NJ-S756; Layer 1: Direct; human-reviewed and accepted; Senate companion substituted by A3036.
+NY-A3536,Layer 1: Direct (App-Targeted Laws),E4,,ID: NY-A3536; Layer 1: Direct; human-reviewed and accepted; companion to S6197.
+NY-A4167,Layer 1: Direct (App-Targeted Laws),E3,,ID: NY-A4167; Layer 1: Direct; human-reviewed and accepted; New York A4167 (2025–2026); pending in Assembly Transportation.
+NY-A5717,Layer 1: Direct (App-Targeted Laws),E3,,ID: NY-A5717; Layer 1: Direct; human-reviewed and accepted; New York A5717 (2025–2026); in Assembly Transportation.
+NY-S6197,Layer 1: Direct (App-Targeted Laws),E4,,ID: NY-S6197; Layer 1: Direct; human-reviewed and accepted; New York S6197 / A3536 (2025–2026); in Senate Consumer Protection.
+AL-01,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,ID: AL-01; Layer 2: Indirect; human-reviewed and accepted; Alabama SB 110 (2025) truck weight exemptions and portable scales.
+CTY-01,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-02,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-03,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-04,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-05,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CA-35701,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,ID: CA-35701; Layer 2: Indirect; human-reviewed and accepted; Foundational enabling act for California municipal truck bans.
+CTY-06,Layer 2: Commercial (Commercial Vehicle & Freight Rules),B1,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+OK-03,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,ID: OK-03; Layer 2: Indirect; human-reviewed and accepted; from project v3 workbook.
+CTY-07,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-08,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-09,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-10,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+FED-06,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,ID: FED-06; Layer 2: Indirect; human-reviewed and accepted; from project v3 workbook.
+FED-10,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,ID: FED-10; Layer 2: Indirect; human-reviewed and accepted; 49 CFR Part 397 Subparts C–D hazmat routing rules.
+FED-11,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,ID: FED-11; Layer 2: Indirect; human-reviewed and accepted; Federal statutory basis for hazmat routing preemption.
+FED-12,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,ID: FED-12; Layer 2: Indirect; human-reviewed and accepted; Federal H.R. 3372 91k-lb pilot (failed).
+CTY-11,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-12,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-13,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-14,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-15,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-16,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-17,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-18,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-19,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-20,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-21,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-22,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-23,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+MA-01,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,ID: MA-01; Layer 2: Indirect; human-reviewed and accepted; Massachusetts statutory heavy truck exclusion.
+CTY-24,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-25,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-26,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-27,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-28,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-29,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-30,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+NJ-02,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,ID: NJ-02; Layer 2: Indirect; human-reviewed and accepted; New Jersey closed-list municipal traffic enabling statute.
+NY-01,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,ID: NY-01; Layer 2: Indirect; human-reviewed and accepted; New York commercial vehicle dimensions and weight limits.
+CTY-31,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+PA-01,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,ID: PA-01; Layer 2: Indirect; human-reviewed and accepted; Pennsylvania statutory exclusion authority.
+CTY-32,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-33,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-34,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-35,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-36,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-37,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-38,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-39,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-40,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-41,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-42,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-43,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-44,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-45,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-46,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-47,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-48,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-49,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-50,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-51,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-52,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-53,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-54,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-55,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-56,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+VA-02,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,ID: VA-02; Layer 2: Indirect; human-reviewed and accepted; Virginia through-truck restriction model.
+CTY-57,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+CTY-58,Layer 2: Commercial (Commercial Vehicle & Freight Rules),A5,,"Bulk Template Entry; Layer 2: Indirect; machine-extracted, not human-reviewed; Secondary category: B1"
+AZ-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",C4,,ID: AZ-01; Layer 3: Background; human-reviewed and accepted; Arizona Proposition 319 photo enforcement prohibition.
+AZ-02,"Layer 3: Indirect (Road, Traffic & Operational Laws)",C4,,"ID: AZ-02; Layer 3: Background; human-reviewed and accepted; Vetoed: Arizona SB 1624 (2026, AZ-02)."
+AZ-03,"Layer 3: Indirect (Road, Traffic & Operational Laws)",C4,,"ID: AZ-03; Layer 3: Background; human-reviewed and accepted; Vetoed: Arizona SB 1019 (2025, AZ-03)."
+AR-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",C4,,"ID: AR-01; Layer 3: Background; human-reviewed and accepted; Arkansas Act 707 (2023 Reg. Sess.) work zone speed cameras, effective August 1, 2023."
+RG-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",F5,,ID: RG-01; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+CA-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A1,,ID: CA-01; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+CA-02,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A1,,ID: CA-02; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+CA-03,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A4,,ID: CA-03; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+CA-04,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A2,,ID: CA-04; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+CA-05,"Layer 3: Indirect (Road, Traffic & Operational Laws)",C4,,ID: CA-05; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+CA-06,"Layer 3: Indirect (Road, Traffic & Operational Laws)",F5,,ID: CA-06; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: F7.
+CA-07,"Layer 3: Indirect (Road, Traffic & Operational Laws)",F4,,ID: CA-07; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+CA-08,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A1,,"ID: CA-08; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: A2, A3, C2, C4."
+CA-09,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A2,,ID: CA-09; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: B1.
+CA-10,"Layer 3: Indirect (Road, Traffic & Operational Laws)",C4,,ID: CA-10; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+CA-11,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A5,,ID: CA-11; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+CA-12,"Layer 3: Indirect (Road, Traffic & Operational Laws)",F4,,ID: CA-12; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: F7.
+CA-13,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A2,,ID: CA-13; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+BK-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A1,,ID: BK-01; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+BK-02,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A5,,ID: BK-02; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+BK-03,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A5,,ID: BK-03; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+BK-04,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A5,,ID: BK-04; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+BK-05,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A4,,ID: BK-05; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+BK-06,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A4,,ID: BK-06; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+BK-07,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A4,,ID: BK-07; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+BK-08,"Layer 3: Indirect (Road, Traffic & Operational Laws)",D3,,ID: BK-08; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: D6.
+BK-09,"Layer 3: Indirect (Road, Traffic & Operational Laws)",F5,,ID: BK-09; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+BK-10,"Layer 3: Indirect (Road, Traffic & Operational Laws)",F7,,ID: BK-10; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+MUNI-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
+MUNI-02,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
+MUNI-03,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
+MUNI-04,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
+MUNI-05,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
+MUNI-06,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
+MUNI-07,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
+MUNI-08,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
+MUNI-09,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
+MUNI-10,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
+OK-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A4,,ID: OK-01; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+OK-02,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A4,,ID: OK-02; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+OK-04,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A5,,ID: OK-04; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+OK-05,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A2,,ID: OK-05; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+OK-06,"Layer 3: Indirect (Road, Traffic & Operational Laws)",C4,,ID: OK-06; Layer 3: Background; human-reviewed and accepted; from project v3 workbook.
+OK-07,"Layer 3: Indirect (Road, Traffic & Operational Laws)",D3,,ID: OK-07; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: D6.
+MUNI-11,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
+MUNI-12,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
+MUNI-13,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
+MUNI-14,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
+MUNI-15,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,"Bulk Template Entry; Layer 3: Background; machine-extracted, not human-reviewed"
+CO-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A1,,ID: CO-01; Layer 3: Background; human-reviewed and accepted; Colorado local traffic regulation authority.
+CO-02,"Layer 3: Indirect (Road, Traffic & Operational Laws)",C4,,ID: CO-02; Layer 3: Background; human-reviewed and accepted; Colorado SB 26-152 (2026) speed camera standards.
+CT-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A1,,ID: CT-01; Layer 3: Background; human-reviewed and accepted; Connecticut State Traffic Commission regulatory authority.
+CT-02,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A1,,ID: CT-02; Layer 3: Background; human-reviewed and accepted; Greenwich peak-hour I-95 bypass turn bans.
+DC-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,ID: DC-01; Layer 3: Background; human-reviewed and accepted; DC neighborhood traffic management regulations.
+FED-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A1,,"ID: FED-01; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: A2, A3, C2, C4."
+FED-02,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B3,,"ID: FED-02; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: B4, B5, B6."
+FED-03,"Layer 3: Indirect (Road, Traffic & Operational Laws)",F4,,ID: FED-03; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: F5.
+FED-04,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,"ID: FED-04; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: B4, B5, C1."
+FED-05,"Layer 3: Indirect (Road, Traffic & Operational Laws)",F4,,ID: FED-05; Layer 3: Background; human-reviewed and accepted; from project v3 workbook. Secondary categories: F5.
+FED-07,"Layer 3: Indirect (Road, Traffic & Operational Laws)",D2,,ID: FED-07; Layer 3: Background; human-reviewed and accepted; In force: 23 U.S.C. §129 (FED-07).
+FED-08,"Layer 3: Indirect (Road, Traffic & Operational Laws)",F5,,ID: FED-08; Layer 3: Background; human-reviewed and accepted; Federal CMAQ program (FED-08).
+FED-09,"Layer 3: Indirect (Road, Traffic & Operational Laws)",C5,,ID: FED-09; Layer 3: Background; human-reviewed and accepted; In force: 23 U.S.C. §166 (FED-09).
+FL-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A1,,ID: FL-01; Layer 3: Background; human-reviewed and accepted; Florida local traffic regulation authority.
+FL-02,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A1,,ID: FL-02; Layer 3: Background; human-reviewed and accepted; Coral Gables peak-hour turn restrictions.
+GA-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A1,,ID: GA-01; Layer 3: Background; human-reviewed and accepted; Georgia local traffic regulation authority.
+IL-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,ID: IL-01; Layer 3: Background; human-reviewed and accepted; Illinois local traffic regulation powers.
+MD-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A1,,ID: MD-01; Layer 3: Background; human-reviewed and accepted; Maryland local traffic regulation powers.
+NJ-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A4,,ID: NJ-01; Layer 3: Background; human-reviewed and accepted; Landmark Leonia peak-hour resident permit ban struck down in court.
+NJ-03,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,ID: NJ-03; Layer 3: Background; human-reviewed and accepted; State preemption statute at issue in Leonia.
+NY-02,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,ID: NY-02; Layer 3: Background; human-reviewed and accepted; New York municipal traffic regulation powers.
+TX-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",C1,,ID: TX-01; Layer 3: Background; human-reviewed and accepted; Texas Chapter 707 red-light camera ban.
+TX-02,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,ID: TX-02; Layer 3: Background; human-reviewed and accepted; Texas local traffic regulation authority.
+VA-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",A2,,ID: VA-01; Layer 3: Background; human-reviewed and accepted; Vienna residential cut-through management.
+WA-01,"Layer 3: Indirect (Road, Traffic & Operational Laws)",C4,,"ID: WA-01; Layer 3: Background; human-reviewed and accepted; Washington RCW 46.63.220 school and work zone cameras, effective June 6, 2024."
+WA-02,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,ID: WA-02; Layer 3: Background; human-reviewed and accepted; Washington traffic diversion authority.
+WA-03,"Layer 3: Indirect (Road, Traffic & Operational Laws)",B1,,ID: WA-03; Layer 3: Background; human-reviewed and accepted; Seattle Home Zones physical modal filters.
