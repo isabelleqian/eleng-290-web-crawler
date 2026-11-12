@@ -110,7 +110,7 @@ FED-01,Layer 2,A5,
 FED-02,Layer 2,A5,
 FED-03,Layer 2,A5,
 FED-04,Layer 2,A5,
-FED-05,Layer 3,D1,
+FED-05,Layer 1,F1,Layer 2
 CA-89,Layer 2,A5,
 VA-01,Layer 2,A5,Layer 3
 VA-02,Layer 3,A2,
@@ -120,3 +120,6 @@ CA-90,Layer 2,A5,
 CA-91,Layer 2,A5,
 NJ-04,Layer 1,E1,
 CT-03,Layer 1,E3,
+NJ-05,Layer 1,E6,Layer 3
+AR-01,Layer 3,C4,
+NY-05,Layer 2,E5,

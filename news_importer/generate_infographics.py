@@ -908,12 +908,18 @@ def generate_html_infographics(data_payload: dict) -> str:
       <h1 class="text-3xl font-serif font-semibold tracking-tight text-white mt-1">Routing app measures</h1>
       <p class="text-sm text-slate-400 mt-2 max-w-2xl">Saved news and archive pages about navigation apps, labeled with the codebook on sheet 1012_codebook. A document can match more than one measure. A document that contains none of the phrases stays unlabeled.</p>
     </div>
-    <div class="flex items-center gap-4">
-      <div class="text-right">
+    <div class="flex flex-wrap items-center gap-3">
+      <nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">
+        <a href="index.html" class="px-3 py-1.5 rounded-lg font-medium bg-blue-600 text-white shadow-sm">Overview Map</a>
+        <a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News Database ({total_sources:,})</a>
+        <a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (131)</a>
+        <a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk</a>
+      </nav>
+      <div class="text-right pl-3 border-l border-slate-800 hidden sm:block">
         <div class="text-xs text-slate-500">Saved documents</div>
         <div id="stat-total-header" class="text-lg font-semibold text-white">{total_sources}</div>
       </div>
-      <label class="cursor-pointer text-xs text-slate-400 underline underline-offset-2 hover:text-white">
+      <label class="cursor-pointer text-xs text-slate-400 underline underline-offset-2 hover:text-white hidden sm:block">
         Load file
         <input type="file" id="json-file-input" accept=".json" class="hidden" />
       </label>
