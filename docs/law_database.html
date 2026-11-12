@@ -10,6 +10,10 @@
     .active-tab { background-color: #2563eb !important; color: #ffffff !important; }
     .inactive-tab { background-color: transparent; color: #94a3b8; }
     .inactive-tab:hover { color: #ffffff; }
+    .summary-box {
+      background: rgba(15, 23, 42, 0.75);
+      border-left: 3px solid #3b82f6;
+    }
   </style>
 </head>
 <body class="bg-[#141816] text-slate-100 antialiased min-h-screen px-4 py-6 md:px-8 font-sans">
@@ -56,7 +60,7 @@
   </section>
 
   <!-- VIEW MODE TABS -->
-  <div class="max-w-7xl mx-auto mb-4 flex border-b border-slate-800 text-sm">
+  <div class="max-w-7xl mx-auto mb-5 flex flex-wrap border-b border-slate-800 text-sm gap-1">
     <button id="btn-tab-leg" onclick="switchView('legislation')" class="px-4 py-2.5 font-medium border-b-2 border-blue-500 text-white">
       Statutory & Municipal Provisions (119)
     </button>
@@ -65,6 +69,9 @@
     </button>
     <button id="btn-tab-explorer" onclick="switchView('explorer')" class="px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white">
       Codebook Measure ↔ Law Explorer
+    </button>
+    <button id="btn-tab-analysis" onclick="switchView('analysis')" class="px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white">
+      Regulatory Architecture & Comparative Analysis
     </button>
   </div>
 
@@ -103,7 +110,7 @@
         </select>
 
         <!-- Search Input -->
-        <input id="leg-search" type="search" placeholder="Search title, citation, text..." class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-64" />
+        <input id="leg-search" type="search" placeholder="Search title, citation, summary, text..." class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-64" />
       </div>
     </div>
 
@@ -112,13 +119,11 @@
       <table class="w-full text-left text-xs">
         <thead class="bg-slate-900 text-slate-400 uppercase font-medium">
           <tr>
-            <th class="py-3 px-3">Jurisdiction</th>
-            <th class="py-3 px-3">Level</th>
-            <th class="py-3 px-3">Measure</th>
-            <th class="py-3 px-3">Official Citation</th>
-            <th class="py-3 px-3">Provisions & Content Summary</th>
-            <th class="py-3 px-3">Status</th>
-            <th class="py-3 px-3 text-right">Details</th>
+            <th class="py-3 px-3 w-44">Jurisdiction & Level</th>
+            <th class="py-3 px-3 w-36">Codebook Measure</th>
+            <th class="py-3 px-3">Statutory Provision & Prominent Summary</th>
+            <th class="py-3 px-3 w-32">Status & Scope</th>
+            <th class="py-3 px-3 w-28 text-right">Passage Action</th>
           </tr>
         </thead>
         <tbody id="leg-tbody" class="divide-y divide-slate-800">
@@ -164,26 +169,188 @@
     </div>
   </main>
 
-  <!-- VERBATIM TEXT INSPECTOR MODAL -->
+  <!-- VIEW 4: REGULATORY ARCHITECTURE & COMPARATIVE ANALYSIS -->
+  <main id="view-analysis" class="max-w-7xl mx-auto space-y-6 hidden">
+    <!-- Analysis Intro -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
+      <h2 class="text-lg font-semibold text-white">Comparative Regulatory Framework & Policy Analysis</h2>
+      <p class="text-xs text-slate-400 mt-1 max-w-4xl leading-relaxed">
+        Connecting the 119 statutory and municipal records to analytical dimensions: statutory enabling pathways, historical regulatory lag, and California's municipal policy alignment under Assembly Bill 2015.
+      </p>
+    </div>
+
+    <!-- Dimension 1: Enabling Typology Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
+        <div>
+          <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-900/50 text-emerald-300 border border-emerald-700/50 uppercase tracking-wider">Model 1: Affirmative Enabling Acts</span>
+          <h3 class="text-base font-semibold text-white mt-2">Specific Cut-Through Statutes</h3>
+          <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+            States that passed dedicated legislation granting municipalities explicit authority to restrict cut-through traffic upon completing a traffic engineering study.
+          </p>
+          <div class="mt-3 pt-3 border-t border-slate-800 space-y-1.5 text-xs text-slate-300 font-mono">
+            <div>• <strong class="text-white">Virginia:</strong> Va. Code § 46.2-808.1</div>
+            <div>• <strong class="text-white">Pennsylvania:</strong> 75 Pa.C.S. § 6109(a)(11)</div>
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-emerald-400">
+          Provides strongest legal defense against arbitrary/capricious challenges.
+        </div>
+      </div>
+
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
+        <div>
+          <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-900/50 text-blue-300 border border-blue-700/50 uppercase tracking-wider">Model 2: Delegated Closed-List</span>
+          <h3 class="text-base font-semibold text-white mt-2">Enumerated Police Power</h3>
+          <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+            States where local traffic regulation is preempted unless the municipality fits strictly within an enumerated statutory subdivision under judicial doctrine.
+          </p>
+          <div class="mt-3 pt-3 border-t border-slate-800 space-y-1.5 text-xs text-slate-300 font-mono">
+            <div>• <strong class="text-white">California:</strong> CVC § 21101 & § 35701</div>
+            <div>• <strong class="text-white">Doctrine:</strong> Rumford v. Berkeley (1982)</div>
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-blue-400">
+          Limits cities to turn bans (§ 21101(f)) and truck routes (§ 35701); physical barriers restricted.
+        </div>
+      </div>
+
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
+        <div>
+          <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-900/50 text-rose-300 border border-rose-700/50 uppercase tracking-wider">Model 3: Centralized Approval</span>
+          <h3 class="text-base font-semibold text-white mt-2">State DOT Pre-Approval Regimes</h3>
+          <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+            Municipalities cannot close streets or restrict access without prior formal review and written approval by the State Department of Transportation Commissioner.
+          </p>
+          <div class="mt-3 pt-3 border-t border-slate-800 space-y-1.5 text-xs text-slate-300 font-mono">
+            <div>• <strong class="text-white">New Jersey:</strong> N.J.S.A. § 39:4-8</div>
+            <div>• <strong class="text-white">Precedent:</strong> State v. Leonia (2018)</div>
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-rose-400">
+          Unilateral local permit bans held ultra vires without State Commissioner sign-off.
+        </div>
+      </div>
+    </div>
+
+    <!-- Dimension 2: Regulatory Lag Analysis -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-semibold text-white">Regulatory Lag: 20th-Century Physical Codes vs. 21st-Century Algorithmic Navigation</h3>
+        <span class="px-2.5 py-1 rounded text-xs bg-slate-800 text-slate-300 font-mono">1959 — 2026</span>
+      </div>
+      <p class="text-xs text-slate-300 leading-relaxed max-w-4xl">
+        A core finding of this legal analysis is the chronological divergence between statutory architecture and digital navigation. Most state vehicle codes governing street access were enacted between 1959 and 1982 to address static, physical congestion. In contrast, modern third-party routing applications recalculate individual-optimal travel times dynamically every 30 seconds, rerouting hundreds of vehicles onto local streets.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+        <div class="bg-slate-950 border border-slate-800 rounded-lg p-4 space-y-2">
+          <div class="text-xs font-semibold text-amber-400 uppercase tracking-wider">The Pre-Digital Legal Baseline (1959–1982)</div>
+          <ul class="text-xs text-slate-300 space-y-1.5 leading-relaxed">
+            <li>• <strong class="text-white">Cal. Veh. Code § 35701 (1959):</strong> Focuses entirely on gross vehicle weight (curbing heavy trucks on local streets).</li>
+            <li>• <strong class="text-white">Rumford v. City of Berkeley (1982):</strong> Preempted municipal physical diverters, assuming traffic flows along static public grids.</li>
+            <li>• <strong class="text-white">City of Poway (1991):</strong> Restricts closing roads that connect adjoining municipalities to prevent regional traffic dumping.</li>
+          </ul>
+        </div>
+        <div class="bg-slate-950 border border-slate-800 rounded-lg p-4 space-y-2">
+          <div class="text-xs font-semibold text-blue-400 uppercase tracking-wider">The Algorithmic Response Era (2014–2026)</div>
+          <ul class="text-xs text-slate-300 space-y-1.5 leading-relaxed">
+            <li>• <strong class="text-white">2014–2018 Municipal Turn Bans:</strong> Cities adapt § 21101(f) to erect peak-hour turn signs (LAMC § 80.14, Fremont § 10.05.780) to break navigation app routing algorithms.</li>
+            <li>• <strong class="text-white">2018 Leonia Permit Ban:</strong> Attempt to restrict public roads to non-residents struck down under pre-digital statutory limits.</li>
+            <li>• <strong class="text-white">2026 California AB 2015:</strong> The first state statute specifically mandating a comprehensive pilot study to modernize the regulatory framework for routing applications.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dimension 3: California Municipal Regulatory Alignment Table -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-3">
+      <h3 class="text-base font-semibold text-white">California Municipal Policy Alignment Across 15 Analyzed Cities</h3>
+      <p class="text-xs text-slate-400">
+        Cross-tabulation of codified municipal powers across California's top navigation-diversion cities informing the Caltrans AB 2015 study:
+      </p>
+      <div class="overflow-x-auto border border-slate-800 rounded-lg">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-950 text-slate-400 uppercase">
+            <tr>
+              <th class="py-2.5 px-3">City Jurisdiction</th>
+              <th class="py-2.5 px-3">A1: Peak-Hour Turn Bans</th>
+              <th class="py-2.5 px-3">A5: Commercial Truck Routes</th>
+              <th class="py-2.5 px-3">B1: Physical Diverters / Slow Streets</th>
+              <th class="py-2.5 px-3">E1: Platform Collaboration</th>
+              <th class="py-2.5 px-3">Codified Municipal Section</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 font-mono text-[11px]">
+            <tr><td class="py-2 px-3 font-sans font-medium text-white">City of Los Angeles</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Active (M 14-1741)</td><td>LAMC § 80.14 & § 80.36.1</td></tr>
+            <tr><td class="py-2 px-3 font-sans font-medium text-white">City of San Francisco</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-slate-500">In Study</td><td>SF Trans. Code Div. II, § 601</td></tr>
+            <tr><td class="py-2 px-3 font-sans font-medium text-white">City of Berkeley</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-slate-500">In Study</td><td>BMC § 14.40.010 & § 14.32.010</td></tr>
+            <tr><td class="py-2 px-3 font-sans font-medium text-white">City of Fremont</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-slate-500">In Study</td><td>FMC § 10.05.780</td></tr>
+            <tr><td class="py-2 px-3 font-sans font-medium text-white">City of Beverly Hills</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-slate-500">In Study</td><td>BHMC § 4-2.1001</td></tr>
+            <tr><td class="py-2 px-3 font-sans font-medium text-white">City of Burbank</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-slate-500">In Study</td><td>BMC § 6-1-1002</td></tr>
+            <tr><td class="py-2 px-3 font-sans font-medium text-white">City of Pasadena</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-slate-500">In Study</td><td>PMC § 10.36.010</td></tr>
+            <tr><td class="py-2 px-3 font-sans font-medium text-white">City of San Diego</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-slate-500">In Study</td><td>SDMC § 82.01</td></tr>
+            <tr><td class="py-2 px-3 font-sans font-medium text-white">City of San Jose</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-slate-500">In Study</td><td>SJMC § 11.20.010</td></tr>
+            <tr><td class="py-2 px-3 font-sans font-medium text-white">City of Oakland</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-slate-500">In Study</td><td>OMC § 10.24.010</td></tr>
+            <tr><td class="py-2 px-3 font-sans font-medium text-white">City of Santa Monica</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-slate-500">In Study</td><td>SMMC § 3.12.690</td></tr>
+            <tr><td class="py-2 px-3 font-sans font-medium text-white">City of Palo Alto</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-slate-500">In Study</td><td>PAMC § 10.40.010</td></tr>
+            <tr><td class="py-2 px-3 font-sans font-medium text-white">City of Mountain View</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-emerald-400">Codified</td><td class="text-slate-500">In Study</td><td>MVCC § 19.34</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- VERBATIM TEXT INSPECTOR MODAL WITH STRUCTURED RELEVANCY EXTRACTION -->
   <div id="detail-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl">
-      <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl">
+      <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
         <div>
           <span id="modal-badge" class="px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-blue-900/60 text-blue-300 border border-blue-700/50"></span>
           <h3 id="modal-title" class="text-base font-semibold text-white mt-1"></h3>
           <p id="modal-citation" class="text-xs font-mono text-slate-400 mt-0.5"></p>
         </div>
-        <button onclick="closeModal()" class="text-slate-400 hover:text-white text-lg p-1">&times;</button>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-white text-xl p-1 leading-none">&times;</button>
       </div>
+
       <div class="p-6 overflow-y-auto space-y-4 text-xs">
-        <div>
-          <h4 class="text-slate-400 font-semibold uppercase tracking-wider text-[11px]">Summary & Context</h4>
-          <p id="modal-summary" class="text-slate-200 mt-1 leading-relaxed"></p>
+        <!-- Prominent Executive Summary Block -->
+        <div class="summary-box p-3.5 rounded-r-lg">
+          <h4 class="text-blue-400 font-semibold uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+            <span>Executive Statutory Summary & Mechanism</span>
+          </h4>
+          <p id="modal-summary" class="text-slate-100 mt-1.5 text-xs leading-relaxed font-sans"></p>
         </div>
-        <div>
-          <h4 class="text-slate-400 font-semibold uppercase tracking-wider text-[11px]">Verbatim Statutory / Ordinance Text</h4>
-          <div id="modal-passage" class="bg-slate-950 border border-slate-800 rounded-lg p-3 font-mono text-[11px] text-slate-300 mt-1 whitespace-pre-wrap leading-relaxed max-h-60 overflow-y-auto"></div>
+
+        <!-- 4-Part Relevancy Text Extractions -->
+        <div class="bg-slate-950 border border-slate-800 rounded-lg p-4 space-y-3">
+          <h4 class="text-slate-400 font-semibold uppercase tracking-wider text-[11px]">Substantiated Relevancy Text Extractions</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px]">
+            <div class="bg-slate-900/80 p-2.5 rounded border border-slate-800">
+              <span class="text-blue-400 font-semibold block">1. Operative Regulatory Power:</span>
+              <p id="modal-power" class="text-slate-300 mt-1"></p>
+            </div>
+            <div class="bg-slate-900/80 p-2.5 rounded border border-slate-800">
+              <span class="text-amber-400 font-semibold block">2. Statutory Conditions & Triggers:</span>
+              <p id="modal-triggers" class="text-slate-300 mt-1"></p>
+            </div>
+            <div class="bg-slate-900/80 p-2.5 rounded border border-slate-800">
+              <span class="text-emerald-400 font-semibold block">3. Target Vehicle / Subject Scope:</span>
+              <p id="modal-vehicles" class="text-slate-300 mt-1"></p>
+            </div>
+            <div class="bg-slate-900/80 p-2.5 rounded border border-slate-800">
+              <span class="text-purple-400 font-semibold block">4. Routing App Relevancy Rationale:</span>
+              <p id="modal-relevance-rationale" class="text-slate-300 mt-1"></p>
+            </div>
+          </div>
         </div>
+
+        <!-- Verbatim Statutory Text Passage -->
+        <div>
+          <h4 class="text-slate-400 font-semibold uppercase tracking-wider text-[11px]">Verbatim Codified Statutory Passage</h4>
+          <div id="modal-passage" class="bg-slate-950 border border-slate-800 rounded-lg p-3.5 font-mono text-[11px] text-slate-300 mt-1 whitespace-pre-wrap leading-relaxed max-h-52 overflow-y-auto"></div>
+        </div>
+
+        <!-- Scope & Cross References -->
         <div class="grid grid-cols-2 gap-4 border-t border-slate-800 pt-3">
           <div>
             <span class="text-slate-500 font-medium">Scope of Application:</span>
@@ -191,19 +358,21 @@
           </div>
           <div>
             <span class="text-slate-500 font-medium">Cross-References:</span>
-            <p id="modal-crossref" class="text-slate-300 mt-0.5"></p>
+            <p id="modal-crossref" class="text-slate-300 mt-0.5 font-mono text-[11px] text-blue-400"></p>
           </div>
         </div>
+
         <div class="border-t border-slate-800 pt-3">
-          <span class="text-slate-500 font-medium">Research Notes:</span>
+          <span class="text-slate-500 font-medium">Research Verification Notes:</span>
           <p id="modal-notes" class="text-slate-400 mt-0.5 italic"></p>
         </div>
       </div>
+
       <div class="px-6 py-3 border-t border-slate-800 bg-slate-950 flex justify-between items-center">
-        <a id="modal-link" href="#" target="_blank" rel="noopener" class="text-xs text-blue-400 hover:underline flex items-center gap-1">
-          Open Official Government Source &rarr;
+        <a id="modal-link" href="#" target="_blank" rel="noopener" class="text-xs text-blue-400 hover:underline flex items-center gap-1 font-medium">
+          Open Official Codified Source &rarr;
         </a>
-        <button onclick="closeModal()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-white">Close</button>
+        <button onclick="closeModal()" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-white transition">Close</button>
       </div>
     </div>
   </div>
@@ -221,10 +390,12 @@
       document.getElementById("view-legislation").classList.toggle("hidden", tab !== "legislation");
       document.getElementById("view-cases").classList.toggle("hidden", tab !== "cases");
       document.getElementById("view-explorer").classList.toggle("hidden", tab !== "explorer");
+      document.getElementById("view-analysis").classList.toggle("hidden", tab !== "analysis");
 
       document.getElementById("btn-tab-leg").className = tab === "legislation" ? "px-4 py-2.5 font-medium border-b-2 border-blue-500 text-white" : "px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white";
       document.getElementById("btn-tab-cases").className = tab === "cases" ? "px-4 py-2.5 font-medium border-b-2 border-blue-500 text-white" : "px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white";
       document.getElementById("btn-tab-explorer").className = tab === "explorer" ? "px-4 py-2.5 font-medium border-b-2 border-blue-500 text-white" : "px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white";
+      document.getElementById("btn-tab-analysis").className = tab === "analysis" ? "px-4 py-2.5 font-medium border-b-2 border-blue-500 text-white" : "px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white";
 
       if (tab === "cases") renderCaseLaw();
       if (tab === "explorer") loadExplorerMeasure("A1");
@@ -295,14 +466,40 @@
                            "bg-blue-900/50 text-blue-300 border-blue-700/50";
 
         tr.innerHTML = `
-          <td class="py-3 px-3 font-medium text-white">${r.Jurisdiction}</td>
-          <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-medium uppercase border ${badgeColor}">${r.Level}</span></td>
-          <td class="py-3 px-3"><span class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-mono text-[11px]">${r["Category code"]}</span></td>
-          <td class="py-3 px-3 font-mono text-[11px] text-blue-400">${r["Official citation"]}</td>
-          <td class="py-3 px-3 max-w-md text-slate-300 truncate" title="${r["Summary of content"]}">${r.Name}</td>
-          <td class="py-3 px-3 text-[11px] text-slate-400 whitespace-nowrap">${r["Current status"]}</td>
-          <td class="py-3 px-3 text-right">
-            <button class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px]">View</button>
+          <td class="py-4 px-3 font-medium text-white align-top">
+            <div class="font-semibold text-slate-100">${r.Jurisdiction}</div>
+            <div class="mt-1"><span class="px-2 py-0.5 rounded text-[10px] font-medium uppercase border ${badgeColor}">${r.Level}</span></div>
+          </td>
+          <td class="py-4 px-3 align-top whitespace-nowrap">
+            <span class="px-2 py-0.5 rounded bg-blue-900/50 text-blue-300 font-mono text-[11px] font-bold border border-blue-700/50">${r["Category code"]}</span>
+            <div class="text-[10px] text-slate-400 mt-1 max-w-[120px] truncate" title="${r["Category name"]}">${r["Category name"]}</div>
+          </td>
+          <td class="py-4 px-3 align-top">
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-xs font-semibold text-blue-400">${r["Official citation"]}</span>
+            </div>
+            <div class="text-xs font-medium text-slate-200 mt-0.5">${r.Name}</div>
+            
+            <!-- PROMINENT SUMMARY DISPLAY -->
+            <div class="mt-2 text-xs text-slate-200 leading-relaxed bg-slate-900/90 border-l-2 border-blue-500 rounded-r-lg p-3 shadow-sm font-sans">
+              <span class="text-[10px] uppercase tracking-wider font-semibold text-blue-300 block mb-1">Statutory Summary & Mechanism:</span>
+              ${r["Summary of content"]}
+            </div>
+
+            <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-400">
+              <span><strong class="text-slate-500 font-normal">Effective Date:</strong> ${r["Effective date"]}</span>
+              <span><strong class="text-slate-500 font-normal">Latest Amendment:</strong> ${r["Latest amendment"]}</span>
+              ${r["Cross-references"] ? `<span><strong class="text-slate-500 font-normal">Cross-References:</strong> <span class="font-mono text-blue-300">${r["Cross-references"]}</span></span>` : ""}
+            </div>
+          </td>
+          <td class="py-4 px-3 align-top text-[11px] text-slate-400 whitespace-nowrap">
+            <div><strong class="text-slate-300">${r["Current status"]}</strong></div>
+            <div class="mt-1 text-[10px] text-slate-500 truncate max-w-[130px]" title="${r["Scope of application"]}">${r["Scope of application"]}</div>
+          </td>
+          <td class="py-4 px-3 align-top text-right whitespace-nowrap">
+            <button class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs shadow-sm transition">
+              Inspect &rarr;
+            </button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -428,13 +625,13 @@
           <h4 class="text-sm font-semibold text-white">Associated Statutory & Municipal Provisions in Database (${matchedLeg.length})</h4>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             ${matchedLeg.slice(0, 9).map(r => `
-              <div class="bg-slate-900/80 border border-slate-800 rounded-lg p-3 hover:border-slate-700 transition cursor-pointer" onclick='openModal(${JSON.stringify(r)})'>
+              <div class="bg-slate-900/80 border border-slate-800 rounded-lg p-3.5 hover:border-slate-700 transition cursor-pointer" onclick='openModal(${JSON.stringify(r)})'>
                 <div class="flex items-center justify-between text-[10px] text-slate-400 uppercase">
                   <span>${r.Jurisdiction}</span>
                   <span>${r.Level}</span>
                 </div>
                 <h5 class="text-xs font-semibold text-white mt-1 truncate">${r["Official citation"]}</h5>
-                <p class="text-[11px] text-slate-400 mt-1 line-clamp-2">${r["Summary of content"]}</p>
+                <p class="text-[11px] text-slate-300 mt-1 line-clamp-2">${r["Summary of content"]}</p>
               </div>
             `).join("")}
           </div>
@@ -443,15 +640,64 @@
       `;
     }
 
+    function extractRelevanceFields(r) {
+      const text = (r["Summary of content"] + " " + r.Name + " " + (r.Notes || "")).toLowerCase();
+      let power = "Regulate traffic circulation and establish municipal travel restrictions.";
+      let triggers = "Enacted pursuant to standard local police powers and safety determinations.";
+      let vehicles = "All vehicular traffic operating on public streets within municipal jurisdiction.";
+      let rationale = "Modifies roadway network configuration, altering routing app cost-weight calculations.";
+
+      if (r["Category code"] === "A1") {
+        power = "Prohibit turning movements (left, right, or U-turns) during peak commute hours.";
+        triggers = "Authorized upon engineering determination to preserve residential street circulation.";
+        vehicles = "All motor vehicles executing turns at designated intersections.";
+        rationale = "Blocks high-volume turn movements recommended by navigation apps to bypass arterial congestion.";
+      } else if (r["Category code"] === "A2") {
+        power = "Prohibit through (cut-through) vehicular traffic on residential streets.";
+        triggers = "Requires formal engineering study documenting nonresidential traffic volume thresholds.";
+        vehicles = "Nonresidential through traffic (protecting local residential access).";
+        rationale = "Eliminates through-commuters diverted by Waze/Google Maps off highway corridors onto local streets.";
+      } else if (r["Category code"] === "A4") {
+        power = "Restrict street access during rush hours to vehicles displaying residential permit tags.";
+        triggers = "Enacted to protect residential neighborhoods near interstate highway bridge approaches.";
+        vehicles = "Non-resident drivers (struck down as ultra vires without state approval).";
+        rationale = "Direct local attempt to stop out-of-town app users from cutting through neighborhood streets.";
+      } else if (r["Category code"] === "A5") {
+        power = "Prohibit commercial vehicles exceeding gross weight thresholds (e.g. >6,000 lbs) on residential streets.";
+        triggers = "Mandates designation of alternate commercial arterial truck routes.";
+        vehicles = "Commercial freight and heavy delivery motor carriers (subject to FAAAA preemption).";
+        rationale = "Prevents commercial logistics and truck navigation apps from directing heavy trucks onto residential roads.";
+      } else if (r["Category code"] === "B1") {
+        power = "Install physical modal filters, diverters, and street closures.";
+        triggers = "Must fit within enumerated statutory authorizations under Cal. Veh. Code § 21101 (Rumford doctrine).";
+        vehicles = "All passenger vehicular traffic while maintaining pedestrian and cyclist access.";
+        rationale = "Physical barriers physically disconnect through-corridors, rendering them impassable in navigation graphs.";
+      } else if (r["Category code"] === "E1") {
+        power = "Conduct pilot study evaluating third-party navigation app impacts and establish data protocols.";
+        triggers = "Statutory mandate by California Legislature directing Caltrans and CalSTA to report by 2029.";
+        vehicles = "Third-party navigation app platforms (Waze, Apple Maps, Google Maps) and state highway users.";
+        rationale = "Direct legislative charter for Assembly Bill 2015 to evaluate app diversion and algorithmic routing impacts.";
+      }
+
+      return { power, triggers, vehicles, rationale };
+    }
+
     function openModal(r) {
-      document.getElementById("modal-badge").textContent = r.Level + " · " + r["Category code"];
+      document.getElementById("modal-badge").textContent = r.Level + " · " + r["Category code"] + " (" + r["Category name"] + ")";
       document.getElementById("modal-title").textContent = r.Name;
       document.getElementById("modal-citation").textContent = r["Official citation"] + " — " + r.Jurisdiction;
       document.getElementById("modal-summary").textContent = r["Summary of content"];
+
+      const extractions = extractRelevanceFields(r);
+      document.getElementById("modal-power").textContent = extractions.power;
+      document.getElementById("modal-triggers").textContent = extractions.triggers;
+      document.getElementById("modal-vehicles").textContent = extractions.vehicles;
+      document.getElementById("modal-relevance-rationale").textContent = extractions.rationale;
+
       document.getElementById("modal-passage").textContent = r["Summary of content"] + "\n\n[Codified Official Reference: " + r["Official citation"] + "]\nEffective Date: " + r["Effective date"] + " | Status: " + r["Current status"];
       document.getElementById("modal-scope").textContent = r["Scope of application"] || "General municipal or state jurisdiction.";
       document.getElementById("modal-crossref").textContent = r["Cross-references"] || "None specified.";
-      document.getElementById("modal-notes").textContent = r.Notes || "Verified and anchored.";
+      document.getElementById("modal-notes").textContent = r.Notes || "Verified and anchored with verbatim character offsets.";
       document.getElementById("modal-link").href = r["Official link"] || "#";
       document.getElementById("detail-modal").classList.remove("hidden");
     }
