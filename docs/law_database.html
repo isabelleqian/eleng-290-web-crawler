@@ -67,6 +67,9 @@
     <button id="btn-tab-cases" onclick="switchView('cases')" class="px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white">
       Landmark Appellate Precedents (10)
     </button>
+    <button id="btn-tab-ranking" onclick="switchView('ranking')" class="px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white">
+      Codebook Measure Popularity & Coverage
+    </button>
     <button id="btn-tab-explorer" onclick="switchView('explorer')" class="px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white">
       Codebook Measure ↔ Law Explorer
     </button>
@@ -142,6 +145,51 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="cases-grid">
+    </div>
+  </main>
+
+  <!-- VIEW: CODEBOOK MEASURE POPULARITY & COVERAGE RANKING -->
+  <main id="view-ranking" class="max-w-7xl mx-auto space-y-6 hidden">
+    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-semibold text-white">Codebook Taxonomy Adoption & Popularity Ranking</h2>
+          <p class="text-xs text-slate-400 mt-1 max-w-3xl leading-relaxed">
+            Distribution of the 119 verified statutory provisions across the project codebook categories (A1–F7), illustrating which intervention mechanisms are most widely codified by governments and why certain measures dominate local adoption.
+          </p>
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-mono font-medium bg-blue-900/50 text-blue-300 border border-blue-700/50 whitespace-nowrap self-start md:self-auto">
+          119 Codified Provisions · 100% Categorized
+        </span>
+      </div>
+    </div>
+
+    <!-- Popularity Metric Highlights -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
+        <div class="text-[10px] font-semibold uppercase tracking-wider text-emerald-400">#1 Most Codified Measure</div>
+        <div class="text-xl font-bold text-white mt-1">A5: Truck Routes (56.3%)</div>
+        <div class="text-[11px] text-slate-400 mt-1">67 provisions across 58 CA counties & cities</div>
+      </div>
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
+        <div class="text-[10px] font-semibold uppercase tracking-wider text-blue-400">#2 Physical Permanence Leader</div>
+        <div class="text-xl font-bold text-white mt-1">B1: Modal Filters (22.7%)</div>
+        <div class="text-[11px] text-slate-400 mt-1">27 provisions in urban centers (SF, LA, Seattle)</div>
+      </div>
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
+        <div class="text-[10px] font-semibold uppercase tracking-wider text-purple-400">#1 Media Controversy Leader</div>
+        <div class="text-xl font-bold text-white mt-1">A1: Turn Bans (14.3%)</div>
+        <div class="text-[11px] text-slate-400 mt-1">17 provisions · 948 news reports on Waze</div>
+      </div>
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
+        <div class="text-[10px] font-semibold uppercase tracking-wider text-rose-400">Highest Judicial Risk</div>
+        <div class="text-xl font-bold text-white mt-1">A4: Resident Permits (0.8%)</div>
+        <div class="text-[11px] text-slate-400 mt-1">1 provision · Struck down as ultra vires</div>
+      </div>
+    </div>
+
+    <!-- Ranked Category Cards List -->
+    <div class="space-y-4" id="ranking-list">
     </div>
   </main>
 
@@ -389,15 +437,18 @@
     function switchView(tab) {
       document.getElementById("view-legislation").classList.toggle("hidden", tab !== "legislation");
       document.getElementById("view-cases").classList.toggle("hidden", tab !== "cases");
+      document.getElementById("view-ranking").classList.toggle("hidden", tab !== "ranking");
       document.getElementById("view-explorer").classList.toggle("hidden", tab !== "explorer");
       document.getElementById("view-analysis").classList.toggle("hidden", tab !== "analysis");
 
       document.getElementById("btn-tab-leg").className = tab === "legislation" ? "px-4 py-2.5 font-medium border-b-2 border-blue-500 text-white" : "px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white";
       document.getElementById("btn-tab-cases").className = tab === "cases" ? "px-4 py-2.5 font-medium border-b-2 border-blue-500 text-white" : "px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white";
+      document.getElementById("btn-tab-ranking").className = tab === "ranking" ? "px-4 py-2.5 font-medium border-b-2 border-blue-500 text-white" : "px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white";
       document.getElementById("btn-tab-explorer").className = tab === "explorer" ? "px-4 py-2.5 font-medium border-b-2 border-blue-500 text-white" : "px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white";
       document.getElementById("btn-tab-analysis").className = tab === "analysis" ? "px-4 py-2.5 font-medium border-b-2 border-blue-500 text-white" : "px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white";
 
       if (tab === "cases") renderCaseLaw();
+      if (tab === "ranking") renderRanking();
       if (tab === "explorer") loadExplorerMeasure("A1");
     }
 
@@ -538,6 +589,158 @@
         `;
         grid.appendChild(card);
       });
+    }
+
+    const RANKED_CATEGORIES = [
+      {
+        rank: 1,
+        code: "A5",
+        name: "Commercial Vehicle Route Exclusions & Weight Limits",
+        count: 67,
+        pct: 56.3,
+        barColor: "bg-emerald-500",
+        badgeColor: "bg-emerald-900/50 text-emerald-300 border-emerald-700/50",
+        jurisdictions: "All 58 California Counties (CVC § 35701), New Jersey (N.J.S.A. § 39:4-197.16), City of Berkeley, Los Angeles",
+        levels: "County (57), Municipal (9), State (1)",
+        newsFrequency: "115 empirical reports in news database",
+        adoptionRationale: "Most widely adopted statutory mechanism nationwide (56.3% of all provisions). State vehicle codes universally grant local authorities express police power to designate heavy truck routes and exclude commercial vehicles (>6,000 lbs) from residential streets. Counties and municipalities universally codified this to protect rural road surfaces and residential quiet from freight navigation apps."
+      },
+      {
+        rank: 2,
+        code: "B1",
+        name: "Physical Diverters & Modal Traffic Filters",
+        count: 27,
+        pct: 22.7,
+        barColor: "bg-blue-500",
+        badgeColor: "bg-blue-900/50 text-blue-300 border-blue-700/50",
+        jurisdictions: "15 California Municipalities (SF, Los Angeles, Berkeley, Oakland, San Jose, Fremont, etc.), Seattle, WA",
+        levels: "Municipal (20), State (7)",
+        newsFrequency: "310 empirical reports in news database",
+        adoptionRationale: "Second most prevalent mechanism (22.7% of provisions). Highly favored by dense urban centers seeking permanent circulation changes without requiring continuous police traffic enforcement. Physical diverters, bollards, and Home Zones/Slow Streets physically prevent through-cut traffic while maintaining permeability for bicycles and pedestrians."
+      },
+      {
+        rank: 3,
+        code: "A1",
+        name: "Turn Restrictions at Intersections",
+        count: 17,
+        pct: 14.3,
+        barColor: "bg-purple-500",
+        badgeColor: "bg-purple-900/50 text-purple-300 border-purple-700/50",
+        jurisdictions: "California (CVC § 21101), Florida (Fla. Stat. § 316.008), Connecticut (Conn. Gen. Stat. § 14-298), Georgia, Maryland, Colorado, Los Angeles, Fremont, Coral Gables, Greenwich",
+        levels: "State (7), Municipal (10)",
+        newsFrequency: "948 empirical reports in news database (Highest in News)",
+        adoptionRationale: "The primary operational countermeasure against navigation app shortcuts. While representing 14.3% of statutory provisions, it accounts for nearly 60% of all news controversies. Cities deploy time-of-day turn bans (e.g. 'No Left Turn 7-9 AM Mon-Fri') to artificially increase intersection travel times in routing algorithms."
+      },
+      {
+        rank: 4,
+        code: "A2",
+        name: "Through-Traffic Restrictions (Cut-Through Street Acts)",
+        count: 3,
+        pct: 2.5,
+        barColor: "bg-amber-500",
+        badgeColor: "bg-amber-900/50 text-amber-300 border-amber-700/50",
+        jurisdictions: "Virginia (Va. Code § 46.2-808.1), Pennsylvania (75 Pa.C.S. § 6109(a)(11)), Town of Vienna, VA",
+        levels: "State (2), Municipal (1)",
+        newsFrequency: "142 empirical reports in news database",
+        adoptionRationale: "Enacted in jurisdictions with affirmative state legislative enabling acts. Virginia pioneered this by giving local governing bodies explicit statutory authority to designate residential cut-through streets and ban through-traffic upon completing an engineering traffic study."
+      },
+      {
+        rank: 5,
+        code: "D1",
+        name: "Information & Federal Routing Standards",
+        count: 3,
+        pct: 2.5,
+        barColor: "bg-cyan-500",
+        badgeColor: "bg-cyan-900/50 text-cyan-300 border-cyan-700/50",
+        jurisdictions: "United States (Federal Highway Administration / USDOT)",
+        levels: "Federal (3)",
+        newsFrequency: "45 empirical reports in news database",
+        adoptionRationale: "Federal mandatory routing framework governing non-radioactive hazardous material transportation under 49 C.F.R. Part 397."
+      },
+      {
+        rank: 6,
+        code: "E1",
+        name: "Routing-Platform Collaboration & Study Mandates",
+        count: 1,
+        pct: 0.8,
+        barColor: "bg-indigo-500",
+        badgeColor: "bg-indigo-900/50 text-indigo-300 border-indigo-700/50",
+        jurisdictions: "California (Cal. Stats. 2026, Ch. 207 - AB 2015)",
+        levels: "State (1)",
+        newsFrequency: "512 empirical reports in news database",
+        adoptionRationale: "The emergent 21st-century regulatory model. Rather than attempting physical blockades, Assembly Bill 2015 establishes a statewide legislative pilot study directing Caltrans to measure congestion displacement and evaluate data-sharing frameworks with private navigation apps."
+      },
+      {
+        rank: 7,
+        code: "A4",
+        name: "Resident-Only Permit Access",
+        count: 1,
+        pct: 0.8,
+        barColor: "bg-rose-500",
+        badgeColor: "bg-rose-900/50 text-rose-300 border-rose-700/50",
+        jurisdictions: "Borough of Leonia, NJ (Ordinance No. 2017-18)",
+        levels: "Municipal (1)",
+        newsFrequency: "38 empirical reports in news database",
+        adoptionRationale: "Rarest and most legally vulnerable mechanism. Attempted by Leonia, NJ to close 60 streets to non-residents during rush hours using yellow windshield decals. Struck down in State v. Leonia (2018) because public streets cannot be restricted to residents without state DOT commissioner authorization."
+      }
+    ];
+
+    function renderRanking() {
+      const container = document.getElementById("ranking-list");
+      container.innerHTML = "";
+
+      RANKED_CATEGORIES.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "bg-slate-900/90 border border-slate-800 rounded-xl p-5 hover:border-slate-700 transition";
+        card.innerHTML = `
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-800 font-bold text-white text-sm">#${item.rank}</span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded text-xs font-mono font-bold ${item.badgeColor}">${item.code}</span>
+                  <h3 class="text-base font-semibold text-white">${item.name}</h3>
+                </div>
+                <div class="text-xs text-slate-400 mt-0.5">${item.jurisdictions}</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-4 self-end md:self-auto">
+              <div class="text-right">
+                <div class="text-base font-bold text-white">${item.count} <span class="text-xs text-slate-400 font-normal">provisions</span></div>
+                <div class="text-xs font-semibold text-blue-400">${item.pct}% of corpus</div>
+              </div>
+              <button onclick="filterByRankedMeasure('${item.code}')" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition whitespace-nowrap">
+                Explore Provisions &rarr;
+              </button>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full bg-slate-950 rounded-full h-2 mt-4 overflow-hidden border border-slate-800">
+            <div class="${item.barColor} h-2 rounded-full" style="width: ${item.pct}%"></div>
+          </div>
+
+          <!-- Details & Rationale -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4 pt-4 border-t border-slate-800 text-xs">
+            <div class="md:col-span-8">
+              <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 block mb-1">Adoption & Popularity Analysis:</span>
+              <p class="text-slate-300 leading-relaxed">${item.adoptionRationale}</p>
+            </div>
+            <div class="md:col-span-4 bg-slate-950 p-3 rounded-lg border border-slate-800 space-y-1.5 text-[11px]">
+              <div><strong class="text-slate-400">Enacting Levels:</strong> <span class="text-slate-200">${item.levels}</span></div>
+              <div><strong class="text-slate-400">News Controversy:</strong> <span class="text-blue-300 font-medium">${item.newsFrequency}</span></div>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function filterByRankedMeasure(code) {
+      switchView('legislation');
+      document.getElementById('measure-filter').value = code;
+      selectedMeasure = code;
+      renderLegislation();
     }
 
     const MEASURE_DEFINITIONS = {
