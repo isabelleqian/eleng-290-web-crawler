@@ -2,11 +2,11 @@
 **Research As-Of Date:** November 3, 2026  
 **Notice:** Current status, amendments, and codified texts must be confirmed on official government legislative or regulatory websites prior to legal reliance.
 
-This executive research summary classifies United States statutes, administrative regulations, and legislative instruments governing traffic management, routing, and vehicular mobility into the project **Three-Layer Governance Framework** (**Layer 1: Direct**, **Layer 2: Indirect**, and **Layer 3: Background**) and **Six-Category Codebook** (Categories A through F). Full records, verbatim text offsets, official government links, and Section 8 liability findings are cataloged in the accompanying 156-record database.
+This executive research summary classifies United States statutes, administrative regulations, and legislative instruments governing traffic management, routing, and vehicular mobility into the project **Three-Layer Governance Framework** (**Layer 1: Direct (App-Targeted)**, **Layer 2: Route-Linked (Vehicle & Road Restrictions)**, and **Layer 3: Indirect (Road Conditions, Pricing & Planning)**) and **Six-Category Codebook** (Categories A through F). Full records, verbatim text offsets, official government links, and Section 8 liability findings are cataloged in the accompanying 156-record database.
 
 ---
 
-# Layer 1: Direct (Laws directly governing navigation apps)
+# Layer 1: Direct (App-Targeted Navigation Laws)
 *Statutes and legislative proposals that explicitly name navigation applications, GPS routing providers, digital mapping platforms, or algorithmic route outputs, imposing affirmative routing restrictions, data reporting charters, or direct civil liability.*
 
 * **E1 Routing restrictions for designated streets and slow streets**
@@ -32,7 +32,7 @@ This executive research summary classifies United States statutes, administrativ
 
 ---
 
-# Layer 2: Indirect (Laws applicable to apps through commercial vehicle rules)
+# Layer 2: Route-Linked (Vehicle & Road Restrictions: Commercial & Physical Traffic Rules)
 *Laws not naming apps specifically, but governing commercial freight routing, truck gross weight restrictions, National Network access, and hazardous materials corridors. Route providers must respect these limits when generating commercial navigation routes.*
 
 * **A5 Vehicle-based restrictions: commercial routing standards**

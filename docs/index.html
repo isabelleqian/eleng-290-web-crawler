@@ -2509,16 +2509,6 @@
       renderDatabase();
     }
 
-      if (search) {
-        search.addEventListener('input', () => {
-          dbSearchQuery = search.value;
-          renderDatabase();
-        });
-      }
-
-      renderDatabase();
-    }
-
     function initOutside() {
       const panel = DATA.outside || { themes: [], unlabeled_count: 0, total: 0 };
       const summary = document.getElementById('outside-summary');
