@@ -114,6 +114,12 @@
       <div class="text-right">
         <div class="text-xs text-slate-500">Saved documents</div>
         <div id="stat-total-header" class="text-lg font-semibold text-white">1605</div>
+<nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs mt-3">
+        <a href="index.html" class="px-3 py-1.5 rounded-lg font-medium bg-blue-600 text-white shadow-sm">Overview Map</a>
+        <a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News Database (1,605)</a>
+        <a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (129)</a>
+        <a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk</a>
+      </nav>
       </div>
       <label class="cursor-pointer text-xs text-slate-400 underline underline-offset-2 hover:text-white">
         Load file
@@ -147,14 +153,14 @@
     </ol>
   </section>
 
-  <nav class="max-w-7xl mx-auto mb-6 flex flex-wrap gap-1 border-b border-slate-800">
-    <button onclick="switchTab('map-view')" id="tab-btn-map" class="tab-btn px-3 py-2 text-sm text-white border-b-2 border-white">Map</button>
-    <button onclick="switchTab('methodology-view')" id="tab-btn-methodology" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">Process</button>
-    <button onclick="switchTab('artifacts-view')" id="tab-btn-artifacts" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">Example</button>
-    <button onclick="switchTab('keywords-view')" id="tab-btn-keywords" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">Keywords</button>
-    <button onclick="switchTab('measures-view')" id="tab-btn-measures" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">Measures</button>
-    <button onclick="switchTab('outside-view')" id="tab-btn-outside" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">Outside codebook</button>
-    <button onclick="switchTab('database-view')" id="tab-btn-database" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">Database</button>
+  <nav class="max-w-7xl mx-auto mb-6 flex flex-wrap gap-1 border-b border-slate-800 text-xs">
+    <button onclick="switchTab('map-view')" id="tab-btn-map" class="tab-btn px-3.5 py-2 text-sm text-white border-b-2 border-white font-medium">Geographic Map & Timeline</button>
+    <button onclick="switchTab('methodology-view')" id="tab-btn-methodology" class="tab-btn px-3.5 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white font-medium">Crawl Methodology</button>
+    <button onclick="switchTab('artifacts-view')" id="tab-btn-artifacts" class="tab-btn px-3.5 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white font-medium">Sample Incident</button>
+    <button onclick="switchTab('keywords-view')" id="tab-btn-keywords" class="tab-btn px-3.5 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white font-medium">Keywords</button>
+    <button onclick="switchTab('measures-view')" id="tab-btn-measures" class="tab-btn px-3.5 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white font-medium">News Codebook Measures</button>
+    <button onclick="switchTab('outside-view')" id="tab-btn-outside" class="tab-btn px-3.5 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white font-medium">Outside Codebook</button>
+    <button onclick="switchTab('database-view')" id="tab-btn-database" class="tab-btn px-3.5 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white font-medium">Inspect News Table</button>
   </nav>
 
   <!-- MAIN TAB 1: GEOGRAPHIC MAP & TIMELINE SLIDER -->
