@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,9 +7,6 @@
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
     tr.marked { background: #1e293b; outline: 1px solid #93c5fd; }
-    .active-tab { background-color: #2563eb !important; color: #ffffff !important; }
-    .inactive-tab { background-color: transparent; color: #94a3b8; }
-    .inactive-tab:hover { color: #ffffff; }
     .summary-box {
       background: rgba(15, 23, 42, 0.75);
       border-left: 3px solid #3b82f6;
@@ -59,31 +56,130 @@
     </div>
   </section>
 
-  <!-- VIEW MODE TABS -->
-  <div class="max-w-7xl mx-auto mb-5 flex flex-wrap border-b border-slate-800 text-sm gap-1">
-    <button id="btn-tab-leg" onclick="switchView('legislation')" class="px-4 py-2.5 font-medium border-b-2 border-blue-500 text-white">
-      Statutory & Municipal Provisions (119)
-    </button>
-    <button id="btn-tab-cases" onclick="switchView('cases')" class="px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white">
-      Landmark Appellate Precedents (10)
-    </button>
-    <button id="btn-tab-ranking" onclick="switchView('ranking')" class="px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white">
-      Codebook Measure Popularity & Coverage
-    </button>
-    <button id="btn-tab-explorer" onclick="switchView('explorer')" class="px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white">
-      Codebook Measure ↔ Law Explorer
-    </button>
-    <button id="btn-tab-analysis" onclick="switchView('analysis')" class="px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white">
-      Regulatory Architecture & Comparative Analysis
-    </button>
-  </div>
+  <!-- STICKY QUICK-JUMP SECTION RIBBON (NO HIDDEN TABS) -->
+  <nav class="sticky top-0 z-30 bg-[#141816]/95 backdrop-blur-md border-y border-slate-800 py-2.5 mb-8">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 px-1">
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <span class="text-slate-400 font-semibold uppercase tracking-wider text-[11px] mr-1">Jump to:</span>
+        <a href="#section-ranking" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 hover:text-white hover:border-blue-500 transition font-medium">
+          📊 1. Codebook Adoption Ranking
+        </a>
+        <a href="#section-legislation" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 hover:text-white hover:border-blue-500 transition font-medium">
+          📜 2. Statutory Provisions (119)
+        </a>
+        <a href="#section-cases" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 hover:text-white hover:border-blue-500 transition font-medium">
+          ⚖️ 3. Landmark Precedents (10)
+        </a>
+        <a href="#section-analysis" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 hover:text-white hover:border-blue-500 transition font-medium">
+          🏛️ 4. Regulatory Framework & AB 2015
+        </a>
+      </div>
+      <a href="crosswalk.html" class="px-3 py-1.5 rounded-lg bg-blue-600/20 border border-blue-500/40 text-blue-300 hover:bg-blue-600 hover:text-white transition font-medium text-xs flex items-center gap-1.5">
+        <span>News ↔ Law Crosswalk (1,585)</span> &rarr;
+      </a>
+    </div>
+  </nav>
 
-  <!-- VIEW 1: LEGISLATION TABLE -->
-  <main id="view-legislation" class="max-w-7xl mx-auto space-y-4">
+  <!-- ========================================================================= -->
+  <!-- SECTION 1: CODEBOOK TAXONOMY ADOPTION & POPULARITY RANKING (DIRECTLY VISIBLE) -->
+  <!-- ========================================================================= -->
+  <section id="section-ranking" class="max-w-7xl mx-auto space-y-6 mb-12 pt-2">
+    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-900/60 text-blue-300 border border-blue-700/50">Section 1</span>
+            <h2 class="text-xl font-semibold text-white">Codebook Taxonomy Adoption & Popularity Analysis</h2>
+          </div>
+          <p class="text-xs text-slate-400 mt-1.5 max-w-4xl leading-relaxed">
+            Distribution of the 119 verified statutory provisions across project codebook categories (A1–F7). This analysis quantifies which legal mechanisms are most widely adopted by state and local governments, and explains the legal and constitutional reasons why certain measures dominate while others are vulnerable to judicial challenge.
+          </p>
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-mono font-medium bg-blue-900/50 text-blue-300 border border-blue-700/50 whitespace-nowrap self-start md:self-auto">
+          119 Codified Provisions · 100% Categorized
+        </span>
+      </div>
+    </div>
+
+    <!-- Inside vs Outside Codebook Overview Card -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Inside Project Codebook (A1–D2)</span>
+          <span class="text-sm font-bold font-mono text-emerald-400">112 Provisions (94.1%)</span>
+        </div>
+        <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+          Traditional physical and operational traffic police powers codified in state vehicle codes and municipal ordinances. Comprises commercial truck route exclusions (A5: 56.3%), physical modal diverters and speed humps (B1: 22.7%), intersection turn bans (A1: 14.3%), and cut-through street bans (A2: 2.5%).
+        </p>
+        <div class="mt-3 pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
+          <span>Governing Basis: Standard state vehicle code delegation</span>
+          <span class="text-emerald-400 font-medium">94.1% Corpus Coverage</span>
+        </div>
+      </div>
+
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-blue-400">Outside Traditional Codebook (E1 / Platform / Study)</span>
+          <span class="text-sm font-bold font-mono text-blue-400">7 Provisions (5.9%)</span>
+        </div>
+        <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+          Emergent 21st-century digital mechanisms created specifically in response to algorithmic navigation apps. Comprises public-private data partnerships (e.g. Boston-Waze Agreement) and statutory pilot research charters (e.g. California AB 2015 / Caltrans navigation app study).
+        </p>
+        <div class="mt-3 pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
+          <span>Governing Basis: Legislative pilot charters & Bilateral agreements</span>
+          <span class="text-blue-400 font-medium">5.9% Corpus Coverage</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popularity Metric Highlights -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
+        <div class="text-[10px] font-semibold uppercase tracking-wider text-emerald-400">#1 Most Codified Measure</div>
+        <div class="text-xl font-bold text-white mt-1">A5: Truck Routes (56.3%)</div>
+        <div class="text-[11px] text-slate-400 mt-1">67 provisions across 58 CA counties & cities</div>
+      </div>
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
+        <div class="text-[10px] font-semibold uppercase tracking-wider text-blue-400">#2 Physical Permanence Leader</div>
+        <div class="text-xl font-bold text-white mt-1">B1: Modal Filters (22.7%)</div>
+        <div class="text-[11px] text-slate-400 mt-1">27 provisions in urban centers (SF, LA, Seattle)</div>
+      </div>
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
+        <div class="text-[10px] font-semibold uppercase tracking-wider text-purple-400">#1 Media Controversy Leader</div>
+        <div class="text-xl font-bold text-white mt-1">A1: Turn Bans (14.3%)</div>
+        <div class="text-[11px] text-slate-400 mt-1">17 provisions · 948 news reports on Waze</div>
+      </div>
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
+        <div class="text-[10px] font-semibold uppercase tracking-wider text-rose-400">Highest Judicial Invalidation Risk</div>
+        <div class="text-xl font-bold text-white mt-1">A4: Resident Permits (0.8%)</div>
+        <div class="text-[11px] text-slate-400 mt-1">1 provision · Struck down as ultra vires</div>
+      </div>
+    </div>
+
+    <!-- Ranked Category Cards List with Visual Progress Bars -->
+    <div class="space-y-4" id="ranking-list">
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SECTION 2: CODIFIED STATUTORY & LOCAL PROVISIONS (119 PROVISIONS) -->
+  <!-- ========================================================================= -->
+  <section id="section-legislation" class="max-w-7xl mx-auto space-y-4 mb-12 pt-4">
+    <!-- Header Card -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-900/60 text-blue-300 border border-blue-700/50">Section 2</span>
+        <h2 class="text-xl font-semibold text-white">Codified Statutory & Municipal Provisions</h2>
+      </div>
+      <p class="text-xs text-slate-400 mt-1 max-w-4xl">
+        Verified statutory provisions and local ordinances across Federal, State, County, and Municipal levels. Every entry includes a prominent executive summary, governing legal mechanism, and verbatim character offset verification.
+      </p>
+    </div>
+
     <!-- Filter Control Card -->
     <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
       <div>
-        <h2 class="text-base font-semibold text-white">Filter Statutory & Local Provisions</h2>
+        <h3 class="text-sm font-semibold text-white">Filter Provisions</h3>
         <p id="leg-count" class="text-xs text-slate-400 mt-0.5">Showing 119 provisions</p>
       </div>
       <div class="flex flex-wrap items-center gap-3">
@@ -133,95 +229,35 @@
         </tbody>
       </table>
     </div>
-  </main>
+  </section>
 
-  <!-- VIEW 2: CASE LAW PRECEDENTS -->
-  <main id="view-cases" class="max-w-7xl mx-auto space-y-4 hidden">
-    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
-      <h2 class="text-base font-semibold text-white">Appellate Precedents & Judicial Feasibility Boundaries</h2>
-      <p class="text-xs text-slate-400 mt-1 max-w-4xl">
+  <!-- ========================================================================= -->
+  <!-- SECTION 3: LANDMARK APPELLATE PRECEDENTS (10 CASES) -->
+  <!-- ========================================================================= -->
+  <section id="section-cases" class="max-w-7xl mx-auto space-y-4 mb-12 pt-4">
+    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-indigo-900/60 text-indigo-300 border border-indigo-700/50">Section 3</span>
+        <h2 class="text-xl font-semibold text-white">Landmark Appellate Precedents & Legal Feasibility Boundaries</h2>
+      </div>
+      <p class="text-xs text-slate-400 mt-1 max-w-4xl leading-relaxed">
         Controlling appellate court decisions that define the constitutional and statutory validity of routing interventions, including state traffic preemption, commercial freight deregulation (FAAAA), regional commuter circulation, and ultra vires resident-only permit bans.
       </p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="cases-grid">
     </div>
-  </main>
+  </section>
 
-  <!-- VIEW: CODEBOOK MEASURE POPULARITY & COVERAGE RANKING -->
-  <main id="view-ranking" class="max-w-7xl mx-auto space-y-6 hidden">
+  <!-- ========================================================================= -->
+  <!-- SECTION 4: COMPARATIVE REGULATORY ARCHITECTURE & CA AB 2015 -->
+  <!-- ========================================================================= -->
+  <section id="section-analysis" class="max-w-7xl mx-auto space-y-6 mb-12 pt-4">
     <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div>
-          <h2 class="text-lg font-semibold text-white">Codebook Taxonomy Adoption & Popularity Ranking</h2>
-          <p class="text-xs text-slate-400 mt-1 max-w-3xl leading-relaxed">
-            Distribution of the 119 verified statutory provisions across the project codebook categories (A1–F7), illustrating which intervention mechanisms are most widely codified by governments and why certain measures dominate local adoption.
-          </p>
-        </div>
-        <span class="px-3 py-1 rounded-full text-xs font-mono font-medium bg-blue-900/50 text-blue-300 border border-blue-700/50 whitespace-nowrap self-start md:self-auto">
-          119 Codified Provisions · 100% Categorized
-        </span>
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-900/60 text-blue-300 border border-blue-700/50">Section 4</span>
+        <h2 class="text-xl font-semibold text-white">Comparative Regulatory Framework & Policy Analysis</h2>
       </div>
-    </div>
-
-    <!-- Popularity Metric Highlights -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
-        <div class="text-[10px] font-semibold uppercase tracking-wider text-emerald-400">#1 Most Codified Measure</div>
-        <div class="text-xl font-bold text-white mt-1">A5: Truck Routes (56.3%)</div>
-        <div class="text-[11px] text-slate-400 mt-1">67 provisions across 58 CA counties & cities</div>
-      </div>
-      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
-        <div class="text-[10px] font-semibold uppercase tracking-wider text-blue-400">#2 Physical Permanence Leader</div>
-        <div class="text-xl font-bold text-white mt-1">B1: Modal Filters (22.7%)</div>
-        <div class="text-[11px] text-slate-400 mt-1">27 provisions in urban centers (SF, LA, Seattle)</div>
-      </div>
-      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
-        <div class="text-[10px] font-semibold uppercase tracking-wider text-purple-400">#1 Media Controversy Leader</div>
-        <div class="text-xl font-bold text-white mt-1">A1: Turn Bans (14.3%)</div>
-        <div class="text-[11px] text-slate-400 mt-1">17 provisions · 948 news reports on Waze</div>
-      </div>
-      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
-        <div class="text-[10px] font-semibold uppercase tracking-wider text-rose-400">Highest Judicial Risk</div>
-        <div class="text-xl font-bold text-white mt-1">A4: Resident Permits (0.8%)</div>
-        <div class="text-[11px] text-slate-400 mt-1">1 provision · Struck down as ultra vires</div>
-      </div>
-    </div>
-
-    <!-- Ranked Category Cards List -->
-    <div class="space-y-4" id="ranking-list">
-    </div>
-  </main>
-
-  <!-- VIEW 3: CODEBOOK MEASURE ↔ LAW EXPLORER -->
-  <main id="view-explorer" class="max-w-7xl mx-auto space-y-6 hidden">
-    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
-      <h2 class="text-base font-semibold text-white">Taxonomy-to-Law Explorer</h2>
-      <p class="text-xs text-slate-400 mt-1 max-w-3xl">
-        Select an intervention mechanism from the project codebook to explore its legal landscape: which state enabling acts authorize it, how municipalities codify it, and which appellate court rulings govern its legality.
-      </p>
-      
-      <!-- Measure Selection Pills -->
-      <div class="flex flex-wrap gap-2 mt-4" id="explorer-pills">
-        <button onclick="loadExplorerMeasure('A1')" class="exp-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-600 text-white" data-code="A1">A1: Turn Restrictions</button>
-        <button onclick="loadExplorerMeasure('A2')" class="exp-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:text-white" data-code="A2">A2: Through-Traffic Restrictions</button>
-        <button onclick="loadExplorerMeasure('A4')" class="exp-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:text-white" data-code="A4">A4: Resident-Only Access</button>
-        <button onclick="loadExplorerMeasure('A5')" class="exp-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:text-white" data-code="A5">A5: Commercial Vehicle Exclusions</button>
-        <button onclick="loadExplorerMeasure('B1')" class="exp-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:text-white" data-code="B1">B1: Physical Diverters & Filters</button>
-        <button onclick="loadExplorerMeasure('E1')" class="exp-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:text-white" data-code="E1">E1: Platform Collaboration & AB 2015</button>
-      </div>
-    </div>
-
-    <!-- Dynamic Explorer Display Card -->
-    <div id="explorer-content" class="space-y-6">
-    </div>
-  </main>
-
-  <!-- VIEW 4: REGULATORY ARCHITECTURE & COMPARATIVE ANALYSIS -->
-  <main id="view-analysis" class="max-w-7xl mx-auto space-y-6 hidden">
-    <!-- Analysis Intro -->
-    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
-      <h2 class="text-lg font-semibold text-white">Comparative Regulatory Framework & Policy Analysis</h2>
       <p class="text-xs text-slate-400 mt-1 max-w-4xl leading-relaxed">
         Connecting the 119 statutory and municipal records to analytical dimensions: statutory enabling pathways, historical regulatory lag, and California's municipal policy alignment under Assembly Bill 2015.
       </p>
@@ -346,7 +382,7 @@
         </table>
       </div>
     </div>
-  </main>
+  </section>
 
   <!-- VERBATIM TEXT INSPECTOR MODAL WITH STRUCTURED RELEVANCY EXTRACTION -->
   <div id="detail-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
@@ -433,24 +469,6 @@
     let selectedMeasure = "";
     let selectedJurisdiction = "";
     let searchQuery = "";
-
-    function switchView(tab) {
-      document.getElementById("view-legislation").classList.toggle("hidden", tab !== "legislation");
-      document.getElementById("view-cases").classList.toggle("hidden", tab !== "cases");
-      document.getElementById("view-ranking").classList.toggle("hidden", tab !== "ranking");
-      document.getElementById("view-explorer").classList.toggle("hidden", tab !== "explorer");
-      document.getElementById("view-analysis").classList.toggle("hidden", tab !== "analysis");
-
-      document.getElementById("btn-tab-leg").className = tab === "legislation" ? "px-4 py-2.5 font-medium border-b-2 border-blue-500 text-white" : "px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white";
-      document.getElementById("btn-tab-cases").className = tab === "cases" ? "px-4 py-2.5 font-medium border-b-2 border-blue-500 text-white" : "px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white";
-      document.getElementById("btn-tab-ranking").className = tab === "ranking" ? "px-4 py-2.5 font-medium border-b-2 border-blue-500 text-white" : "px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white";
-      document.getElementById("btn-tab-explorer").className = tab === "explorer" ? "px-4 py-2.5 font-medium border-b-2 border-blue-500 text-white" : "px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white";
-      document.getElementById("btn-tab-analysis").className = tab === "analysis" ? "px-4 py-2.5 font-medium border-b-2 border-blue-500 text-white" : "px-4 py-2.5 font-medium border-b-2 border-transparent text-slate-400 hover:text-white";
-
-      if (tab === "cases") renderCaseLaw();
-      if (tab === "ranking") renderRanking();
-      if (tab === "explorer") loadExplorerMeasure("A1");
-    }
 
     function initFilters() {
       const jurSelect = document.getElementById("jurisdiction-filter");
@@ -710,7 +728,7 @@
                 <div class="text-xs font-semibold text-blue-400">${item.pct}% of corpus</div>
               </div>
               <button onclick="filterByRankedMeasure('${item.code}')" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition whitespace-nowrap">
-                Explore Provisions &rarr;
+                Filter Provisions &darr;
               </button>
             </div>
           </div>
@@ -737,110 +755,13 @@
     }
 
     function filterByRankedMeasure(code) {
-      switchView('legislation');
-      document.getElementById('measure-filter').value = code;
       selectedMeasure = code;
+      document.getElementById('measure-filter').value = code;
       renderLegislation();
-    }
-
-    const MEASURE_DEFINITIONS = {
-      "A1": {
-        "title": "Turn Restrictions at Intersections",
-        "definition": "Prohibiting specific turning movements (left, right, or U-turns), often during peak commute periods, to prevent app-directed cut-through traffic through residential neighborhoods.",
-        "precedents": ["Save the Sunset Strip Coalition v. City of West Hollywood (2001)", "Citizens for Improved Sorrento Access, Inc. v. City of San Diego (2004)"],
-        "news_count": "948 reports in news corpus"
-      },
-      "A2": {
-        "title": "Through-Traffic Prohibitions",
-        "definition": "Statutory prohibitions banning through (non-local) traffic on designated residential cut-through streets, requiring official traffic engineering studies.",
-        "precedents": ["State of New Jersey v. Borough of Leonia (distinguished by state statutory enabling act)"],
-        "news_count": "142 reports in news corpus"
-      },
-      "A4": {
-        "title": "Resident-Only Permit Access",
-        "definition": "Restricting physical access on public municipal streets exclusively to local residents displaying permit tags or vehicle decals during peak commute hours.",
-        "precedents": ["State of New Jersey v. Borough of Leonia (2018) [Held ultra vires without state DOT approval]"],
-        "news_count": "38 reports in news corpus"
-      },
-      "A5": {
-        "title": "Commercial Vehicle Route & Weight Exclusions",
-        "definition": "Designating specific commercial truck arterial corridors and prohibiting commercial motor carriers exceeding weight thresholds on residential streets.",
-        "precedents": ["American Trucking Associations, Inc. v. City of Los Angeles (2013) [FAAAA Preemption]", "Neary v. Town of Los Altos Hills (1959) [Local Alternate Route Requirement]"],
-        "news_count": "115 reports in news corpus"
-      },
-      "B1": {
-        "title": "Physical Diverters & Modal Filters",
-        "definition": "Installing physical roadway infrastructure (traffic diverters, median barriers, chicanes, modal filters) to alter vehicular circulation while maintaining pedestrian/cyclist permeability.",
-        "precedents": ["Rumford v. City of Berkeley (1982) [State Preemption of Physical Road Barriers]", "City of Poway v. City of San Diego (1991) [Regional Impairment Limitation]"],
-        "news_count": "310 reports in news corpus"
-      },
-      "E1": {
-        "title": "Routing-Platform Collaboration & Study Mandates",
-        "definition": "Statutory pilot study charters and public-private data-sharing agreements between transportation agencies and navigation platforms.",
-        "precedents": ["California Assembly Bill 2015 (Cal. Stats. 2026, Ch. 207)"],
-        "news_count": "512 reports in news corpus"
+      const el = document.getElementById("section-legislation");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
       }
-    };
-
-    function loadExplorerMeasure(code) {
-      document.querySelectorAll(".exp-pill").forEach(p => {
-        if (p.getAttribute("data-code") === code) {
-          p.className = "exp-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-600 text-white";
-        } else {
-          p.className = "exp-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:text-white";
-        }
-      });
-
-      const meta = MEASURE_DEFINITIONS[code];
-      const matchedLeg = LEGISLATION.filter(r => r["Category code"] === code);
-      const container = document.getElementById("explorer-content");
-
-      const stateProvs = matchedLeg.filter(r => r.Level === "state");
-      const localProvs = matchedLeg.filter(r => r.Level === "municipal" || r.Level === "city" || r.Level === "county");
-
-      container.innerHTML = `
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
-          <div class="flex items-center justify-between">
-            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-blue-900/60 text-blue-300 border border-blue-700/50">${code}</span>
-            <span class="text-xs text-slate-400 font-medium">${meta.news_count}</span>
-          </div>
-          <h3 class="text-xl font-serif font-semibold text-white">${meta.title}</h3>
-          <p class="text-xs text-slate-300 leading-relaxed max-w-4xl">${meta.definition}</p>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3 border-t border-slate-800">
-            <div>
-              <h4 class="text-[11px] uppercase tracking-wider font-semibold text-slate-400">Codified Legal Provisions (${matchedLeg.length} total)</h4>
-              <ul class="mt-2 space-y-1.5 text-xs text-slate-300">
-                <li>• State Enabling Acts: <span class="text-white font-medium">${stateProvs.length} provisions</span></li>
-                <li>• Municipal & County Codes: <span class="text-white font-medium">${localProvs.length} local ordinances</span></li>
-              </ul>
-            </div>
-            <div>
-              <h4 class="text-[11px] uppercase tracking-wider font-semibold text-slate-400">Interpreting Appellate Court Decisions</h4>
-              <ul class="mt-2 space-y-1 text-xs text-slate-300">
-                ${meta.precedents.map(p => `<li>• <span class="font-mono text-blue-400 text-[11px]">${p}</span></li>`).join("")}
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="space-y-3">
-          <h4 class="text-sm font-semibold text-white">Associated Statutory & Municipal Provisions in Database (${matchedLeg.length})</h4>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            ${matchedLeg.slice(0, 9).map(r => `
-              <div class="bg-slate-900/80 border border-slate-800 rounded-lg p-3.5 hover:border-slate-700 transition cursor-pointer" onclick='openModal(${JSON.stringify(r)})'>
-                <div class="flex items-center justify-between text-[10px] text-slate-400 uppercase">
-                  <span>${r.Jurisdiction}</span>
-                  <span>${r.Level}</span>
-                </div>
-                <h5 class="text-xs font-semibold text-white mt-1 truncate">${r["Official citation"]}</h5>
-                <p class="text-[11px] text-slate-300 mt-1 line-clamp-2">${r["Summary of content"]}</p>
-              </div>
-            `).join("")}
-          </div>
-          ${matchedLeg.length > 9 ? `<p class="text-xs text-slate-500 italic">+ ${matchedLeg.length - 9} more provisions. Switch to the Statutory Provisions tab to view all.` : ""}
-        </div>
-      `;
     }
 
     function extractRelevanceFields(r) {
@@ -911,7 +832,9 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       initFilters();
+      renderRanking();
       renderLegislation();
+      renderCaseLaw();
     });
   </script>
 </body>
