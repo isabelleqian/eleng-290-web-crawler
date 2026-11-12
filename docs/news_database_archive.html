@@ -292,7 +292,7 @@
     }
 
     function revealHash() {
-      const id = decodeURIComponent(location.hash || '').replace(/^#/, '');
+      const id = decodeURIComponent(window.location.hash || '').replace(/^#/, '');
       if (!id) return;
       let row = document.getElementById(id);
       if (!row) {

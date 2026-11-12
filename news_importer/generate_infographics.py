@@ -3251,16 +3251,6 @@ def generate_html_infographics(data_payload: dict) -> str:
       renderDatabase();
     }}
 
-      if (search) {{
-        search.addEventListener('input', () => {{
-          dbSearchQuery = search.value;
-          renderDatabase();
-        }});
-      }}
-
-      renderDatabase();
-    }}
-
     function initOutside() {{
       const panel = DATA.outside || {{ themes: [], unlabeled_count: 0, total: 0 }};
       const summary = document.getElementById('outside-summary');
@@ -3701,7 +3691,7 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
     }}
 
     function revealHash() {{
-      const id = decodeURIComponent(location.hash || '').replace(/^#/, '');
+      const id = decodeURIComponent(window.location.hash || '').replace(/^#/, '');
       if (!id) return;
       let row = document.getElementById(id);
       if (!row) {{
