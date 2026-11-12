@@ -75,7 +75,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 95,
+    "relevance_rationale": "Empirical research and transportation authority studies evaluating algorithmic navigation impacts and municipal data integration."
   },
   {
     "source_id": "src_dc10ae72df82e2180ca6",
@@ -158,7 +160,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 98,
+    "relevance_rationale": "Municipal city council legislative action and legal initiatives addressing navigation platform cut-through traffic on neighborhood streets."
   },
   {
     "source_id": "src_d1320840ff1688ff741e",
@@ -251,7 +255,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 99,
+    "relevance_rationale": "Landmark municipal ordinance restricting residential cut-through streets to residents during peak commute hours to counter navigation apps."
   },
   {
     "source_id": "src_23a1fcd9de5f1849cfa3",
@@ -339,7 +345,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 93,
+    "relevance_rationale": "Targeted traffic engineering measures (one-way street conversions and physical diverters) installed to block navigation app bypass routes."
   },
   {
     "source_id": "src_8f6b264845ca47814ba0",
@@ -434,7 +442,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "src_02454d2db17a078f05f9",
@@ -505,7 +515,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 98,
+    "relevance_rationale": "Municipal city council legislative action and legal initiatives addressing navigation platform cut-through traffic on neighborhood streets."
   },
   {
     "source_id": "src_483bc7bade77380c2828",
@@ -564,7 +576,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 99,
+    "relevance_rationale": "Statutory and legislative mandate requiring navigation platforms to respect municipal street restrictions and commercial bridge heights."
   },
   {
     "source_id": "src_32ccdcb0712575f8cb0b",
@@ -628,7 +642,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 99,
+    "relevance_rationale": "Statutory and legislative mandate requiring navigation platforms to respect municipal street restrictions and commercial bridge heights."
   },
   {
     "source_id": "src_9403a6fb4c495dd5f6e0",
@@ -686,7 +702,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 98,
+    "relevance_rationale": "Municipal city council legislative action and legal initiatives addressing navigation platform cut-through traffic on neighborhood streets."
   },
   {
     "source_id": "src_004598f106dc0112c9f5",
@@ -750,7 +768,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 98,
+    "relevance_rationale": "Municipal city council legislative action and legal initiatives addressing navigation platform cut-through traffic on neighborhood streets."
   },
   {
     "source_id": "src_df18bde5b05e69aa6fee",
@@ -827,7 +847,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 97,
+    "relevance_rationale": "Severe physical traffic hazards and vehicle rollovers on extreme-gradient residential streets caused by routing algorithm shortcuts."
   },
   {
     "source_id": "src_ec380b5a89074be9476e",
@@ -891,7 +913,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 98,
+    "relevance_rationale": "Municipal city council legislative action and legal initiatives addressing navigation platform cut-through traffic on neighborhood streets."
   },
   {
     "source_id": "src_2910e1608eed71065145",
@@ -955,7 +979,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 97,
+    "relevance_rationale": "Severe physical traffic hazards and vehicle rollovers on extreme-gradient residential streets caused by routing algorithm shortcuts."
   },
   {
     "source_id": "src_7a51efb5b5f5430e194b",
@@ -1013,7 +1039,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "src_0d4fa7ccce08eaf50b2f",
@@ -1071,7 +1099,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "src_ab2b7d7e044d5121e5f5",
@@ -1129,7 +1159,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 95,
+    "relevance_rationale": "Empirical research and transportation authority studies evaluating algorithmic navigation impacts and municipal data integration."
   },
   {
     "source_id": "src_f2e92e99cdf509170cc7",
@@ -1187,7 +1219,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "src_396cf33a5161f5f5bd8d",
@@ -1251,7 +1285,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 93,
+    "relevance_rationale": "Targeted traffic engineering measures (one-way street conversions and physical diverters) installed to block navigation app bypass routes."
   },
   {
     "source_id": "src_a8fe04b8629212eb1ae5",
@@ -1315,7 +1351,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 93,
+    "relevance_rationale": "Targeted traffic engineering measures (one-way street conversions and physical diverters) installed to block navigation app bypass routes."
   },
   {
     "source_id": "src_5b329e50217cff65c640",
@@ -1379,7 +1417,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 93,
+    "relevance_rationale": "Targeted traffic engineering measures (one-way street conversions and physical diverters) installed to block navigation app bypass routes."
   },
   {
     "source_id": "src_a8b514916cc36bde3d40",
@@ -1443,7 +1483,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 93,
+    "relevance_rationale": "Targeted traffic engineering measures (one-way street conversions and physical diverters) installed to block navigation app bypass routes."
   },
   {
     "source_id": "src_a16a62edb70588f81bbb",
@@ -1501,7 +1543,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 93,
+    "relevance_rationale": "Targeted traffic engineering measures (one-way street conversions and physical diverters) installed to block navigation app bypass routes."
   },
   {
     "source_id": "src_c8f5fcc928d66ad4b9e7",
@@ -1559,7 +1603,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 90,
+    "relevance_rationale": "Navigation platform mapping architecture, emergency vehicle alerts, and municipal requests for road closure integrations."
   },
   {
     "source_id": "src_264bf1d902e4b812735b",
@@ -1617,7 +1663,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 90,
+    "relevance_rationale": "Navigation platform mapping architecture, emergency vehicle alerts, and municipal requests for road closure integrations."
   },
   {
     "source_id": "src_a3aec998433f0c3fff3d",
@@ -1675,7 +1723,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "src_209e9565661083dba383",
@@ -1733,7 +1783,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "src_97a13ecf3417e5676e08",
@@ -1797,7 +1849,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 90,
+    "relevance_rationale": "Navigation platform mapping architecture, emergency vehicle alerts, and municipal requests for road closure integrations."
   },
   {
     "source_id": "src_ae24cf62a63f34c9fe0b",
@@ -1855,7 +1909,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "src_2cee64cfc090c4b25ca7",
@@ -1919,7 +1975,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 99,
+    "relevance_rationale": "Landmark municipal ordinance restricting residential cut-through streets to residents during peak commute hours to counter navigation apps."
   },
   {
     "source_id": "src_2602e1f52eb57cee5b07",
@@ -1977,7 +2035,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 95,
+    "relevance_rationale": "Empirical research and transportation authority studies evaluating algorithmic navigation impacts and municipal data integration."
   },
   {
     "source_id": "src_8844a04c3601f584693a",
@@ -2054,7 +2114,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 86,
+    "relevance_rationale": "Investigation into legal implications and systemic traffic dynamics of routing algorithms redirecting commuter flows onto local roads."
   },
   {
     "source_id": "src_d8bae76a48b8c662c148",
@@ -2112,7 +2174,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 95,
+    "relevance_rationale": "Empirical research and transportation authority studies evaluating algorithmic navigation impacts and municipal data integration."
   },
   {
     "source_id": "src_6b808701b37bfa4ff82d",
@@ -2176,7 +2240,9 @@
     "archive_dir": "",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6J9T-Y0C3-S3T5-M0JH-00000-00",
@@ -2245,7 +2311,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6J9T-Y0C3-S3T5-M0JH-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:6KGN-8633-RV2G-70PX-00000-00",
@@ -2314,7 +2382,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6KGN-8633-RV2G-70PX-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:6K23-G0Y3-S99D-X1PV-00000-00",
@@ -2394,7 +2464,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6K23-G0Y3-S99D-X1PV-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5KXP-09P1-DXY3-00J6-00000-00",
@@ -2468,7 +2540,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5KXP-09P1-DXY3-00J6-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5S66-H271-F03R-N3F4-00000-00",
@@ -2537,7 +2611,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5S66-H271-F03R-N3F4-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5CFG-S691-F03R-N0CD-00000-00",
@@ -2606,7 +2682,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5CFG-S691-F03R-N0CD-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 98,
+    "relevance_rationale": "Federal regulatory proposal by the US Department of Transportation and NHTSA to establish safety and routing oversight over mobile navigation apps."
   },
   {
     "source_id": "nexis_urn:contentItem:6G76-J083-RVJY-R2R6-00000-00",
@@ -2675,7 +2753,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6G76-J083-RVJY-R2R6-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 98,
+    "relevance_rationale": "Federal regulatory proposal by the US Department of Transportation and NHTSA to establish safety and routing oversight over mobile navigation apps."
   },
   {
     "source_id": "nexis_urn:contentItem:6DP3-HNN3-SBYC-S06J-00000-00",
@@ -2744,7 +2824,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6DP3-HNN3-SBYC-S06J-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5KR5-JDR1-F12F-F437-00000-00",
@@ -2818,7 +2900,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5KR5-JDR1-F12F-F437-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5KPS-F281-DYG2-R4FC-00000-00",
@@ -2892,7 +2976,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5KPS-F281-DYG2-R4FC-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:6JDF-6YF3-RXM1-R51N-00000-00",
@@ -2966,7 +3052,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6JDF-6YF3-RXM1-R51N-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:6JB1-HSD3-RRJ6-S2F0-00000-00",
@@ -3035,7 +3123,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6JB1-HSD3-RRJ6-S2F0-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:6JDJ-CKB3-S76F-Y3CS-00000-00",
@@ -3104,7 +3194,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6JDJ-CKB3-S76F-Y3CS-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Autonomous vehicle sensor fleet and crowdsourced navigation partnership alerting municipal public works departments to roadway potholes."
   },
   {
     "source_id": "nexis_urn:contentItem:5JRW-M521-DYG2-R3W7-00000-00",
@@ -3178,7 +3270,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5JRW-M521-DYG2-R3W7-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5X5R-39S1-F03R-N066-00000-00",
@@ -3241,7 +3335,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5X5R-39S1-F03R-N066-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:6KF6-GDK3-RT1G-H08X-00000-00",
@@ -3310,7 +3406,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6KF6-GDK3-RT1G-H08X-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 90,
+    "relevance_rationale": "Navigation platform mapping architecture, emergency vehicle alerts, and municipal requests for road closure integrations."
   },
   {
     "source_id": "nexis_urn:contentItem:6CNY-BDW1-F12F-F1B5-00000-00",
@@ -3384,7 +3482,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6CNY-BDW1-F12F-F1B5-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 95,
+    "relevance_rationale": "Municipal traffic signal timing optimization initiative using navigation platform mobility data to reduce intersection delays and emissions."
   },
   {
     "source_id": "nexis_urn:contentItem:6HBG-7JV3-RSFV-C2TW-00000-00",
@@ -3453,7 +3553,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6HBG-7JV3-RSFV-C2TW-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 93,
+    "relevance_rationale": "Municipal traffic enforcement and neighborhood resistance against navigation app shortcuts diverting highway overflow into local residential streets."
   },
   {
     "source_id": "nexis_urn:contentItem:69X0-WNX1-F03F-K51D-00000-00",
@@ -3516,7 +3618,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-69X0-WNX1-F03F-K51D-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5FBD-JYR1-F03R-N249-00000-00",
@@ -3585,7 +3689,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5FBD-JYR1-F03R-N249-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5GHC-2MH1-JB72-12MV-00000-00",
@@ -3653,7 +3759,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5GHC-2MH1-JB72-12MV-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 86,
+    "relevance_rationale": "Investigation into legal implications and systemic traffic dynamics of routing algorithms redirecting commuter flows onto local roads."
   },
   {
     "source_id": "nexis_urn:contentItem:6JB2-23J3-RWVD-34TB-00000-00",
@@ -3716,7 +3824,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6JB2-23J3-RWVD-34TB-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Autonomous vehicle sensor fleet and crowdsourced navigation partnership alerting municipal public works departments to roadway potholes."
   },
   {
     "source_id": "nexis_urn:contentItem:6GD2-Y0F3-RV1H-T2MT-00000-00",
@@ -3785,7 +3895,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6GD2-Y0F3-RV1H-T2MT-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 92,
+    "relevance_rationale": "Infrastructure damage risks and vehicle weight/height bans enacted to prevent GPS routing from directing heavy vehicles onto unsuitable roadways."
   },
   {
     "source_id": "nexis_urn:contentItem:5RN8-0M61-JDKC-R331-00000-00",
@@ -3853,7 +3965,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5RN8-0M61-JDKC-R331-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5CFM-X9F1-JCMN-Y3FG-00000-00",
@@ -3916,7 +4030,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5CFM-X9F1-JCMN-Y3FG-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 98,
+    "relevance_rationale": "Federal regulatory proposal by the US Department of Transportation and NHTSA to establish safety and routing oversight over mobile navigation apps."
   },
   {
     "source_id": "nexis_urn:contentItem:5FV2-0F51-DYTH-G1V5-00000-00",
@@ -3984,7 +4100,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5FV2-0F51-DYTH-G1V5-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:6GD2-Y0F3-RV1H-T2MS-00000-00",
@@ -4053,7 +4171,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6GD2-Y0F3-RV1H-T2MS-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 92,
+    "relevance_rationale": "Infrastructure damage risks and vehicle weight/height bans enacted to prevent GPS routing from directing heavy vehicles onto unsuitable roadways."
   },
   {
     "source_id": "nexis_urn:contentItem:5K36-VSB1-DYG2-R3XV-00000-00",
@@ -4127,7 +4247,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5K36-VSB1-DYG2-R3XV-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:6KFT-KTJ3-S8NW-80HD-00000-00",
@@ -4196,7 +4318,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6KFT-KTJ3-S8NW-80HD-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Autonomous vehicle sensor fleet and crowdsourced navigation partnership alerting municipal public works departments to roadway potholes."
   },
   {
     "source_id": "nexis_urn:contentItem:6J9V-WWH3-RX6H-53PJ-00000-00",
@@ -4265,7 +4389,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6J9V-WWH3-RX6H-53PJ-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Autonomous vehicle sensor fleet and crowdsourced navigation partnership alerting municipal public works departments to roadway potholes."
   },
   {
     "source_id": "nexis_urn:contentItem:5MP0-RJT1-F12F-F2DN-00000-00",
@@ -4333,7 +4459,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5MP0-RJT1-F12F-F2DN-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:63ST-04D1-F03R-N3SF-00000-00",
@@ -4396,7 +4524,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-63ST-04D1-F03R-N3SF-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 87,
+    "relevance_rationale": "Algorithmic routing policy shift toward eco-friendly routing to optimize fuel consumption and minimize residential emissions."
   },
   {
     "source_id": "nexis_urn:contentItem:6J9S-VFV3-SG7J-T1CW-00000-00",
@@ -4464,7 +4594,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6J9S-VFV3-SG7J-T1CW-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Autonomous vehicle sensor fleet and crowdsourced navigation partnership alerting municipal public works departments to roadway potholes."
   },
   {
     "source_id": "nexis_urn:contentItem:6JBN-B2S3-S0W8-N43H-00000-00",
@@ -4533,7 +4665,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6JBN-B2S3-S0W8-N43H-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Autonomous vehicle sensor fleet and crowdsourced navigation partnership alerting municipal public works departments to roadway potholes."
   },
   {
     "source_id": "nexis_urn:contentItem:6JBN-T673-SGW5-C224-00000-00",
@@ -4602,7 +4736,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6JBN-T673-SGW5-C224-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Autonomous vehicle sensor fleet and crowdsourced navigation partnership alerting municipal public works departments to roadway potholes."
   },
   {
     "source_id": "nexis_urn:contentItem:5KJ7-X441-JDKC-R3KT-00000-00",
@@ -4676,7 +4812,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5KJ7-X441-JDKC-R3KT-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5JG5-TCW1-F053-W0NR-00000-00",
@@ -4750,7 +4888,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5JG5-TCW1-F053-W0NR-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5CFV-P751-JBPX-W04S-00000-00",
@@ -4813,7 +4953,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5CFV-P751-JBPX-W04S-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 98,
+    "relevance_rationale": "Federal regulatory proposal by the US Department of Transportation and NHTSA to establish safety and routing oversight over mobile navigation apps."
   },
   {
     "source_id": "nexis_urn:contentItem:5JPT-KMX1-F12F-F3C3-00000-00",
@@ -4881,7 +5023,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5JPT-KMX1-F12F-F3C3-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5FKJ-FVR1-DYTH-G4FG-00000-00",
@@ -4949,7 +5093,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5FKJ-FVR1-DYTH-G4FG-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5S8X-WVF1-JCBF-S33F-00000-00",
@@ -5023,7 +5169,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5S8X-WVF1-JCBF-S33F-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5F9R-KCS1-F12F-F39G-00000-00",
@@ -5097,7 +5245,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5F9R-KCS1-F12F-F39G-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:60XF-PW11-JDKC-R1W3-00000-00",
@@ -5171,7 +5321,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-60XF-PW11-JDKC-R1W3-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5VSV-C4W1-JDKC-R0MT-00000-00",
@@ -5239,7 +5391,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5VSV-C4W1-JDKC-R0MT-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5S8R-1761-JCKG-J00S-00000-00",
@@ -5308,7 +5462,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5S8R-1761-JCKG-J00S-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 93,
+    "relevance_rationale": "Municipal traffic enforcement and neighborhood resistance against navigation app shortcuts diverting highway overflow into local residential streets."
   },
   {
     "source_id": "nexis_urn:contentItem:5MD5-07S1-JC11-10YN-00000-00",
@@ -5376,7 +5532,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5MD5-07S1-JC11-10YN-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5T5C-XB71-JC65-505H-00000-00",
@@ -5450,7 +5608,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5T5C-XB71-JC65-505H-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 99,
+    "relevance_rationale": "Landmark municipal ordinance restricting residential cut-through streets to residents during peak commute hours to counter navigation apps."
   },
   {
     "source_id": "nexis_urn:contentItem:6GBB-B2S3-S09F-M2HX-00000-00",
@@ -5513,7 +5673,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6GBB-B2S3-S09F-M2HX-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 92,
+    "relevance_rationale": "Infrastructure damage risks and vehicle weight/height bans enacted to prevent GPS routing from directing heavy vehicles onto unsuitable roadways."
   },
   {
     "source_id": "nexis_urn:contentItem:5P7K-RGT1-F12F-F49X-00000-00",
@@ -5587,7 +5749,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5P7K-RGT1-F12F-F49X-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5NMW-2HG1-DYG2-R1KW-00000-00",
@@ -5661,7 +5825,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5NMW-2HG1-DYG2-R1KW-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5RF0-1NN1-JB20-G507-00000-00",
@@ -5730,7 +5896,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5RF0-1NN1-JB20-G507-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 93,
+    "relevance_rationale": "Municipal traffic enforcement and neighborhood resistance against navigation app shortcuts diverting highway overflow into local residential streets."
   },
   {
     "source_id": "nexis_urn:contentItem:5N17-Y4B1-F12F-F2MY-00000-00",
@@ -5798,7 +5966,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5N17-Y4B1-F12F-F2MY-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5R0P-P3D1-DYTH-G110-00000-00",
@@ -5866,7 +6036,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5R0P-P3D1-DYTH-G110-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5KR0-JYX1-JDKC-R50Y-00000-00",
@@ -5934,7 +6106,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5KR0-JYX1-JDKC-R50Y-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5KJ7-X441-JDKC-R3KW-00000-00",
@@ -6008,7 +6182,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5KJ7-X441-JDKC-R3KW-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5K50-8MY1-JDKC-R246-00000-00",
@@ -6082,7 +6258,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5K50-8MY1-JDKC-R246-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5K1K-PW91-JCBF-S4VS-00000-00",
@@ -6150,7 +6328,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5K1K-PW91-JCBF-S4VS-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5HND-4081-JC8F-22BP-00000-00",
@@ -6213,7 +6393,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5HND-4081-JC8F-22BP-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5J2N-DK81-DYG2-R401-00000-00",
@@ -6287,7 +6469,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5J2N-DK81-DYG2-R401-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5YD5-NK31-JC65-51MB-00000-00",
@@ -6361,7 +6545,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5YD5-NK31-JC65-51MB-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 99,
+    "relevance_rationale": "Landmark municipal ordinance restricting residential cut-through streets to residents during peak commute hours to counter navigation apps."
   },
   {
     "source_id": "nexis_urn:contentItem:5K3G-GG71-JDTS-G2V0-00000-00",
@@ -6424,7 +6610,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5K3G-GG71-JDTS-G2V0-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5RPF-NKS1-DY83-T08F-00000-00",
@@ -6498,7 +6686,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5RPF-NKS1-DY83-T08F-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 93,
+    "relevance_rationale": "Municipal traffic enforcement and neighborhood resistance against navigation app shortcuts diverting highway overflow into local residential streets."
   },
   {
     "source_id": "nexis_urn:contentItem:5MFN-DGD1-JDKC-R1RJ-00000-00",
@@ -6566,7 +6756,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5MFN-DGD1-JDKC-R1RJ-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5SST-61B1-JDKC-R3BD-00000-00",
@@ -6634,7 +6826,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5SST-61B1-JDKC-R3BD-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 95,
+    "relevance_rationale": "Empirical research and transportation authority studies evaluating algorithmic navigation impacts and municipal data integration."
   },
   {
     "source_id": "nexis_urn:contentItem:6H62-XB83-S25R-T4M5-00000-00",
@@ -6702,7 +6896,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6H62-XB83-S25R-T4M5-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 92,
+    "relevance_rationale": "Infrastructure damage risks and vehicle weight/height bans enacted to prevent GPS routing from directing heavy vehicles onto unsuitable roadways."
   },
   {
     "source_id": "nexis_urn:contentItem:5V5C-RPM1-JDKC-R091-00000-00",
@@ -6770,7 +6966,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5V5C-RPM1-JDKC-R091-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:62CM-7GY1-DYVR-P2T2-00000-00",
@@ -6844,7 +7042,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-62CM-7GY1-DYVR-P2T2-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 99,
+    "relevance_rationale": "Statutory and legislative mandate requiring navigation platforms to respect municipal street restrictions and commercial bridge heights."
   },
   {
     "source_id": "nexis_urn:contentItem:5VCH-KK31-JCMN-Y1VY-00000-00",
@@ -6907,7 +7107,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5VCH-KK31-JCMN-Y1VY-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 96,
+    "relevance_rationale": "Law enforcement agency pushback demanding navigation apps remove crowdsourced police location, speed trap, and DUI checkpoint alerts."
   },
   {
     "source_id": "nexis_urn:contentItem:6HFB-7F23-SBRV-H1GS-00000-00",
@@ -6981,7 +7183,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6HFB-7F23-SBRV-H1GS-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 99,
+    "relevance_rationale": "Statutory and legislative mandate requiring navigation platforms to respect municipal street restrictions and commercial bridge heights."
   },
   {
     "source_id": "nexis_urn:contentItem:6FWV-BM43-RRX6-50DY-00000-00",
@@ -7049,7 +7253,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6FWV-BM43-RRX6-50DY-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 95,
+    "relevance_rationale": "Municipal traffic signal timing optimization initiative using navigation platform mobility data to reduce intersection delays and emissions."
   },
   {
     "source_id": "nexis_urn:contentItem:5JG7-TH41-DYTH-G0P2-00000-00",
@@ -7117,7 +7323,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5JG7-TH41-DYTH-G0P2-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5KKY-N4W1-JC8S-D52X-00000-00",
@@ -7186,7 +7394,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5KKY-N4W1-JC8S-D52X-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:5FWG-YXT1-JCMN-Y4XP-00000-00",
@@ -7255,7 +7465,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5FWG-YXT1-JCMN-Y4XP-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 96,
+    "relevance_rationale": "Law enforcement agency pushback demanding navigation apps remove crowdsourced police location, speed trap, and DUI checkpoint alerts."
   },
   {
     "source_id": "nexis_urn:contentItem:5XBB-X0M1-JC0C-J026-00000-00",
@@ -7318,7 +7530,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5XBB-X0M1-JC0C-J026-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 96,
+    "relevance_rationale": "Law enforcement agency pushback demanding navigation apps remove crowdsourced police location, speed trap, and DUI checkpoint alerts."
   },
   {
     "source_id": "nexis_urn:contentItem:5SH9-WFC1-F12F-F53T-00000-00",
@@ -7392,7 +7606,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5SH9-WFC1-F12F-F53T-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5K6D-XDN1-JC11-114H-00000-00",
@@ -7460,7 +7676,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5K6D-XDN1-JC11-114H-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5RMS-DBB1-JDKC-R2MH-00000-00",
@@ -7534,7 +7752,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5RMS-DBB1-JDKC-R2MH-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5GPG-YMV1-JC85-V436-00000-00",
@@ -7597,7 +7817,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5GPG-YMV1-JC85-V436-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5VCH-D7R1-JBPX-X3FP-00000-00",
@@ -7660,7 +7882,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5VCH-D7R1-JBPX-X3FP-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 96,
+    "relevance_rationale": "Law enforcement agency pushback demanding navigation apps remove crowdsourced police location, speed trap, and DUI checkpoint alerts."
   },
   {
     "source_id": "nexis_urn:contentItem:5MD4-RFN1-DYTH-G34S-00000-00",
@@ -7728,7 +7952,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5MD4-RFN1-DYTH-G34S-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:63HR-VBW1-F03R-N442-00000-00",
@@ -7797,7 +8023,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-63HR-VBW1-F03R-N442-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 96,
+    "relevance_rationale": "State transportation department intervention attempting to inject false road closure information into navigation apps to manage flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5VG9-HDB1-JBSN-30DK-00000-00",
@@ -7866,7 +8094,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5VG9-HDB1-JBSN-30DK-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 96,
+    "relevance_rationale": "Law enforcement agency pushback demanding navigation apps remove crowdsourced police location, speed trap, and DUI checkpoint alerts."
   },
   {
     "source_id": "nexis_urn:contentItem:4D8V-XDY0-0092-J3HK-00000-00",
@@ -7935,7 +8165,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-4D8V-XDY0-0092-J3HK-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 98,
+    "relevance_rationale": "Federal regulatory proposal by the US Department of Transportation and NHTSA to establish safety and routing oversight over mobile navigation apps."
   },
   {
     "source_id": "nexis_urn:contentItem:5TCC-3WG1-DXVP-V217-00000-00",
@@ -8004,7 +8236,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5TCC-3WG1-DXVP-V217-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 93,
+    "relevance_rationale": "Municipal traffic enforcement and neighborhood resistance against navigation app shortcuts diverting highway overflow into local residential streets."
   },
   {
     "source_id": "nexis_urn:contentItem:5MDK-CX51-JC11-10KJ-00000-00",
@@ -8078,7 +8312,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5MDK-CX51-JC11-10KJ-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:6JD4-H063-SFWH-73FN-00000-00",
@@ -8141,7 +8377,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6JD4-H063-SFWH-73FN-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Autonomous vehicle sensor fleet and crowdsourced navigation partnership alerting municipal public works departments to roadway potholes."
   },
   {
     "source_id": "nexis_urn:contentItem:5H0V-B0R1-DYG2-R2C4-00000-00",
@@ -8209,7 +8447,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5H0V-B0R1-DYG2-R2C4-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5Y26-NTJ1-DYVR-P4M9-00000-00",
@@ -8283,7 +8523,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5Y26-NTJ1-DYVR-P4M9-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 99,
+    "relevance_rationale": "Statutory and legislative mandate requiring navigation platforms to respect municipal street restrictions and commercial bridge heights."
   },
   {
     "source_id": "nexis_urn:contentItem:5VCM-69K1-JCMN-Y00B-00000-00",
@@ -8352,7 +8594,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5VCM-69K1-JCMN-Y00B-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 96,
+    "relevance_rationale": "Law enforcement agency pushback demanding navigation apps remove crowdsourced police location, speed trap, and DUI checkpoint alerts."
   },
   {
     "source_id": "nexis_urn:contentItem:5N4W-N571-DYTH-G2G4-00000-00",
@@ -8420,7 +8664,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5N4W-N571-DYTH-G2G4-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:53T0-GXS1-DXX7-H25H-00000-00",
@@ -8483,7 +8729,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-53T0-GXS1-DXX7-H25H-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 86,
+    "relevance_rationale": "Investigation into legal implications and systemic traffic dynamics of routing algorithms redirecting commuter flows onto local roads."
   },
   {
     "source_id": "nexis_urn:contentItem:5N1D-GYS1-JC8N-K0NH-00000-00",
@@ -8552,7 +8800,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5N1D-GYS1-JC8N-K0NH-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 93,
+    "relevance_rationale": "Municipal traffic enforcement and neighborhood resistance against navigation app shortcuts diverting highway overflow into local residential streets."
   },
   {
     "source_id": "nexis_urn:contentItem:679C-4GD1-JBG1-83JX-00000-00",
@@ -8626,7 +8876,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-679C-4GD1-JBG1-83JX-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:5HJK-RKB1-DYRR-92B0-00000-00",
@@ -8695,7 +8947,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5HJK-RKB1-DYRR-92B0-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 85,
+    "relevance_rationale": "Analysis of navigation platform routing patterns, feature updates, and commuter navigation behavior."
   },
   {
     "source_id": "nexis_urn:contentItem:5X4N-53V1-JDKC-R3PT-00000-00",
@@ -8769,7 +9023,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5X4N-53V1-JDKC-R3PT-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 85,
+    "relevance_rationale": "Analysis of navigation platform routing patterns, feature updates, and commuter navigation behavior."
   },
   {
     "source_id": "nexis_urn:contentItem:589D-0D91-DXNV-51YF-00000-00",
@@ -8838,7 +9094,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-589D-0D91-DXNV-51YF-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:6CPS-DDJ1-F03R-N298-00000-00",
@@ -8907,7 +9165,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6CPS-DDJ1-F03R-N298-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 95,
+    "relevance_rationale": "Municipal traffic signal timing optimization initiative using navigation platform mobility data to reduce intersection delays and emissions."
   },
   {
     "source_id": "nexis_urn:contentItem:6KBM-BFX3-SDJ6-53RR-00000-00",
@@ -8976,7 +9236,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-6KBM-BFX3-SDJ6-53RR-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:5VCH-KKT1-JCMN-Y1TM-00000-00",
@@ -9045,7 +9307,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5VCH-KKT1-JCMN-Y1TM-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 96,
+    "relevance_rationale": "Law enforcement agency pushback demanding navigation apps remove crowdsourced police location, speed trap, and DUI checkpoint alerts."
   },
   {
     "source_id": "nexis_urn:contentItem:69RD-M391-JCBF-S14F-00000-00",
@@ -9119,7 +9383,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-navigation-app-AND-turn-ban-OR-turn-restric/urn-contentItem-69RD-M391-JCBF-S14F-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 85,
+    "relevance_rationale": "Analysis of navigation platform routing patterns, feature updates, and commuter navigation behavior."
   },
   {
     "source_id": "nexis_urn:contentItem:5K0V-VBK1-DY6F-J3BW-00000-00",
@@ -9188,7 +9454,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-navigation-app-AND-turn-ban-OR-turn-restric/urn-contentItem-5K0V-VBK1-DY6F-J3BW-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 86,
+    "relevance_rationale": "Investigation into legal implications and systemic traffic dynamics of routing algorithms redirecting commuter flows onto local roads."
   },
   {
     "source_id": "nexis_urn:contentItem:7X74-0TJ0-Y8T9-V4S1-00000-00",
@@ -9262,7 +9530,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-navigation-app-AND-turn-ban-OR-turn-restric/urn-contentItem-7X74-0TJ0-Y8T9-V4S1-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 90,
+    "relevance_rationale": "Navigation platform mapping architecture, emergency vehicle alerts, and municipal requests for road closure integrations."
   },
   {
     "source_id": "nexis_urn:contentItem:5VNV-SYP1-DY07-K292-00000-00",
@@ -9331,7 +9601,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-navigation-app-AND-turn-ban-OR-turn-restric/urn-contentItem-5VNV-SYP1-DY07-K292-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 91,
+    "relevance_rationale": "Commercial fleet navigation technology designed to provide low-clearance avoidance and truck-safe routing to prevent infrastructure strikes."
   },
   {
     "source_id": "nexis_urn:contentItem:63SN-6D81-DY7V-G183-00000-00",
@@ -9399,7 +9671,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-navigation-app-AND-avoid-residential-street/urn-contentItem-63SN-6D81-DY7V-G183-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 87,
+    "relevance_rationale": "Algorithmic routing policy shift toward eco-friendly routing to optimize fuel consumption and minimize residential emissions."
   },
   {
     "source_id": "nexis_urn:contentItem:5N7J-XFH1-F03R-N37N-00000-00",
@@ -9462,7 +9736,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-navigation-app-AND-avoid-residential-street/urn-contentItem-5N7J-XFH1-F03R-N37N-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 85,
+    "relevance_rationale": "Analysis of navigation platform routing patterns, feature updates, and commuter navigation behavior."
   },
   {
     "source_id": "nexis_urn:contentItem:5W9Y-MDT1-DY60-M0M6-00000-00",
@@ -9525,7 +9801,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-navigation-app-AND-avoid-residential-street/urn-contentItem-5W9Y-MDT1-DY60-M0M6-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 85,
+    "relevance_rationale": "Analysis of navigation platform routing patterns, feature updates, and commuter navigation behavior."
   },
   {
     "source_id": "nexis_urn:contentItem:5YRJ-C711-JCMN-Y15H-00000-00",
@@ -9588,7 +9866,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-navigation-app-AND-avoid-residential-street/urn-contentItem-5YRJ-C711-JCMN-Y15H-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 85,
+    "relevance_rationale": "Analysis of navigation platform routing patterns, feature updates, and commuter navigation behavior."
   },
   {
     "source_id": "nexis_urn:contentItem:5YX1-RGD1-JCMN-Y4PM-00000-00",
@@ -9651,7 +9931,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-navigation-app-AND-avoid-residential-street/urn-contentItem-5YX1-RGD1-JCMN-Y4PM-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 85,
+    "relevance_rationale": "Analysis of navigation platform routing patterns, feature updates, and commuter navigation behavior."
   },
   {
     "source_id": "nexis_urn:contentItem:5WC1-D801-JCMN-Y21G-00000-00",
@@ -9714,7 +9996,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-navigation-app-AND-avoid-residential-street/urn-contentItem-5WC1-D801-JCMN-Y21G-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Autonomous vehicle sensor fleet and crowdsourced navigation partnership alerting municipal public works departments to roadway potholes."
   },
   {
     "source_id": "nexis_urn:contentItem:5X75-KD41-F03R-N52V-00000-00",
@@ -9783,7 +10067,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5X75-KD41-F03R-N52V-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 86,
+    "relevance_rationale": "Investigation into legal implications and systemic traffic dynamics of routing algorithms redirecting commuter flows onto local roads."
   },
   {
     "source_id": "nexis_urn:contentItem:5Y5V-NWG1-JBRC-V10Y-00000-00",
@@ -9852,7 +10138,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5Y5V-NWG1-JBRC-V10Y-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 97,
+    "relevance_rationale": "Empirical demonstration of algorithmic resistance simulating virtual traffic jams on Google Maps using 99 smartphones in a handcart."
   },
   {
     "source_id": "nexis_urn:contentItem:5F86-02N1-JBSS-S139-00000-00",
@@ -9926,7 +10214,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5F86-02N1-JBSS-S139-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 96,
+    "relevance_rationale": "Law enforcement agency pushback demanding navigation apps remove crowdsourced police location, speed trap, and DUI checkpoint alerts."
   },
   {
     "source_id": "nexis_urn:contentItem:5DVF-PCG1-F03R-N4RS-00000-00",
@@ -9995,7 +10285,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5DVF-PCG1-F03R-N4RS-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 96,
+    "relevance_rationale": "Neighborhood resident collective action and algorithmic resistance via crowdsourced false accident reporting to divert Waze traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:7X0X-V9T0-Y9HJ-P07D-00000-00",
@@ -10043,7 +10335,9 @@
     "archive_dir": "data/nexis/probes/urn-contentItem-7X0X-V9T0-Y9HJ-P07D-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 91,
+    "relevance_rationale": "Commercial fleet navigation technology designed to provide low-clearance avoidance and truck-safe routing to prevent infrastructure strikes."
   },
   {
     "source_id": "nexis_urn:contentItem:5TNP-YDV1-JCBD-1017-00000-00",
@@ -10097,7 +10391,9 @@
     "archive_dir": "data/nexis/neighborhood-impacts/urn-contentItem-5TNP-YDV1-JCBD-1017-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 98,
+    "relevance_rationale": "Municipal city council legislative action and legal initiatives addressing navigation platform cut-through traffic on neighborhood streets."
   },
   {
     "source_id": "nexis_urn:contentItem:5R2M-WBX1-JCMN-Y23D-00000-00",
@@ -10145,7 +10441,9 @@
     "archive_dir": "data/nexis/vehicle-type/urn-contentItem-5R2M-WBX1-JCMN-Y23D-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 85,
+    "relevance_rationale": "Analysis of navigation platform routing patterns, feature updates, and commuter navigation behavior."
   },
   {
     "source_id": "nexis_urn:contentItem:5K3Y-R4C1-JCMN-Y31S-00000-00",
@@ -10193,7 +10491,9 @@
     "archive_dir": "data/nexis/dynamic-parking-prices/urn-contentItem-5K3Y-R4C1-JCMN-Y31S-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 90,
+    "relevance_rationale": "Navigation platform mapping architecture, emergency vehicle alerts, and municipal requests for road closure integrations."
   },
   {
     "source_id": "nexis_urn:contentItem:59C9-W101-F03R-N0MX-00000-00",
@@ -10241,7 +10541,9 @@
     "archive_dir": "data/nexis/road-diets/urn-contentItem-59C9-W101-F03R-N0MX-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 93,
+    "relevance_rationale": "Targeted traffic engineering measures (one-way street conversions and physical diverters) installed to block navigation app bypass routes."
   },
   {
     "source_id": "nexis_urn:contentItem:5W18-9X61-DXVP-V170-00000-00",
@@ -10295,7 +10597,9 @@
     "archive_dir": "data/nexis/no-left-turn/urn-contentItem-5W18-9X61-DXVP-V170-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 93,
+    "relevance_rationale": "Municipal traffic enforcement and neighborhood resistance against navigation app shortcuts diverting highway overflow into local residential streets."
   },
   {
     "source_id": "nexis_urn:contentItem:5Y0N-7PG1-JBH5-W02N-00000-00",
@@ -10343,7 +10647,9 @@
     "archive_dir": "data/nexis/truck-restrictions/urn-contentItem-5Y0N-7PG1-JBH5-W02N-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 99,
+    "relevance_rationale": "Statutory and legislative mandate requiring navigation platforms to respect municipal street restrictions and commercial bridge heights."
   },
   {
     "source_id": "nexis_urn:contentItem:4MDG-VTK0-TX51-22NM-00000-00",
@@ -10391,7 +10697,9 @@
     "archive_dir": "data/nexis/truck-restrictions/urn-contentItem-4MDG-VTK0-TX51-22NM-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 91,
+    "relevance_rationale": "Commercial fleet navigation technology designed to provide low-clearance avoidance and truck-safe routing to prevent infrastructure strikes."
   },
   {
     "source_id": "nexis_urn:contentItem:5VSM-G3V1-JBH5-W0J6-00000-00",
@@ -10439,7 +10747,9 @@
     "archive_dir": "data/nexis/truck-restrictions/urn-contentItem-5VSM-G3V1-JBH5-W0J6-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 91,
+    "relevance_rationale": "Commercial fleet navigation technology designed to provide low-clearance avoidance and truck-safe routing to prevent infrastructure strikes."
   },
   {
     "source_id": "nexis_urn:contentItem:4V41-25W0-TX51-20M6-00000-00",
@@ -10487,7 +10797,9 @@
     "archive_dir": "data/nexis/truck-restrictions/urn-contentItem-4V41-25W0-TX51-20M6-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 91,
+    "relevance_rationale": "Commercial fleet navigation technology designed to provide low-clearance avoidance and truck-safe routing to prevent infrastructure strikes."
   },
   {
     "source_id": "nexis_urn:contentItem:58RR-7N31-JCRR-013F-00000-00",
@@ -10535,7 +10847,9 @@
     "archive_dir": "data/nexis/truck-restrictions/urn-contentItem-58RR-7N31-JCRR-013F-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 91,
+    "relevance_rationale": "Commercial fleet navigation technology designed to provide low-clearance avoidance and truck-safe routing to prevent infrastructure strikes."
   },
   {
     "source_id": "nexis_urn:contentItem:55CW-X7P1-J9YY-Y0G2-00000-00",
@@ -10583,7 +10897,9 @@
     "archive_dir": "data/nexis/truck-restrictions/urn-contentItem-55CW-X7P1-J9YY-Y0G2-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 91,
+    "relevance_rationale": "Commercial fleet navigation technology designed to provide low-clearance avoidance and truck-safe routing to prevent infrastructure strikes."
   },
   {
     "source_id": "nexis_urn:contentItem:6G8W-3GS3-RXR2-2143-00000-00",
@@ -10637,7 +10953,9 @@
     "archive_dir": "data/nexis/traffic-counts/urn-contentItem-6G8W-3GS3-RXR2-2143-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 93,
+    "relevance_rationale": "Municipal traffic enforcement and neighborhood resistance against navigation app shortcuts diverting highway overflow into local residential streets."
   },
   {
     "source_id": "nexis_urn:contentItem:6DP3-TRV3-RVYY-455N-00000-00",
@@ -10685,7 +11003,9 @@
     "archive_dir": "data/nexis/emergency-vehicles/urn-contentItem-6DP3-TRV3-RVYY-455N-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 90,
+    "relevance_rationale": "Navigation platform mapping architecture, emergency vehicle alerts, and municipal requests for road closure integrations."
   },
   {
     "source_id": "nexis_urn:contentItem:5J9G-46V1-JBKS-P433-00000-00",
@@ -10733,7 +11053,9 @@
     "archive_dir": "data/nexis/truck-restrictions/urn-contentItem-5J9G-46V1-JBKS-P433-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 91,
+    "relevance_rationale": "Commercial fleet navigation technology designed to provide low-clearance avoidance and truck-safe routing to prevent infrastructure strikes."
   },
   {
     "source_id": "src_472865dc84294b0bd125",
@@ -10793,7 +11115,9 @@
     "archive_dir": "data/archive/los_angeles/laist.com/waze-and-la-city-council-will-work-together-to-reduce-growing-traffic-on-residen--src_472865dc84294b0bd125/attempt-001",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 98,
+    "relevance_rationale": "Municipal city council legislative action and legal initiatives addressing navigation platform cut-through traffic on neighborhood streets."
   },
   {
     "source_id": "nexis_urn:contentItem:6CWY-FN51-DY37-31X4-00000-00",
@@ -10859,7 +11183,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6CWY-FN51-DY37-31X4-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6FYH-9K43-RSGG-P2M7-00000-00",
@@ -10925,7 +11251,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6FYH-9K43-RSGG-P2M7-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6GHR-C3D3-RWMJ-44YY-00000-00",
@@ -10991,7 +11319,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6GHR-C3D3-RWMJ-44YY-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6GS3-MVY3-RT79-600V-00000-00",
@@ -11051,7 +11381,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6GS3-MVY3-RT79-600V-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6GWR-4W53-RRTX-13F9-00000-00",
@@ -11111,7 +11443,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6GWR-4W53-RRTX-13F9-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6H7T-H1B3-RW7S-61G3-00000-00",
@@ -11177,7 +11511,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6H7T-H1B3-RW7S-61G3-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6H8K-R233-RT2P-13GY-00000-00",
@@ -11237,7 +11573,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6H8K-R233-RT2P-13GY-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6HFR-R813-RS65-00N7-00000-00",
@@ -11303,7 +11641,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6HFR-R813-RS65-00N7-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6HGC-SMW3-RW2Y-927P-00000-00",
@@ -11369,7 +11709,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6HGC-SMW3-RW2Y-927P-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6HGK-KM93-RXKC-C0JF-00000-00",
@@ -11429,7 +11771,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6HGK-KM93-RXKC-C0JF-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6J6N-NJY3-RTWR-N4D2-00000-00",
@@ -11495,7 +11839,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6J6N-NJY3-RTWR-N4D2-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6J9V-D563-S61W-X0NH-00000-00",
@@ -11555,7 +11901,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6J9V-D563-S61W-X0NH-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6JMY-GR73-RWVS-G0PF-00000-00",
@@ -11621,7 +11969,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6JMY-GR73-RWVS-G0PF-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6K64-XTC3-RVRN-D3K7-00000-00",
@@ -11687,7 +12037,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6K64-XTC3-RVRN-D3K7-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6KGW-X313-RYMC-J2S7-00000-00",
@@ -11753,7 +12105,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6KGW-X313-RYMC-J2S7-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6KGN-XYV3-RV2K-H099-00000-00",
@@ -11819,7 +12173,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6KGN-XYV3-RV2K-H099-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:6KP2-3303-RSGV-41K1-00000-00",
@@ -11879,7 +12235,9 @@
     "archive_dir": "data/nexis/Atlanta-city-council-cut-through-traffic-residential-street-speed-humps-OR-no-th/urn-contentItem-6KP2-3303-RSGV-41K1-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 88,
+    "relevance_rationale": "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:5RG8-H741-JCB3-X1WH-00000-00",
@@ -11945,7 +12303,9 @@
     "archive_dir": "data/nexis/Turn-restrictions/urn-contentItem-5RG8-H741-JCB3-X1WH-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 98,
+    "relevance_rationale": "Municipal cut-through street closures and court challenges concerning local government authority to restrict navigation app traffic."
   },
   {
     "source_id": "nexis_urn:contentItem:53RV-7R81-F18Y-Y1PF-00000-00",
@@ -11999,7 +12359,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-53RV-7R81-F18Y-Y1PF-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 99,
+    "relevance_rationale": "Statutory and legislative mandate requiring navigation platforms to respect municipal street restrictions and commercial bridge heights."
   },
   {
     "source_id": "nexis_urn:contentItem:5HM3-0111-JB72-12XH-00000-00",
@@ -12059,7 +12421,9 @@
     "archive_dir": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-5HM3-0111-JB72-12XH-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 94,
+    "relevance_rationale": "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
   },
   {
     "source_id": "nexis_urn:contentItem:567T-G511-J9YY-Y0C3-00000-00",
@@ -12119,7 +12483,9 @@
     "archive_dir": "data/nexis/truck-restrictions/urn-contentItem-567T-G511-J9YY-Y0C3-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 91,
+    "relevance_rationale": "Commercial fleet navigation technology designed to provide low-clearance avoidance and truck-safe routing to prevent infrastructure strikes."
   },
   {
     "source_id": "nexis_urn:contentItem:56T5-C1H1-DXF1-N0CH-00000-00",
@@ -12179,7 +12545,9 @@
     "archive_dir": "data/nexis/truck-restrictions/urn-contentItem-56T5-C1H1-DXF1-N0CH-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 91,
+    "relevance_rationale": "Commercial fleet navigation technology designed to provide low-clearance avoidance and truck-safe routing to prevent infrastructure strikes."
   },
   {
     "source_id": "nexis_urn:contentItem:57T9-W851-DXMP-K561-00000-00",
@@ -12239,7 +12607,9 @@
     "archive_dir": "data/nexis/truck-restrictions/urn-contentItem-57T9-W851-DXMP-K561-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 91,
+    "relevance_rationale": "Commercial fleet navigation technology designed to provide low-clearance avoidance and truck-safe routing to prevent infrastructure strikes."
   },
   {
     "source_id": "nexis_urn:contentItem:58PM-K8W1-F0R9-G4CC-00000-00",
@@ -12299,7 +12669,9 @@
     "archive_dir": "data/nexis/truck-restrictions/urn-contentItem-58PM-K8W1-F0R9-G4CC-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 91,
+    "relevance_rationale": "Commercial fleet navigation technology designed to provide low-clearance avoidance and truck-safe routing to prevent infrastructure strikes."
   },
   {
     "source_id": "nexis_urn:contentItem:5F5N-4Y71-JB5M-W1MH-00000-00",
@@ -12359,7 +12731,9 @@
     "archive_dir": "data/nexis/truck-restrictions/urn-contentItem-5F5N-4Y71-JB5M-W1MH-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 91,
+    "relevance_rationale": "Commercial fleet navigation technology designed to provide low-clearance avoidance and truck-safe routing to prevent infrastructure strikes."
   },
   {
     "source_id": "nexis_urn:contentItem:5VR5-3RR1-JBH5-W122-00000-00",
@@ -12419,7 +12793,9 @@
     "archive_dir": "data/nexis/truck-restrictions/urn-contentItem-5VR5-3RR1-JBH5-W122-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 91,
+    "relevance_rationale": "Commercial fleet navigation technology designed to provide low-clearance avoidance and truck-safe routing to prevent infrastructure strikes."
   },
   {
     "source_id": "nexis_urn:contentItem:7YBS-9011-2PG1-000M-00000-00",
@@ -12479,6 +12855,8 @@
     "archive_dir": "data/nexis/truck-restrictions/urn-contentItem-7YBS-9011-2PG1-000M-00000-00",
     "is_project_relevant": 1,
     "relevance_tier": "In-Scope",
-    "exclusion_reason": null
+    "exclusion_reason": "",
+    "relevance_score": 91,
+    "relevance_rationale": "Commercial fleet navigation technology designed to provide low-clearance avoidance and truck-safe routing to prevent infrastructure strikes."
   }
 ]

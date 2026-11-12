@@ -168,12 +168,141 @@ RE_OFF_TOPIC_MISC = re.compile(
 )
 
 
-def evaluate_document(record: dict[str, Any]) -> tuple[int, str, str | None]:
-    """Evaluate an article record and return (is_relevant, tier, exclusion_reason).
+def compute_relevance_meta(
+    record: dict[str, Any],
+    is_relevant: int,
+    tier: str,
+    exclusion_reason: str | None,
+) -> tuple[int, str]:
+    """Compute numerical relevance score (0-99%) and a crisp 1-line rationale."""
+    title = str(record.get("title") or "").strip()
+    summary = str(record.get("factual_summary") or "").strip()
+    text = f"{title} {summary}".lower()
+
+    if not is_relevant:
+        reason = exclusion_reason or tier or "Off-Topic"
+        if "Metaphor" in reason:
+            return 10, "Excluded: Metaphorical brand reference rather than navigation app routing policy."
+        if "Foreign" in reason:
+            return 15, "Excluded: International jurisdiction outside the scope of US municipal traffic governance."
+        if "Consumer Tech" in reason:
+            return 10, "Excluded: Consumer gadget tutorial, tech tips, or feature review without public policy impact."
+        if "Highway Operations" in reason:
+            return 12, "Excluded: Routine highway operations, DOT command centers, or standard maintenance."
+        if "Automated Commute" in reason:
+            return 5, "Excluded: Automated daily commute traffic report or routine radio broadcast."
+        if "Police Blotter" in reason or "Crime" in reason:
+            return 5, "Excluded: Law enforcement blotter, fatal crash report, or crime news."
+        return 8, f"Excluded: Outside research scope ({reason})."
+
+    # IN-SCOPE SCORING & RATIONALES:
+
+    # Tier 1: Statutory mandates, federal regulations & landmark municipal street bans (98-99%)
+    if re.search(r"\bleonia\b", text):
+        return 99, "Landmark municipal ordinance restricting residential cut-through streets to residents during peak commute hours to counter navigation apps."
+    if re.search(
+        r"\bab\s*2015\b|\bassembly bill\b|california legislation|\bblumenthal\b|\brep(s)?\. latimer\b|\bschumer\b.*bridge|\bking street bridge\b|illinois bill.*truck route",
+        text,
+    ):
+        return 99, "Statutory and legislative mandate requiring navigation platforms to respect municipal street restrictions and commercial bridge heights."
+    if re.search(
+        r"u\.s\. government wants to regulate|feds to regulate|feds.*regulate|government seeks to regulate maps|smartphone navigation.*regulated by the transportation department|bills would exempt car navigation",
+        text,
+    ):
+        return 98, "Federal regulatory proposal by the US Department of Transportation and NHTSA to establish safety and routing oversight over mobile navigation apps."
+    if re.search(
+        r"krekorian|los angeles city council|l\.a\. may crack down|council file #11-2130|motion 14-1741|pilot program to curb waze|l\.a\. council seeks solutions to waze|waze restricted due to buildup|will work together to reduce growing traffic on residential",
+        text,
+    ):
+        return 98, "Municipal city council legislative action and legal initiatives addressing navigation platform cut-through traffic on neighborhood streets."
+    if re.search(
+        r"town beset by traffic.*closes off streets|town that closed streets.*court reprieve|judge nixes new jersey town",
+        text,
+    ):
+        return 98, "Municipal cut-through street closures and court challenges concerning local government authority to restrict navigation app traffic."
+
+    # Tier 2: Platform resistance, gaming, police warnings, and extreme road hazards (96-97%)
+    if re.search(r"simon weckert|99 (smart)?phones|wagon.*google maps", text):
+        return 97, "Empirical demonstration of algorithmic resistance simulating virtual traffic jams on Google Maps using 99 smartphones in a handcart."
+    if re.search(r"baxter st|steepest street|spin out|falling off.*hill|absolute chaos", text):
+        return 97, "Severe physical traffic hazards and vehicle rollovers on extreme-gradient residential streets caused by routing algorithm shortcuts."
+    if re.search(r"fake (traffic )?accident|false report|game the app|spoof|trolling waze|reporting fake", text):
+        return 96, "Neighborhood resident collective action and algorithmic resistance via crowdsourced false accident reporting to divert Waze traffic."
+    if re.search(
+        r"nypd.*dui|dui checkpoint|dwi checkpoint|checkpoint notification|speed trap|speed traps|stop reporting locations of dw?i|letter demands google stop|nypd sends letter|nypd demands|la cops bury the hatchet",
+        text,
+    ):
+        return 96, "Law enforcement agency pushback demanding navigation apps remove crowdsourced police location, speed trap, and DUI checkpoint alerts."
+    if re.search(r"colorado transportation.*false information|plant false information", text):
+        return 96, "State transportation department intervention attempting to inject false road closure information into navigation apps to manage flow."
+
+    # Tier 3: Public-private data partnerships, signal optimization & smart infrastructure (94-95%)
+    if re.search(r"project green light|signal optimization|signal timing", text):
+        return 95, "Municipal traffic signal timing optimization initiative using navigation platform mobility data to reduce intersection delays and emissions."
+    if re.search(
+        r"urban congestion relief experiments|using waze data to measure traffic|traffic control and routing in the era of algorithmic navigation|data integration, sharing, and management for transportation planning|smart city challenge|traffic app a two-way street",
+        text,
+    ):
+        return 95, "Empirical research and transportation authority studies evaluating algorithmic navigation impacts and municipal data integration."
+    if re.search(
+        r"connected citizens program|waze for cities|esri.*waze|waycare|data-sharing|partnership with.*waze|partners? with.*waze|works with waze|joins waze|waze.*google cloud|joins forces to alleviate congestion|mayor garcetti details agreement|agreement with waze|waze, abc team|collaborat.*waze|partner for real-time traffic|partner to share real-time|louisville announces real-time traffic app",
+        text,
+    ):
+        return 94, "Bilateral public-private data partnership integrating municipal road closure data with crowdsourced app telemetry to optimize traffic flow."
+    if re.search(r"waymo.*waze.*pothole|fix (cities\x27|city) potholes|mapping potholes|spotting potholes|pothole", text):
+        return 94, "Autonomous vehicle sensor fleet and crowdsourced navigation partnership alerting municipal public works departments to roadway potholes."
+
+    # Tier 4: Physical traffic engineering, turn restrictions, and diverters (92-93%)
+    if re.search(
+        r"wood street.*one-way|traffic diverter|genesee.*brandon|delridge neighborhood greenway|home zone|reducing a lane on dexter",
+        text,
+    ):
+        return 93, "Targeted traffic engineering measures (one-way street conversions and physical diverters) installed to block navigation app bypass routes."
+    if re.search(
+        r"nursery road|merritt traffic|towns cracking down on gps|secret shortcut|turner\x27s county road|headache for cities|shortcuts on waze|state looks to avoid gps sending drivers down small roads|why some cities have had enough of waze",
+        text,
+    ):
+        return 93, "Municipal traffic enforcement and neighborhood resistance against navigation app shortcuts diverting highway overflow into local residential streets."
+    if re.search(r"bridge strike|overpass|low clearance|commercial buses to be banned|south kent road", text):
+        return 92, "Infrastructure damage risks and vehicle weight/height bans enacted to prevent GPS routing from directing heavy vehicles onto unsuitable roadways."
+
+    # Tier 5: Specialized commercial vehicle GPS systems & mapping architecture (90-91%)
+    if re.search(
+        r"copilot|samsara.*truck|smarttruckroute|pc\*miler|commercial navigation|truck gps|truck routing app|teletype.*truck|u\.s\. xpress drivers get|commercial vehicle|senators call for more truck info on phone gps|navigation partnership with alk",
+        text,
+    ):
+        return 91, "Commercial fleet navigation technology designed to provide low-clearance avoidance and truck-safe routing to prevent infrastructure strikes."
+    if re.search(
+        r"blacklist areas|maps now change as roads close|adds road closure reporting|international partner program|google told drivers to drive a longer way|flow a smart traffic and parking platform|traffic safety digital alert",
+        text,
+    ):
+        return 90, "Navigation platform mapping architecture, emergency vehicle alerts, and municipal requests for road closure integrations."
+
+    # Tier 6: Neighborhood traffic calming, speed hump programs, and eco-routing (87-89%)
+    if re.search(
+        r"speed hump|speed cushion|speed bump|traffic calming|traffic circle|shady ave|traffic-calming|slowing down for safety",
+        text,
+    ):
+        return 88, "Municipal neighborhood traffic calming program (speed humps/cushions) implemented to slow and discourage cut-through commuter traffic."
+    if re.search(r"eco friendly|eco-friendly|lower your carbon footprint", text):
+        return 87, "Algorithmic routing policy shift toward eco-friendly routing to optimize fuel consumption and minimize residential emissions."
+
+    # Tier 7: Algorithmic governance, route personalization, and commuter dynamics (85-86%)
+    if re.search(
+        r"working properly.*make traffic flows worse|traffic-weary homeowners|suburban congestion|carmageddon|cut-through|traffic calming illusion|impact privacy, the law and google maps",
+        text,
+    ):
+        return 86, "Investigation into legal implications and systemic traffic dynamics of routing algorithms redirecting commuter flows onto local roads."
+
+    return 85, "Analysis of navigation platform routing patterns, feature updates, and commuter navigation behavior."
+
+
+def evaluate_document(record: dict[str, Any]) -> tuple[int, str, str | None, int, str]:
+    """Evaluate an article record and return (is_relevant, tier, exclusion_reason, relevance_score, relevance_rationale).
 
     Returns:
-        (1, 'In-Scope', None) if article belongs in the filtered research corpus.
-        (0, 'Excluded: <Category>', reason_str) if article is outside scope.
+        (1, 'In-Scope', None, score, rationale) if article belongs in the filtered research corpus.
+        (0, 'Excluded: <Category>', reason_str, score, rationale) if article is outside scope.
     """
     title = str(record.get("title") or "").strip()
     publisher = str(record.get("publisher") or "").strip()
@@ -188,16 +317,14 @@ def evaluate_document(record: dict[str, Any]) -> tuple[int, str, str | None]:
     # 1. Publisher blacklists
     if pl in ("law and crime", "global industry snapshot"):
         if pl == "law and crime":
-            return (
-                0,
-                "Excluded: Police Blotter / Crime",
-                "Police report, fatal collision, or criminal assault with incidental mapping/traffic mentions.",
-            )
-        return (
-            0,
-            "Excluded: Market Research / Financial Wire",
-            "Automated artificial intelligence software valuation and equity market snapshot.",
-        )
+            tier = "Excluded: Police Blotter / Crime"
+            reason = "Police report, fatal collision, or criminal assault with incidental mapping/traffic mentions."
+            score, rationale = compute_relevance_meta(record, 0, tier, reason)
+            return (0, tier, reason, score, rationale)
+        tier = "Excluded: Market Research / Financial Wire"
+        reason = "Automated artificial intelligence software valuation and equity market snapshot."
+        score, rationale = compute_relevance_meta(record, 0, tier, reason)
+        return (0, tier, reason, score, rationale)
 
     # 2. Check for Policy Overrides
     is_override = bool(RE_OVERRIDE.search(head_text))
@@ -205,59 +332,52 @@ def evaluate_document(record: dict[str, Any]) -> tuple[int, str, str | None]:
     if not is_override:
         # Metaphorical usages
         if RE_METAPHOR.search(head_text):
-            return (
-                0,
-                "Excluded: Metaphorical Brand Usage",
-                "Uses Waze or Google Maps metaphorically as an industry or technology analogy.",
-            )
+            tier = "Excluded: Metaphorical Brand Usage"
+            reason = "Uses Waze or Google Maps metaphorically as an industry or technology analogy."
+            score, rationale = compute_relevance_meta(record, 0, tier, reason)
+            return (0, tier, reason, score, rationale)
 
         # Foreign / Non-US Jurisdictions
         if RE_FOREIGN.search(head_text):
-            return (
-                0,
-                "Excluded: Foreign Jurisdiction",
-                "Article reports on foreign routing controversies outside US municipal and policy scope.",
-            )
+            tier = "Excluded: Foreign Jurisdiction"
+            reason = "Article reports on foreign routing controversies outside US municipal and policy scope."
+            score, rationale = compute_relevance_meta(record, 0, tier, reason)
+            return (0, tier, reason, score, rationale)
 
         # Consumer Tech Tips, How-Tos, Reviews
         if RE_CONSUMER_GADGET.search(head_text) or RE_CONSUMER_GADGET.search(tl):
-            return (
-                0,
-                "Excluded: Consumer Tech Tips / Gadget Blog",
-                "Consumer tech tip, gadget walkthrough, or app review without public policy relevance.",
-            )
+            tier = "Excluded: Consumer Tech Tips / Gadget Blog"
+            reason = "Consumer tech tip, gadget walkthrough, or app review without public policy relevance."
+            score, rationale = compute_relevance_meta(record, 0, tier, reason)
+            return (0, tier, reason, score, rationale)
 
         # Routine Highway Operations & Maintenance
         if RE_ROUTINE_CONSTRUCTION.search(head_text) or RE_ROUTINE_CONSTRUCTION.search(tl):
-            return (
-                0,
-                "Excluded: Highway Operations / Maintenance",
-                "State DOT freeway monitoring room overview or routine asphalt/bridge maintenance.",
-            )
+            tier = "Excluded: Highway Operations / Maintenance"
+            reason = "State DOT freeway monitoring room overview or routine asphalt/bridge maintenance."
+            score, rationale = compute_relevance_meta(record, 0, tier, reason)
+            return (0, tier, reason, score, rationale)
 
         # Daily Automated Commute Bulletins
         if RE_COMMUTE_BULLETIN.search(tl):
-            return (
-                0,
-                "Excluded: Automated Commute Bulletin",
-                "Routine automated daily morning/evening highway traffic bulletin.",
-            )
+            tier = "Excluded: Automated Commute Bulletin"
+            reason = "Routine automated daily morning/evening highway traffic bulletin."
+            score, rationale = compute_relevance_meta(record, 0, tier, reason)
+            return (0, tier, reason, score, rationale)
 
         # Police Blotters, Fatal Crashes, Violence
         if RE_CRIME.search(tl):
-            return (
-                0,
-                "Excluded: Police Blotter / Crime",
-                "Police report, fatal collision, or criminal assault with incidental mapping/traffic mentions.",
-            )
+            tier = "Excluded: Police Blotter / Crime"
+            reason = "Police report, fatal collision, or criminal assault with incidental mapping/traffic mentions."
+            score, rationale = compute_relevance_meta(record, 0, tier, reason)
+            return (0, tier, reason, score, rationale)
 
         # Generic Off-Topic Subjects
         if RE_OFF_TOPIC_MISC.search(head_text) or RE_OFF_TOPIC_MISC.search(tl):
-            return (
-                0,
-                "Excluded: Off-Topic Subject",
-                "Article subject is outside project scope (sports parking, drone market, web design, earnings call, etc.).",
-            )
+            tier = "Excluded: Off-Topic Subject"
+            reason = "Article subject is outside project scope (sports parking, drone market, web design, earnings call, etc.)."
+            score, rationale = compute_relevance_meta(record, 0, tier, reason)
+            return (0, tier, reason, score, rationale)
 
     # 3. Affirmative Evaluation (Must match at least one of the 4 Core Tracks in Title or Lead)
     t1 = bool(RE_TRACK1_ROUTING.search(head_text) and RE_TRACK1_EFFECT.search(head_text))
@@ -267,15 +387,14 @@ def evaluate_document(record: dict[str, Any]) -> tuple[int, str, str | None]:
 
     if t1 or t2 or t3 or t4 or is_override:
         if not is_override and (RE_CONSUMER_GADGET.search(tl) or RE_OFF_TOPIC_MISC.search(tl)):
-            return (
-                0,
-                "Excluded: Consumer Tech Tips / Gadget Blog",
-                "Consumer tech tip, gadget walkthrough, or app review without public policy relevance.",
-            )
-        return (1, "In-Scope", None)
+            tier = "Excluded: Consumer Tech Tips / Gadget Blog"
+            reason = "Consumer tech tip, gadget walkthrough, or app review without public policy relevance."
+            score, rationale = compute_relevance_meta(record, 0, tier, reason)
+            return (0, tier, reason, score, rationale)
+        score, rationale = compute_relevance_meta(record, 1, "In-Scope", None)
+        return (1, "In-Scope", None, score, rationale)
 
-    return (
-        0,
-        "Excluded: Off-Topic / Incidental Match",
-        "No substantive mention of routing apps, traffic calming, or municipal navigation governance.",
-    )
+    tier = "Excluded: Off-Topic / Incidental Match"
+    reason = "No substantive mention of routing apps, traffic calming, or municipal navigation governance."
+    score, rationale = compute_relevance_meta(record, 0, tier, reason)
+    return (0, tier, reason, score, rationale)
