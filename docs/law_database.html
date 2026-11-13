@@ -52,10 +52,10 @@
           <span>📊</span>
           <span>1. Overview & Architecture</span>
         </button>
-        <button onclick="switchTab('functional')" id="tab-btn-functional" class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center gap-2 transition">
-          <span>🗂️</span>
-          <span>2. By Function (Cross-Jurisdiction)</span>
-          <span class="px-1.5 py-0.5 rounded text-[10px] bg-slate-800 text-blue-400 font-mono">7 Canonical Clusters</span>
+        <button onclick="switchTab('empirical')" id="tab-btn-empirical" class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center gap-2 transition">
+          <span>⚖️</span>
+          <span>2. Empirical Legal &amp; Policy Analysis</span>
+          <span class="px-1.5 py-0.5 rounded text-[10px] bg-slate-800 text-blue-400 font-mono">3 Core Dimensions</span>
         </button>
         <button onclick="switchTab('database')" id="tab-btn-database" class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center gap-2 transition">
           <span>📜</span>
@@ -265,7 +265,7 @@
       </div>
     </section>
 
-    <!-- SECTION 4: LANDMARK APPELLATE PRECEDENTS -->
+    <!-- SECTION 3: LANDMARK APPELLATE PRECEDENTS -->
     <section class="max-w-7xl mx-auto space-y-4">
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
         <div class="flex items-center gap-2">
@@ -281,19 +281,105 @@
       </div>
     </section>
 
-    <!-- SECTION 5: COMPARATIVE REGULATORY FRAMEWORK & CA AB 2015 -->
+    <!-- SECTION 4: RESEARCH DELIVERABLES & DOWNLOAD CENTER -->
     <section class="max-w-7xl mx-auto space-y-6">
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
         <div class="flex items-center gap-2">
-          <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-900/60 text-amber-300 border border-amber-700/50">Policy Analysis</span>
-          <h2 class="text-xl font-semibold text-white">Comparative Regulatory Framework & Empirical Policy Analysis</h2>
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-900/60 text-emerald-300 border border-emerald-700/50">Downloads</span>
+          <h2 class="text-xl font-semibold text-white">Research Deliverables & Data Center</h2>
         </div>
         <p class="text-xs text-slate-400 mt-1 max-w-4xl leading-relaxed">
-          Connecting statutory records to foundational enabling models, historical regulatory lag, and California's municipal policy alignment informing Assembly Bill 2015.
+          Access formal project deliverables conforming strictly to the research instruction specifications (Section 5 Three-Layer Summary and Section 6 Multi-Sheet Detailed Database).
         </p>
       </div>
 
-      <!-- Dimension 1: Enabling Typology Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <!-- Deliverable 1 -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 flex flex-col justify-between hover:border-slate-700 transition">
+          <div>
+            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-purple-900/50 text-purple-300 border border-purple-700/50 uppercase tracking-wider">Output 1 Document</span>
+            <h3 class="text-base font-semibold text-white mt-2">Three-Layer Summary Document</h3>
+            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+              Executive summary document conforming strictly to Section 5: "Navigation App Regulation: Three-Layer Summary (US, Phase 1)". Organizes all instruments by Layer 1 (E1, E2, E3, E4, F3), Layer 2 (A5), and Layer 3 (A1-F7) with canonical citations.
+            </p>
+            <div class="mt-3 pt-3 border-t border-slate-800 text-xs text-slate-400 font-mono">
+              Navigation_App_Regulation_Three_Layer_Summary.md
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-[11px] text-slate-400">Canonical Markdown</span>
+            <a href="data/Navigation_App_Regulation_Three_Layer_Summary.md" target="_blank" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition">
+              View / Download &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Deliverable 2 -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 flex flex-col justify-between hover:border-slate-700 transition">
+          <div>
+            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-900/50 text-blue-300 border border-blue-700/50 uppercase tracking-wider">Output 2: Sheet 2</span>
+            <h3 class="text-base font-semibold text-white mt-2">Detailed Database (19 Columns)</h3>
+            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+              Standard research database conforming strictly to Section 6. Exactly 19 columns with USPS prefix sequence IDs (FED-01, CA-01, NJ-01, etc.), verbatim character offsets, verification status, and layer assignments in Notes.
+            </p>
+            <div class="mt-3 pt-3 border-t border-slate-800 text-xs text-slate-400 font-mono">
+              detailed_database_19_col.csv (179 rows)
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-[11px] text-slate-400">19 Standard Columns</span>
+            <a href="data/detailed_database_19_col.csv" target="_blank" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition">
+              Download CSV &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Deliverable 3 -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 flex flex-col justify-between hover:border-slate-700 transition">
+          <div>
+            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-900/50 text-emerald-300 border border-emerald-700/50 uppercase tracking-wider">Output 2: Sheet 3</span>
+            <h3 class="text-base font-semibold text-white mt-2">Layer Map Cross-Reference</h3>
+            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+              Dedicated cross-reference sheet mandated by Section 6: mapping every statutory ID to its Primary Layer (Layer 1, 2, or 3), primary Category Code, and optional Also Layer tag.
+            </p>
+            <div class="mt-3 pt-3 border-t border-slate-800 text-xs text-slate-400 font-mono">
+              layer_map.csv (179 mapped entries)
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-[11px] text-slate-400">Layer Map Schema</span>
+            <a href="data/layer_map.csv" target="_blank" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition">
+              Download CSV &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- TAB PANE 2: EMPIRICAL LEGAL AND POLICY ANALYSIS -->
+  <!-- ========================================================================= -->
+  <div id="tab-pane-empirical" class="tab-pane hidden space-y-8 max-w-7xl mx-auto">
+    <!-- Explanatory Header Banner -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-900/60 text-amber-300 border border-amber-700/50">Empirical Analysis</span>
+            <h2 class="text-xl font-semibold text-white">Empirical Legal and Policy Analysis</h2>
+          </div>
+          <p class="text-xs text-slate-300 mt-2 leading-relaxed max-w-4xl">
+            A comprehensive empirical synthesis connecting codified statutory baselines to foundational regulatory models, chronological regulatory lag, and municipal policy alignments informing the California Assembly Bill 2015 study.
+          </p>
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-mono font-medium bg-amber-900/50 text-amber-300 border border-amber-700/50 whitespace-nowrap self-start md:self-auto">
+          3 Empirical Dimensions
+        </span>
+      </div>
+    </div>
+
+    <!-- Dimension 1: Enabling Typology Grid -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
           <div>
@@ -410,108 +496,9 @@
           </table>
         </div>
       </div>
-    </section>
-
-    <!-- SECTION 6: RESEARCH DELIVERABLES & DOWNLOAD CENTER -->
-    <section class="max-w-7xl mx-auto space-y-6">
-      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
-        <div class="flex items-center gap-2">
-          <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-900/60 text-emerald-300 border border-emerald-700/50">Downloads</span>
-          <h2 class="text-xl font-semibold text-white">Research Deliverables & Data Center</h2>
-        </div>
-        <p class="text-xs text-slate-400 mt-1 max-w-4xl leading-relaxed">
-          Access formal project deliverables conforming strictly to the research instruction specifications (Section 5 Three-Layer Summary and Section 6 Multi-Sheet Detailed Database).
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <!-- Deliverable 1 -->
-        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 flex flex-col justify-between hover:border-slate-700 transition">
-          <div>
-            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-purple-900/50 text-purple-300 border border-purple-700/50 uppercase tracking-wider">Output 1 Document</span>
-            <h3 class="text-base font-semibold text-white mt-2">Three-Layer Summary Document</h3>
-            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-              Executive summary document conforming strictly to Section 5: "Navigation App Regulation: Three-Layer Summary (US, Phase 1)". Organizes all instruments by Layer 1 (E1, E2, E3, E4, F3), Layer 2 (A5), and Layer 3 (A1-F7) with canonical citations.
-            </p>
-            <div class="mt-3 pt-3 border-t border-slate-800 text-xs text-slate-400 font-mono">
-              Navigation_App_Regulation_Three_Layer_Summary.md
-            </div>
-          </div>
-          <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
-            <span class="text-[11px] text-slate-400">Canonical Markdown</span>
-            <a href="data/Navigation_App_Regulation_Three_Layer_Summary.md" target="_blank" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition">
-              View / Download &rarr;
-            </a>
-          </div>
-        </div>
-
-        <!-- Deliverable 2 -->
-        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 flex flex-col justify-between hover:border-slate-700 transition">
-          <div>
-            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-900/50 text-blue-300 border border-blue-700/50 uppercase tracking-wider">Output 2: Sheet 2</span>
-            <h3 class="text-base font-semibold text-white mt-2">Detailed Database (19 Columns)</h3>
-            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-              Standard research database conforming strictly to Section 6. Exactly 19 columns with USPS prefix sequence IDs (FED-01, CA-01, NJ-01, etc.), verbatim character offsets, verification status, and layer assignments in Notes.
-            </p>
-            <div class="mt-3 pt-3 border-t border-slate-800 text-xs text-slate-400 font-mono">
-              detailed_database_19_col.csv (179 rows)
-            </div>
-          </div>
-          <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
-            <span class="text-[11px] text-slate-400">19 Standard Columns</span>
-            <a href="data/detailed_database_19_col.csv" target="_blank" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition">
-              Download CSV &rarr;
-            </a>
-          </div>
-        </div>
-
-        <!-- Deliverable 3 -->
-        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 flex flex-col justify-between hover:border-slate-700 transition">
-          <div>
-            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-900/50 text-emerald-300 border border-emerald-700/50 uppercase tracking-wider">Output 2: Sheet 3</span>
-            <h3 class="text-base font-semibold text-white mt-2">Layer Map Cross-Reference</h3>
-            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-              Dedicated cross-reference sheet mandated by Section 6: mapping every statutory ID to its Primary Layer (Layer 1, 2, or 3), primary Category Code, and optional Also Layer tag.
-            </p>
-            <div class="mt-3 pt-3 border-t border-slate-800 text-xs text-slate-400 font-mono">
-              layer_map.csv (179 mapped entries)
-            </div>
-          </div>
-          <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
-            <span class="text-[11px] text-slate-400">Layer Map Schema</span>
-            <a href="data/layer_map.csv" target="_blank" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition">
-              Download CSV &rarr;
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
   </div>
 
-  <!-- ========================================================================= -->
-  <!-- TAB PANE 2: BY FUNCTION (CROSS-JURISDICTIONAL PATTERNS) -->
-  <!-- ========================================================================= -->
-  <div id="tab-pane-functional" class="tab-pane hidden space-y-6">
-    <!-- Explanatory Header Banner -->
-    <div class="max-w-7xl mx-auto bg-slate-900/90 border border-slate-800 rounded-xl p-5">
-      <div class="flex items-center gap-2">
-        <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-900/60 text-blue-300 border border-blue-700/50">Canonical Groupings</span>
-        <h2 class="text-xl font-semibold text-white">Cross-Jurisdictional Functional Clusters</h2>
-      </div>
-      <p class="text-xs text-slate-300 mt-2 leading-relaxed max-w-4xl">
-        Synthesizing the legislation into the canonical <strong class="text-white">Three-Tier Routing App Legal Regulation Framework</strong>:
-        <span class="text-purple-300 font-semibold">Tier 1: Laws Directly Governing Routing Apps</span> (Topics 1.1–1.5);
-        <span class="text-blue-300 font-semibold">Tier 2: Laws Not Specific to Routing Apps but Directly Applicable to Them</span> (Topics 2.1–2.7);
-        and <span class="text-emerald-300 font-semibold">Tier 3: Indirectly Applicable Road and Traffic Laws</span> (Topics 3.1–3.9).
-      </p>
-    </div>
-
-    <!-- Container where JS renders the 7 Functional Clusters -->
-    <div id="functional-clusters-container" class="max-w-7xl mx-auto space-y-6">
-    </div>
-  </div>
-
-  <!-- ========================================================================= -->
+<!-- ========================================================================= -->
   <!-- TAB PANE 3: SEARCHABLE DATABASE (FLAT TABLE & ADVANCED FILTERS) -->
   <!-- ========================================================================= -->
   <div id="tab-pane-database" class="tab-pane hidden space-y-4">
@@ -732,8 +719,9 @@
 
     // Tab Switcher
     function switchTab(tabId) {
+      if (tabId === 'functional') tabId = 'empirical';
       activeTab = tabId;
-      ['summary', 'functional', 'database'].forEach(id => {
+      ['summary', 'empirical', 'database'].forEach(id => {
         const pane = document.getElementById(`tab-pane-${id}`);
         const btn = document.getElementById(`tab-btn-${id}`);
         if (pane) {
@@ -751,9 +739,7 @@
           }
         }
       });
-      if (tabId === 'functional') {
-        renderFunctionalClusters();
-      } else if (tabId === 'database') {
+      if (tabId === 'database') {
         renderLegislation();
       }
       window.history.replaceState(null, null, `#${tabId}`);
@@ -838,204 +824,6 @@
     }
 
     // =========================================================================
-    // CANONICAL FUNCTIONAL CLUSTERS RENDERER (TAB 2)
-    // =========================================================================
-    const FUNCTIONAL_CLUSTERS = [
-      {
-        id: "cluster-t1",
-        title: "Tier 1: Laws Directly Governing Routing Apps (Topics 1.1–1.5)",
-        badge: "Tier 1: Directly Governing · Topics 1.1–1.5",
-        badgeColor: "bg-purple-900/60 text-purple-300 border-purple-700/50",
-        borderClass: "border-purple-800/60",
-        headerBg: "bg-purple-950/40",
-        summary: "Statutes and bills explicitly naming navigation apps: California AB 2015 (Topic 1.1 Slow Streets Exclusion & Topic 1.5 Caltrans Study); New Jersey A3036 SAFER APP (Topic 1.2 Emergency Rerouting); Connecticut HB 5071 & HB 6709, Massachusetts HD.4949 (Topic 1.3 Heavy Vehicle Route Rules); New York S6197/A3536, NY A8582, NY A4167, NY A5717, Federal H.R. 6531 Bridges Not Bumpers (Topic 1.4 Bridge Clearance Mandates); and Federal MAP Roads Act (Topic 1.5 Rural Road Digitization).",
-        filter: r => (r.primary_layer || "").includes("Tier 1") || (r.primary_layer || "").includes("Layer 1")
-      },
-      {
-        id: "cluster-t2-general",
-        title: "Tier 2: Directly Applicable Cross-Sector Platform Laws (Topics 2.1–2.6)",
-        badge: "Tier 2: Platform Governance · Topics 2.1–2.6",
-        badgeColor: "bg-blue-900/60 text-blue-300 border-blue-700/50",
-        borderClass: "border-blue-800/60",
-        headerBg: "bg-blue-950/40",
-        summary: "Cross-sector statutory frameworks governing mobile device mounting (CVC §§ 23123/23123.5); precise location privacy (CCPA/CPRA Civ. Code § 1798.140, Penal Code § 637.7, NY A8729); consumer protection (Cal. B&PC §§ 17200/17500, FTC Act § 5); Section 230 platform immunity for crowdsourced alerts (Lemmon v. Snap algorithmic limitation); public records data compacts (CPRA Gov. Code § 7920); and TNC rideshare regulations (CPUC §§ 5430–5450).",
-        filter: r => ((r.primary_layer || "").includes("Tier 2") || (r.primary_layer || "").includes("Layer 2")) && r["Category code"] !== "A5" && !(r["Official citation"] || "").includes("658") && !(r["Official citation"] || "").includes("397")
-      },
-      {
-        id: "cluster-freight",
-        title: "Tier 2 & 3: Commercial Freight & Oversize/Overweight Routing (Topics 2.7 & 3.4)",
-        badge: "Commercial Freight · Topics 2.7 & 3.4",
-        badgeColor: "bg-indigo-900/60 text-indigo-300 border-indigo-700/50",
-        borderClass: "border-indigo-800/60",
-        headerBg: "bg-indigo-950/40",
-        summary: "Commercial freight standards and truck restrictions: 49 CFR Part 397 hazmat corridors; 23 CFR Part 658 National Network and 1-mile reasonable access rule; 23 U.S.C. § 127 federal Interstate weight limits; California Vehicle Code § 35701; Texas Transportation Code Ch. 621–623; and 58 California county truck codes.",
-        filter: r => r["Category code"] === "A5" || ((r.primary_layer || "").includes("Tier 2") && ((r["Official citation"] || "").includes("658") || (r["Official citation"] || "").includes("397"))),
-        hasBulk: true
-      },
-      {
-        id: "cluster-turn-closures",
-        title: "Tier 3: Turn Prohibitions, Cut-Through Bans & Street Closures (Topics 3.1 & 3.2)",
-        badge: "Tier 3: Access Control · Topics 3.1 & 3.2",
-        badgeColor: "bg-teal-900/60 text-teal-300 border-teal-700/50",
-        borderClass: "border-teal-800/60",
-        headerBg: "bg-teal-950/40",
-        summary: "Local police powers regulating street access: California Vehicle Code § 21101 (slow streets and closures); California CVC §§ 22101 & 22113 (turn signs and directional restrictions); municipal turn restrictions (LAMC § 80.14) designed to break navigation app neighborhood diversion.",
-        filter: r => (r["Category code"] === "A1" || r["Category code"] === "A2" || r["Category code"] === "B1") && !((r.primary_layer || "").includes("Tier 1")) && !((r.primary_layer || "").includes("Layer 1"))
-      },
-      {
-        id: "cluster-cameras",
-        title: "Tier 3: Speed Management & Automated Photo Radar Enforcement (Topic 3.5)",
-        badge: "Tier 3: Automated Enforcement · Topic 3.5",
-        badgeColor: "bg-violet-900/60 text-violet-300 border-violet-700/50",
-        borderClass: "border-violet-800/60",
-        headerBg: "bg-violet-950/40",
-        summary: "Automated speed cameras and photo radar laws: Arkansas Act 707 and Ark. Code §§ 27-52-110/111; Washington RCW 46.63.220; New York VTL § 1180-b NYC school speed cameras; Alabama SB 341 work zone cameras; Connecticut PA 23-116 & PA 26-14; Texas Ch. 707 red light camera ban; Arizona Proposition 319 voter-approved photo radar ban; and pending bills in CO, CT, AK, AL, WA.",
-        filter: r => (r["Category code"] === "C1" || r["Category code"] === "C4" || (r.Notes || "").includes("Topic 3.5")) && !((r.primary_layer || "").includes("Tier 2"))
-      },
-      {
-        id: "cluster-pricing",
-        title: "Tier 3: Road Tolling, Congestion Pricing & HOV/HOT Lanes (Topics 3.6 & 3.7)",
-        badge: "Tier 3: Pricing & Lanes · Topics 3.6 & 3.7",
-        badgeColor: "bg-amber-900/60 text-amber-300 border-amber-700/50",
-        borderClass: "border-amber-800/60",
-        headerBg: "bg-amber-950/40",
-        summary: "Operational road pricing and lane management: 23 U.S.C. § 129 federal tolling authority; 23 U.S.C. § 166 HOV occupancy and HOT dynamically priced lanes; California CVC § 22507 preferential parking; municipal demand-responsive parking (goBerkeley, OakPark+).",
-        filter: r => r["Category code"] === "A4" || r["Category code"] === "C5" || r["Category code"] === "D2" || r["Category code"] === "D3" || (r.Notes || "").includes("Topic 3.6") || (r.Notes || "").includes("Topic 3.7")
-      },
-      {
-        id: "cluster-planning",
-        title: "Tier 3: Federal Planning, Complete Streets, TDM & MUTCD Standards (Topics 3.8 & 3.9)",
-        badge: "Tier 3: Planning & MUTCD · Topics 3.8 & 3.9",
-        badgeColor: "bg-cyan-900/60 text-cyan-300 border-cyan-700/50",
-        borderClass: "border-cyan-800/60",
-        headerBg: "bg-cyan-950/40",
-        summary: "Long-range planning and engineering baselines: Federal MUTCD 11th Edition (23 CFR Part 655); CMAQ program (23 U.S.C. § 149); IIJA surface transportation funding (Pub. L. 117-58); California Complete Streets (Gov. Code § 65302); and SB 743 VMT standards.",
-        filter: r => (r["Category code"] === "B3" || r["Category code"] === "F4" || r["Category code"] === "F5" || r["Category code"] === "F7" || (r.Notes || "").includes("Topic 3.8") || (r.Notes || "").includes("Topic 3.9")) && !((r.primary_layer || "").includes("Tier 1"))
-      }
-    ];
-
-    function renderFunctionalClusters() {
-      const container = document.getElementById("functional-clusters-container");
-      if (!container) return;
-      container.innerHTML = "";
-
-      FUNCTIONAL_CLUSTERS.forEach(c => {
-        const items = LEGISLATION.filter(c.filter);
-        const card = document.createElement("div");
-        card.className = `bg-slate-900/90 border ${c.borderClass} rounded-xl overflow-hidden shadow-lg`;
-
-        let rowsHtml = items.map(r => `
-          <tr class="hover:bg-slate-800/50 transition cursor-pointer" onclick='openModalByIndex(${r._orig_idx})'>
-            <td class="py-3 px-3 align-top font-medium text-white whitespace-nowrap">
-              <div class="font-semibold text-slate-100">${r.Jurisdiction}</div>
-              <div class="mt-0.5"><span class="px-2 py-0.5 rounded text-[9px] font-medium uppercase border ${
-                r.Level === 'state' ? 'bg-amber-900/40 text-amber-300 border-amber-700/50' :
-                r.Level === 'federal' ? 'bg-blue-900/40 text-blue-300 border-blue-700/50' :
-                r.Level === 'county' ? 'bg-purple-900/40 text-purple-300 border-purple-700/50' :
-                'bg-emerald-900/40 text-emerald-300 border-emerald-700/50'
-              }">${r.Level}</span></div>
-            </td>
-            <td class="py-3 px-3 align-top whitespace-nowrap">
-              <span class="px-2 py-0.5 rounded bg-slate-800 text-blue-300 font-mono text-[11px] font-bold border border-slate-700">${r["Category code"]}</span>
-              <div class="text-[10px] text-slate-400 mt-0.5 max-w-[120px] truncate">${r["Category name"]}</div>
-            </td>
-            <td class="py-3 px-3 align-top">
-              <div class="flex items-center gap-2">
-                <span class="font-mono text-xs font-semibold text-blue-400">${r["Official citation"]}</span>
-                <span class="text-[10px] text-emerald-400 font-medium">${r["Current status"]}</span>
-              </div>
-              <div class="text-xs font-medium text-slate-200 mt-0.5">${r.Name}</div>
-              <p class="text-xs text-slate-300 mt-1 leading-relaxed">${r["Summary of content"]}</p>
-            </td>
-            <td class="py-3 px-3 align-top text-right whitespace-nowrap">
-              <button onclick='event.stopPropagation(); openModalByIndex(${r._orig_idx});' class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs shadow-sm transition">
-                Inspect &rarr;
-              </button>
-            </td>
-          </tr>
-        `).join("");
-
-        let bulkSectionHtml = "";
-        if (c.hasBulk) {
-          const bulkItems = LEGISLATION.filter(r => (r.Notes || "").includes("Bulk Template Entry"));
-          bulkSectionHtml = `
-            <details class="border-t border-slate-800 bg-slate-950/60 overflow-hidden">
-              <summary class="px-4 py-3 cursor-pointer text-xs font-semibold text-slate-300 hover:text-white flex items-center justify-between bg-slate-900/90 transition select-none">
-                <span class="flex items-center gap-2">
-                  <span class="text-blue-400">📁</span>
-                  <span>57 California County Enabling Codes & 16 Municipal Chapter Templates</span>
-                </span>
-                <span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-blue-300 font-mono">${bulkItems.length} Templates (Click to Expand)</span>
-              </summary>
-              <div class="p-4 border-t border-slate-800 space-y-3 bg-slate-950/90">
-                <p class="text-xs text-slate-400">
-                  These ${bulkItems.length} local jurisdictions enact the standardized commercial vehicle route and weight exclusion framework authorized by <strong class="text-white">California Vehicle Code § 35701</strong>. Rather than repeating identical provisions across the main table, they are indexed here for reference:
-                </p>
-                <div class="max-h-72 overflow-y-auto border border-slate-800 rounded-lg">
-                  <table class="w-full text-left text-xs">
-                    <thead class="bg-slate-900 text-slate-400 uppercase text-[10px] sticky top-0">
-                      <tr>
-                        <th class="py-2 px-3">Jurisdiction</th>
-                        <th class="py-2 px-3">Standard Enabling Code Name</th>
-                        <th class="py-2 px-3 text-right">Official Codified Portal</th>
-                      </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-800 font-sans">
-                      ${bulkItems.map(b => `
-                        <tr class="hover:bg-slate-900/50">
-                          <td class="py-1.5 px-3 font-medium text-white">${b.Jurisdiction}</td>
-                          <td class="py-1.5 px-3 text-slate-300 text-[11px] truncate max-w-md">${b.Name}</td>
-                          <td class="py-1.5 px-3 text-right">
-                            <a href="${b["Official link"]}" target="_blank" rel="noopener" class="text-blue-400 hover:underline text-[11px]">
-                              Municode / Gateway &rarr;
-                            </a>
-                          </td>
-                        </tr>
-                      `).join("")}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </details>
-          `;
-        }
-
-        card.innerHTML = `
-          <div class="p-5 border-b border-slate-800 ${c.headerBg} flex flex-col md:flex-row md:items-center justify-between gap-3">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${c.badgeColor}">${c.badge}</span>
-                <h3 class="text-base font-semibold text-white">${c.title}</h3>
-              </div>
-              <p class="text-xs text-slate-300 mt-1 max-w-3xl leading-relaxed">${c.summary}</p>
-            </div>
-            <div class="text-right whitespace-nowrap self-start md:self-auto">
-              <span class="px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-slate-800 text-slate-200 border border-slate-700">
-                ${items.length} Distinct Provisions
-              </span>
-            </div>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-slate-950 text-slate-400 uppercase text-[10px]">
-                <tr>
-                  <th class="py-2.5 px-3 w-40">Jurisdiction</th>
-                  <th class="py-2.5 px-3 w-36">Code & Measure</th>
-                  <th class="py-2.5 px-3">Statutory Provision & Operative Mechanism</th>
-                  <th class="py-2.5 px-3 w-28 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-slate-800">
-                ${rowsHtml}
-              </tbody>
-            </table>
-          </div>
-          ${bulkSectionHtml}
-        `;
-        container.appendChild(card);
-      });
-    }
-
     function openModalByIndex(idx) {
       const r = LEGISLATION[idx];
       if (r) openModal(r);
