@@ -458,7 +458,8 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
     crosswalk_layer_map = load_crosswalk_layer_map()
 
     for item in all_raw_data:
-        raw_loc = item.get("target_location", "").strip()
+        raw_loc = (item.get("target_location", "") or item.get("location", "") or item.get("actual_jurisdiction", "")).strip()
+        raw_loc = re.sub(r',\s*([A-Za-z]{2})$', lambda m: f", {m.group(1).upper()}", raw_loc)
         pub_date = str(item.get("publication_date") or "")
         year = pub_date[:4]
         if not (year.isdigit() and len(year) == 4):
@@ -1513,15 +1514,15 @@ def generate_html_infographics(data_payload: dict) -> str:
       <!-- Relevance Score Tier Pills -->
       <div class="pt-2 border-t border-slate-800/80">
         <div class="flex flex-wrap items-center gap-1.5 text-xs" id="database-score-pills">
-          <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1.5">Relevance Tier:</span>
+          <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1.5">Actionability Level:</span>
           <button type="button" data-score="" class="db-score-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Scores</button>
-          <button type="button" data-score="98-99" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">98–99% Statutory</button>
-          <button type="button" data-score="96-97" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">96–97% Resistance</button>
-          <button type="button" data-score="94-95" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">94–95% Partnerships</button>
-          <button type="button" data-score="92-93" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">92–93% Diverters</button>
-          <button type="button" data-score="90-91" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">90–91% Freight</button>
-          <button type="button" data-score="87-89" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">87–89% Calming</button>
-          <button type="button" data-score="85-86" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">85–86% Studies</button>
+          <button type="button" data-score="98-99" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">98–99% Statutory Mandates</button>
+          <button type="button" data-score="96-97" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">96–97% Street Bans & Disputes</button>
+          <button type="button" data-score="94-95" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">94–95% Bilateral Agreements</button>
+          <button type="button" data-score="92-93" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">92–93% Infrastructure Diverters</button>
+          <button type="button" data-score="90-91" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">90–91% Commercial Fleet Systems</button>
+          <button type="button" data-score="87-89" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">87–89% Traffic Calming Dynamics</button>
+          <button type="button" data-score="85-86" class="db-score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">85–86% Corridor Studies</button>
         </div>
       </div>
 
@@ -3036,7 +3037,10 @@ def generate_html_infographics(data_payload: dict) -> str:
         if (dbActiveLayer && String(row.layer) !== String(dbActiveLayer)) return false;
         if (dbActiveScore && row.score_tier !== dbActiveScore) return false;
         if (dbActiveGov && !matchesGov(row.gov, dbActiveGov)) return false;
-        if (dbActivePlace && String(row.location || '').trim() !== dbActivePlace) return false;
+        if (dbActivePlace) {{
+          const rLoc = String(row.location || '').trim().replace(/,\s*([A-Za-z]{{2}})$/, (m, st) => ', ' + st.toUpperCase());
+          if (rLoc !== dbActivePlace) return false;
+        }}
         if (needle) {{
           const haystack = [row.title, row.publisher, row.location, row.gov, row.category, row.topic_category, row.date, row.exclusion_reason, row.relevance_rationale].join(' ').toLowerCase();
           if (!haystack.includes(needle)) return false;
@@ -3195,7 +3199,8 @@ def generate_html_infographics(data_payload: dict) -> str:
 
       const placeCounts = new Map();
       corpusRows.forEach(r => {{
-        const loc = String(r.location || '').trim();
+        let loc = String(r.location || '').trim();
+        loc = loc.replace(/,\s*([A-Za-z]{{2}})$/, (m, st) => ', ' + st.toUpperCase());
         if (loc) {{
           placeCounts.set(loc, (placeCounts.get(loc) || 0) + 1);
         }}
@@ -3419,6 +3424,8 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         score = int(row.get("relevance_score") or (85 if int(row.get("is_project_relevant") if row.get("is_project_relevant") is not None else 1) == 1 else 10))
         score_tier = classify_score_tier(score)
         layer = classify_document_layer(source_id, str(row.get("title") or ""), str(row.get("category") or ""), str(row.get("relevance_rationale") or ""), crosswalk_layer_map)
+        loc = str(row.get("location") or row.get("target_location") or "").strip()
+        loc = re.sub(r',\s*([A-Za-z]{2})$', lambda m: f", {m.group(1).upper()}", loc)
         payload.append({
             "anchor": document_anchor(source_id),
             "id": source_id,
@@ -3426,7 +3433,7 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
             "title": str(row.get("title") or ""),
             "publisher": str(row.get("publisher") or ""),
             "date": str(row.get("publication_date") or ""),
-            "location": str(row.get("location") or ""),
+            "location": loc,
             "url": url,
             "nexis_id": nexis_match.group(0) if nexis_match and not url.startswith("http") else "",
             "archive_dir": str(row.get("archive_dir") or ""),
@@ -3469,6 +3476,48 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         f'<a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk ({filtered_count:,})</a>'
         '</nav>'
     )
+
+    if is_archive:
+        topic_pills_html = f"""
+        <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1.5">Archive Scope:</span>
+        <button type="button" data-topic="" class="topic-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Archive Sources ({archive_total:,})</button>
+        <button type="button" data-topic="__in_scope__" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">In-Scope Core Corpus ({filtered_count:,})</button>
+        <button type="button" data-topic="__excluded__" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Archived Background ({archive_total - filtered_count:,})</button>
+        <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 ml-2 mr-1.5">Core Topics:</span>
+        <button type="button" data-topic="Public-Private Data Partnerships" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Data Partnerships (77)</button>
+        <button type="button" data-topic="Municipal Traffic Mitigation & Street Controls" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Municipal Mitigation (29)</button>
+        <button type="button" data-topic="Legislation & City Council Actions" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Legislation & Actions (23)</button>
+        <button type="button" data-topic="Community Pushback & Safety Hazards" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Community Pushback (22)</button>
+        <button type="button" data-topic="Commercial Freight & Bridge Clearance" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Freight & Bridge Clearances (21)</button>
+        <button type="button" data-topic="Platform Features & Routing Algorithms" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Platform Features (14)</button>
+        """
+        score_archive_btn = '<button type="button" data-score="excluded" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">&lt;85% Archived Background</button>'
+    else:
+        topic_pills_html = f"""
+        <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1.5">News Topic:</span>
+        <button type="button" data-topic="" class="topic-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Topics ({filtered_count:,})</button>
+        <button type="button" data-topic="Public-Private Data Partnerships" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Data Partnerships (77)</button>
+        <button type="button" data-topic="Municipal Traffic Mitigation & Street Controls" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Municipal Mitigation (29)</button>
+        <button type="button" data-topic="Legislation & City Council Actions" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Legislation & Actions (23)</button>
+        <button type="button" data-topic="Community Pushback & Safety Hazards" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Community Pushback (22)</button>
+        <button type="button" data-topic="Commercial Freight & Bridge Clearance" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Freight & Bridge Clearances (21)</button>
+        <button type="button" data-topic="Platform Features & Routing Algorithms" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Platform Features (14)</button>
+        """
+        score_archive_btn = ''
+
+    score_pills_html = f"""
+        <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1.5">Actionability Level:</span>
+        <button type="button" data-score="" class="score-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Scores</button>
+        <button type="button" data-score="98-99" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">98–99% Statutory Mandates</button>
+        <button type="button" data-score="96-97" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">96–97% Street Bans & Disputes</button>
+        <button type="button" data-score="94-95" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">94–95% Bilateral Agreements</button>
+        <button type="button" data-score="92-93" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">92–93% Infrastructure Diverters</button>
+        <button type="button" data-score="90-91" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">90–91% Commercial Fleet Systems</button>
+        <button type="button" data-score="87-89" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">87–89% Traffic Calming Dynamics</button>
+        <button type="button" data-score="85-86" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">85–86% Corridor Studies</button>
+        {score_archive_btn}
+    """
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3508,29 +3557,14 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
     <!-- News Topic Category Pills -->
     <div class="pt-2 border-t border-slate-800/80">
       <div class="flex flex-wrap items-center gap-1.5 text-xs" id="topic-pills">
-        <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1.5">News Topic:</span>
-        <button type="button" data-topic="" class="topic-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Topics (186)</button>
-        <button type="button" data-topic="Public-Private Data Partnerships" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Data Partnerships (77)</button>
-        <button type="button" data-topic="Municipal Traffic Mitigation & Street Controls" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Municipal Mitigation (29)</button>
-        <button type="button" data-topic="Legislation & City Council Actions" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Legislation & Actions (23)</button>
-        <button type="button" data-topic="Community Pushback & Safety Hazards" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Community Pushback (22)</button>
-        <button type="button" data-topic="Commercial Freight & Bridge Clearance" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Freight & Bridge Clearances (21)</button>
-        <button type="button" data-topic="Platform Features & Routing Algorithms" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Platform Features (14)</button>
+        {topic_pills_html}
       </div>
     </div>
 
     <!-- Relevance Score Tier Pills -->
     <div class="pt-2 border-t border-slate-800/80">
       <div class="flex flex-wrap items-center gap-1.5 text-xs" id="score-pills">
-        <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1.5">Relevance Tier:</span>
-        <button type="button" data-score="" class="score-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Scores</button>
-        <button type="button" data-score="98-99" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">98–99% Statutory</button>
-        <button type="button" data-score="96-97" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">96–97% Resistance</button>
-        <button type="button" data-score="94-95" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">94–95% Partnerships</button>
-        <button type="button" data-score="92-93" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">92–93% Diverters</button>
-        <button type="button" data-score="90-91" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">90–91% Freight</button>
-        <button type="button" data-score="87-89" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">87–89% Calming</button>
-        <button type="button" data-score="85-86" class="score-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">85–86% Studies</button>
+        {score_pills_html}
       </div>
     </div>
 
@@ -3794,11 +3828,22 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
     function applyFilter(triggerHash = true) {{
       const needle = query.value.trim().toLowerCase();
       const list = ROWS.filter(row => {{
-        if (activeTopic && row.topic_category !== activeTopic && (row.topic_slug || '') !== activeTopic) return false;
+        if (activeTopic) {{
+          if (activeTopic === '__in_scope__') {{
+            if (row.is_relevant !== 1) return false;
+          }} else if (activeTopic === '__excluded__') {{
+            if (row.is_relevant === 1) return false;
+          }} else if (row.topic_category !== activeTopic && (row.topic_slug || '') !== activeTopic) {{
+            return false;
+          }}
+        }}
         if (activeLayer && String(row.layer) !== String(activeLayer)) return false;
         if (activeScore && row.score_tier !== activeScore) return false;
         if (activeGov && !matchesGov(row.governing_level, activeGov)) return false;
-        if (activePlace && String(row.location || '').trim() !== activePlace) return false;
+        if (activePlace) {{
+          const rLoc = String(row.location || '').trim().replace(/,\s*([A-Za-z]{{2}})$/, (m, st) => ', ' + st.toUpperCase());
+          if (rLoc !== activePlace) return false;
+        }}
         if (needle) {{
           const haystack = [row.title, row.publisher, row.location, row.governing_level, row.id, row.nexis_id, row.category, row.topic_category, row.relevance_rationale].join(' ').toLowerCase();
           if (!haystack.includes(needle)) return false;
@@ -3837,7 +3882,22 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
     function parseUrlParams() {{
       const p = new URLSearchParams(window.location.search);
       if (p.has('topic')) {{
-        activeTopic = p.get('topic');
+        const t = p.get('topic');
+        if (t === 'freight' || t.toLowerCase().includes('freight') || t.toLowerCase().includes('bridge')) {{
+          activeTopic = 'Commercial Freight & Bridge Clearance';
+        }} else if (t === 'partnerships' || t.toLowerCase().includes('partner')) {{
+          activeTopic = 'Public-Private Data Partnerships';
+        }} else if (t === 'mitigation' || t.toLowerCase().includes('mitigat')) {{
+          activeTopic = 'Municipal Traffic Mitigation & Street Controls';
+        }} else if (t === 'legislation' || t.toLowerCase().includes('legislat')) {{
+          activeTopic = 'Legislation & City Council Actions';
+        }} else if (t === 'pushback' || t.toLowerCase().includes('pushback')) {{
+          activeTopic = 'Community Pushback & Safety Hazards';
+        }} else if (t === 'features' || t.toLowerCase().includes('algorithm')) {{
+          activeTopic = 'Platform Features & Routing Algorithms';
+        }} else {{
+          activeTopic = t;
+        }}
       }}
       if (p.has('layer')) {{
         const val = p.get('layer');
@@ -3851,9 +3911,10 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         else if (s.includes('96') || s.includes('97') || s.includes('gam') || s.includes('resist')) activeScore = '96-97';
         else if (s.includes('94') || s.includes('95') || s.includes('partner') || s.includes('signal')) activeScore = '94-95';
         else if (s.includes('92') || s.includes('93') || s.includes('divert') || s.includes('geom')) activeScore = '92-93';
-        else if (s.includes('90') || s.includes('91') || s.includes('freight') || s.includes('bridge') || s.includes('truck')) activeScore = '90-91';
+        else if (s.includes('90') || s.includes('91') || s.includes('fleet')) activeScore = '90-91';
         else if (s.includes('87') || s.includes('88') || s.includes('89') || s.includes('calm') || s.includes('eco')) activeScore = '87-89';
         else if (s.includes('85') || s.includes('86') || s.includes('stud') || s.includes('congest')) activeScore = '85-86';
+        else if (s.includes('exclud') || s.includes('archiv')) activeScore = 'excluded';
       }}
       if (p.has('gov')) activeGov = p.get('gov');
       if (p.has('place')) activePlace = p.get('place');
@@ -3871,7 +3932,8 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
 
       const placeCounts = new Map();
       ROWS.forEach(r => {{
-        const loc = String(r.location || '').trim();
+        let loc = String(r.location || '').trim();
+        loc = loc.replace(/,\s*([A-Za-z]{{2}})$/, (m, st) => ', ' + st.toUpperCase());
         if (loc) {{
           placeCounts.set(loc, (placeCounts.get(loc) || 0) + 1);
         }}

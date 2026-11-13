@@ -341,21 +341,24 @@ def build_pass1_analyses(db_path: Path, archive_root: Path) -> list[ResearchAnal
     con.row_factory = sqlite3.Row
     
     def get_discoveries(source_id: str) -> list[DiscoveryReference]:
-        rows = con.execute("""
-            SELECT d.id, d.batch_id, d.study_area, d.discovery_method, d.original_url
-            FROM discoveries d
-            JOIN source_discoveries sd ON d.id = sd.discovery_id
-            WHERE sd.source_id = ?
-        """, (source_id,)).fetchall()
-        return [
-            DiscoveryReference(
-                discovery_id=r["id"],
-                batch_id=r["batch_id"],
-                study_area=r["study_area"],
-                discovery_method=r["discovery_method"],
-                original_url=r["original_url"],
-            ) for r in rows
-        ]
+        try:
+            rows = con.execute("""
+                SELECT d.id, d.batch_id, d.study_area, d.discovery_method, d.original_url
+                FROM discoveries d
+                JOIN source_discoveries sd ON d.id = sd.discovery_id
+                WHERE sd.source_id = ?
+            """, (source_id,)).fetchall()
+            return [
+                DiscoveryReference(
+                    discovery_id=r["id"],
+                    batch_id=r["batch_id"],
+                    study_area=r["study_area"],
+                    discovery_method=r["discovery_method"],
+                    original_url=r["original_url"],
+                ) for r in rows
+            ]
+        except sqlite3.OperationalError:
+            return []
 
     def get_archive_text(archive_rel_path: str) -> str:
         # Determine full path
