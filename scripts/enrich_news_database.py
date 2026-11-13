@@ -24,13 +24,331 @@ EXCLUDED_ACADEMIC_PAPERS = {
     ),
 }
 
+# Verified metadata corrections for non-nexis archive records
+NON_NEXIS_CORRECTIONS = {
+    "src_dc10ae72df82e2180ca6": {
+        "title": "City Council Approves Pilot Program to Curb Waze Traffic on Side Streets",
+        "publication_date": "2019-04-30",
+        "publisher": "NBC Los Angeles (KNBC) / City News Service",
+        "location": "Los Angeles, CA",
+        "url": "https://www.nbclosangeles.com/news/city-council-pilot-program-to-curb-waze-traffic-on-side-streets/162349/",
+    },
+    "src_d1320840ff1688ff741e": {
+        "title": "New Jersey Town Closes Some City Streets to Drivers Who Don’t Live There",
+        "publication_date": "2018-01-22",
+        "publisher": "Next City",
+        "location": "Leonia, NJ",
+        "url": "https://nextcity.org/urbanist-news/new-jersey-town-closes-some-city-streets-to-drivers-who-dont-live-there",
+    },
+    "src_23a1fcd9de5f1849cfa3": {
+        "title": "Delridge Neighborhood Greenway — 26th Ave SW Proposed Diverters: Outreach Summary",
+        "publication_date": "2020-11-01",
+        "publisher": "Seattle Department of Transportation (SDOT)",
+        "location": "Seattle, WA",
+        "url": "https://www.seattle.gov/documents/Departments/SDOT/TransitProgram/RapidRide/RapidRide%20H/26th%20Ave%20SW%20Diverter%20Outreach%20Summary.pdf",
+    },
+    "src_8f6b264845ca47814ba0": {
+        "title": "Waze Connected Citizens Program — United States Municipal Rollout",
+        "publication_date": "2014-12-08",
+        "publisher": "Waze Mobile (Google)",
+        "location": "United States (Multi-City)",
+        "url": "https://www.waze.com/discuss/t/waze-connected-citizens-program/102835",
+    },
+    "src_02454d2db17a078f05f9": {
+        "title": "Los Angeles Council File 11-2130-S4: Rowena Ave / Angus St Cut-Through Traffic Mitigation",
+        "publication_date": "2019-06-24",
+        "publisher": "Los Angeles City Clerk / Silver Lake Neighborhood Council",
+        "location": "Los Angeles, CA",
+        "url": "https://cityclerk.lacity.org/onlinedocs/2011/11-2130-S4_PC_AB_06-24-2019.pdf",
+    },
+    "src_483bc7bade77380c2828": {
+        "title": "California AB 2015: Department of Transportation: Third-Party Navigation Applications Pilot Study",
+        "publication_date": "2024-09-22",
+        "publisher": "California State Legislature / CalMatters Digital Democracy",
+        "location": "California",
+        "url": "https://calmatters.digitaldemocracy.org/bills/ca_202520260ab2015",
+    },
+    "src_32ccdcb0712575f8cb0b": {
+        "title": "New 'Absurd' Dem-Backed Bill Could Make Your Commute Longer, California Lawmaker Warns",
+        "publication_date": "2024-06-16",
+        "publisher": "Yahoo News",
+        "location": "California",
+        "url": "https://www.yahoo.com/news/politics/articles/absurd-dem-backed-bill-could-205725514.html",
+    },
+    "src_9403a6fb4c495dd5f6e0": {
+        "title": "Los Angeles Council Motion 14-1741-S1: Data-Sharing Partnership with Waze to Protect Residential Streets",
+        "publication_date": "2015-04-28",
+        "publisher": "Los Angeles City Clerk",
+        "location": "Los Angeles, CA",
+        "url": "https://cityclerk.lacity.org/onlinedocs/2014/14-1741-S1_MOT_04-28-2015.pdf",
+    },
+    "src_004598f106dc0112c9f5": {
+        "title": "L.A. May Crack Down on Waze and Google Maps Over Side-Street Traffic",
+        "publication_date": "2019-05-07",
+        "publisher": "Los Angeles Magazine",
+        "location": "Los Angeles, CA",
+        "url": "https://lamag.com/technology/waze-restrictions-program/",
+    },
+    "src_df18bde5b05e69aa6fee": {
+        "title": "Waze Hijacked L.A. in the Name of Convenience. Can Anyone Put the Genie Back in the Bottle?",
+        "publication_date": "2018-05-18",
+        "publisher": "Los Angeles Magazine",
+        "location": "Los Angeles, CA",
+        "url": "https://lamag.com/urbandevelopment/waze-los-angeles-neighborhoods/",
+    },
+    "src_ec380b5a89074be9476e": {
+        "title": "Waze Restricted Due to Side Street Traffic Buildup in Los Angeles",
+        "publication_date": "2019-04-30",
+        "publisher": "ABC 10News San Diego / City News Service",
+        "location": "Los Angeles, CA",
+        "url": "https://www.10news.com/news/national/waze-restricted-due-to-buildup-of-side-street-traffic-in-los-angeles",
+    },
+    "src_2910e1608eed71065145": {
+        "title": "'Absolute Chaos': Navigation Apps Blamed for Traffic Nightmare on One of L.A.'s Steepest Streets",
+        "publication_date": "2018-04-05",
+        "publisher": "FOX 13 Seattle / KTLA",
+        "location": "Los Angeles, CA",
+        "url": "https://www.fox13seattle.com/news/absolute-chaos-navigation-apps-blamed-for-traffic-nightmare-on-one-of-l-a-s-steepest-streets",
+    },
+    "src_7a51efb5b5f5430e194b": {
+        "title": "Mayor Walsh Announces City of Boston Partnership with Traffic App Waze",
+        "publication_date": "2015-02-19",
+        "publisher": "The Daily Free Press",
+        "location": "Boston, MA",
+        "url": "https://dailyfreepress.com/02/19/05/92334/walsh-announces-partnership-with-traffic-app-waze/",
+    },
+    "src_0d4fa7ccce08eaf50b2f": {
+        "title": "Boston Partners with Waze to Clear Up Clogged Streets",
+        "publication_date": "2015-02-21",
+        "publisher": "Engadget",
+        "location": "Boston, MA",
+        "url": "https://www.engadget.com/2015-02-21-waze-boston-partner.html",
+    },
+    "src_ab2b7d7e044d5121e5f5": {
+        "title": "Using Waze Data to Measure Traffic Congestion and Centre Street Road Diet Safety",
+        "publication_date": "2019-10-15",
+        "publisher": "City of Boston Citywide Analytics Team",
+        "location": "Boston, MA",
+        "url": "https://www.boston.gov/departments/analytics-team/using-waze-data-measure-traffic-congestion-0",
+    },
+    "src_f2e92e99cdf509170cc7": {
+        "title": "MassDOT Partners with Waze to Improve Traffic and Planning",
+        "publication_date": "2016-06-16",
+        "publisher": "The Boston Globe",
+        "location": "Massachusetts",
+        "url": "https://www.bostonglobe.com/metro/2016/06/16/massdot-partners-with-waze-improve-traffic-planning/9p4D9vWnIYNQ7g9s1DwhIO/story.html",
+    },
+    "src_396cf33a5161f5f5bd8d": {
+        "title": "Wood Street In West Town Going One-Way To Cut Down On Thru-Traffic",
+        "publication_date": "2021-08-10",
+        "publisher": "Block Club Chicago",
+        "location": "Chicago, IL",
+        "url": "https://blockclubchicago.org/2025/06/06/parts-of-wood-street-in-west-town-to-become-one-way-3-years-after-bike-lanes-pitched-ditched/",
+    },
+    "src_a8fe04b8629212eb1ae5": {
+        "title": "Proposal To Make Wood Street One-Way Stirs Debate In West Town",
+        "publication_date": "2021-08-04",
+        "publisher": "CBS News Chicago",
+        "location": "Chicago, IL",
+        "url": "https://www.cbsnews.com/chicago/news/proposed-one-way-street-chicago-north-side/",
+    },
+    "src_5b329e50217cff65c640": {
+        "title": "Councilmember Saka Opposed Traffic Diverters in Delridge Over Equity Concerns",
+        "publication_date": "2024-04-02",
+        "publisher": "PubliCola",
+        "location": "Seattle, WA",
+        "url": "https://publicola.com/2025/04/02/shannon-braddock-appointed-acting-county-executive-saka-says-he-opposed-traffic-diverters-in-his-neighborhood-because-of-equity-concerns/",
+    },
+    "src_a8b514916cc36bde3d40": {
+        "title": "Community Petition: Stop the Installation of Traffic Diverters at SW Genesee and SW Brandon",
+        "publication_date": "2020-09-01",
+        "publisher": "Change.org (West Seattle Residents)",
+        "location": "Seattle, WA",
+        "url": "https://www.change.org/p/seattle-department-of-transportation-stop-the-installation-of-traffic-diverters-at-sw-genesee-and-sw-brandon",
+    },
+    "src_a16a62edb70588f81bbb": {
+        "title": "Home Zone Program: Lake City Neighborhood Traffic Calming",
+        "publication_date": "2023-01-01",
+        "publisher": "Seattle Department of Transportation (SDOT)",
+        "location": "Seattle, WA",
+        "url": "https://www.seattle.gov/transportation/projects-and-programs/programs/home-zone-program/lake-city",
+    },
+    "src_c8f5fcc928d66ad4b9e7": {
+        "title": "Waze’s Maps Now Change as Roads Close",
+        "publication_date": "2013-02-27",
+        "publisher": "The New York Times (Bits Blog)",
+        "location": "United States",
+        "url": "https://archive.nytimes.com/bits.blogs.nytimes.com/2013/02/27/wazes-maps-now-change-as-roads-close/",
+    },
+    "src_264bf1d902e4b812735b": {
+        "title": "Navigation App Waze Adds Road Closure Reporting, Reaches 40M Users",
+        "publication_date": "2013-02-27",
+        "publisher": "TechCrunch",
+        "location": "United States",
+        "url": "https://techcrunch.com/2013/02/27/waze-road-closure/",
+    },
+    "src_a3aec998433f0c3fff3d": {
+        "title": "Waze Connected Citizens Program Official Partner Factsheet",
+        "publication_date": "2019-01-01",
+        "publisher": "Waze (Google LLC)",
+        "location": "United States",
+        "url": "https://web-assets.waze.com/partners/ccp/WAZE-CCP-Factsheet.pdf",
+    },
+    "src_209e9565661083dba383": {
+        "title": "Waze for Cities (W4C) Program Overview and Municipal Data Guide",
+        "publication_date": "2020-01-01",
+        "publisher": "Waze Discuss / Wazeopedia",
+        "location": "United States",
+        "url": "https://www.waze.com/discuss/t/waze-for-cities/377967",
+    },
+    "src_97a13ecf3417e5676e08": {
+        "title": "Community Feature Request: Municipal Blacklist for Residential Shortcut Streets",
+        "publication_date": "2020-05-15",
+        "publisher": "Waze Discuss Community Forum",
+        "location": "United States",
+        "url": "https://www.waze.com/discuss/t/feature-request-blacklist-areas-roads/399185",
+    },
+    "src_ae24cf62a63f34c9fe0b": {
+        "title": "Waze for Cities: Real-Time Traffic Data Analytics with Google Cloud",
+        "publication_date": "2021-06-01",
+        "publisher": "Waze (Google LLC)",
+        "location": "United States",
+        "url": "https://www.waze.com/wazeforcities/",
+    },
+    "src_8844a04c3601f584693a": {
+        "title": "Borough of Mantoloking Regular Council Meeting Minutes: Waze Cut-Through Traffic Deployment",
+        "publication_date": "2020-07-21",
+        "publisher": "Borough of Mantoloking, New Jersey",
+        "location": "Mantoloking, NJ",
+        "url": "https://www.mantoloking.org/AgendaCenter/ViewFile/Minutes/_07212026-45",
+    },
+    "src_d8bae76a48b8c662c148": {
+        "title": "San Francisco Smart City Challenge Phase II: Connected Mobility and Navigation Management",
+        "publication_date": "2016-05-01",
+        "publisher": "San Francisco Municipal Transportation Agency (SFMTA)",
+        "location": "San Francisco, CA",
+        "url": "https://www.sfmta.com/sites/default/files/reports-and-documents/2018/11/sf_smart_city_challenge_phase_ii_volume_2.pdf",
+    },
+    "src_6b808701b37bfa4ff82d": {
+        "title": "San Francisco County Transportation Authority Citizens Advisory Committee Meeting Packet",
+        "publication_date": "2023-09-03",
+        "publisher": "San Francisco County Transportation Authority (SFCTA)",
+        "location": "San Francisco, CA",
+        "url": "https://www.sfcta.org/sites/default/files/2025-08/SFCTA_CAC_PACKET_2025-09-03-reduced.pdf",
+    },
+    "src_472865dc84294b0bd125": {
+        "title": "Waze and LA City Council Will Work Together to Reduce Growing Traffic on Residential Streets",
+        "publication_date": "2019-05-01",
+        "publisher": "LAist / 89.3 KPCC (AirTalk with Larry Mantle)",
+        "location": "Los Angeles, CA",
+        "url": "https://laist.com/shows/airtalk/waze-and-la-city-council-will-work-together-to-reduce-growing-traffic-on-residential-streets",
+    },
+}
+
+# Standardized location mapping for clean, consistent formatting
+LOCATION_NORM = {
+    "Albany, Ny": "Albany, NY",
+    "Anchorage, Ak": "Anchorage, AK",
+    "Arlington, TX": "Arlington, TX",
+    "Asheville, Nc": "Asheville, NC",
+    "Atlanta, Ga": "Atlanta, GA",
+    "Atlanta, GA": "Atlanta, GA",
+    "Austin, Tx": "Austin, TX",
+    "Austin, TX": "Austin, TX",
+    "Baton Rouge, LA": "Baton Rouge, LA",
+    "Boston": "Boston, MA",
+    "Boston, Ma": "Boston, MA",
+    "Boston, MA": "Boston, MA",
+    "Boston, Los Angeles County, Miami, New York City, Pittsburgh; Florida, Utah, Kentucky": "United States (Multi-City)",
+    "California": "California",
+    "Carson City, Nv": "Carson City, NV",
+    "Charlotte, Nc": "Charlotte, NC",
+    "Chesapeake, VA": "Chesapeake, VA",
+    "Chicago": "Chicago, IL",
+    "Chicago, Il": "Chicago, IL",
+    "Chicago, IL": "Chicago, IL",
+    "Colorado": "Colorado",
+    "Columbus": "Columbus, OH",
+    "Connecticut": "Connecticut",
+    "Dallas, Tx": "Dallas, TX",
+    "Des Moines, Ia": "Des Moines, IA",
+    "Des Moines, IA": "Des Moines, IA",
+    "Detroit, MI": "Detroit, MI",
+    "Florida": "Florida",
+    "Fort Worth, Tx": "Fort Worth, TX",
+    "Georgia": "Georgia",
+    "Global": "Global",
+    "Greensboro, NC": "Greensboro, NC",
+    "Harrisburg, PA": "Harrisburg, PA",
+    "Houston, Tx": "Houston, TX",
+    "Illinois": "Illinois",
+    "Illinois (State)": "Illinois",
+    "Lancaster, Pa": "Lancaster, PA",
+    "Las Vegas, NV (Southern Nevada), Tampa, FL, Delaware": "United States (Multi-City)",
+    "Leonia": "Leonia, NJ",
+    "Lincoln, Ne": "Lincoln, NE",
+    "Los Angeles": "Los Angeles, CA",
+    "Los Angeles, Ca": "Los Angeles, CA",
+    "Los Angeles, CA": "Los Angeles, CA",
+    "Louisville, Ky": "Louisville, KY",
+    "Maine": "Maine",
+    "Mantoloking": "Mantoloking, NJ",
+    "Maryland": "Maryland",
+    "Maryland (State)": "Maryland",
+    "Massachusetts": "Massachusetts",
+    "Miami, Fl": "Miami, FL",
+    "Montgomery, Al": "Montgomery, AL",
+    "Mount Prospect, IL": "Mount Prospect, IL",
+    "New Haven, Ct": "New Haven, CT",
+    "New Jersey": "New Jersey",
+    "New Jersey (State)": "New Jersey",
+    "New York": "New York",
+    "New York (State)": "New York",
+    "New York, New York": "New York, NY",
+    "New York, Ny": "New York, NY",
+    "Norfolk, VA": "Norfolk, VA",
+    "North Carolina": "North Carolina",
+    "Pennsylvania": "Pennsylvania",
+    "Pennsylvania (State)": "Pennsylvania",
+    "Philadelphia, PA": "Philadelphia, PA",
+    "Pittsburgh, PA": "Pittsburgh, PA",
+    "Portland, Or": "Portland, OR",
+    "Providence, Ri": "Providence, RI",
+    "Raleigh, Nc": "Raleigh, NC",
+    "Richmond, Va": "Richmond, VA",
+    "Sacramento, CA": "Sacramento, CA",
+    "Saint Louis, MO": "St. Louis, MO",
+    "Salt Lake City, Ut": "Salt Lake City, UT",
+    "San Francisco": "San Francisco, CA",
+    "San Francisco Bay Area, Ca": "San Francisco Bay Area, CA",
+    "San Francisco Bay Area, Los Angeles, Phoenix, Austin, Atlanta": "United States (Multi-City)",
+    "San Francisco County": "San Francisco, CA",
+    "San Francisco, Ca": "San Francisco, CA",
+    "San Francisco, CA": "San Francisco, CA",
+    "San Francisco, Los Angeles, Phoenix, Austin, Atlanta": "United States (Multi-City)",
+    "San Jose, Ca": "San Jose, CA",
+    "Seattle": "Seattle, WA",
+    "Spokane, Wa": "Spokane, WA",
+    "Tampa, Fl": "Tampa, FL",
+    "Texas": "Texas",
+    "Torrance": "Torrance, CA",
+    "United States": "United States",
+    "Virginia": "Virginia",
+    "Virginia Beach, Va": "Virginia Beach, VA",
+    "Washington Dc": "Washington, DC",
+    "Washington, Washington": "Washington, DC",
+}
+
 def resolve_url(d):
     """Resolve a live canonical URL for any crawled news document or Nexis Uni record."""
+    sid = d.get("source_id") or d.get("id") or ""
+    if sid in NON_NEXIS_CORRECTIONS and NON_NEXIS_CORRECTIONS[sid].get("url"):
+        return NON_NEXIS_CORRECTIONS[sid]["url"]
+
     url = d.get("url") or d.get("final_url") or d.get("requested_url") or ""
     if url and (url.startswith("http://") or url.startswith("https://")):
         return url
 
-    sid = d.get("source_id") or d.get("id") or ""
     archive_dir = d.get("archive_dir") or ""
     combined = f"{sid} {archive_dir}"
     m = re.search(r"urn:contentItem:([A-Za-z0-9-]+)", combined)
@@ -1033,6 +1351,23 @@ def main():
         sid = d["source_id"]
         c_entry = crosswalk.get(sid, {})
 
+        # Apply verified metadata corrections for non-nexis records
+        if sid in NON_NEXIS_CORRECTIONS:
+            corr = NON_NEXIS_CORRECTIONS[sid]
+            for k, v in corr.items():
+                d[k] = v
+                if k == "location":
+                    d["target_location"] = v
+                    d["actual_jurisdiction"] = v
+                elif k == "publication_date":
+                    d["crawl_timestamp"] = f"{v}T00:00:00Z"
+
+        # Apply location normalization
+        for loc_k in ("location", "target_location", "actual_jurisdiction"):
+            v = d.get(loc_k, "")
+            if v:
+                d[loc_k] = LOCATION_NORM.get(v, LOCATION_NORM.get(v.strip(), v))
+
         if sid in BESPOKE_DATA:
             cat, rationale, inst_id, inst_name = BESPOKE_DATA[sid]
         else:
@@ -1107,6 +1442,38 @@ def main():
                 writer.writerow(clean_row)
         print(f"Saved CSV: {filtered_export_csv}")
 
+    # Update crosswalk files with verified metadata
+    for cw_file in [crosswalk_path, root.parent / "Law_Crawler" / "exports" / "news_to_law_crosswalk.csv"]:
+        if cw_file.exists():
+            with open(cw_file, "r", encoding="utf-8") as f:
+                cw_rows = list(csv.DictReader(f))
+            if cw_rows:
+                fieldnames_cw = list(cw_rows[0].keys())
+                for r in cw_rows:
+                    sid = r.get("source_id", "")
+                    if sid in NON_NEXIS_CORRECTIONS:
+                        corr = NON_NEXIS_CORRECTIONS[sid]
+                        if "title" in corr:
+                            r["headline"] = corr["title"]
+                            r["article_title"] = corr["title"]
+                        if "publication_date" in corr:
+                            r["date"] = corr["publication_date"]
+                            r["publication_year"] = corr["publication_date"][:4]
+                        if "url" in corr:
+                            r["url"] = corr["url"]
+                        if "location" in corr:
+                            r["news_jurisdiction"] = corr["location"]
+                        if "publisher" in corr and "location" in corr:
+                            r["source_and_jurisdiction"] = f"{corr['publisher']} · {corr['location']}"
+                    jur = r.get("news_jurisdiction", "")
+                    if jur and jur in LOCATION_NORM:
+                        r["news_jurisdiction"] = LOCATION_NORM[jur]
+                with open(cw_file, "w", encoding="utf-8", newline="") as f:
+                    writer = csv.DictWriter(f, fieldnames=fieldnames_cw)
+                    writer.writeheader()
+                    writer.writerows(cw_rows)
+                print(f"Updated Crosswalk CSV: {cw_file}")
+
     # Update SQLite database: resolve all URLs, archive academic papers, set active metadata
     if db_path.exists():
         conn = sqlite3.connect(db_path)
@@ -1131,7 +1498,7 @@ def main():
                 WHERE id = ?
             """, (score, reason, sid))
 
-        # 3. Update active news corpus rows
+        # 3. Update active news corpus rows with full verified metadata
         for d in enriched_docs:
             cur.execute("""
                 UPDATE crawled_documents
@@ -1139,7 +1506,11 @@ def main():
                     topic_category = ?,
                     relevance_rationale = ?,
                     crosswalk_instrument_id = ?,
-                    crosswalk_instrument_name = ?
+                    crosswalk_instrument_name = ?,
+                    title = ?,
+                    publication_date = ?,
+                    publisher = ?,
+                    location = ?
                 WHERE id = ?
             """, (
                 d["url"],
@@ -1147,8 +1518,21 @@ def main():
                 d["relevance_rationale"],
                 d["crosswalk_instrument_id"],
                 d["crosswalk_instrument_name"],
+                d.get("title", ""),
+                d.get("publication_date", ""),
+                d.get("publisher", ""),
+                d.get("target_location", "") or d.get("location", ""),
                 d["source_id"]
             ))
+
+        # 4. Normalize locations for all rows in SQLite
+        cur.execute("SELECT id, location FROM crawled_documents")
+        for sid, loc_val in cur.fetchall():
+            if loc_val:
+                norm_loc = LOCATION_NORM.get(loc_val, LOCATION_NORM.get(loc_val.strip(), loc_val))
+                if norm_loc != loc_val:
+                    cur.execute("UPDATE crawled_documents SET location = ? WHERE id = ?", (norm_loc, sid))
+
         conn.commit()
         conn.close()
         print(f"Updated SQLite database: {db_path}")
@@ -1161,6 +1545,19 @@ def main():
         for item in all_sources:
             sid = item.get("source_id", "")
             item["url"] = resolve_url(item)
+            if sid in NON_NEXIS_CORRECTIONS:
+                corr = NON_NEXIS_CORRECTIONS[sid]
+                for k, v in corr.items():
+                    item[k] = v
+                    if k == "location":
+                        item["target_location"] = v
+                        item["actual_jurisdiction"] = v
+                    elif k == "publication_date":
+                        item["crawl_timestamp"] = f"{v}T00:00:00Z"
+            for loc_k in ("location", "target_location", "actual_jurisdiction"):
+                v = item.get(loc_k, "")
+                if v:
+                    item[loc_k] = LOCATION_NORM.get(v, LOCATION_NORM.get(v.strip(), v))
             if sid in EXCLUDED_ACADEMIC_PAPERS:
                 _, score, reason = EXCLUDED_ACADEMIC_PAPERS[sid]
                 item["is_project_relevant"] = 0

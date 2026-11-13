@@ -36,25 +36,37 @@ def build_all_analyses(db_path: Path, archive_root: Path) -> list[ResearchAnalys
     con.row_factory = sqlite3.Row
 
     def get_discoveries(source_id: str) -> list[DiscoveryReference]:
-        rows = con.execute("""
-            SELECT d.id, d.batch_id, d.study_area, d.discovery_method, d.original_url
-            FROM discoveries d
-            JOIN source_discoveries sd ON d.id = sd.discovery_id
-            WHERE sd.source_id = ?
-        """, (source_id,)).fetchall()
-        return [
-            DiscoveryReference(
-                discovery_id=r["id"],
-                batch_id=r["batch_id"],
-                study_area=r["study_area"],
-                discovery_method=r["discovery_method"],
-                original_url=r["original_url"],
-            ) for r in rows
-        ]
+        try:
+            rows = con.execute("""
+                SELECT d.id, d.batch_id, d.study_area, d.discovery_method, d.original_url
+                FROM discoveries d
+                JOIN source_discoveries sd ON d.id = sd.discovery_id
+                WHERE sd.source_id = ?
+            """, (source_id,)).fetchall()
+            return [
+                DiscoveryReference(
+                    discovery_id=r["id"],
+                    batch_id=r["batch_id"],
+                    study_area=r["study_area"],
+                    discovery_method=r["discovery_method"],
+                    original_url=r["original_url"],
+                ) for r in rows
+            ]
+        except sqlite3.OperationalError:
+            return []
 
     def get_archive_text(source_or_path: str) -> str:
         if source_or_path.startswith("src_"):
-            row = con.execute("SELECT archive_dir FROM fetch_attempts WHERE source_id = ? AND outcome = 'retrieved'", (source_or_path,)).fetchone()
+            row = None
+            try:
+                row = con.execute("SELECT archive_dir FROM crawled_documents WHERE id = ?", (source_or_path,)).fetchone()
+            except sqlite3.OperationalError:
+                pass
+            if not row:
+                try:
+                    row = con.execute("SELECT archive_dir FROM fetch_attempts WHERE source_id = ? AND outcome = 'retrieved'", (source_or_path,)).fetchone()
+                except sqlite3.OperationalError:
+                    pass
             if not row:
                 return ""
             adir = Path(row["archive_dir"])
