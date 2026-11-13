@@ -1,41 +1,64 @@
 import json
 import csv
 import sqlite3
+import re
+import urllib.parse
 from pathlib import Path
+
+# Academic publications excluded from journalistic news corpus
+EXCLUDED_ACADEMIC_PAPERS = {
+    "src_e3cc761c4fd41439dcff": (
+        "Academic Research Publication",
+        15,
+        "Academic research publication / peer-reviewed journal paper (Nature Cities), not a journalistic news report; covered by news article in SF Chronicle (nexis_urn:contentItem:6KF6-GDK3-RT1G-H08X-00000-00)."
+    ),
+    "src_2cee64cfc090c4b25ca7": (
+        "Academic Doctoral Dissertation",
+        15,
+        "Academic doctoral dissertation (UC Berkeley Graduate Division), not a journalistic news report."
+    ),
+    "src_2602e1f52eb57cee5b07": (
+        "Academic / Technical Circular",
+        15,
+        "Academic / technical research circular (Transportation Research Board / National Academies), not a journalistic news report."
+    ),
+}
+
+def resolve_url(d):
+    """Resolve a live canonical URL for any crawled news document or Nexis Uni record."""
+    url = d.get("url") or d.get("final_url") or d.get("requested_url") or ""
+    if url and (url.startswith("http://") or url.startswith("https://")):
+        return url
+
+    sid = d.get("source_id") or d.get("id") or ""
+    archive_dir = d.get("archive_dir") or ""
+    combined = f"{sid} {archive_dir}"
+    m = re.search(r"urn:contentItem:([A-Za-z0-9-]+)", combined)
+    if m:
+        urn_id = m.group(1)
+        path = f"/shared/document/news/urn:contentItem:{urn_id}"
+        return f"https://www.nexisuni.com/document/?pddocfullpath={urllib.parse.quote(path, safe='')}"
+    
+    return ""
 
 # Bespoke dictionary for each source_id
 # source_id -> (category, rationale, instrument_id, instrument_name)
 BESPOKE_DATA = {
-    # 1. Academic & Empirical Research
-    "src_e3cc761c4fd41439dcff": (
-        "Academic Research & Traffic Studies",
-        "Google Research and academic co-authors conducted randomized switchback routing interventions across 10 US metropolitan corridors, empirically quantifying how algorithmic rerouting affects travel times, network speeds, and vehicular emissions.",
-        "None (Legal Gap)", "Unaddressed by Current Law"
-    ),
+    # 1. Specialized Platform & Municipal Empirical Case Studies
     "nexis_urn:contentItem:6KF6-GDK3-RT1G-H08X-00000-00": (
-        "Academic Research & Traffic Studies",
+        "Platform Features & Routing Algorithms",
         "San Francisco Chronicle investigative report on UC Berkeley and Google Research's randomized switchback routing trial across 10 US metro corridors, evaluating how algorithmic diversion away from highway bottlenecks affects travel times and network equilibrium.",
-        "None (Legal Gap)", "Unaddressed by Current Law"
-    ),
-    "src_2cee64cfc090c4b25ca7": (
-        "Academic Research & Traffic Studies",
-        "University of California transportation study analyzing mathematical traffic control and routing equilibria in the era of algorithmic navigation, modeling how selfish GPS routing degrades municipal network throughput.",
-        "None (Legal Gap)", "Unaddressed by Current Law"
+        "PLAT-ALG-04", "Large-Scale Arterial Commuter Diversion & Incident Rerouting"
     ),
     "src_ab2b7d7e044d5121e5f5": (
-        "Academic Research & Traffic Studies",
-        "Official empirical analysis by Boston's Citywide Analytics Team utilizing aggregated Waze traffic telemetry to measure the congestion and safety impacts of the Centre Street road diet redesign.",
-        "None (Legal Gap)", "Unaddressed by Current Law"
-    ),
-    "src_2602e1f52eb57cee5b07": (
-        "Academic Research & Traffic Studies",
-        "Transportation Research Board study examining methods for integrating third-party navigation app telemetry with municipal traffic operations and roadway sensor networks.",
-        "None (Legal Gap)", "Unaddressed by Current Law"
+        "Public-Private Data Partnerships",
+        "Official empirical analysis by Boston's Citywide Analytics Team utilizing aggregated Waze Connected Citizens telemetry to evaluate the congestion and safety impacts of the Centre Street road diet redesign.",
+        "BOS-CCP-2015", "City of Boston & Waze Connected Citizens Agreement"
     ),
     "nexis_urn:contentItem:5X75-KD41-F03R-N52V-00000-00": (
-        "Academic Research & Traffic Studies",
-        "Transportation analysis examining Braess's paradox and user equilibrium in algorithmic navigation, demonstrating how navigation apps optimizing individual commuter paths exacerbate overall network congestion.",
-        "None (Legal Gap)", "Unaddressed by Current Law"
+        "Platform Features & Routing Algorithms",
+        "Techdirt transportation analysis examining Braess's paradox and user equilibrium in algorithmic navigation, demonstrating how navigation apps optimizing individual commuter paths exacerbate overall network congestion.",
+        "PLAT-ALG-04", "Large-Scale Arterial Commuter Diversion & Incident Rerouting"
     ),
 
     # 2. State & Federal Legislation / City Council Actions
@@ -985,14 +1008,23 @@ def main():
     root = Path(__file__).resolve().parent.parent
     docs_path = root / "docs" / "data" / "news_corpus_filtered.json"
     crosswalk_path = root / "docs" / "data" / "news_to_law_crosswalk.csv"
+    filtered_export_json = root / "data" / "exports" / "research_analysis_filtered.json"
+    filtered_export_csv = root / "data" / "exports" / "research_analysis_filtered.csv"
+    all_sources_json = root / "data" / "exports" / "research_analysis_all_sources.json"
+    all_sources_csv = root / "data" / "exports" / "research_analysis_all_sources.csv"
+    db_path = root / "data" / "news.sqlite"
 
     with open(docs_path, "r", encoding="utf-8") as f:
-        docs = json.load(f)
+        raw_docs = json.load(f)
 
-    with open(crosswalk_path, "r", encoding="utf-8") as f:
-        crosswalk = {r["source_id"]: r for r in csv.DictReader(f)}
+    # Filter out academic papers from news database
+    docs = [d for d in raw_docs if d["source_id"] not in EXCLUDED_ACADEMIC_PAPERS]
+    print(f"Loaded {len(raw_docs)} documents, excluded {len(raw_docs) - len(docs)} academic papers. Active news corpus: {len(docs)} documents.")
 
-    print(f"Loaded {len(docs)} documents. Applying bespoke metadata...")
+    crosswalk = {}
+    if crosswalk_path.exists():
+        with open(crosswalk_path, "r", encoding="utf-8") as f:
+            crosswalk = {r["source_id"]: r for r in csv.DictReader(f)}
 
     enriched_docs = []
     missing_bespoke = []
@@ -1005,15 +1037,13 @@ def main():
             cat, rationale, inst_id, inst_name = BESPOKE_DATA[sid]
         else:
             missing_bespoke.append(sid)
-            title = d.get("title", "")
-            summary = d.get("factual_summary", "") or ""
-            pub = d.get("publisher", "") or ""
             loc = d.get("target_location", "") or d.get("actual_jurisdiction", "") or "metropolitan networks"
             cat = "Platform Features & Routing Algorithms"
             rationale = f"Analysis of navigation platform routing mechanics, commuter route diversion, and municipal governance policies managing vehicular flows across {loc}."
             inst_id = c_entry.get("instrument_id", "None (Legal Gap)")
             inst_name = c_entry.get("instrument_name", "Unaddressed by Current Law")
 
+        d["url"] = resolve_url(d)
         d["topic_category"] = cat
         d["relevance_rationale"] = rationale
         d["crosswalk_instrument_id"] = inst_id
@@ -1027,7 +1057,6 @@ def main():
             "Commercial Freight & Bridge Clearance": "freight",
             "Legislation & City Council Actions": "legislation",
             "Community Pushback & Safety Hazards": "pushback",
-            "Academic Research & Traffic Studies": "research",
         }
         d["topic_slug"] = slug_map.get(cat, "general")
 
@@ -1044,9 +1073,28 @@ def main():
 
     # Write back to CSV
     csv_path = root / "docs" / "data" / "news_corpus_filtered.csv"
-    if csv_path.exists():
-        fieldnames = list(enriched_docs[0].keys())
-        with open(csv_path, "w", encoding="utf-8", newline="") as f:
+    fieldnames = list(enriched_docs[0].keys())
+    with open(csv_path, "w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in enriched_docs:
+            clean_row = {}
+            for k, v in row.items():
+                if isinstance(v, (list, dict)):
+                    clean_row[k] = json.dumps(v, ensure_ascii=False)
+                else:
+                    clean_row[k] = v
+            writer.writerow(clean_row)
+    print(f"Saved CSV: {csv_path}")
+
+    # Update research_analysis_filtered exports
+    if filtered_export_json.exists() or filtered_export_json.parent.exists():
+        with open(filtered_export_json, "w", encoding="utf-8") as f:
+            json.dump(enriched_docs, f, indent=2, ensure_ascii=False)
+        print(f"Saved JSON: {filtered_export_json}")
+
+    if filtered_export_csv.exists() or filtered_export_csv.parent.exists():
+        with open(filtered_export_csv, "w", encoding="utf-8", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             for row in enriched_docs:
@@ -1057,22 +1105,44 @@ def main():
                     else:
                         clean_row[k] = v
                 writer.writerow(clean_row)
-        print(f"Saved CSV: {csv_path}")
+        print(f"Saved CSV: {filtered_export_csv}")
 
-    # Update SQLite database
-    db_path = root / "data" / "news.sqlite"
+    # Update SQLite database: resolve all URLs, archive academic papers, set active metadata
     if db_path.exists():
         conn = sqlite3.connect(db_path)
         cur = conn.cursor()
+
+        # 1. Resolve canonical URLs for ALL rows in database
+        cur.execute("SELECT id, origin, url, archive_dir FROM crawled_documents")
+        all_db_rows = cur.fetchall()
+        for sid, origin, existing_url, archive_dir in all_db_rows:
+            canon_url = resolve_url({"id": sid, "source_id": sid, "url": existing_url, "archive_dir": archive_dir})
+            if canon_url != existing_url:
+                cur.execute("UPDATE crawled_documents SET url = ? WHERE id = ?", (canon_url, sid))
+
+        # 2. Mark excluded academic papers
+        for sid, (tier, score, reason) in EXCLUDED_ACADEMIC_PAPERS.items():
+            cur.execute("""
+                UPDATE crawled_documents
+                SET is_project_relevant = 0,
+                    relevance_tier = 'Excluded: Academic Publication',
+                    relevance_score = ?,
+                    exclusion_reason = ?
+                WHERE id = ?
+            """, (score, reason, sid))
+
+        # 3. Update active news corpus rows
         for d in enriched_docs:
             cur.execute("""
                 UPDATE crawled_documents
-                SET topic_category = ?,
+                SET url = ?,
+                    topic_category = ?,
                     relevance_rationale = ?,
                     crosswalk_instrument_id = ?,
                     crosswalk_instrument_name = ?
                 WHERE id = ?
             """, (
+                d["url"],
                 d["topic_category"],
                 d["relevance_rationale"],
                 d["crosswalk_instrument_id"],
@@ -1082,6 +1152,51 @@ def main():
         conn.commit()
         conn.close()
         print(f"Updated SQLite database: {db_path}")
+
+    # Update research_analysis_all_sources.json and .csv
+    if all_sources_json.exists():
+        with open(all_sources_json, "r", encoding="utf-8") as f:
+            all_sources = json.load(f)
+
+        for item in all_sources:
+            sid = item.get("source_id", "")
+            item["url"] = resolve_url(item)
+            if sid in EXCLUDED_ACADEMIC_PAPERS:
+                _, score, reason = EXCLUDED_ACADEMIC_PAPERS[sid]
+                item["is_project_relevant"] = 0
+                item["relevance_tier"] = "Excluded: Academic Publication"
+                item["relevance_score"] = score
+                item["exclusion_reason"] = reason
+            elif sid in BESPOKE_DATA:
+                cat, rationale, inst_id, inst_name = BESPOKE_DATA[sid]
+                item["topic_category"] = cat
+                item["relevance_rationale"] = rationale
+                item["crosswalk_instrument_id"] = inst_id
+                item["crosswalk_instrument_name"] = inst_name
+
+        with open(all_sources_json, "w", encoding="utf-8") as f:
+            json.dump(all_sources, f, indent=2, ensure_ascii=False)
+        print(f"Updated JSON: {all_sources_json}")
+
+        if all_sources_csv.exists() or all_sources_csv.parent.exists():
+            fieldnames_all = []
+            for row in all_sources:
+                for k in row.keys():
+                    if k not in fieldnames_all:
+                        fieldnames_all.append(k)
+            with open(all_sources_csv, "w", encoding="utf-8", newline="") as f:
+                writer = csv.DictWriter(f, fieldnames=fieldnames_all)
+                writer.writeheader()
+                for row in all_sources:
+                    clean_row = {}
+                    for k in fieldnames_all:
+                        v = row.get(k, "")
+                        if isinstance(v, (list, dict)):
+                            clean_row[k] = json.dumps(v, ensure_ascii=False)
+                        else:
+                            clean_row[k] = v
+                    writer.writerow(clean_row)
+            print(f"Updated CSV: {all_sources_csv}")
 
     # Print Category & Rationale Distribution
     from collections import Counter
