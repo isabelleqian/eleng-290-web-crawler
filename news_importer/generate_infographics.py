@@ -985,8 +985,8 @@ def generate_html_infographics(data_payload: dict) -> str:
       <nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">
         <a href="index.html" class="px-3 py-1.5 rounded-lg font-medium bg-blue-600 text-white shadow-sm">Overview Map</a>
         <a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News Database ({total_sources:,})</a>
-        <a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (166)</a>
-        <a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk (189)</a>
+        <a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (189)</a>
+        <a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk (186)</a>
       </nav>
       <div class="text-right pl-3 border-l border-slate-800 hidden sm:block">
         <div class="text-xs text-slate-500">Saved documents</div>
@@ -1500,14 +1500,13 @@ def generate_html_infographics(data_payload: dict) -> str:
       <div class="pt-2 border-t border-slate-800/80">
         <div class="flex flex-wrap items-center gap-1.5 text-xs" id="database-topic-pills">
           <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1.5">Topic:</span>
-          <button type="button" data-topic="" class="db-topic-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Topics (189)</button>
-          <button type="button" data-topic="Public-Private Data Partnerships" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Data Partnerships (76)</button>
+          <button type="button" data-topic="" class="db-topic-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Topics (186)</button>
+          <button type="button" data-topic="Public-Private Data Partnerships" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Data Partnerships (77)</button>
           <button type="button" data-topic="Municipal Traffic Mitigation & Street Controls" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Municipal Mitigation (29)</button>
           <button type="button" data-topic="Legislation & City Council Actions" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Legislation & Actions (23)</button>
           <button type="button" data-topic="Community Pushback & Safety Hazards" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Community Pushback (22)</button>
           <button type="button" data-topic="Commercial Freight & Bridge Clearance" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Freight & Bridge Clearances (21)</button>
-          <button type="button" data-topic="Platform Features & Routing Algorithms" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Platform Features (12)</button>
-          <button type="button" data-topic="Academic Research & Traffic Studies" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Academic Studies (6)</button>
+          <button type="button" data-topic="Platform Features & Routing Algorithms" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Platform Features (14)</button>
         </div>
       </div>
 
@@ -3458,7 +3457,7 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         else "Curated news, government actions, and research articles directly matching the routing app research scope. Excludes off-topic search hits (distracted driving phone bans, police blotters, corporate earnings, routine paving)."
     )
     switch_button = (
-        '<a href="news_database.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-700 bg-blue-950/60 text-xs text-blue-300 hover:text-white">&larr; Back to Filtered Project Database (189 docs)</a>'
+        f'<a href="news_database.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-700 bg-blue-950/60 text-xs text-blue-300 hover:text-white">&larr; Back to Filtered Project Database ({filtered_count:,} docs)</a>'
         if is_archive
         else f'<a href="news_database_archive.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900 text-xs text-slate-300 hover:text-white hover:border-slate-500">View Complete Raw Archive ({archive_total:,} docs) &rarr;</a>'
     )
@@ -3466,8 +3465,8 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         '<nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">'
         '<a href="index.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Overview Map</a>'
         f'<a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium {"bg-blue-600 text-white shadow-sm" if not is_archive else "text-slate-400 hover:text-white transition"}">News Database ({filtered_count:,})</a>'
-        '<a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (166)</a>'
-        '<a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk (189)</a>'
+        '<a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (189)</a>'
+        f'<a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk ({filtered_count:,})</a>'
         '</nav>'
     )
     return f"""<!DOCTYPE html>
@@ -3510,14 +3509,13 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
     <div class="pt-2 border-t border-slate-800/80">
       <div class="flex flex-wrap items-center gap-1.5 text-xs" id="topic-pills">
         <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1.5">News Topic:</span>
-        <button type="button" data-topic="" class="topic-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Topics (189)</button>
-        <button type="button" data-topic="Public-Private Data Partnerships" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Data Partnerships (76)</button>
+        <button type="button" data-topic="" class="topic-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Topics (186)</button>
+        <button type="button" data-topic="Public-Private Data Partnerships" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Data Partnerships (77)</button>
         <button type="button" data-topic="Municipal Traffic Mitigation & Street Controls" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Municipal Mitigation (29)</button>
         <button type="button" data-topic="Legislation & City Council Actions" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Legislation & Actions (23)</button>
         <button type="button" data-topic="Community Pushback & Safety Hazards" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Community Pushback (22)</button>
         <button type="button" data-topic="Commercial Freight & Bridge Clearance" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Freight & Bridge Clearances (21)</button>
-        <button type="button" data-topic="Platform Features & Routing Algorithms" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Platform Features (12)</button>
-        <button type="button" data-topic="Academic Research & Traffic Studies" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Academic Studies (6)</button>
+        <button type="button" data-topic="Platform Features & Routing Algorithms" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Platform Features (14)</button>
       </div>
     </div>
 

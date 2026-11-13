@@ -1,89 +1,5 @@
 [
   {
-    "source_id": "src_e3cc761c4fd41439dcff",
-    "archive_attempt_id": "att_891dd9e8e77b46e6a9d4a1796bb7d165",
-    "requested_url": "https://www.nature.com/articles/s44284-026-00443-x",
-    "final_url": "https://www.nature.com/articles/s44284-026-00443-x",
-    "title": "Urban congestion relief experiments through routing-app interventions",
-    "publisher": "Nature Cities (Springer Nature / Google Research)",
-    "publication_date": "2026-06-16",
-    "actual_jurisdiction": "Multi-jurisdiction (10 US Metros: Atlanta, Boston, Chicago, Los Angeles, Miami, New York, Philadelphia, Salt Lake City, San Francisco, Seattle)",
-    "governing_level": "Company",
-    "authority_names": "Google Research & Google Maps Navigation Team",
-    "target_location_type": "City",
-    "target_location": "Atlanta, Boston, Chicago, Los Angeles, Miami, New York, Philadelphia, Salt Lake City, San Francisco, Seattle",
-    "source_type": "other",
-    "factual_summary": "Google Research and academic co-authors conducted randomized switchback routing experiments across approximately 100 congested arterial and highway segments in 10 major US metropolitan areas. By rerouting a small share of Google Maps navigation requests to alternative routes of equivalent road classification and comparable travel times, the intervention achieved a city-average 2% increase in vehicle speeds on intervened segments, a 0.7% improvement in city-average travel times, and projected annual CO2-equivalent emissions savings exceeding 1,000 tons per city.",
-    "measures": [
-      {
-        "actor": "Google Research & Google Maps Navigation Engine",
-        "mechanism": "Algorithmic marginal rerouting of a minor fraction of drivers from congested highway and arterial bottlenecks onto comparable equivalent-class alternative corridors.",
-        "purpose": "Relieve bottleneck congestion, improve urban corridor speeds, shorten aggregate travel times, and decrease vehicle CO2 emissions.",
-        "status": "piloted",
-        "governing_level": "Company",
-        "authority_names": "Google Research & Google Maps Navigation Team",
-        "target_location_type": "City",
-        "target_location": "Atlanta, Boston, Chicago, Los Angeles, Miami, New York, Philadelphia, Salt Lake City, San Francisco, Seattle",
-        "implementation_dates": "6-month experimental period (with 2-month window for retained trip-level data)",
-        "reported_effects": "Projected annual reductions exceeding 1,000 tons of CO2-equivalent emissions per city.",
-        "demonstrated_causal_effects": "Causally identified via randomized crossover/switchback design: 2% city-average increase in vehicle speed on intervened segments; 0.7% improvement in city travel times; median speed effect of 3.30% in Atlanta and 4.56% in Los Angeles on targeted freeway corridors."
-      }
-    ],
-    "community_feedback": [],
-    "category": "Experimented Measures",
-    "supporting_passages": [
-      {
-        "claim_topic": "Intervention mechanism and observed aggregate efficiency effects",
-        "verbatim_text": "Here we report large-scale empirical experiments evaluating routing-based traffic interventions on ~100 highly congested road segments across 10 major US cities. By rerouting a small share of Google Maps trips from targeted congested highway and arterial segments to less congested alternatives of equivalent road-classes with comparable travel times, we observe a city-average 2% increase in vehicle speeds on the intervened segments, along with improved travel times 0.7% and potential annual reductions exceeding 1,000 tons of CO2-equivalent emissions per city in the majority of studied locations.",
-        "verified": true,
-        "verification_note": "Exact verbatim match"
-      },
-      {
-        "claim_topic": "Causal identification via randomized switchback crossover design",
-        "verbatim_text": "Second, we used a switchback (also known as crossover) experimental design that alternated the treatment status of all users in a given geography over time. Switchback designs are commonly used in medical studies and have recently been adopted by ride-hailing platforms such as Uber and Lyft",
-        "verified": true,
-        "verification_note": "Exact verbatim match"
-      },
-      {
-        "claim_topic": "Demonstrated causal speed increases in specific metro areas",
-        "verbatim_text": "The impact of the intervention was particularly pronounced in cities where freeway segments were targeted. This is the case in Atlanta and Los Angeles, for instance, for which the median speed effect was 3.30% and 4.56%, respectively.",
-        "verified": true,
-        "verification_note": "Exact verbatim match"
-      },
-      {
-        "claim_topic": "Data retention limitation and duration of experimental window",
-        "verbatim_text": "Our initial analysis focused only on segment-level outcomes and used a full 6 months of data. We added a trip-level analysis to ascertain our results on network effects after the initial analysis was done. Due to data retention limitations, we were only able to use the final 2 months of data for this second analysis.",
-        "verified": true,
-        "verification_note": "Exact verbatim match"
-      }
-    ],
-    "quality_flags": [],
-    "unresolved_questions": [
-      "Extent of spillover effects on unmonitored local streets adjacent to alternative corridors.",
-      "Long-term equilibrium behavior if uncoordinated third-party navigation apps (e.g. Apple Maps, Waze) counter-route traffic.",
-      "Driver compliance retention if alternate routes involve minor individual travel time penalties."
-    ],
-    "discovery_records": [
-      {
-        "discovery_id": "disc_f36e8aa540fb487399074e5a794fae48",
-        "batch_id": "batch_853ee9e8d544464588c9b5c591ab18d4",
-        "study_area": null,
-        "discovery_method": "other",
-        "original_url": "https://www.nature.com/articles/s44284-026-00443-x"
-      }
-    ],
-    "archive_dir": "",
-    "is_project_relevant": 1,
-    "relevance_tier": "In-Scope",
-    "exclusion_reason": "",
-    "relevance_score": 95,
-    "relevance_rationale": "Google Research and academic co-authors conducted randomized switchback routing interventions across 10 US metropolitan corridors, empirically quantifying how algorithmic rerouting affects travel times, network speeds, and vehicular emissions.",
-    "topic_category": "Academic Research & Traffic Studies",
-    "topic_slug": "research",
-    "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
-  },
-  {
     "source_id": "src_dc10ae72df82e2180ca6",
     "archive_attempt_id": "att_41933d3af29d415685ec2b065022fdd0",
     "requested_url": "https://www.nbclosangeles.com/news/city-council-pilot-program-to-curb-waze-traffic-on-side-streets/162349/",
@@ -170,7 +86,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "LA-CF-11-2130",
-    "crosswalk_instrument_name": "Los Angeles City Council File 11-2130 (Cut-Through Traffic Mitigation)"
+    "crosswalk_instrument_name": "Los Angeles City Council File 11-2130 (Cut-Through Traffic Mitigation)",
+    "url": "https://www.nbclosangeles.com/news/city-council-pilot-program-to-curb-waze-traffic-on-side-streets/162349/"
   },
   {
     "source_id": "src_d1320840ff1688ff741e",
@@ -269,7 +186,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "NJ-LEONIA-2018",
-    "crosswalk_instrument_name": "Borough of Leonia Ordinance 2017-25 (Non-Resident Street Closure)"
+    "crosswalk_instrument_name": "Borough of Leonia Ordinance 2017-25 (Non-Resident Street Closure)",
+    "url": "https://nextcity.org/urbanist-news/new-jersey-town-closes-some-city-streets-to-drivers-who-dont-live-there"
   },
   {
     "source_id": "src_23a1fcd9de5f1849cfa3",
@@ -363,7 +281,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "SEA-SMC-11.16",
-    "crosswalk_instrument_name": "Seattle Municipal Code Title 11 (Traffic Control & Calming)"
+    "crosswalk_instrument_name": "Seattle Municipal Code Title 11 (Traffic Control & Calming)",
+    "url": "https://www.seattle.gov/documents/Departments/SDOT/TransitProgram/RapidRide/RapidRide%20H/26th%20Ave%20SW%20Diverter%20Outreach%20Summary.pdf"
   },
   {
     "source_id": "src_8f6b264845ca47814ba0",
@@ -464,7 +383,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAZE-CCP-01",
-    "crosswalk_instrument_name": "Waze Connected Citizens Program Framework"
+    "crosswalk_instrument_name": "Waze Connected Citizens Program Framework",
+    "url": "https://www.waze.com/discuss/t/waze-connected-citizens-program/102835"
   },
   {
     "source_id": "src_02454d2db17a078f05f9",
@@ -541,7 +461,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "LA-CF-11-2130-S4",
-    "crosswalk_instrument_name": "Los Angeles Council File 11-2130-S4 (Angus St / Rowena Ave)"
+    "crosswalk_instrument_name": "Los Angeles Council File 11-2130-S4 (Angus St / Rowena Ave)",
+    "url": "https://cityclerk.lacity.org/onlinedocs/2011/11-2130-S4_PC_AB_06-24-2019.pdf"
   },
   {
     "source_id": "src_483bc7bade77380c2828",
@@ -606,7 +527,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "CA-AB2015",
-    "crosswalk_instrument_name": "California AB 2015 (Third-party navigation apps pilot study)"
+    "crosswalk_instrument_name": "California AB 2015 (Third-party navigation apps pilot study)",
+    "url": "https://digitaldemocracy.calmatters.org/bills/ca_202520260ab2015"
   },
   {
     "source_id": "src_32ccdcb0712575f8cb0b",
@@ -676,7 +598,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "CA-AB2015",
-    "crosswalk_instrument_name": "California AB 2015 (Third-party navigation apps pilot study)"
+    "crosswalk_instrument_name": "California AB 2015 (Third-party navigation apps pilot study)",
+    "url": "https://www.yahoo.com/news/lawmaker-warns-proposal-could-alter-171804797.html"
   },
   {
     "source_id": "src_9403a6fb4c495dd5f6e0",
@@ -740,7 +663,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "LA-CF-14-1741",
-    "crosswalk_instrument_name": "Los Angeles Council File 14-1741 (Waze Data Partnership)"
+    "crosswalk_instrument_name": "Los Angeles Council File 14-1741 (Waze Data Partnership)",
+    "url": "https://cityclerk.lacity.org/onlinedocs/2014/14-1741-S1_MOT_04-28-2015.pdf"
   },
   {
     "source_id": "src_004598f106dc0112c9f5",
@@ -810,7 +734,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "LA-CF-14-1741",
-    "crosswalk_instrument_name": "Los Angeles Council File 14-1741 (Waze Data Partnership)"
+    "crosswalk_instrument_name": "Los Angeles Council File 14-1741 (Waze Data Partnership)",
+    "url": "https://lamag.com/news/city-council-pilot-program-waze-traffic"
   },
   {
     "source_id": "src_df18bde5b05e69aa6fee",
@@ -893,7 +818,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "crosswalk_instrument_name": "Unaddressed by Current Law",
+    "url": "https://lamag.com/urbandevelopment/waze-los-angeles-neighborhoods"
   },
   {
     "source_id": "src_ec380b5a89074be9476e",
@@ -963,7 +889,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "LA-CF-11-2130",
-    "crosswalk_instrument_name": "Los Angeles City Council File 11-2130 (Cut-Through Traffic Mitigation)"
+    "crosswalk_instrument_name": "Los Angeles City Council File 11-2130 (Cut-Through Traffic Mitigation)",
+    "url": "https://www.10news.com/news/national/waze-restricted-due-to-buildup-of-side-street-traffic-in-los-angeles"
   },
   {
     "source_id": "src_2910e1608eed71065145",
@@ -1033,7 +960,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "crosswalk_instrument_name": "Unaddressed by Current Law",
+    "url": "https://www.fox13seattle.com/news/absolute-chaos-navigation-apps-blamed-for-traffic-nightmare-on-one-of-l-a-s-steepest-streets"
   },
   {
     "source_id": "src_7a51efb5b5f5430e194b",
@@ -1097,7 +1025,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "BOS-CCP-2015",
-    "crosswalk_instrument_name": "City of Boston & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "City of Boston & Waze Connected Citizens Agreement",
+    "url": "https://dailyfreepress.com/2015/02/19/walsh-announces-partnership-with-traffic-app-waze/"
   },
   {
     "source_id": "src_0d4fa7ccce08eaf50b2f",
@@ -1161,7 +1090,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "BOS-CCP-2015",
-    "crosswalk_instrument_name": "City of Boston & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "City of Boston & Waze Connected Citizens Agreement",
+    "url": "https://www.engadget.com/2015-02-21-waze-boston-partner.html"
   },
   {
     "source_id": "src_ab2b7d7e044d5121e5f5",
@@ -1221,11 +1151,12 @@
     "relevance_tier": "In-Scope",
     "exclusion_reason": "",
     "relevance_score": 95,
-    "relevance_rationale": "Official empirical analysis by Boston's Citywide Analytics Team utilizing aggregated Waze traffic telemetry to measure the congestion and safety impacts of the Centre Street road diet redesign.",
-    "topic_category": "Academic Research & Traffic Studies",
-    "topic_slug": "research",
-    "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "relevance_rationale": "Official empirical analysis by Boston's Citywide Analytics Team utilizing aggregated Waze Connected Citizens telemetry to evaluate the congestion and safety impacts of the Centre Street road diet redesign.",
+    "topic_category": "Public-Private Data Partnerships",
+    "topic_slug": "partnerships",
+    "crosswalk_instrument_id": "BOS-CCP-2015",
+    "crosswalk_instrument_name": "City of Boston & Waze Connected Citizens Agreement",
+    "url": "https://www.boston.gov/departments/analytics-team/using-waze-data-measure-traffic-congestion-0"
   },
   {
     "source_id": "src_f2e92e99cdf509170cc7",
@@ -1289,7 +1220,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "MA-DOT-CCP",
-    "crosswalk_instrument_name": "MassDOT Statewide Waze Connected Citizens Partnership"
+    "crosswalk_instrument_name": "MassDOT Statewide Waze Connected Citizens Partnership",
+    "url": "https://www.bostonglobe.com/metro/2016/06/16/massdot-partners-with-waze-improve-traffic-planning/9p4D9vWnIYNQ7g9s1DwhIO/story.html"
   },
   {
     "source_id": "src_396cf33a5161f5f5bd8d",
@@ -1359,7 +1291,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "CHI-MCC-9-12",
-    "crosswalk_instrument_name": "Chicago Municipal Code Title 9 (One-Way Street Designations)"
+    "crosswalk_instrument_name": "Chicago Municipal Code Title 9 (One-Way Street Designations)",
+    "url": "https://blockclubchicago.org/2025/06/06/wood-street-in-west-town-wicker-park-going-one-way-to-cut-down-on-thru-traffic/"
   },
   {
     "source_id": "src_a8fe04b8629212eb1ae5",
@@ -1429,7 +1362,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "CHI-MCC-9-12",
-    "crosswalk_instrument_name": "Chicago Municipal Code Title 9 (One-Way Street Designations)"
+    "crosswalk_instrument_name": "Chicago Municipal Code Title 9 (One-Way Street Designations)",
+    "url": "https://www.cbsnews.com/chicago/news/proposal-to-make-wood-street-one-way-stirs-debate-in-west-town/"
   },
   {
     "source_id": "src_5b329e50217cff65c640",
@@ -1499,7 +1433,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "SEA-SMC-11.16",
-    "crosswalk_instrument_name": "Seattle Municipal Code Title 11 (Traffic Control & Calming)"
+    "crosswalk_instrument_name": "Seattle Municipal Code Title 11 (Traffic Control & Calming)",
+    "url": "https://publicola.com/2025/04/02/shannon-braddock-appointed-acting-county-executive-saka-says-he-opposed-traffic-diverters-in-his-neighborhood-because-of-equity-concerns/"
   },
   {
     "source_id": "src_a8b514916cc36bde3d40",
@@ -1569,7 +1504,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "SEA-SMC-11.16",
-    "crosswalk_instrument_name": "Seattle Municipal Code Title 11 (Traffic Control & Calming)"
+    "crosswalk_instrument_name": "Seattle Municipal Code Title 11 (Traffic Control & Calming)",
+    "url": "https://www.change.org/p/stop-the-installation-of-traffic-diverters-at-sw-genesee-and-sw-brandon"
   },
   {
     "source_id": "src_a16a62edb70588f81bbb",
@@ -1633,7 +1569,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "SEA-SMC-11.16",
-    "crosswalk_instrument_name": "Seattle Municipal Code Title 11 (Traffic Control & Calming)"
+    "crosswalk_instrument_name": "Seattle Municipal Code Title 11 (Traffic Control & Calming)",
+    "url": "https://www.seattle.gov/transportation/projects-and-programs/programs/neighborhood-street-operations-programs/home-zone-lake-city"
   },
   {
     "source_id": "src_c8f5fcc928d66ad4b9e7",
@@ -1697,7 +1634,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "GA-DOT-CCP",
-    "crosswalk_instrument_name": "Georgia DOT & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "Georgia DOT & Waze Connected Citizens Agreement",
+    "url": "https://archive.nytimes.com/bits.blogs.nytimes.com/2013/02/27/wazes-maps-now-change-as-roads-close/"
   },
   {
     "source_id": "src_264bf1d902e4b812735b",
@@ -1761,7 +1699,8 @@
     "topic_category": "Platform Features & Routing Algorithms",
     "topic_slug": "features",
     "crosswalk_instrument_id": "PLAT-FEAT-01",
-    "crosswalk_instrument_name": "Waze Dynamic Road Closure Crowdsourcing System"
+    "crosswalk_instrument_name": "Waze Dynamic Road Closure Crowdsourcing System",
+    "url": "https://techcrunch.com/2013/02/27/navigation-app-waze-adds-road-closure-reporting-says-it-now-has-36m-users/"
   },
   {
     "source_id": "src_a3aec998433f0c3fff3d",
@@ -1825,7 +1764,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAZE-CCP-01",
-    "crosswalk_instrument_name": "Waze Connected Citizens Program Framework"
+    "crosswalk_instrument_name": "Waze Connected Citizens Program Framework",
+    "url": "https://www.waze.com/ccp_factsheet.pdf"
   },
   {
     "source_id": "src_209e9565661083dba383",
@@ -1889,7 +1829,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAZE-CCP-01",
-    "crosswalk_instrument_name": "Waze Connected Citizens Program Framework"
+    "crosswalk_instrument_name": "Waze Connected Citizens Program Framework",
+    "url": "https://www.waze.com/wazeopedia/Waze_for_Cities_Overview"
   },
   {
     "source_id": "src_97a13ecf3417e5676e08",
@@ -1959,7 +1900,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "crosswalk_instrument_name": "Unaddressed by Current Law",
+    "url": "https://www.waze.com/forum/viewtopic.php?t=338291"
   },
   {
     "source_id": "src_ae24cf62a63f34c9fe0b",
@@ -2023,141 +1965,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAZE-CCP-01",
-    "crosswalk_instrument_name": "Waze Connected Citizens Program Framework"
-  },
-  {
-    "source_id": "src_2cee64cfc090c4b25ca7",
-    "archive_attempt_id": "att_c41271626a6b47d9ae0a37f2cf6488ae",
-    "requested_url": "https://escholarship.org/uc/item/73h7f87m",
-    "final_url": "https://escholarship.org/uc/item/73h7f87m",
-    "title": "Traffic Control and Routing in the Era of Algorithmic Navigation",
-    "publisher": "University of California, Berkeley (Doctoral Dissertation of Theophile Cabannes)",
-    "publication_date": "2022-05-01",
-    "actual_jurisdiction": "United States (California & New Jersey)",
-    "governing_level": "Government: State",
-    "authority_names": "University of California, Berkeley (Department of EECS)",
-    "target_location_type": "State",
-    "target_location": "California",
-    "source_type": "other",
-    "factual_summary": "Doctoral dissertation examining the mathematical foundations and real-world externalities of algorithmic navigation apps. Empirically and theoretically models cut-through traffic phenomena in Fremont, CA; Los Angeles, CA (Baxter Street crashes); and Leonia, NJ (fatal crash on Ford Lee Road), evaluating game-theoretic traffic equilibria.",
-    "measures": [
-      {
-        "actor": "Transportation researchers and municipal authorities (Fremont, LA, Leonia)",
-        "mechanism": "Mathematical modeling and empirical evaluation of municipal countermeasures (turn restrictions, one-way streets, non-resident bans, app rerouting).",
-        "purpose": "Analyze user equilibrium vs system optimum routing externalities created by routing apps.",
-        "status": "piloted",
-        "governing_level": "Non-Government Organization",
-        "authority_names": "UC Berkeley Transportation Research",
-        "target_location_type": "Country",
-        "target_location": "United States",
-        "implementation_dates": "Dissertation published 2022",
-        "reported_effects": "Demonstrates that selfish routing pushes traffic onto residential links until travel times equalize, creating severe negative local externalities.",
-        "demonstrated_causal_effects": "Rigorous game-theoretic and simulation proofs of cut-through spillover."
-      }
-    ],
-    "community_feedback": [
-      {
-        "who_expressed": "Municipal residents in Los Angeles, Leonia, and Fremont",
-        "what_concerned_them": "Dangerous cut-through traffic, vehicle crashes on steep grades (Baxter St), fatalities on narrow residential corridors (Ford Lee Rd), and arterial gridlock.",
-        "which_measure": "Algorithmic routing apps and municipal traffic restrictions"
-      }
-    ],
-    "category": "Both",
-    "supporting_passages": [
-      {
-        "claim_topic": "Empirical externalities documented in Baxter St LA and Ford Lee Rd Leonia",
-        "verbatim_text": "Baxter Street, Leonia, NJ reported a fa-\ntality on the Ford Lee Road",
-        "verified": true,
-        "verification_note": "Exact verbatim match"
-      }
-    ],
-    "quality_flags": [],
-    "unresolved_questions": [
-      "What optimal tolling or routing algorithm adjustments can bridge user equilibrium with system optimum traffic states?"
-    ],
-    "discovery_records": [
-      {
-        "discovery_id": "disc_1337de86ebc8486f897bd3a36ee3a7db",
-        "batch_id": "batch_17a8e1a126094a609f4e3b9ea8610ea9",
-        "study_area": "los_angeles",
-        "discovery_method": "google_first_page",
-        "original_url": "https://bayen.berkeley.edu/sites/default/files/v3_cabannes_doctoral_thesis.pdf"
-      }
-    ],
-    "archive_dir": "",
-    "is_project_relevant": 1,
-    "relevance_tier": "In-Scope",
-    "exclusion_reason": "",
-    "relevance_score": 99,
-    "relevance_rationale": "University of California transportation study analyzing mathematical traffic control and routing equilibria in the era of algorithmic navigation, modeling how selfish GPS routing degrades municipal network throughput.",
-    "topic_category": "Academic Research & Traffic Studies",
-    "topic_slug": "research",
-    "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
-  },
-  {
-    "source_id": "src_2602e1f52eb57cee5b07",
-    "archive_attempt_id": "att_9741c08d56ee4401ae1709b0e23e564e",
-    "requested_url": "https://nap.nationalacademies.org/read/28045/chapter/11",
-    "final_url": "https://nap.nationalacademies.org/read/28045/chapter/11",
-    "title": "Data Integration, Sharing, and Management for Transportation Planning and Traffic Operations",
-    "publisher": "Transportation Research Board (TRB) / National Academies",
-    "publication_date": "2025-01-01",
-    "actual_jurisdiction": "United States",
-    "governing_level": "Government: Federal",
-    "authority_names": "Transportation Research Board, National Academies of Sciences, Engineering, and Medicine",
-    "target_location_type": "Country",
-    "target_location": "United States",
-    "source_type": "government material",
-    "factual_summary": "National research report outlining frameworks and best practices for integrating commercial third-party navigation vendor data (Waze, INRIX, HERE) into municipal and state transportation planning and real-time operations.",
-    "measures": [
-      {
-        "actor": "TRB, AASHTO, FHWA",
-        "mechanism": "Federal guidelines for public-private data integration, API licensing, and privacy preservation in navigation data management.",
-        "purpose": "Standardize public agency ingestion of commercial mapping vendor feeds.",
-        "status": "implemented",
-        "governing_level": "Government: Federal",
-        "authority_names": "Transportation Research Board",
-        "target_location_type": "Country",
-        "target_location": "United States",
-        "implementation_dates": "2025",
-        "reported_effects": "Standardized operational frameworks across state DOTs.",
-        "demonstrated_causal_effects": "Institutional governance guidance."
-      }
-    ],
-    "community_feedback": [],
-    "category": "Experimented Measures",
-    "supporting_passages": [
-      {
-        "claim_topic": "TRB report title on transportation data integration",
-        "verbatim_text": "Data Integration, Sharing, and Management for Transportation Planning and Traffic Operations",
-        "verified": true,
-        "verification_note": "Exact verbatim match"
-      }
-    ],
-    "quality_flags": [],
-    "unresolved_questions": [
-      "How federal data privacy standards limit granular origin-destination telemetry collection by public agencies."
-    ],
-    "discovery_records": [
-      {
-        "discovery_id": "disc_9523cbc3e4014e34a691e60de70a79d4",
-        "batch_id": "batch_90dfd13577ca402587e05b4ba6f4a159",
-        "study_area": "new_york_city",
-        "discovery_method": "google_first_page",
-        "original_url": "https://www.nationalacademies.org/read/28690/chapter/11"
-      }
-    ],
-    "archive_dir": "",
-    "is_project_relevant": 1,
-    "relevance_tier": "In-Scope",
-    "exclusion_reason": "",
-    "relevance_score": 95,
-    "relevance_rationale": "Transportation Research Board study examining methods for integrating third-party navigation app telemetry with municipal traffic operations and roadway sensor networks.",
-    "topic_category": "Academic Research & Traffic Studies",
-    "topic_slug": "research",
-    "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "crosswalk_instrument_name": "Waze Connected Citizens Program Framework",
+    "url": "https://www.waze.com/wazeforcities/google-cloud"
   },
   {
     "source_id": "src_8844a04c3601f584693a",
@@ -2240,7 +2049,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "NJ-MAN-01",
-    "crosswalk_instrument_name": "Borough of Mantoloking Navigation Cut-Through Mitigation Order"
+    "crosswalk_instrument_name": "Borough of Mantoloking Navigation Cut-Through Mitigation Order",
+    "url": "https://www.mantoloking.org/sites/default/files/minutes/2026-07-21_minutes.pdf"
   },
   {
     "source_id": "src_d8bae76a48b8c662c148",
@@ -2304,7 +2114,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "DOT-SMART-CITY",
-    "crosswalk_instrument_name": "USDOT Smart City Challenge Mobility Integration"
+    "crosswalk_instrument_name": "USDOT Smart City Challenge Mobility Integration",
+    "url": "https://www.sfmta.com/sites/default/files/reports-and-documents/2016/05/smart_city_challenge_sf_phase_ii.pdf"
   },
   {
     "source_id": "src_6b808701b37bfa4ff82d",
@@ -2374,7 +2185,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "SF-TC-2025",
-    "crosswalk_instrument_name": "San Francisco Traffic Calming Policy & Guidelines"
+    "crosswalk_instrument_name": "San Francisco Traffic Calming Policy & Guidelines",
+    "url": "https://www.sfcta.org/sites/default/files/2025-08/cac_packet_09-03-2025.pdf"
   },
   {
     "source_id": "nexis_urn:contentItem:6J9T-Y0C3-S3T5-M0JH-00000-00",
@@ -2449,7 +2261,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAYMO-WAZE-01",
-    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership"
+    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6J9T-Y0C3-S3T5-M0JH-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6KGN-8633-RV2G-70PX-00000-00",
@@ -2524,7 +2337,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAYMO-WAZE-01",
-    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership"
+    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6KGN-8633-RV2G-70PX-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6K23-G0Y3-S99D-X1PV-00000-00",
@@ -2610,7 +2424,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "ESRI-GIS-01",
-    "crosswalk_instrument_name": "Esri ArcGIS & Navigation Data Integration Standard"
+    "crosswalk_instrument_name": "Esri ArcGIS & Navigation Data Integration Standard",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6K23-G0Y3-S99D-X1PV-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5KXP-09P1-DXY3-00J6-00000-00",
@@ -2690,7 +2505,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "ESRI-GIS-01",
-    "crosswalk_instrument_name": "Esri ArcGIS & Navigation Data Integration Standard"
+    "crosswalk_instrument_name": "Esri ArcGIS & Navigation Data Integration Standard",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5KXP-09P1-DXY3-00J6-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5S66-H271-F03R-N3F4-00000-00",
@@ -2765,7 +2581,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAYCARE-NV-01",
-    "crosswalk_instrument_name": "Nevada Regional Transportation Commission AI Data Agreement"
+    "crosswalk_instrument_name": "Nevada Regional Transportation Commission AI Data Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5S66-H271-F03R-N3F4-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5CFG-S691-F03R-N0CD-00000-00",
@@ -2840,7 +2657,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "FED-01",
-    "crosswalk_instrument_name": "GROW AMERICA Act / NHTSA Navigation App Regulatory Proposals"
+    "crosswalk_instrument_name": "GROW AMERICA Act / NHTSA Navigation App Regulatory Proposals",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5CFG-S691-F03R-N0CD-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6G76-J083-RVJY-R2R6-00000-00",
@@ -2915,7 +2733,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "FED-01",
-    "crosswalk_instrument_name": "GROW AMERICA Act / NHTSA Navigation App Regulatory Proposals"
+    "crosswalk_instrument_name": "GROW AMERICA Act / NHTSA Navigation App Regulatory Proposals",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6G76-J083-RVJY-R2R6-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6DP3-HNN3-SBYC-S06J-00000-00",
@@ -2990,7 +2809,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "HAAS-ALERT-01",
-    "crosswalk_instrument_name": "HAAS Alert Digital Emergency Vehicle Notification System"
+    "crosswalk_instrument_name": "HAAS Alert Digital Emergency Vehicle Notification System",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6DP3-HNN3-SBYC-S06J-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5KR5-JDR1-F12F-F437-00000-00",
@@ -3070,7 +2890,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "NC-GREENS-CCP",
-    "crosswalk_instrument_name": "Greensboro & Waze Connected Citizens Partnership"
+    "crosswalk_instrument_name": "Greensboro & Waze Connected Citizens Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5KR5-JDR1-F12F-F437-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5KPS-F281-DYG2-R4FC-00000-00",
@@ -3150,7 +2971,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "NC-GREENS-CCP",
-    "crosswalk_instrument_name": "Greensboro & Waze Connected Citizens Partnership"
+    "crosswalk_instrument_name": "Greensboro & Waze Connected Citizens Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5KPS-F281-DYG2-R4FC-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6JDF-6YF3-RXM1-R51N-00000-00",
@@ -3230,7 +3052,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAYMO-WAZE-01",
-    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership"
+    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6JDF-6YF3-RXM1-R51N-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6JB1-HSD3-RRJ6-S2F0-00000-00",
@@ -3305,7 +3128,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAYMO-WAZE-01",
-    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership"
+    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6JB1-HSD3-RRJ6-S2F0-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6JDJ-CKB3-S76F-Y3CS-00000-00",
@@ -3380,7 +3204,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAYMO-WAZE-01",
-    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership"
+    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6JDJ-CKB3-S76F-Y3CS-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5JRW-M521-DYG2-R3W7-00000-00",
@@ -3460,7 +3285,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "LA-DOTD-CCP",
-    "crosswalk_instrument_name": "Louisiana DOTD & Baton Rouge Waze Partnership"
+    "crosswalk_instrument_name": "Louisiana DOTD & Baton Rouge Waze Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5JRW-M521-DYG2-R3W7-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5X5R-39S1-F03R-N066-00000-00",
@@ -3529,7 +3355,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAZE-CCP-01",
-    "crosswalk_instrument_name": "Waze Connected Citizens Program Framework"
+    "crosswalk_instrument_name": "Waze Connected Citizens Program Framework",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5X5R-39S1-F03R-N066-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6KF6-GDK3-RT1G-H08X-00000-00",
@@ -3601,10 +3428,11 @@
     "exclusion_reason": "",
     "relevance_score": 90,
     "relevance_rationale": "San Francisco Chronicle investigative report on UC Berkeley and Google Research's randomized switchback routing trial across 10 US metro corridors, evaluating how algorithmic diversion away from highway bottlenecks affects travel times and network equilibrium.",
-    "topic_category": "Academic Research & Traffic Studies",
-    "topic_slug": "research",
-    "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "topic_category": "Platform Features & Routing Algorithms",
+    "topic_slug": "features",
+    "crosswalk_instrument_id": "PLAT-ALG-04",
+    "crosswalk_instrument_name": "Large-Scale Arterial Commuter Diversion & Incident Rerouting",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6KF6-GDK3-RT1G-H08X-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6CNY-BDW1-F12F-F1B5-00000-00",
@@ -3684,7 +3512,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "BOS-GOOGLE-GL",
-    "crosswalk_instrument_name": "Boston & Google Project Green Light Signal Optimization"
+    "crosswalk_instrument_name": "Boston & Google Project Green Light Signal Optimization",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6CNY-BDW1-F12F-F1B5-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6HBG-7JV3-RSFV-C2TW-00000-00",
@@ -3759,7 +3588,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "crosswalk_instrument_name": "Unaddressed by Current Law",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6HBG-7JV3-RSFV-C2TW-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:69X0-WNX1-F03F-K51D-00000-00",
@@ -3828,7 +3658,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "TX-SARA-01",
-    "crosswalk_instrument_name": "San Antonio River Authority Flood Telemetry Partnership"
+    "crosswalk_instrument_name": "San Antonio River Authority Flood Telemetry Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A69X0-WNX1-F03F-K51D-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5FBD-JYR1-F03R-N249-00000-00",
@@ -3903,7 +3734,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "BOS-CCP-2015",
-    "crosswalk_instrument_name": "City of Boston & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "City of Boston & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5FBD-JYR1-F03R-N249-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5GHC-2MH1-JB72-12MV-00000-00",
@@ -3977,7 +3809,8 @@
     "topic_category": "Platform Features & Routing Algorithms",
     "topic_slug": "features",
     "crosswalk_instrument_id": "LEGAL-ANALYSIS-01",
-    "crosswalk_instrument_name": "Antitrust, Privacy, and Municipal Externalities in Navigation Platforms"
+    "crosswalk_instrument_name": "Antitrust, Privacy, and Municipal Externalities in Navigation Platforms",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5GHC-2MH1-JB72-12MV-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6JB2-23J3-RWVD-34TB-00000-00",
@@ -4046,7 +3879,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAYMO-WAZE-01",
-    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership"
+    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6JB2-23J3-RWVD-34TB-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6GD2-Y0F3-RV1H-T2MT-00000-00",
@@ -4121,7 +3955,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "CT-NM-01",
-    "crosswalk_instrument_name": "Town of New Milford Commercial Vehicle Road Restriction Ordinance"
+    "crosswalk_instrument_name": "Town of New Milford Commercial Vehicle Road Restriction Ordinance",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6GD2-Y0F3-RV1H-T2MT-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5RN8-0M61-JDKC-R331-00000-00",
@@ -4195,7 +4030,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "VA-NORF-CCP",
-    "crosswalk_instrument_name": "City of Norfolk & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "City of Norfolk & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5RN8-0M61-JDKC-R331-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5CFM-X9F1-JCMN-Y3FG-00000-00",
@@ -4264,7 +4100,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "FED-01",
-    "crosswalk_instrument_name": "GROW AMERICA Act / NHTSA Navigation App Regulatory Proposals"
+    "crosswalk_instrument_name": "GROW AMERICA Act / NHTSA Navigation App Regulatory Proposals",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5CFM-X9F1-JCMN-Y3FG-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5FV2-0F51-DYTH-G1V5-00000-00",
@@ -4338,7 +4175,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "LA-MOU-2015",
-    "crosswalk_instrument_name": "City of Los Angeles & Waze Connected Citizens MOU"
+    "crosswalk_instrument_name": "City of Los Angeles & Waze Connected Citizens MOU",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5FV2-0F51-DYTH-G1V5-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6GD2-Y0F3-RV1H-T2MS-00000-00",
@@ -4413,7 +4251,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "CT-NM-01",
-    "crosswalk_instrument_name": "Town of New Milford Commercial Vehicle Road Restriction Ordinance"
+    "crosswalk_instrument_name": "Town of New Milford Commercial Vehicle Road Restriction Ordinance",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6GD2-Y0F3-RV1H-T2MS-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5K36-VSB1-DYG2-R3XV-00000-00",
@@ -4493,7 +4332,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "CA-SAC-CCP",
-    "crosswalk_instrument_name": "City of Sacramento & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "City of Sacramento & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5K36-VSB1-DYG2-R3XV-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6KFT-KTJ3-S8NW-80HD-00000-00",
@@ -4568,7 +4408,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAYMO-WAZE-01",
-    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership"
+    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6KFT-KTJ3-S8NW-80HD-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6J9V-WWH3-RX6H-53PJ-00000-00",
@@ -4643,7 +4484,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAYMO-WAZE-01",
-    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership"
+    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6J9V-WWH3-RX6H-53PJ-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5MP0-RJT1-F12F-F2DN-00000-00",
@@ -4717,7 +4559,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "TX-ARL-CCP",
-    "crosswalk_instrument_name": "City of Arlington & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "City of Arlington & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5MP0-RJT1-F12F-F2DN-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:63ST-04D1-F03R-N3SF-00000-00",
@@ -4786,7 +4629,8 @@
     "topic_category": "Platform Features & Routing Algorithms",
     "topic_slug": "features",
     "crosswalk_instrument_id": "PLAT-ALG-02",
-    "crosswalk_instrument_name": "Navigation Platform Eco-Friendly & Fuel-Efficient Routing Engine"
+    "crosswalk_instrument_name": "Navigation Platform Eco-Friendly & Fuel-Efficient Routing Engine",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A63ST-04D1-F03R-N3SF-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6J9S-VFV3-SG7J-T1CW-00000-00",
@@ -4860,7 +4704,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAYMO-WAZE-01",
-    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership"
+    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6J9S-VFV3-SG7J-T1CW-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6JBN-B2S3-S0W8-N43H-00000-00",
@@ -4935,7 +4780,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAYMO-WAZE-01",
-    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership"
+    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6JBN-B2S3-S0W8-N43H-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6JBN-T673-SGW5-C224-00000-00",
@@ -5010,7 +4856,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAYMO-WAZE-01",
-    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership"
+    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6JBN-T673-SGW5-C224-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5KJ7-X441-JDKC-R3KT-00000-00",
@@ -5090,7 +4937,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "IL-EVAN-CCP",
-    "crosswalk_instrument_name": "Evanston & Naperville Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "Evanston & Naperville Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5KJ7-X441-JDKC-R3KT-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5JG5-TCW1-F053-W0NR-00000-00",
@@ -5170,7 +5018,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "NC-CHAR-CCP",
-    "crosswalk_instrument_name": "City of Charlotte & Waze Connected Citizens Partnership"
+    "crosswalk_instrument_name": "City of Charlotte & Waze Connected Citizens Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5JG5-TCW1-F053-W0NR-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5CFV-P751-JBPX-W04S-00000-00",
@@ -5239,7 +5088,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "FED-01",
-    "crosswalk_instrument_name": "GROW AMERICA Act / NHTSA Navigation App Regulatory Proposals"
+    "crosswalk_instrument_name": "GROW AMERICA Act / NHTSA Navigation App Regulatory Proposals",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5CFV-P751-JBPX-W04S-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5JPT-KMX1-F12F-F3C3-00000-00",
@@ -5313,7 +5163,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "NC-RAL-CCP",
-    "crosswalk_instrument_name": "City of Raleigh & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "City of Raleigh & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5JPT-KMX1-F12F-F3C3-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5FKJ-FVR1-DYTH-G4FG-00000-00",
@@ -5387,7 +5238,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "MD-SHA-CCP",
-    "crosswalk_instrument_name": "Maryland SHA & Waze Connected Citizens Partnership"
+    "crosswalk_instrument_name": "Maryland SHA & Waze Connected Citizens Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5FKJ-FVR1-DYTH-G4FG-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5S8X-WVF1-JCBF-S33F-00000-00",
@@ -5467,7 +5319,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "VA-LOUD-CCP",
-    "crosswalk_instrument_name": "Loudoun County & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "Loudoun County & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5S8X-WVF1-JCBF-S33F-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5F9R-KCS1-F12F-F39G-00000-00",
@@ -5547,7 +5400,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "BOS-CCP-2015",
-    "crosswalk_instrument_name": "City of Boston & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "City of Boston & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5F9R-KCS1-F12F-F39G-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:60XF-PW11-JDKC-R1W3-00000-00",
@@ -5627,7 +5481,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "VA-VB-CCP",
-    "crosswalk_instrument_name": "Virginia Beach & Waze Connected Citizens Partnership"
+    "crosswalk_instrument_name": "Virginia Beach & Waze Connected Citizens Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A60XF-PW11-JDKC-R1W3-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5VSV-C4W1-JDKC-R0MT-00000-00",
@@ -5701,7 +5556,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "VA-VB-CCP",
-    "crosswalk_instrument_name": "Virginia Beach & Waze Connected Citizens Partnership"
+    "crosswalk_instrument_name": "Virginia Beach & Waze Connected Citizens Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5VSV-C4W1-JDKC-R0MT-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5S8R-1761-JCKG-J00S-00000-00",
@@ -5776,7 +5632,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "crosswalk_instrument_name": "Unaddressed by Current Law",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5S8R-1761-JCKG-J00S-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5MD5-07S1-JC11-10YN-00000-00",
@@ -5850,7 +5707,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "TX-FTW-CCP",
-    "crosswalk_instrument_name": "City of Fort Worth & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "City of Fort Worth & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5MD5-07S1-JC11-10YN-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5T5C-XB71-JC65-505H-00000-00",
@@ -5930,7 +5788,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "NJ-LEONIA-2018",
-    "crosswalk_instrument_name": "Borough of Leonia Ordinance 2017-25 (Non-Resident Street Closure)"
+    "crosswalk_instrument_name": "Borough of Leonia Ordinance 2017-25 (Non-Resident Street Closure)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5T5C-XB71-JC65-505H-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6GBB-B2S3-S09F-M2HX-00000-00",
@@ -5999,7 +5858,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "PA-TITLE-75-49",
-    "crosswalk_instrument_name": "Pennsylvania Vehicle Code Title 75 § 4902 (Size/Weight Restrictions)"
+    "crosswalk_instrument_name": "Pennsylvania Vehicle Code Title 75 § 4902 (Size/Weight Restrictions)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6GBB-B2S3-S09F-M2HX-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5P7K-RGT1-F12F-F49X-00000-00",
@@ -6079,7 +5939,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "AK-ANC-CCP",
-    "crosswalk_instrument_name": "Municipality of Anchorage & Waze Connected Citizens Partnership"
+    "crosswalk_instrument_name": "Municipality of Anchorage & Waze Connected Citizens Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5P7K-RGT1-F12F-F49X-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5NMW-2HG1-DYG2-R1KW-00000-00",
@@ -6159,7 +6020,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "NV-DOT-CCP",
-    "crosswalk_instrument_name": "Nevada DOT & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "Nevada DOT & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5NMW-2HG1-DYG2-R1KW-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5RF0-1NN1-JB20-G507-00000-00",
@@ -6234,7 +6096,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "crosswalk_instrument_name": "Unaddressed by Current Law",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5RF0-1NN1-JB20-G507-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5N17-Y4B1-F12F-F2MY-00000-00",
@@ -6308,7 +6171,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "NC-CARY-CCP",
-    "crosswalk_instrument_name": "Town of Cary & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "Town of Cary & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5N17-Y4B1-F12F-F2MY-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5R0P-P3D1-DYTH-G110-00000-00",
@@ -6382,7 +6246,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "RI-DOT-CCP",
-    "crosswalk_instrument_name": "Rhode Island DOT & Waze Data Partnership"
+    "crosswalk_instrument_name": "Rhode Island DOT & Waze Data Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5R0P-P3D1-DYTH-G110-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5KR0-JYX1-JDKC-R50Y-00000-00",
@@ -6456,7 +6321,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "GA-DOUG-CCP",
-    "crosswalk_instrument_name": "Douglas County & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "Douglas County & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5KR0-JYX1-JDKC-R50Y-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5KJ7-X441-JDKC-R3KW-00000-00",
@@ -6536,7 +6402,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "IL-EVAN-CCP",
-    "crosswalk_instrument_name": "Evanston & Naperville Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "Evanston & Naperville Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5KJ7-X441-JDKC-R3KW-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5K50-8MY1-JDKC-R246-00000-00",
@@ -6616,7 +6483,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "FL-MDC-CCP",
-    "crosswalk_instrument_name": "Miami-Dade County & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "Miami-Dade County & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5K50-8MY1-JDKC-R246-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5K1K-PW91-JCBF-S4VS-00000-00",
@@ -6690,7 +6558,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "MA-DOT-CCP",
-    "crosswalk_instrument_name": "MassDOT Statewide Waze Connected Citizens Partnership"
+    "crosswalk_instrument_name": "MassDOT Statewide Waze Connected Citizens Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5K1K-PW91-JCBF-S4VS-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5HND-4081-JC8F-22BP-00000-00",
@@ -6759,7 +6628,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "PA-DOT-CCP",
-    "crosswalk_instrument_name": "PennDOT Statewide Waze Connected Citizens Partnership"
+    "crosswalk_instrument_name": "PennDOT Statewide Waze Connected Citizens Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5HND-4081-JC8F-22BP-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5J2N-DK81-DYG2-R401-00000-00",
@@ -6839,7 +6709,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "SF-MOU-2015",
-    "crosswalk_instrument_name": "City of San Francisco & Waze Connected Citizens MOU"
+    "crosswalk_instrument_name": "City of San Francisco & Waze Connected Citizens MOU",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5J2N-DK81-DYG2-R401-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5YD5-NK31-JC65-51MB-00000-00",
@@ -6919,7 +6790,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "NJ-LEONIA-2018",
-    "crosswalk_instrument_name": "Borough of Leonia Ordinance 2017-25 (Non-Resident Street Closure)"
+    "crosswalk_instrument_name": "Borough of Leonia Ordinance 2017-25 (Non-Resident Street Closure)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5YD5-NK31-JC65-51MB-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5K3G-GG71-JDTS-G2V0-00000-00",
@@ -6988,7 +6860,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "IA-DOT-CCP",
-    "crosswalk_instrument_name": "Iowa DOT & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "Iowa DOT & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5K3G-GG71-JDTS-G2V0-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5RPF-NKS1-DY83-T08F-00000-00",
@@ -7068,7 +6941,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "MUNI-CUTTHRU-GEN",
-    "crosswalk_instrument_name": "Municipal Residential Traffic Calming & Thru-Traffic Restrictions"
+    "crosswalk_instrument_name": "Municipal Residential Traffic Calming & Thru-Traffic Restrictions",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5RPF-NKS1-DY83-T08F-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5MFN-DGD1-JDKC-R1RJ-00000-00",
@@ -7142,7 +7016,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "NC-ASH-CCP",
-    "crosswalk_instrument_name": "City of Asheville & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "City of Asheville & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5MFN-DGD1-JDKC-R1RJ-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5SST-61B1-JDKC-R3BD-00000-00",
@@ -7216,7 +7091,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "GA-JC-CCP",
-    "crosswalk_instrument_name": "Johns Creek & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "Johns Creek & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5SST-61B1-JDKC-R3BD-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6H62-XB83-S25R-T4M5-00000-00",
@@ -7290,7 +7166,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6H62-XB83-S25R-T4M5-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5V5C-RPM1-JDKC-R091-00000-00",
@@ -7364,7 +7241,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "FL-CG-CCP",
-    "crosswalk_instrument_name": "City of Coral Gables & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "City of Coral Gables & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5V5C-RPM1-JDKC-R091-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:62CM-7GY1-DYVR-P2T2-00000-00",
@@ -7444,7 +7322,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A62CM-7GY1-DYVR-P2T2-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5VCH-KK31-JCMN-Y1VY-00000-00",
@@ -7513,7 +7392,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "FED-POLICE-01",
-    "crosswalk_instrument_name": "Police Enforcement & Navigation Platform Warning Disputes"
+    "crosswalk_instrument_name": "Police Enforcement & Navigation Platform Warning Disputes",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5VCH-KK31-JCMN-Y1VY-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6HFB-7F23-SBRV-H1GS-00000-00",
@@ -7593,7 +7473,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6HFB-7F23-SBRV-H1GS-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6FWV-BM43-RRX6-50DY-00000-00",
@@ -7667,7 +7548,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "BOS-GOOGLE-GL",
-    "crosswalk_instrument_name": "Boston & Google Project Green Light Signal Optimization"
+    "crosswalk_instrument_name": "Boston & Google Project Green Light Signal Optimization",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6FWV-BM43-RRX6-50DY-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5JG7-TH41-DYTH-G0P2-00000-00",
@@ -7741,7 +7623,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "CA-CALTRANS-CCP",
-    "crosswalk_instrument_name": "Caltrans Statewide Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "Caltrans Statewide Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5JG7-TH41-DYTH-G0P2-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5KKY-N4W1-JC8S-D52X-00000-00",
@@ -7816,7 +7699,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "crosswalk_instrument_name": "Unaddressed by Current Law",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5KKY-N4W1-JC8S-D52X-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5FWG-YXT1-JCMN-Y4XP-00000-00",
@@ -7891,7 +7775,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "FED-POLICE-01",
-    "crosswalk_instrument_name": "Police Enforcement & Navigation Platform Warning Disputes"
+    "crosswalk_instrument_name": "Police Enforcement & Navigation Platform Warning Disputes",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5FWG-YXT1-JCMN-Y4XP-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5XBB-X0M1-JC0C-J026-00000-00",
@@ -7960,7 +7845,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "FED-POLICE-01",
-    "crosswalk_instrument_name": "Police Enforcement & Navigation Platform Warning Disputes"
+    "crosswalk_instrument_name": "Police Enforcement & Navigation Platform Warning Disputes",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5XBB-X0M1-JC0C-J026-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5SH9-WFC1-F12F-F53T-00000-00",
@@ -8040,7 +7926,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "TX-ATX-CCP",
-    "crosswalk_instrument_name": "City of Austin & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "City of Austin & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5SH9-WFC1-F12F-F53T-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5K6D-XDN1-JC11-114H-00000-00",
@@ -8114,7 +8001,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "AL-DOT-CCP",
-    "crosswalk_instrument_name": "Alabama DOT & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "Alabama DOT & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5K6D-XDN1-JC11-114H-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5RMS-DBB1-JDKC-R2MH-00000-00",
@@ -8194,7 +8082,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "NE-LINC-CCP",
-    "crosswalk_instrument_name": "City of Lincoln & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "City of Lincoln & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5RMS-DBB1-JDKC-R2MH-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5GPG-YMV1-JC85-V436-00000-00",
@@ -8263,7 +8152,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "GA-ATL-CCP",
-    "crosswalk_instrument_name": "City of Atlanta & Waze Connected Citizens Partnership"
+    "crosswalk_instrument_name": "City of Atlanta & Waze Connected Citizens Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5GPG-YMV1-JC85-V436-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5VCH-D7R1-JBPX-X3FP-00000-00",
@@ -8332,7 +8222,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "FED-POLICE-01",
-    "crosswalk_instrument_name": "Police Enforcement & Navigation Platform Warning Disputes"
+    "crosswalk_instrument_name": "Police Enforcement & Navigation Platform Warning Disputes",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5VCH-D7R1-JBPX-X3FP-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5MD4-RFN1-DYTH-G34S-00000-00",
@@ -8406,7 +8297,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "VA-VDOT-CCP",
-    "crosswalk_instrument_name": "Virginia DOT & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "Virginia DOT & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5MD4-RFN1-DYTH-G34S-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:63HR-VBW1-F03R-N442-00000-00",
@@ -8481,7 +8373,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "CO-DOT-ALERT",
-    "crosswalk_instrument_name": "Colorado DOT Navigation App Coordination Incident"
+    "crosswalk_instrument_name": "Colorado DOT Navigation App Coordination Incident",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A63HR-VBW1-F03R-N442-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5VG9-HDB1-JBSN-30DK-00000-00",
@@ -8556,7 +8449,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "FED-POLICE-01",
-    "crosswalk_instrument_name": "Police Enforcement & Navigation Platform Warning Disputes"
+    "crosswalk_instrument_name": "Police Enforcement & Navigation Platform Warning Disputes",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5VG9-HDB1-JBSN-30DK-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:4D8V-XDY0-0092-J3HK-00000-00",
@@ -8631,7 +8525,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "NY-NAV-01",
-    "crosswalk_instrument_name": "New York Vehicle Navigation Device Exemption Legislation"
+    "crosswalk_instrument_name": "New York Vehicle Navigation Device Exemption Legislation",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A4D8V-XDY0-0092-J3HK-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5TCC-3WG1-DXVP-V217-00000-00",
@@ -8706,7 +8601,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "crosswalk_instrument_name": "Unaddressed by Current Law",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5TCC-3WG1-DXVP-V217-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5MDK-CX51-JC11-10KJ-00000-00",
@@ -8786,7 +8682,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "CA-MTC-FSP",
-    "crosswalk_instrument_name": "Bay Area MTC Freeway Service Patrol & Waze Partnership"
+    "crosswalk_instrument_name": "Bay Area MTC Freeway Service Patrol & Waze Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5MDK-CX51-JC11-10KJ-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6JD4-H063-SFWH-73FN-00000-00",
@@ -8855,7 +8752,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAYMO-WAZE-01",
-    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership"
+    "crosswalk_instrument_name": "Waymo & Waze Autonomous Infrastructure Telemetry Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6JD4-H063-SFWH-73FN-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5H0V-B0R1-DYG2-R2C4-00000-00",
@@ -8929,7 +8827,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "KY-LOU-CCP",
-    "crosswalk_instrument_name": "Louisville Metro & Waze Connected Citizens Agreement"
+    "crosswalk_instrument_name": "Louisville Metro & Waze Connected Citizens Agreement",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5H0V-B0R1-DYG2-R2C4-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5Y26-NTJ1-DYVR-P4M9-00000-00",
@@ -9009,7 +8908,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5Y26-NTJ1-DYVR-P4M9-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5VCM-69K1-JCMN-Y00B-00000-00",
@@ -9084,7 +8984,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "FED-POLICE-01",
-    "crosswalk_instrument_name": "Police Enforcement & Navigation Platform Warning Disputes"
+    "crosswalk_instrument_name": "Police Enforcement & Navigation Platform Warning Disputes",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5VCM-69K1-JCMN-Y00B-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5N4W-N571-DYTH-G2G4-00000-00",
@@ -9158,7 +9059,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "NYNJ-PANYNJ-CCP",
-    "crosswalk_instrument_name": "Port Authority of NY & NJ & Waze Data Partnership"
+    "crosswalk_instrument_name": "Port Authority of NY & NJ & Waze Data Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5N4W-N571-DYTH-G2G4-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:53T0-GXS1-DXX7-H25H-00000-00",
@@ -9227,7 +9129,8 @@
     "topic_category": "Platform Features & Routing Algorithms",
     "topic_slug": "features",
     "crosswalk_instrument_id": "PLAT-ALG-04",
-    "crosswalk_instrument_name": "Large-Scale Arterial Commuter Diversion & Incident Rerouting"
+    "crosswalk_instrument_name": "Large-Scale Arterial Commuter Diversion & Incident Rerouting",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A53T0-GXS1-DXX7-H25H-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5N1D-GYS1-JC8N-K0NH-00000-00",
@@ -9302,7 +9205,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "crosswalk_instrument_name": "Unaddressed by Current Law",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5N1D-GYS1-JC8N-K0NH-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:679C-4GD1-JBG1-83JX-00000-00",
@@ -9382,7 +9286,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "V2X-APPLIED-01",
-    "crosswalk_instrument_name": "Connected Vehicle V2X Navigation Infrastructure Integration"
+    "crosswalk_instrument_name": "Connected Vehicle V2X Navigation Infrastructure Integration",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A679C-4GD1-JBG1-83JX-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5HJK-RKB1-DYRR-92B0-00000-00",
@@ -9457,7 +9362,8 @@
     "topic_category": "Platform Features & Routing Algorithms",
     "topic_slug": "features",
     "crosswalk_instrument_id": "PLAT-ALG-04",
-    "crosswalk_instrument_name": "Large-Scale Arterial Commuter Diversion & Incident Rerouting"
+    "crosswalk_instrument_name": "Large-Scale Arterial Commuter Diversion & Incident Rerouting",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5HJK-RKB1-DYRR-92B0-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5X4N-53V1-JDKC-R3PT-00000-00",
@@ -9537,7 +9443,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "FL-MDT-WAZE",
-    "crosswalk_instrument_name": "Miami-Dade Transit & Waze Carpool Mobility Partnership"
+    "crosswalk_instrument_name": "Miami-Dade Transit & Waze Carpool Mobility Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5X4N-53V1-JDKC-R3PT-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:589D-0D91-DXNV-51YF-00000-00",
@@ -9612,7 +9519,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "crosswalk_instrument_name": "Unaddressed by Current Law",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A589D-0D91-DXNV-51YF-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6CPS-DDJ1-F03R-N298-00000-00",
@@ -9687,7 +9595,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "BOS-GOOGLE-GL",
-    "crosswalk_instrument_name": "Boston & Google Project Green Light Signal Optimization"
+    "crosswalk_instrument_name": "Boston & Google Project Green Light Signal Optimization",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6CPS-DDJ1-F03R-N298-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6KBM-BFX3-SDJ6-53RR-00000-00",
@@ -9762,7 +9671,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "CT-DOT-14",
-    "crosswalk_instrument_name": "Connecticut General Statutes Title 14 (Highway Traffic Control)"
+    "crosswalk_instrument_name": "Connecticut General Statutes Title 14 (Highway Traffic Control)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6KBM-BFX3-SDJ6-53RR-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5VCH-KKT1-JCMN-Y1TM-00000-00",
@@ -9837,7 +9747,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "FED-POLICE-01",
-    "crosswalk_instrument_name": "Police Enforcement & Navigation Platform Warning Disputes"
+    "crosswalk_instrument_name": "Police Enforcement & Navigation Platform Warning Disputes",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5VCH-KKT1-JCMN-Y1TM-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:69RD-M391-JCBF-S14F-00000-00",
@@ -9917,7 +9828,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "MUNI-STREET-TEMP",
-    "crosswalk_instrument_name": "Municipal Temporary Street Closure & Event Detour Regulations"
+    "crosswalk_instrument_name": "Municipal Temporary Street Closure & Event Detour Regulations",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A69RD-M391-JCBF-S14F-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5K0V-VBK1-DY6F-J3BW-00000-00",
@@ -9992,7 +9904,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "crosswalk_instrument_name": "Unaddressed by Current Law",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5K0V-VBK1-DY6F-J3BW-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:7X74-0TJ0-Y8T9-V4S1-00000-00",
@@ -10072,7 +9985,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "WAZE-CCP-01",
-    "crosswalk_instrument_name": "Waze Connected Citizens Program Framework"
+    "crosswalk_instrument_name": "Waze Connected Citizens Program Framework",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A7X74-0TJ0-Y8T9-V4S1-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5VNV-SYP1-DY07-K292-00000-00",
@@ -10147,7 +10061,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5VNV-SYP1-DY07-K292-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:63SN-6D81-DY7V-G183-00000-00",
@@ -10221,7 +10136,8 @@
     "topic_category": "Platform Features & Routing Algorithms",
     "topic_slug": "features",
     "crosswalk_instrument_id": "PLAT-ALG-02",
-    "crosswalk_instrument_name": "Navigation Platform Eco-Friendly & Fuel-Efficient Routing Engine"
+    "crosswalk_instrument_name": "Navigation Platform Eco-Friendly & Fuel-Efficient Routing Engine",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A63SN-6D81-DY7V-G183-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5N7J-XFH1-F03R-N37N-00000-00",
@@ -10290,7 +10206,8 @@
     "topic_category": "Platform Features & Routing Algorithms",
     "topic_slug": "features",
     "crosswalk_instrument_id": "PLAT-ALG-03",
-    "crosswalk_instrument_name": "Google Maps Commuter Route Preference Learning Engine"
+    "crosswalk_instrument_name": "Google Maps Commuter Route Preference Learning Engine",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5N7J-XFH1-F03R-N37N-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5W9Y-MDT1-DY60-M0M6-00000-00",
@@ -10359,7 +10276,8 @@
     "topic_category": "Platform Features & Routing Algorithms",
     "topic_slug": "features",
     "crosswalk_instrument_id": "FED-DISTRACT-01",
-    "crosswalk_instrument_name": "State & Federal Distracted Driving Compliance Controls"
+    "crosswalk_instrument_name": "State & Federal Distracted Driving Compliance Controls",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5W9Y-MDT1-DY60-M0M6-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5YRJ-C711-JCMN-Y15H-00000-00",
@@ -10428,7 +10346,8 @@
     "topic_category": "Platform Features & Routing Algorithms",
     "topic_slug": "features",
     "crosswalk_instrument_id": "PLAT-FEAT-02",
-    "crosswalk_instrument_name": "Navigation App Multi-Stop & Waypoint Path Customization"
+    "crosswalk_instrument_name": "Navigation App Multi-Stop & Waypoint Path Customization",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5YRJ-C711-JCMN-Y15H-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5YX1-RGD1-JCMN-Y4PM-00000-00",
@@ -10497,7 +10416,8 @@
     "topic_category": "Platform Features & Routing Algorithms",
     "topic_slug": "features",
     "crosswalk_instrument_id": "PLAT-FEAT-02",
-    "crosswalk_instrument_name": "Navigation App Multi-Stop & Waypoint Path Customization"
+    "crosswalk_instrument_name": "Navigation App Multi-Stop & Waypoint Path Customization",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5YX1-RGD1-JCMN-Y4PM-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5WC1-D801-JCMN-Y21G-00000-00",
@@ -10566,7 +10486,8 @@
     "topic_category": "Platform Features & Routing Algorithms",
     "topic_slug": "features",
     "crosswalk_instrument_id": "FED-DISTRACT-01",
-    "crosswalk_instrument_name": "State & Federal Distracted Driving Compliance Controls"
+    "crosswalk_instrument_name": "State & Federal Distracted Driving Compliance Controls",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5WC1-D801-JCMN-Y21G-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5X75-KD41-F03R-N52V-00000-00",
@@ -10637,11 +10558,12 @@
     "relevance_tier": "In-Scope",
     "exclusion_reason": "",
     "relevance_score": 86,
-    "relevance_rationale": "Transportation analysis examining Braess's paradox and user equilibrium in algorithmic navigation, demonstrating how navigation apps optimizing individual commuter paths exacerbate overall network congestion.",
-    "topic_category": "Academic Research & Traffic Studies",
-    "topic_slug": "research",
-    "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "relevance_rationale": "Techdirt transportation analysis examining Braess's paradox and user equilibrium in algorithmic navigation, demonstrating how navigation apps optimizing individual commuter paths exacerbate overall network congestion.",
+    "topic_category": "Platform Features & Routing Algorithms",
+    "topic_slug": "features",
+    "crosswalk_instrument_id": "PLAT-ALG-04",
+    "crosswalk_instrument_name": "Large-Scale Arterial Commuter Diversion & Incident Rerouting",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5X75-KD41-F03R-N52V-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5Y5V-NWG1-JBRC-V10Y-00000-00",
@@ -10716,7 +10638,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "crosswalk_instrument_name": "Unaddressed by Current Law",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5Y5V-NWG1-JBRC-V10Y-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5F86-02N1-JBSS-S139-00000-00",
@@ -10796,7 +10719,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "FED-POLICE-01",
-    "crosswalk_instrument_name": "Police Enforcement & Navigation Platform Warning Disputes"
+    "crosswalk_instrument_name": "Police Enforcement & Navigation Platform Warning Disputes",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5F86-02N1-JBSS-S139-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5DVF-PCG1-F03R-N4RS-00000-00",
@@ -10871,7 +10795,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "crosswalk_instrument_name": "Unaddressed by Current Law",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5DVF-PCG1-F03R-N4RS-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:7X0X-V9T0-Y9HJ-P07D-00000-00",
@@ -10925,7 +10850,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A7X0X-V9T0-Y9HJ-P07D-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5TNP-YDV1-JCBD-1017-00000-00",
@@ -10985,7 +10911,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "LA-CF-14-1741",
-    "crosswalk_instrument_name": "Los Angeles Council File 14-1741 (Waze Data Partnership)"
+    "crosswalk_instrument_name": "Los Angeles Council File 14-1741 (Waze Data Partnership)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5TNP-YDV1-JCBD-1017-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5R2M-WBX1-JCMN-Y23D-00000-00",
@@ -11039,7 +10966,8 @@
     "topic_category": "Platform Features & Routing Algorithms",
     "topic_slug": "features",
     "crosswalk_instrument_id": "FED-DISTRACT-01",
-    "crosswalk_instrument_name": "State & Federal Distracted Driving Compliance Controls"
+    "crosswalk_instrument_name": "State & Federal Distracted Driving Compliance Controls",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5R2M-WBX1-JCMN-Y23D-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5K3Y-R4C1-JCMN-Y31S-00000-00",
@@ -11093,7 +11021,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "DOT-SMART-CITY",
-    "crosswalk_instrument_name": "USDOT Smart City Challenge Mobility Integration"
+    "crosswalk_instrument_name": "USDOT Smart City Challenge Mobility Integration",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5K3Y-R4C1-JCMN-Y31S-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:59C9-W101-F03R-N0MX-00000-00",
@@ -11147,7 +11076,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "SEA-SMC-11.16",
-    "crosswalk_instrument_name": "Seattle Municipal Code Title 11 (Traffic Control & Calming)"
+    "crosswalk_instrument_name": "Seattle Municipal Code Title 11 (Traffic Control & Calming)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A59C9-W101-F03R-N0MX-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5W18-9X61-DXVP-V170-00000-00",
@@ -11207,7 +11137,8 @@
     "topic_category": "Community Pushback & Safety Hazards",
     "topic_slug": "pushback",
     "crosswalk_instrument_id": "None (Legal Gap)",
-    "crosswalk_instrument_name": "Unaddressed by Current Law"
+    "crosswalk_instrument_name": "Unaddressed by Current Law",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5W18-9X61-DXVP-V170-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5Y0N-7PG1-JBH5-W02N-00000-00",
@@ -11261,7 +11192,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5Y0N-7PG1-JBH5-W02N-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:4MDG-VTK0-TX51-22NM-00000-00",
@@ -11315,7 +11247,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A4MDG-VTK0-TX51-22NM-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5VSM-G3V1-JBH5-W0J6-00000-00",
@@ -11369,7 +11302,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5VSM-G3V1-JBH5-W0J6-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:4V41-25W0-TX51-20M6-00000-00",
@@ -11423,7 +11357,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A4V41-25W0-TX51-20M6-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:58RR-7N31-JCRR-013F-00000-00",
@@ -11477,7 +11412,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A58RR-7N31-JCRR-013F-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:55CW-X7P1-J9YY-Y0G2-00000-00",
@@ -11531,7 +11467,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A55CW-X7P1-J9YY-Y0G2-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6G8W-3GS3-RXR2-2143-00000-00",
@@ -11591,7 +11528,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "CT-DOT-14",
-    "crosswalk_instrument_name": "Connecticut General Statutes Title 14 (Highway Traffic Control)"
+    "crosswalk_instrument_name": "Connecticut General Statutes Title 14 (Highway Traffic Control)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6G8W-3GS3-RXR2-2143-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6DP3-TRV3-RVYY-455N-00000-00",
@@ -11645,7 +11583,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "HAAS-ALERT-01",
-    "crosswalk_instrument_name": "HAAS Alert Digital Emergency Vehicle Notification System"
+    "crosswalk_instrument_name": "HAAS Alert Digital Emergency Vehicle Notification System",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6DP3-TRV3-RVYY-455N-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5J9G-46V1-JBKS-P433-00000-00",
@@ -11699,7 +11638,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5J9G-46V1-JBKS-P433-00000-00"
   },
   {
     "source_id": "src_472865dc84294b0bd125",
@@ -11765,7 +11705,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "LA-CF-14-1741",
-    "crosswalk_instrument_name": "Los Angeles Council File 14-1741 (Waze Data Partnership)"
+    "crosswalk_instrument_name": "Los Angeles Council File 14-1741 (Waze Data Partnership)",
+    "url": "https://laist.com/shows/airtalk/waze-and-la-city-council-will-work-together-to-reduce-growing-traffic-on-residential-streets"
   },
   {
     "source_id": "nexis_urn:contentItem:6CWY-FN51-DY37-31X4-00000-00",
@@ -11837,7 +11778,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "MO-FERG-44",
-    "crosswalk_instrument_name": "Ferguson Municipal Code Chapter 44 (Traffic Calming)"
+    "crosswalk_instrument_name": "Ferguson Municipal Code Chapter 44 (Traffic Calming)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6CWY-FN51-DY37-31X4-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6FYH-9K43-RSGG-P2M7-00000-00",
@@ -11909,7 +11851,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "IL-MP-18",
-    "crosswalk_instrument_name": "Mount Prospect Village Code Chapter 18 (Traffic Mitigation)"
+    "crosswalk_instrument_name": "Mount Prospect Village Code Chapter 18 (Traffic Mitigation)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6FYH-9K43-RSGG-P2M7-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6GHR-C3D3-RWMJ-44YY-00000-00",
@@ -11981,7 +11924,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "VA-CHEP-74",
-    "crosswalk_instrument_name": "Chesapeake City Code Chapter 74 (Traffic Calming Program)"
+    "crosswalk_instrument_name": "Chesapeake City Code Chapter 74 (Traffic Calming Program)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6GHR-C3D3-RWMJ-44YY-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6GS3-MVY3-RT79-600V-00000-00",
@@ -12047,7 +11991,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "PA-PGH-501",
-    "crosswalk_instrument_name": "Pittsburgh Code of Ordinances Title 5 (Traffic Calming)"
+    "crosswalk_instrument_name": "Pittsburgh Code of Ordinances Title 5 (Traffic Calming)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6GS3-MVY3-RT79-600V-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6GWR-4W53-RRTX-13F9-00000-00",
@@ -12113,7 +12058,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "PA-PGH-501",
-    "crosswalk_instrument_name": "Pittsburgh Code of Ordinances Title 5 (Traffic Calming)"
+    "crosswalk_instrument_name": "Pittsburgh Code of Ordinances Title 5 (Traffic Calming)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6GWR-4W53-RRTX-13F9-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6H7T-H1B3-RW7S-61G3-00000-00",
@@ -12185,7 +12131,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "SF-TC-2025",
-    "crosswalk_instrument_name": "San Francisco Traffic Calming Policy & Guidelines"
+    "crosswalk_instrument_name": "San Francisco Traffic Calming Policy & Guidelines",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6H7T-H1B3-RW7S-61G3-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6H8K-R233-RT2P-13GY-00000-00",
@@ -12251,7 +12198,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "SF-TC-2025",
-    "crosswalk_instrument_name": "San Francisco Traffic Calming Policy & Guidelines"
+    "crosswalk_instrument_name": "San Francisco Traffic Calming Policy & Guidelines",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6H8K-R233-RT2P-13GY-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6HFR-R813-RS65-00N7-00000-00",
@@ -12323,7 +12271,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "IL-MP-18",
-    "crosswalk_instrument_name": "Mount Prospect Village Code Chapter 18 (Traffic Mitigation)"
+    "crosswalk_instrument_name": "Mount Prospect Village Code Chapter 18 (Traffic Mitigation)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6HFR-R813-RS65-00N7-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6HGC-SMW3-RW2Y-927P-00000-00",
@@ -12395,7 +12344,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "NY-MUNI-01",
-    "crosswalk_instrument_name": "New York Municipal Home Rule Law (Traffic Calming Powers)"
+    "crosswalk_instrument_name": "New York Municipal Home Rule Law (Traffic Calming Powers)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6HGC-SMW3-RW2Y-927P-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6HGK-KM93-RXKC-C0JF-00000-00",
@@ -12461,7 +12411,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "IA-DM-114",
-    "crosswalk_instrument_name": "Des Moines Municipal Code Chapter 114 (Traffic Regulation)"
+    "crosswalk_instrument_name": "Des Moines Municipal Code Chapter 114 (Traffic Regulation)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6HGK-KM93-RXKC-C0JF-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6J6N-NJY3-RTWR-N4D2-00000-00",
@@ -12533,7 +12484,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "MI-DET-55",
-    "crosswalk_instrument_name": "Detroit City Code Chapter 55 (Traffic Calming & Speed Humps)"
+    "crosswalk_instrument_name": "Detroit City Code Chapter 55 (Traffic Calming & Speed Humps)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6J6N-NJY3-RTWR-N4D2-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6J9V-D563-S61W-X0NH-00000-00",
@@ -12599,7 +12551,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "IL-GOD-01",
-    "crosswalk_instrument_name": "Village of Godfrey Traffic Safety Resolution"
+    "crosswalk_instrument_name": "Village of Godfrey Traffic Safety Resolution",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6J9V-D563-S61W-X0NH-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6JMY-GR73-RWVS-G0PF-00000-00",
@@ -12671,7 +12624,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "PA-ELT-01",
-    "crosswalk_instrument_name": "East Lampeter Township Traffic Calming Resolution"
+    "crosswalk_instrument_name": "East Lampeter Township Traffic Calming Resolution",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6JMY-GR73-RWVS-G0PF-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6K64-XTC3-RVRN-D3K7-00000-00",
@@ -12743,7 +12697,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "PA-ABING-150",
-    "crosswalk_instrument_name": "Abington Township Code Chapter 150 (Traffic Regulation)"
+    "crosswalk_instrument_name": "Abington Township Code Chapter 150 (Traffic Regulation)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6K64-XTC3-RVRN-D3K7-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6KGW-X313-RYMC-J2S7-00000-00",
@@ -12815,7 +12770,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "MO-STL-01",
-    "crosswalk_instrument_name": "City of St. Louis Traffic Calming & Speed Hump Authority Ordinance"
+    "crosswalk_instrument_name": "City of St. Louis Traffic Calming & Speed Hump Authority Ordinance",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6KGW-X313-RYMC-J2S7-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6KGN-XYV3-RV2K-H099-00000-00",
@@ -12887,7 +12843,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "MO-STL-01",
-    "crosswalk_instrument_name": "City of St. Louis Traffic Calming & Speed Hump Authority Ordinance"
+    "crosswalk_instrument_name": "City of St. Louis Traffic Calming & Speed Hump Authority Ordinance",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6KGN-XYV3-RV2K-H099-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:6KP2-3303-RSGV-41K1-00000-00",
@@ -12953,7 +12910,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "MD-HOW-21",
-    "crosswalk_instrument_name": "Howard County Code Title 21 (Traffic Calming Program)"
+    "crosswalk_instrument_name": "Howard County Code Title 21 (Traffic Calming Program)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A6KP2-3303-RSGV-41K1-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5RG8-H741-JCB3-X1WH-00000-00",
@@ -13025,7 +12983,8 @@
     "topic_category": "Municipal Traffic Mitigation & Street Controls",
     "topic_slug": "mitigation",
     "crosswalk_instrument_id": "NJ-LEONIA-2018",
-    "crosswalk_instrument_name": "Borough of Leonia Ordinance 2017-25 (Non-Resident Street Closure)"
+    "crosswalk_instrument_name": "Borough of Leonia Ordinance 2017-25 (Non-Resident Street Closure)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5RG8-H741-JCB3-X1WH-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:53RV-7R81-F18Y-Y1PF-00000-00",
@@ -13085,7 +13044,8 @@
     "topic_category": "Legislation & City Council Actions",
     "topic_slug": "legislation",
     "crosswalk_instrument_id": "IL-HB5071",
-    "crosswalk_instrument_name": "Illinois Commercial Truck GPS & Bridge Strike Prevention Act"
+    "crosswalk_instrument_name": "Illinois Commercial Truck GPS & Bridge Strike Prevention Act",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A53RV-7R81-F18Y-Y1PF-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5HM3-0111-JB72-12XH-00000-00",
@@ -13151,7 +13111,8 @@
     "topic_category": "Public-Private Data Partnerships",
     "topic_slug": "partnerships",
     "crosswalk_instrument_id": "PA-DOT-CCP",
-    "crosswalk_instrument_name": "PennDOT Statewide Waze Connected Citizens Partnership"
+    "crosswalk_instrument_name": "PennDOT Statewide Waze Connected Citizens Partnership",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5HM3-0111-JB72-12XH-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:567T-G511-J9YY-Y0C3-00000-00",
@@ -13217,7 +13178,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A567T-G511-J9YY-Y0C3-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:56T5-C1H1-DXF1-N0CH-00000-00",
@@ -13283,7 +13245,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A56T5-C1H1-DXF1-N0CH-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:57T9-W851-DXMP-K561-00000-00",
@@ -13349,7 +13312,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A57T9-W851-DXMP-K561-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:58PM-K8W1-F0R9-G4CC-00000-00",
@@ -13415,7 +13379,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A58PM-K8W1-F0R9-G4CC-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5F5N-4Y71-JB5M-W1MH-00000-00",
@@ -13481,7 +13446,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5F5N-4Y71-JB5M-W1MH-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:5VR5-3RR1-JBH5-W122-00000-00",
@@ -13547,7 +13513,8 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A5VR5-3RR1-JBH5-W122-00000-00"
   },
   {
     "source_id": "nexis_urn:contentItem:7YBS-9011-2PG1-000M-00000-00",
@@ -13613,6 +13580,7 @@
     "topic_category": "Commercial Freight & Bridge Clearance",
     "topic_slug": "freight",
     "crosswalk_instrument_id": "FED-06",
-    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)"
+    "crosswalk_instrument_name": "Federal truck size and weight limits (National Network / 23 U.S.C. § 127)",
+    "url": "https://www.nexisuni.com/document/?pddocfullpath=%2Fshared%2Fdocument%2Fnews%2Furn%3AcontentItem%3A7YBS-9011-2PG1-000M-00000-00"
   }
 ]
