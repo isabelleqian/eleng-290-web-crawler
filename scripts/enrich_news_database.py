@@ -29,220 +29,256 @@ NON_NEXIS_CORRECTIONS = {
     "src_dc10ae72df82e2180ca6": {
         "title": "City Council Approves Pilot Program to Curb Waze Traffic on Side Streets",
         "publication_date": "2019-04-30",
-        "publisher": "NBC Los Angeles (KNBC) / City News Service",
+        "publisher": "NBC Los Angeles",
         "location": "Los Angeles, CA",
-        "url": "https://www.nbclosangeles.com/news/city-council-pilot-program-to-curb-waze-traffic-on-side-streets/162349/",
+        "url": "https://www.nbclosangeles.com/news/city-council-pilot-program-to-curb-waze-traffic-on-side-streets/162349/"
     },
     "src_d1320840ff1688ff741e": {
         "title": "New Jersey Town Closes Some City Streets to Drivers Who Don’t Live There",
         "publication_date": "2018-01-22",
         "publisher": "Next City",
         "location": "Leonia, NJ",
-        "url": "https://nextcity.org/urbanist-news/new-jersey-town-closes-some-city-streets-to-drivers-who-dont-live-there",
+        "url": "https://nextcity.org/urbanist-news/new-jersey-town-closes-some-city-streets-to-drivers-who-dont-live-there"
     },
     "src_23a1fcd9de5f1849cfa3": {
-        "title": "Delridge Neighborhood Greenway — 26th Ave SW Proposed Diverters: Outreach Summary",
+        "title": "Delridge Neighborhood Greenway | 26th Ave SW Proposed Diverters: Outreach Summary",
         "publication_date": "2020-11-01",
-        "publisher": "Seattle Department of Transportation (SDOT)",
+        "publisher": "Seattle Department of Transportation",
         "location": "Seattle, WA",
-        "url": "https://www.seattle.gov/documents/Departments/SDOT/TransitProgram/RapidRide/RapidRide%20H/26th%20Ave%20SW%20Diverter%20Outreach%20Summary.pdf",
+        "url": "https://www.seattle.gov/documents/Departments/SDOT/TransitProgram/RapidRide/RapidRide%20H/26th%20Ave%20SW%20Diverter%20Outreach%20Summary.pdf"
     },
     "src_8f6b264845ca47814ba0": {
-        "title": "Waze Connected Citizens Program — United States Municipal Rollout",
+        "title": "Waze Connected Citizens Program",
         "publication_date": "2014-12-08",
-        "publisher": "Waze Mobile (Google)",
+        "publisher": "Waze Discuss",
         "location": "United States (Multi-City)",
-        "url": "https://www.waze.com/discuss/t/waze-connected-citizens-program/102835",
+        "url": "https://www.waze.com/discuss/t/waze-connected-citizens-program/102835"
     },
     "src_02454d2db17a078f05f9": {
-        "title": "Los Angeles Council File 11-2130-S4: Rowena Ave / Angus St Cut-Through Traffic Mitigation",
+        "title": "Communication from Public: Council File No. 11-2130-S4",
         "publication_date": "2019-06-24",
         "publisher": "Los Angeles City Clerk / Silver Lake Neighborhood Council",
         "location": "Los Angeles, CA",
-        "url": "https://cityclerk.lacity.org/onlinedocs/2011/11-2130-S4_PC_AB_06-24-2019.pdf",
+        "url": "https://cityclerk.lacity.org/onlinedocs/2011/11-2130-S4_PC_AB_06-24-2019.pdf"
     },
     "src_483bc7bade77380c2828": {
-        "title": "California AB 2015: Department of Transportation: Third-Party Navigation Applications Pilot Study",
-        "publication_date": "2024-09-22",
-        "publisher": "California State Legislature / CalMatters Digital Democracy",
+        "title": "AB 2015: Department of Transportation: third-party navigation applications: study and report.",
+        "publication_date": "2026-09-14",
+        "publisher": "CalMatters Digital Democracy",
         "location": "California",
-        "url": "https://calmatters.digitaldemocracy.org/bills/ca_202520260ab2015",
+        "url": "https://calmatters.digitaldemocracy.org/bills/ca_202520260ab2015"
     },
     "src_32ccdcb0712575f8cb0b": {
-        "title": "New 'Absurd' Dem-Backed Bill Could Make Your Commute Longer, California Lawmaker Warns",
-        "publication_date": "2024-06-16",
-        "publisher": "Yahoo News",
+        "title": "New ‘absurd’ Dem-backed bill could make your commute longer, California Rep says",
+        "publication_date": "2026-06-16",
+        "publisher": "California Post / Yahoo News",
         "location": "California",
-        "url": "https://www.yahoo.com/news/politics/articles/absurd-dem-backed-bill-could-205725514.html",
+        "url": "https://www.yahoo.com/news/politics/articles/absurd-dem-backed-bill-could-205725514.html"
     },
     "src_9403a6fb4c495dd5f6e0": {
-        "title": "Los Angeles Council Motion 14-1741-S1: Data-Sharing Partnership with Waze to Protect Residential Streets",
+        "title": "Transportation Motion: Council File 14-1741-S1",
         "publication_date": "2015-04-28",
         "publisher": "Los Angeles City Clerk",
         "location": "Los Angeles, CA",
-        "url": "https://cityclerk.lacity.org/onlinedocs/2014/14-1741-S1_MOT_04-28-2015.pdf",
+        "url": "https://cityclerk.lacity.org/onlinedocs/2014/14-1741-S1_MOT_04-28-2015.pdf"
     },
     "src_004598f106dc0112c9f5": {
-        "title": "L.A. May Crack Down on Waze and Google Maps Over Side-Street Traffic",
+        "title": "Waze Directions May Skip Certain Streets Under a New City Council Plan",
         "publication_date": "2019-05-07",
         "publisher": "Los Angeles Magazine",
         "location": "Los Angeles, CA",
-        "url": "https://lamag.com/technology/waze-restrictions-program/",
+        "url": "https://lamag.com/technology/waze-restrictions-program/"
     },
     "src_df18bde5b05e69aa6fee": {
         "title": "Waze Hijacked L.A. in the Name of Convenience. Can Anyone Put the Genie Back in the Bottle?",
-        "publication_date": "2018-05-18",
+        "publication_date": "2019-08-20",
         "publisher": "Los Angeles Magazine",
         "location": "Los Angeles, CA",
-        "url": "https://lamag.com/urbandevelopment/waze-los-angeles-neighborhoods/",
+        "url": "https://lamag.com/urbandevelopment/waze-los-angeles-neighborhoods"
     },
     "src_ec380b5a89074be9476e": {
-        "title": "Waze Restricted Due to Side Street Traffic Buildup in Los Angeles",
+        "title": "Waze restricted due to buildup of side street traffic in Los Angeles",
         "publication_date": "2019-04-30",
-        "publisher": "ABC 10News San Diego / City News Service",
+        "publisher": "ABC 10News San Diego",
         "location": "Los Angeles, CA",
-        "url": "https://www.10news.com/news/national/waze-restricted-due-to-buildup-of-side-street-traffic-in-los-angeles",
+        "url": "https://www.10news.com/news/national/waze-restricted-due-to-buildup-of-side-street-traffic-in-los-angeles"
     },
     "src_2910e1608eed71065145": {
-        "title": "'Absolute Chaos': Navigation Apps Blamed for Traffic Nightmare on One of L.A.'s Steepest Streets",
+        "title": "‘Absolute chaos’: Navigation apps blamed for traffic nightmare on one of L.A.’s steepest streets",
         "publication_date": "2018-04-05",
-        "publisher": "FOX 13 Seattle / KTLA",
+        "publisher": "FOX 13 Seattle",
         "location": "Los Angeles, CA",
-        "url": "https://www.fox13seattle.com/news/absolute-chaos-navigation-apps-blamed-for-traffic-nightmare-on-one-of-l-a-s-steepest-streets",
+        "url": "https://www.fox13seattle.com/news/absolute-chaos-navigation-apps-blamed-for-traffic-nightmare-on-one-of-l-a-s-steepest-streets"
     },
     "src_7a51efb5b5f5430e194b": {
-        "title": "Mayor Walsh Announces City of Boston Partnership with Traffic App Waze",
+        "title": "Walsh announces partnership with traffic app, Waze",
         "publication_date": "2015-02-19",
         "publisher": "The Daily Free Press",
         "location": "Boston, MA",
-        "url": "https://dailyfreepress.com/02/19/05/92334/walsh-announces-partnership-with-traffic-app-waze/",
+        "url": "https://dailyfreepress.com/2015/02/19/walsh-announces-partnership-with-traffic-app-waze/"
     },
     "src_0d4fa7ccce08eaf50b2f": {
-        "title": "Boston Partners with Waze to Clear Up Clogged Streets",
+        "title": "Boston partners with Waze to clear up clogged streets",
         "publication_date": "2015-02-21",
         "publisher": "Engadget",
         "location": "Boston, MA",
-        "url": "https://www.engadget.com/2015-02-21-waze-boston-partner.html",
+        "url": "https://www.engadget.com/2015-02-21-waze-boston-partner.html"
     },
     "src_ab2b7d7e044d5121e5f5": {
-        "title": "Using Waze Data to Measure Traffic Congestion and Centre Street Road Diet Safety",
-        "publication_date": "2019-10-15",
-        "publisher": "City of Boston Citywide Analytics Team",
+        "title": "Using Waze Data to Measure Traffic Congestion",
+        "publication_date": "2024-10-24",
+        "publisher": "City of Boston",
         "location": "Boston, MA",
-        "url": "https://www.boston.gov/departments/analytics-team/using-waze-data-measure-traffic-congestion-0",
+        "url": "https://www.boston.gov/departments/analytics-team/using-waze-data-measure-traffic-congestion-0"
     },
     "src_f2e92e99cdf509170cc7": {
-        "title": "MassDOT Partners with Waze to Improve Traffic and Planning",
+        "title": "Waze’s data-sharing program expands across state",
         "publication_date": "2016-06-16",
         "publisher": "The Boston Globe",
         "location": "Massachusetts",
-        "url": "https://www.bostonglobe.com/metro/2016/06/16/massdot-partners-with-waze-improve-traffic-planning/9p4D9vWnIYNQ7g9s1DwhIO/story.html",
+        "url": "https://www.bostonglobe.com/business/2016/06/16/waze-data-sharing-program-expands-across-state/CNE4ETlyXk8wOHc0C8y7ZO/story.html"
     },
     "src_396cf33a5161f5f5bd8d": {
-        "title": "Wood Street In West Town Going One-Way To Cut Down On Thru-Traffic",
-        "publication_date": "2021-08-10",
+        "title": "Parts Of Wood Street In West Town To Become One-Way — 3+ Years After Bike Lanes Pitched, Ditched",
+        "publication_date": "2025-06-06",
         "publisher": "Block Club Chicago",
         "location": "Chicago, IL",
-        "url": "https://blockclubchicago.org/2025/06/06/parts-of-wood-street-in-west-town-to-become-one-way-3-years-after-bike-lanes-pitched-ditched/",
+        "url": "https://blockclubchicago.org/2025/06/06/parts-of-wood-street-in-west-town-to-become-one-way-3-years-after-bike-lanes-pitched-ditched/"
     },
     "src_a8fe04b8629212eb1ae5": {
-        "title": "Proposal To Make Wood Street One-Way Stirs Debate In West Town",
-        "publication_date": "2021-08-04",
-        "publisher": "CBS News Chicago",
+        "title": "Proposed Switch To One-Way Street On Chicago's Near Northwest Side Is 'Going To Affect Businesses', According To Business Owner",
+        "publication_date": "2022-01-31",
+        "publisher": "CBS Chicago",
         "location": "Chicago, IL",
-        "url": "https://www.cbsnews.com/chicago/news/proposed-one-way-street-chicago-north-side/",
+        "url": "https://www.cbsnews.com/chicago/news/proposed-one-way-street-chicago-north-side/"
     },
     "src_5b329e50217cff65c640": {
-        "title": "Councilmember Saka Opposed Traffic Diverters in Delridge Over Equity Concerns",
-        "publication_date": "2024-04-02",
+        "title": "Shannon Braddock Appointed Acting County Executive; Saka Says He Opposed Traffic Diverters In His Neighborhood Because of Equity Concerns",
+        "publication_date": "2025-04-02",
         "publisher": "PubliCola",
         "location": "Seattle, WA",
-        "url": "https://publicola.com/2025/04/02/shannon-braddock-appointed-acting-county-executive-saka-says-he-opposed-traffic-diverters-in-his-neighborhood-because-of-equity-concerns/",
+        "url": "https://publicola.com/2025/04/02/shannon-braddock-appointed-acting-county-executive-saka-says-he-opposed-traffic-diverters-in-his-neighborhood-because-of-equity-concerns/"
     },
     "src_a8b514916cc36bde3d40": {
-        "title": "Community Petition: Stop the Installation of Traffic Diverters at SW Genesee and SW Brandon",
-        "publication_date": "2020-09-01",
-        "publisher": "Change.org (West Seattle Residents)",
+        "title": "Upcoming opportunities to share feedback on the proposed diverters",
+        "publication_date": "2020-09-18",
+        "publisher": "Change.org",
         "location": "Seattle, WA",
-        "url": "https://www.change.org/p/seattle-department-of-transportation-stop-the-installation-of-traffic-diverters-at-sw-genesee-and-sw-brandon",
+        "url": "https://www.change.org/p/seattle-department-of-transportation-stop-the-installation-of-traffic-diverters-at-sw-genesee-and-sw-brandon/u/27748137"
     },
     "src_a16a62edb70588f81bbb": {
-        "title": "Home Zone Program: Lake City Neighborhood Traffic Calming",
-        "publication_date": "2023-01-01",
-        "publisher": "Seattle Department of Transportation (SDOT)",
+        "title": "Home Zone: Lake City",
+        "publication_date": "",
+        "publisher": "Seattle Department of Transportation",
         "location": "Seattle, WA",
-        "url": "https://www.seattle.gov/transportation/projects-and-programs/programs/home-zone-program/lake-city",
+        "url": "https://www.seattle.gov/transportation/projects-and-programs/programs/home-zone-program/lake-city"
     },
     "src_c8f5fcc928d66ad4b9e7": {
         "title": "Waze’s Maps Now Change as Roads Close",
         "publication_date": "2013-02-27",
-        "publisher": "The New York Times (Bits Blog)",
+        "publisher": "The New York Times",
         "location": "United States",
-        "url": "https://archive.nytimes.com/bits.blogs.nytimes.com/2013/02/27/wazes-maps-now-change-as-roads-close/",
+        "url": "https://archive.nytimes.com/bits.blogs.nytimes.com/2013/02/27/wazes-maps-now-change-as-roads-close/"
     },
     "src_264bf1d902e4b812735b": {
-        "title": "Navigation App Waze Adds Road Closure Reporting, Reaches 40M Users",
+        "title": "Navigation App Waze Adds Road Closure Reporting, Says It Now Has 40M Users",
         "publication_date": "2013-02-27",
         "publisher": "TechCrunch",
         "location": "United States",
-        "url": "https://techcrunch.com/2013/02/27/waze-road-closure/",
+        "url": "https://techcrunch.com/2013/02/27/waze-road-closure/"
     },
     "src_a3aec998433f0c3fff3d": {
-        "title": "Waze Connected Citizens Program Official Partner Factsheet",
-        "publication_date": "2019-01-01",
-        "publisher": "Waze (Google LLC)",
+        "title": "Waze Connected Citizens Program Factsheet",
+        "publication_date": "",
+        "publisher": "Waze",
         "location": "United States",
-        "url": "https://web-assets.waze.com/partners/ccp/WAZE-CCP-Factsheet.pdf",
+        "url": "https://web-assets.waze.com/partners/ccp/WAZE-CCP-Factsheet.pdf"
     },
     "src_209e9565661083dba383": {
-        "title": "Waze for Cities (W4C) Program Overview and Municipal Data Guide",
-        "publication_date": "2020-01-01",
-        "publisher": "Waze Discuss / Wazeopedia",
+        "title": "Waze for Cities Data Program",
+        "publication_date": "",
+        "publisher": "Waze",
         "location": "United States",
-        "url": "https://www.waze.com/discuss/t/waze-for-cities/377967",
+        "url": "https://web-assets.waze.com/cms/Waze%20for%20Cities-Two-Pager_DIGITAL_Final.pdf"
     },
     "src_97a13ecf3417e5676e08": {
-        "title": "Community Feature Request: Municipal Blacklist for Residential Shortcut Streets",
-        "publication_date": "2020-05-15",
-        "publisher": "Waze Discuss Community Forum",
+        "title": "Feature Request: Blacklist Areas / Roads",
+        "publication_date": "2026-02-13",
+        "publisher": "Waze Discuss",
         "location": "United States",
-        "url": "https://www.waze.com/discuss/t/feature-request-blacklist-areas-roads/399185",
+        "url": "https://www.waze.com/discuss/t/feature-request-blacklist-areas-roads/399185"
     },
     "src_ae24cf62a63f34c9fe0b": {
-        "title": "Waze for Cities: Real-Time Traffic Data Analytics with Google Cloud",
-        "publication_date": "2021-06-01",
-        "publisher": "Waze (Google LLC)",
+        "title": "Waze for Cities",
+        "publication_date": "",
+        "publisher": "Waze",
         "location": "United States",
-        "url": "https://www.waze.com/wazeforcities/",
+        "url": "https://www.waze.com/partners/wazeforcities"
     },
     "src_8844a04c3601f584693a": {
-        "title": "Borough of Mantoloking Regular Council Meeting Minutes: Waze Cut-Through Traffic Deployment",
-        "publication_date": "2020-07-21",
-        "publisher": "Borough of Mantoloking, New Jersey",
+        "title": "Borough of Mantoloking Council Meeting Minutes — July 21, 2026",
+        "publication_date": "2026-07-21",
+        "publisher": "Borough of Mantoloking",
         "location": "Mantoloking, NJ",
-        "url": "https://www.mantoloking.org/AgendaCenter/ViewFile/Minutes/_07212026-45",
+        "url": "https://www.mantoloking.org/AgendaCenter/ViewFile/Minutes/_07212026-45"
     },
     "src_d8bae76a48b8c662c148": {
-        "title": "San Francisco Smart City Challenge Phase II: Connected Mobility and Navigation Management",
-        "publication_date": "2016-05-01",
-        "publisher": "San Francisco Municipal Transportation Agency (SFMTA)",
+        "title": "City of San Francisco Meeting the Smart City Challenge — Volume 2",
+        "publication_date": "2016-05",
+        "publisher": "San Francisco Municipal Transportation Agency",
         "location": "San Francisco, CA",
-        "url": "https://www.sfmta.com/sites/default/files/reports-and-documents/2018/11/sf_smart_city_challenge_phase_ii_volume_2.pdf",
+        "url": "https://www.sfmta.com/sites/default/files/reports-and-documents/2018/11/sf_smart_city_challenge_phase_ii_volume_2.pdf"
     },
     "src_6b808701b37bfa4ff82d": {
-        "title": "San Francisco County Transportation Authority Citizens Advisory Committee Meeting Packet",
-        "publication_date": "2023-09-03",
-        "publisher": "San Francisco County Transportation Authority (SFCTA)",
+        "title": "Community Advisory Committee Meeting Packet — September 3, 2025",
+        "publication_date": "2025-09-03",
+        "publisher": "San Francisco County Transportation Authority",
         "location": "San Francisco, CA",
-        "url": "https://www.sfcta.org/sites/default/files/2025-08/SFCTA_CAC_PACKET_2025-09-03-reduced.pdf",
+        "url": "https://www.sfcta.org/sites/default/files/2025-08/SFCTA_CAC_PACKET_2025-09-03-reduced.pdf"
     },
     "src_472865dc84294b0bd125": {
         "title": "Waze and LA City Council Will Work Together to Reduce Growing Traffic on Residential Streets",
         "publication_date": "2019-05-01",
         "publisher": "LAist / 89.3 KPCC (AirTalk with Larry Mantle)",
         "location": "Los Angeles, CA",
-        "url": "https://laist.com/shows/airtalk/waze-and-la-city-council-will-work-together-to-reduce-growing-traffic-on-residential-streets",
+        "url": "https://laist.com/shows/airtalk/waze-and-la-city-council-will-work-together-to-reduce-growing-traffic-on-residential-streets"
     },
+    "src_e3cc761c4fd41439dcff": {
+        "title": "Urban congestion relief experiments through routing-app interventions",
+        "publisher": "Nature Cities",
+        "publication_date": "2026-06-16",
+        "url": "https://www.nature.com/articles/s44284-026-00443-x"
+    },
+    "src_8269369b969b68e10744": {
+        "title": "Let’s build giant tree circles in every Seattle neighborhood",
+        "publisher": "Seattle Bike Blog",
+        "publication_date": "2025-02-25",
+        "url": "https://seattlebikeblog.com/2025/02/25/lets-build-giant-tree-circles-in-every-seattle-neighborhood/"
+    },
+    "src_ff00f9c2aa962ff25e8c": {
+        "title": "Seattle Is Finally Getting Its First Protected Intersection",
+        "publisher": "The Urbanist",
+        "publication_date": "2023-07-06",
+        "url": "https://www.theurbanist.org/seattle-is-finally-getting-its-first-protected-intersection/"
+    },
+    "src_2cee64cfc090c4b25ca7": {
+        "title": "The impact of information-aware routing on road traffic: From case studies to game-theoretical analysis and simulations",
+        "publisher": "University of California, Berkeley",
+        "publication_date": "2022-08-08",
+        "url": "https://bayen.berkeley.edu/sites/default/files/v3_cabannes_doctoral_thesis.pdf"
+    },
+    "src_2602e1f52eb57cee5b07": {
+        "title": "Data Integration, Sharing, and Management for Transportation Planning and Traffic Operations",
+        "publisher": "The National Academies Press",
+        "publication_date": "2025-06-25",
+        "url": "https://www.nationalacademies.org/read/28690/chapter/11"
+    },
+    "src_da3625d65ff04918a9c9": {
+        "title": "Real-Time Traffic Conditions & Cameras",
+        "publisher": "New York City Department of Transportation",
+        "publication_date": "",
+        "url": "https://www.nyc.gov/html/dot/html/motorist/atis.shtml"
+    }
 }
 
 # Standardized location mapping for clean, consistent formatting
