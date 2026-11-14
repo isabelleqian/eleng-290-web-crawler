@@ -18,7 +18,7 @@
     </div>
     <div class="flex flex-wrap items-center gap-3">
       <a href="news_database_archive.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900 text-xs text-slate-300 hover:text-white hover:border-slate-500">View Complete Raw Archive (1,605 docs) &rarr;</a>
-      <nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs"><a href="index.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Overview Map</a><a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium bg-blue-600 text-white shadow-sm">News Database (186)</a><a href="policy_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Policy Database (66)</a><a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (189)</a><a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk (186)</a></nav>
+      <nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs"><a href="index.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Overview Map</a><a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium bg-blue-600 text-white shadow-sm">News Database (186)</a><a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (189)</a><a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk (186)</a></nav>
     </div>
   </header>
   <div class="max-w-7xl mx-auto mb-4 bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3">
@@ -75,6 +75,8 @@
         <button type="button" data-gov="" class="gov-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white">All</button>
         <button type="button" data-gov="City" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">City</button>
         <button type="button" data-gov="State" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">State</button>
+        <button type="button" data-gov="Federal" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">Federal</button>
+        <button type="button" data-gov="Non-Government Organization" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">NGO</button>
         <button type="button" data-gov="County" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">County</button>
         <button type="button" data-gov="Company" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">Company</button>
       </div>
@@ -249,7 +251,13 @@
         const relCell = document.createElement('td');
         relCell.className = 'py-3 px-3.5 align-top';
         const score = Number(row.relevance_score != null ? row.relevance_score : (row.is_relevant === 1 ? 85 : 10));
-        const scoreBadge = document.createElement('span');
+        const scoreBadge = document.createElement('button');
+        scoreBadge.type = 'button';
+        scoreBadge.title = 'Filter by this relevance score band';
+        scoreBadge.addEventListener('click', () => {
+          activeScore = row.score_tier;
+          applyFilter();
+        });
         const badgeColor = score >= 95 ? 'bg-emerald-950/90 text-emerald-300 border-emerald-700/60' :
                            score >= 90 ? 'bg-teal-950/90 text-teal-300 border-teal-700/60' :
                            score >= 85 ? 'bg-blue-950/90 text-blue-300 border-blue-700/60' :
@@ -266,7 +274,7 @@
         // 3. Topic Category Cell (w-[14%])
         const catCell = document.createElement('td');
         catCell.className = 'py-3 px-3.5 align-top';
-        const topicName = row.topic_category || 'Platform Features & Routing Algorithms';
+        const topicName = row.topic_category || 'Unclassified';
         const catBtn = document.createElement('button');
         catBtn.type = 'button';
         catBtn.className = 'inline-block px-2 py-1 rounded text-xs font-medium border text-left transition hover:opacity-80 ' + topicColor(topicName);
@@ -283,7 +291,13 @@
         const govCell = document.createElement('td');
         govCell.className = 'py-3 px-3.5 align-top whitespace-nowrap';
         const gVal = row.governing_level || 'Company';
-        const govBadge = document.createElement('span');
+        const govBadge = document.createElement('button');
+        govBadge.type = 'button';
+        govBadge.title = 'Filter by ' + gVal;
+        govBadge.addEventListener('click', () => {
+          activeGov = gVal.replace('Government: ', '');
+          applyFilter();
+        });
         govBadge.className = 'px-2 py-0.5 rounded text-xs font-medium ' + govBadgeClass(gVal);
         govBadge.textContent = gVal.replace('Government: ', '');
         govCell.appendChild(govBadge);

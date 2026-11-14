@@ -3446,7 +3446,11 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
             "exclusion_reason": str(row.get("exclusion_reason") or ""),
             "relevance_score": score,
             "relevance_rationale": str(row.get("relevance_rationale") or ""),
-            "topic_category": str(row.get("topic_category") or "Platform Features & Routing Algorithms"),
+            "topic_category": (
+                "Unclassified" if row.get("is_project_relevant") == 0
+                and row.get("topic_category") in (None, "", "Platform Features & Routing Algorithms")
+                else str(row.get("topic_category") or "Unclassified")
+            ),
             "crosswalk_id": str(row.get("crosswalk_instrument_id") or ""),
             "crosswalk_name": str(row.get("crosswalk_instrument_name") or ""),
             "layer": layer,
@@ -3483,7 +3487,7 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         <button type="button" data-topic="" class="topic-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Archive Sources ({archive_total:,})</button>
         <button type="button" data-topic="__in_scope__" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">In-Scope Core Corpus ({filtered_count:,})</button>
         <button type="button" data-topic="__excluded__" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Archived Background ({archive_total - filtered_count:,})</button>
-        <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 ml-2 mr-1.5">Core Topics:</span>
+        <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 ml-2 mr-1.5">Topics (all archive):</span>
         <button type="button" data-topic="Public-Private Data Partnerships" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Data Partnerships (77)</button>
         <button type="button" data-topic="Municipal Traffic Mitigation & Street Controls" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Municipal Mitigation (29)</button>
         <button type="button" data-topic="Legislation & City Council Actions" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Legislation & Actions (23)</button>
@@ -3504,6 +3508,23 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         <button type="button" data-topic="Platform Features & Routing Algorithms" class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Platform Features (14)</button>
         """
         score_archive_btn = ''
+
+    archive_topics = (("Unclassified", "Unclassified"),
+                      ("Academic Research & Traffic Studies", "Academic Research")) if is_archive else ()
+    for topic, label in archive_topics:
+        topic_pills_html += (
+            f'<button type="button" data-topic="{topic}" '
+            'class="topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">'
+            f'{label} (0)</button>'
+        )
+    # Counts must describe the same records that the topic predicate searches.
+    topic_pills_html = re.sub(
+        r'(data-topic="([^"\n]+)"[^>]*>)([^<]*?) \(\d+\)(</button>)',
+        lambda m: m[0] if m[2].startswith('__') else (
+            f'{m[1]}{m[3]} ({sum(r["topic_category"] == m[2] for r in payload):,}){m[4]}'
+        ),
+        topic_pills_html,
+    )
 
     score_pills_html = f"""
         <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1.5">Actionability Level:</span>
@@ -3575,6 +3596,8 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         <button type="button" data-gov="" class="gov-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white">All</button>
         <button type="button" data-gov="City" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">City</button>
         <button type="button" data-gov="State" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">State</button>
+        <button type="button" data-gov="Federal" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">Federal</button>
+        <button type="button" data-gov="Non-Government Organization" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">NGO</button>
         <button type="button" data-gov="County" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">County</button>
         <button type="button" data-gov="Company" class="gov-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white">Company</button>
       </div>
@@ -3749,7 +3772,13 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         const relCell = document.createElement('td');
         relCell.className = 'py-3 px-3.5 align-top';
         const score = Number(row.relevance_score != null ? row.relevance_score : (row.is_relevant === 1 ? 85 : 10));
-        const scoreBadge = document.createElement('span');
+        const scoreBadge = document.createElement('button');
+        scoreBadge.type = 'button';
+        scoreBadge.title = 'Filter by this relevance score band';
+        scoreBadge.addEventListener('click', () => {{
+          activeScore = row.score_tier;
+          applyFilter();
+        }});
         const badgeColor = score >= 95 ? 'bg-emerald-950/90 text-emerald-300 border-emerald-700/60' :
                            score >= 90 ? 'bg-teal-950/90 text-teal-300 border-teal-700/60' :
                            score >= 85 ? 'bg-blue-950/90 text-blue-300 border-blue-700/60' :
@@ -3766,7 +3795,7 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         // 3. Topic Category Cell (w-[14%])
         const catCell = document.createElement('td');
         catCell.className = 'py-3 px-3.5 align-top';
-        const topicName = row.topic_category || 'Platform Features & Routing Algorithms';
+        const topicName = row.topic_category || 'Unclassified';
         const catBtn = document.createElement('button');
         catBtn.type = 'button';
         catBtn.className = 'inline-block px-2 py-1 rounded text-xs font-medium border text-left transition hover:opacity-80 ' + topicColor(topicName);
@@ -3783,9 +3812,15 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         const govCell = document.createElement('td');
         govCell.className = 'py-3 px-3.5 align-top whitespace-nowrap';
         const gVal = row.governing_level || 'Company';
-        const govBadge = document.createElement('span');
+        const govBadge = document.createElement('button');
+        govBadge.type = 'button';
+        govBadge.title = 'Filter by ' + gVal;
+        govBadge.addEventListener('click', () => {{
+          activeGov = gVal.replace('Government: ', '');
+          applyFilter();
+        }});
         govBadge.className = 'px-2 py-0.5 rounded text-xs font-medium ' + govBadgeClass(gVal);
-        govBadge.textContent = gVal.replace('Government: ', '');
+        govBadge.textContent = {'true' if is_archive else 'false'} && gVal === 'Non-Government Organization' ? 'NGO' : gVal.replace('Government: ', '');
         govCell.appendChild(govBadge);
 
         // 5. Law Crosswalk Cell (w-[8%])
