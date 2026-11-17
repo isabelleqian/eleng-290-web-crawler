@@ -986,7 +986,7 @@ def generate_html_infographics(data_payload: dict) -> str:
       <nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">
         <a href="index.html" class="px-3 py-1.5 rounded-lg font-medium bg-blue-600 text-white shadow-sm">Overview Map</a>
         <a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News Database ({total_sources:,})</a>
-        <a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (189)</a>
+        <a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">U.S. Law Database (189)</a>
         <a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk (186)</a>
       </nav>
       <div class="text-right pl-3 border-l border-slate-800 hidden sm:block">
@@ -3476,7 +3476,7 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         '<nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">'
         '<a href="index.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Overview Map</a>'
         f'<a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium {"bg-blue-600 text-white shadow-sm" if not is_archive else "text-slate-400 hover:text-white transition"}">News Database ({filtered_count:,})</a>'
-        '<a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Law & Precedents (189)</a>'
+        '<a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">U.S. Law Database (189)</a>'
         f'<a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk ({filtered_count:,})</a>'
         '</nav>'
     )
