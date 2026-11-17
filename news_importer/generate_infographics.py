@@ -8,6 +8,39 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
+
+def format_location(value: str) -> str:
+    """Standardize existing place labels without inferring missing geography."""
+    states = dict(zip(
+        ('Alabama|Alaska|Arizona|Arkansas|California|Colorado|Connecticut|Delaware|'
+         'Florida|Georgia|Hawaii|Idaho|Illinois|Indiana|Iowa|Kansas|Kentucky|Louisiana|'
+         'Maine|Maryland|Massachusetts|Michigan|Minnesota|Mississippi|Missouri|Montana|'
+         'Nebraska|Nevada|New Hampshire|New Jersey|New Mexico|New York|North Carolina|'
+         'North Dakota|Ohio|Oklahoma|Oregon|Pennsylvania|Rhode Island|South Carolina|'
+         'South Dakota|Tennessee|Texas|Utah|Vermont|Virginia|Washington|West Virginia|'
+         'Wisconsin|Wyoming').split('|'),
+        'AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY'.split(),
+    ))
+    label = re.sub(r'\s+', ' ', str(value or '')).strip()
+    state_label = re.sub(r'\s*\(state\)$', '', label, flags=re.I)
+    names = {name.casefold(): name for name in states}
+    if state_label.casefold() in names:
+        return names[state_label.casefold()]
+    if label.casefold() == 'district of columbia':
+        return 'District of Columbia'
+    if label.count(',') == 1:
+        place, region = (part.strip() for part in label.split(','))
+        name = names.get(region.casefold())
+        if name:
+            region = states[name]
+        elif region.upper() in set(states.values()) | {'DC'}:
+            region = region.upper()
+        else:
+            return label
+        label = f'{place}, {region}'
+    return {'New York City, NY': 'New York, NY',
+            'Saint Louis, MO': 'St. Louis, MO'}.get(label, label)
+
 # Geographic coordinates lookup for U.S. target locations (all localized cities, counties, and states)
 COORDINATES_MAP: dict[str, dict[str, float | str]] = {
     # Cities
@@ -3425,7 +3458,7 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         score_tier = classify_score_tier(score)
         layer = classify_document_layer(source_id, str(row.get("title") or ""), str(row.get("category") or ""), str(row.get("relevance_rationale") or ""), crosswalk_layer_map)
         loc = str(row.get("location") or row.get("target_location") or "").strip()
-        loc = re.sub(r',\s*([A-Za-z]{2})$', lambda m: f", {m.group(1).upper()}", loc)
+        loc = format_location(loc)
         payload.append({
             "anchor": document_anchor(source_id),
             "id": source_id,
