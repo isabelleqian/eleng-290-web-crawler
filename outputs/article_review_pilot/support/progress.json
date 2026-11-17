@@ -1,0 +1,55 @@
+{
+  "updated_at": "2026-11-17T23:06:10+00:00",
+  "scope": "All 1592 Nexis records, retaining the original 36 non-Nexis reviews",
+  "processing_order": [
+    "publication_date",
+    "source_id"
+  ],
+  "nexis_total": 1592,
+  "nexis_reviewed": 620,
+  "nexis_pending": 972,
+  "nexis_summaries_completed": 620,
+  "nexis_summaries_pending": 972,
+  "nexis_verification_deferred_by_user": 520,
+  "additional_nexis_reviewed_after_pilot": 610,
+  "reviewed_status_counts": {
+    "partial_verification": 594,
+    "completed": 26
+  },
+  "nexis_reviews_with_public_url": 51,
+  "next_pending": [
+    {
+      "source_id": "nexis_urn:contentItem:62CT-JKM1-JBCN-408M-00000-00",
+      "title": "TECH; Blumenthal wants mapping apps to include truck bans, low bridge warnings",
+      "publication_date": "2021-04-08",
+      "readable_path": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-62CT-JKM1-JBCN-408M-00000-00/readable_article.txt"
+    },
+    {
+      "source_id": "nexis_urn:contentItem:62D1-HT71-DXVP-V3GN-00000-00",
+      "title": "Blumenthal wants mapping apps to include truck bans, low bridge warnings",
+      "publication_date": "2021-04-08",
+      "readable_path": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-62D1-HT71-DXVP-V3GN-00000-00/readable_article.txt"
+    },
+    {
+      "source_id": "nexis_urn:contentItem:62DF-D1M1-F03R-N0P8-00000-00",
+      "title": "What are the environmental pros and cons of so many of us relying on GPS apps",
+      "publication_date": "2021-04-10",
+      "readable_path": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-62DF-D1M1-F03R-N0P8-00000-00/readable_article.txt"
+    },
+    {
+      "source_id": "nexis_urn:contentItem:62FN-DYB1-JC8F-K1TH-00000-00",
+      "title": "Stops for minor infractions scrutinized after shooting",
+      "publication_date": "2021-04-15",
+      "readable_path": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-62FN-DYB1-JC8F-K1TH-00000-00/readable_article.txt"
+    },
+    {
+      "source_id": "nexis_urn:contentItem:62GD-2X31-JB72-155J-00000-00",
+      "title": "As Travel Restrictions Ease, Curb Partners with Gett to Connect Corporate Travelers with Taxis Across the U.S.",
+      "publication_date": "2021-04-19",
+      "readable_path": "data/nexis/Waze-OR-Google-Maps-OR-Apple-Maps-OR-MapQuest-OR-HERE-WeGo-OR-navigation-app-OR-/urn-contentItem-62GD-2X31-JB72-155J-00000-00/readable_article.txt"
+    }
+  ],
+  "complete": false,
+  "pending_rule": "Inventory IDs absent from reviewed_results.csv; no review implied.",
+  "background_worker_running": false
+}

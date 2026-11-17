@@ -1,0 +1,141 @@
+{
+  "validated_at": "2026-11-17T23:06:10+00:00",
+  "checks_passed": true,
+  "total_rows": 656,
+  "unique_ids": 656,
+  "non_nexis_rows": 36,
+  "nexis_rows": 620,
+  "original_pilot_ids_preserved": true,
+  "no_out_of_scope_ids": true,
+  "all_1592_original_nexis_readables_unchanged": true,
+  "status_counts": {
+    "completed": 53,
+    "partial_verification": 603
+  },
+  "nonblank_summaries": 656,
+  "nonblank_public_urls": 87,
+  "nonblank_dates": 653,
+  "review_is_complete": false,
+  "original_pilot_validation": {
+    "validated_at": "2026-11-17T09:47:24+00:00",
+    "checks_passed": true,
+    "total_rows": 46,
+    "non_nexis_rows": 36,
+    "nexis_rows": 10,
+    "unique_ids": 46,
+    "exact_whitelist_match": true,
+    "non_nexis_readable_inventory": 43,
+    "excluded_outside_whitelist": 7,
+    "status_counts": {
+      "completed": 34,
+      "partial_verification": 12
+    },
+    "nonblank_summaries": 46,
+    "nonblank_public_urls": 44,
+    "nonblank_dates": 43,
+    "unknown_dates": [
+      {
+        "source_id": "src_a16a62edb70588f81bbb",
+        "title": "Home Zone: Lake City"
+      },
+      {
+        "source_id": "src_ae24cf62a63f34c9fe0b",
+        "title": "Waze for Cities"
+      },
+      {
+        "source_id": "src_da3625d65ff04918a9c9",
+        "title": "Real-Time Traffic Conditions & Cameras"
+      }
+    ],
+    "shared_readable_files_verified": 36,
+    "local_original_readables_unchanged": true,
+    "metadata_proposals": [
+      {
+        "source_id": "src_23a1fcd9de5f1849cfa3",
+        "changes": {
+          "publication_date": {
+            "starting": "2020-11-01",
+            "reviewed": "2020-11"
+          }
+        }
+      },
+      {
+        "source_id": "src_a3aec998433f0c3fff3d",
+        "changes": {
+          "publication_date": {
+            "starting": "",
+            "reviewed": "2017-09-26"
+          }
+        }
+      },
+      {
+        "source_id": "src_209e9565661083dba383",
+        "changes": {
+          "title": {
+            "starting": "Waze for Cities Data Program",
+            "reviewed": "Waze for Cities"
+          },
+          "publisher": {
+            "starting": "Waze",
+            "reviewed": "Waze Discuss / USA Wazeopedia"
+          },
+          "publication_date": {
+            "starting": "",
+            "reviewed": "2021-09-09"
+          }
+        }
+      },
+      {
+        "source_id": "src_2cee64cfc090c4b25ca7",
+        "changes": {
+          "publication_date": {
+            "starting": "2022-08-08",
+            "reviewed": "2022"
+          }
+        }
+      },
+      {
+        "source_id": "src_2602e1f52eb57cee5b07",
+        "changes": {
+          "publication_date": {
+            "starting": "2025-06-25",
+            "reviewed": "2025"
+          }
+        }
+      },
+      {
+        "source_id": "nexis_urn:contentItem:5WKM-K531-DXP3-R20Y-00000-00",
+        "changes": {
+          "title": {
+            "starting": "Nexar Launches Live Map, Taking On Google Street View Using billions of street level images from the Nexar network, Nexar Live Map paves the way for the future of digital mapping",
+            "reviewed": "Nexar Launches Live Map, Taking On Google Street View"
+          }
+        }
+      },
+      {
+        "source_id": "nexis_urn:contentItem:6C6C-3YF1-JC0G-4023-00000-00",
+        "changes": {
+          "publication_date": {
+            "starting": "2024-06-03",
+            "reviewed": "2024-05-22"
+          }
+        }
+      }
+    ],
+    "sha256": {
+      "docs\\data\\non_nexis_metadata_reviewed.csv": "6a800bd6224dadbbbec50f5ab6c90e0f54233ce08f87d03324cb069dd28668b1",
+      "outputs\\article_review_pilot\\nexis_selection.csv": "ce13ef69288e4c418d551ccf86d19ab452114354563d489207f82b66c924bc5f",
+      "outputs\\article_review_pilot\\reviewed_results.csv": "8740f7418c70eb922f897d6d962968791d00ca9a1a3c1425705d389b920c9e01"
+    },
+    "token_usage": null,
+    "cost": null
+  },
+  "sha256": {
+    "outputs\\article_review_pilot\\reviewed_results.csv": "a97cd310869e3e88471f680d38b1919883d7c79908676ede714c1b94180fe2fd",
+    "outputs\\article_review_pilot\\support\\nexis_review_inventory.csv": "85b12c25ccd870ab870243c874fbd58bd79b96bd3dc9734445ff3e3c10529b13",
+    "outputs\\article_review_pilot\\support\\nexis_selection.csv": "ce13ef69288e4c418d551ccf86d19ab452114354563d489207f82b66c924bc5f",
+    "docs\\data\\non_nexis_metadata_reviewed.csv": "6a800bd6224dadbbbec50f5ab6c90e0f54233ce08f87d03324cb069dd28668b1"
+  },
+  "token_usage": null,
+  "cost": null
+}

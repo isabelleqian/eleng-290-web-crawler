@@ -1,5 +1,22 @@
 # AI News Scraper: URL importer and archive
 
+## Readable text for reviewing existing archives
+
+Run `python -m news_importer.readable_archive data/archive` to create
+`readable_article.txt` beside each usable non-Nexis crawl attempt. This reads only
+saved HTML and `content.md`; it does not fetch pages, change metadata, regenerate
+summaries, or run relevance filtering. Existing readable files are kept unless
+`--overwrite` is passed.
+
+`data/reports/readable_archive_report.json` lists written files, extraction
+methods, review warnings, and blocked/missing attempts. Archived titles and dates
+in the text headers remain unverified. Explicit article bodies are preferred;
+fallback page text is marked for review. PDFs use their existing extracted text
+and remain whole documents, so meeting packets and multi-document sources need
+section selection before summarization. No text is fabricated for failed crawls.
+
+For Nexis XML, continue using `python -m news_importer.readable_nexis data/nexis`.
+
 This project collects, archives, and analyzes news and regulations about navigation-app traffic, access restrictions, routing-app rules, and community complaints. Collection goes through the Nexis API. A keyword list is searched so every word must appear, and a multi-word place such as Los Angeles is kept as one phrase.
 
 - `nexis` sends that keyword list to Nexis, stores each hit in a folder, and writes a CSV report.
