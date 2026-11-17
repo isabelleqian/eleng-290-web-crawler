@@ -129,7 +129,7 @@
             </p>
             <div id="nationwide-screening" class="mt-4 rounded-lg border border-slate-700 bg-slate-950/50 p-4 text-sm text-slate-300">
               <h3 class="font-semibold text-white">Federal and state screening results</h3>
-              <p class="mt-2 leading-relaxed"><strong class="text-white">3,484 screening records</strong> across the four candidate downloads (3,248 provision records and 236 bill records). 9 records from this screening batch were added after official text review. The source totals include records that overlap with the searchable index. The searchable index contains 188 indexed instruments and 10 court decisions.</p>
+              <p class="mt-2 leading-relaxed"><strong class="text-white">3,484 screening records</strong> across the four candidate downloads (3,248 provision records and 236 bill records). 9 records from this screening batch were added after official text review. The source totals include records that overlap with the searchable index. The searchable index contains 188 instruments and 10 court decisions. <a class="text-blue-300 underline" href="#empirical" onclick="switchTab('empirical'); return false;">Read the policy analysis</a> or <a class="text-blue-300 underline" href="crosswalk.html">view the news evidence</a>.</p>
               <p class="mt-2 leading-relaxed">The new screening covers federal sources and 49 states. The searchable corpus and policy analysis also include previously collected California material. Full-text screening covered the U.S. Code, the electronic Code of Federal Regulations, and snapshots of 45 state statutory codes and 37 state administrative codes. The state bill search used titles and available summaries for records with activity since January 2024.</p>
               <p class="mt-2 leading-relaxed">The downloads include research candidates and proposed bills. Each candidate still needs review for relevance, current legal status, and applicability to routing apps. The separately reviewed entries below link to their official text.</p>
               <ul class="mt-3 list-disc space-y-1 pl-5">
@@ -435,7 +435,7 @@
           <li><a class="text-blue-300 underline" href="https://www.congress.gov/bill/119th-congress/house-bill/6531">Federal H.R. 6531</a> is a proposal concerning commercial vehicle routing and bridge strikes.</li>
           <li><a class="text-blue-300 underline" href="https://pub.njleg.state.nj.us/Bills/2026/A1000/590_I1.HTM">New Jersey A590</a> would allow mounting a GPS device where it does not unduly obstruct the driver's vision. The introduced text addresses device placement.</li>
         </ul>
-        <p class="text-sm text-slate-300">Assessing effects on recommended routes requires evidence about whether a particular restriction is in force, the road segment and time window it covers, and whether an app reflects it. The legislative and regulatory screening did not measure app behavior or traffic volumes.</p>
+        <p class="text-sm text-slate-300">Assessing effects on recommended routes requires evidence about whether a particular restriction is in force, the road segment and time window it covers, and whether an app reflects it. The screening did not measure app behavior or traffic volumes. The <a class="text-blue-300 underline" href="crosswalk.html">News ↔ Law Crosswalk</a> gives the related news evidence and the status of each linked instrument. A link to a proposal or an invalidated ordinance is evidence of the policy discussion.</p>
       </section>
 
       <section class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-4">
@@ -468,7 +468,7 @@
         <h2 class="text-xl font-semibold text-white">Searchable Statutes, Regulations, Bills & Local Measures</h2>
       </div>
       <p class="text-xs text-slate-400 mt-1 max-w-4xl">
-        Search indexed federal, state, county and municipal records by jurisdiction, layer and topic. Review the instrument type and status for each record.
+        Search indexed federal, state, county and municipal records by jurisdiction, layer and topic. Review each instrument’s type and status. Links from the <a class="text-blue-300 underline" href="crosswalk.html">News ↔ Law Crosswalk</a> open the corresponding record.
       </p>
     </div>
 
@@ -1013,6 +1013,14 @@
       renderRanking();
       renderCaseLaw();
       renderLegislation();
+
+      const instrumentId = new URLSearchParams(window.location.search).get("instrument");
+      const linkedRecord = instrumentId && LEGISLATION.find(row => row.ID === instrumentId);
+      if (linkedRecord) {
+        switchTab("database");
+        openModal(linkedRecord);
+        return;
+      }
 
       // Check URL hash for direct tab linking
       const hash = window.location.hash.replace('#', '');
