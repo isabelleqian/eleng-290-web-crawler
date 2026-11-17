@@ -1,9 +1,9 @@
 ID,Primary Layer,Primary Category Code,Also Layer,Notes
-CA-AB2015,Tier 1: Laws Directly Governing Routing Apps,E1,,ID: CA-AB2015; Layer 1: Direct (App-Targeted Laws)); human-reviewed and accepted; Secondary category: F3 (Routing-impact monitoring and traffic analysis); AB 2015 adding Sts. & Hy. Code § 155.8.
+CA-AB2015,Tier 1: Laws Directly Governing Routing Apps,F3,,"ID: CA-AB2015. Chapter 207, Statutes of 2026. This record concerns data collection and reporting under Streets and Highways Code § 155.8."
 CT-HB5071,Tier 1: Laws Directly Governing Routing Apps,E1,,ID: CT-HB5071; Layer 1: Direct (App-Targeted Laws)); human-reviewed and accepted; Connecticut HB 5071 (2025); bill died at session end.
 FED-13,Tier 1: Laws Directly Governing Routing Apps,E3,,ID: FED-13; Layer 1: Direct (App-Targeted Laws)); human-reviewed and accepted; Federal H.R. 6531 Bridges Not Bumpers Act of 2025.
 MA-HD4949,Tier 1: Laws Directly Governing Routing Apps,E1,,ID: MA-HD4949; Layer 1: Direct (App-Targeted Laws)); human-reviewed and accepted; Massachusetts HD.4949 (2025–2026); currently in House Rules.
-NJ-A3036,Tier 1: Laws Directly Governing Routing Apps,E2,,"ID: NJ-A3036; Layer 1: Direct (App-Targeted Laws)); human-reviewed and accepted; New Jersey A3036 (SAFER APP Act); enacted January 20, 2026."
+NJ-A3036,Tier 1: Laws Directly Governing Routing Apps,E2,,"ID: NJ-A3036. Approved January 20, 2026 as P.L. 2025, c. 347. The final reprint incorporates the Governor’s recommendations."
 NJ-S756,Tier 1: Laws Directly Governing Routing Apps,E6,,ID: NJ-S756; Layer 1: Direct (App-Targeted Laws)); human-reviewed and accepted; Senate companion substituted by A3036.
 NY-A3536,Tier 1: Laws Directly Governing Routing Apps,E4,,ID: NY-A3536; Layer 1: Direct (App-Targeted Laws)); human-reviewed and accepted; companion to S6197.
 NY-A4167,Tier 1: Laws Directly Governing Routing Apps,E3,,ID: NY-A4167; Layer 1: Direct (App-Targeted Laws)); human-reviewed and accepted; New York A4167 (2025–2026); pending in Assembly Transportation.
@@ -178,3 +178,12 @@ CT-PA26-14,Tier 3: Indirectly Applicable Road and Traffic Laws,C4,,Tier 3: Indir
 AZ-PROP319,Tier 3: Indirectly Applicable Road and Traffic Laws,C4,,"Tier 3: Indirectly Applicable Road and Traffic Laws; Topic 3.5: Speed Enforcement and Automated Cameras; Approved by voters on November 3, 2026."
 CO-HB1318,Tier 3: Indirectly Applicable Road and Traffic Laws,C4,,Tier 3: Indirectly Applicable Road and Traffic Laws; Topic 3.5: Speed Enforcement and Automated Cameras; Pending in 2026 session.
 FED-IIJA,Tier 3: Indirectly Applicable Road and Traffic Laws,F4,,"Tier 3: Indirectly Applicable Road and Traffic Laws; Topic 3.8: Federal Transportation Planning and Funding; Authorization ended Sept 30, 2026; successor status pending."
+WA-SRC-RCW4644020,Tier 3: Indirectly Applicable Road and Traffic Laws,A5,,Official codified text reviewed for scope and routing relevance.
+MN-SRC-MINNSTAT169812,Tier 3: Indirectly Applicable Road and Traffic Laws,A5,,Official codified text reviewed for scope and routing relevance.
+NY-SRC-NYVATLAW1645,Tier 3: Indirectly Applicable Road and Traffic Laws,A5,,Official codified text reviewed for scope and routing relevance.
+NY-SRC-NYVATLAW1127,Tier 3: Indirectly Applicable Road and Traffic Laws,A1,,Official codified text reviewed for scope and routing relevance.
+NY-SRC-NYHAYLAW104,Tier 3: Indirectly Applicable Road and Traffic Laws,B1,,Official codified text reviewed for scope and routing relevance.
+OR-SRC-OAR7340200150,Tier 3: Indirectly Applicable Road and Traffic Laws,B1,,Official codified text reviewed for scope and routing relevance.
+NY-SRC-NYVATLAW1660,Tier 3: Indirectly Applicable Road and Traffic Laws,A5,,Official codified text reviewed for scope and routing relevance.
+NY-SRC-NYVATLAW1683,Tier 3: Indirectly Applicable Road and Traffic Laws,B1,,Official codified text reviewed for scope and routing relevance.
+NY-SRC-NYVATLAW1602,Tier 3: Indirectly Applicable Road and Traffic Laws,B1,,Official codified text reviewed for scope and routing relevance.

@@ -22,7 +22,7 @@ The legal framework governing vehicular navigation applications (e.g., Google Ma
 +-----------------------------------------------------------------------------------+
 |                        TIER 1: DIRECT PLATFORM GOVERNANCE                         |
 |  - Explicitly names routing apps / GPS navigation                                 |
-|  - Slow street exclusions (CA AB 2015), Emergency rerouting (NJ SAFER APP)        |
+|  - Routing impact study (CA AB 2015), Emergency rerouting (NJ SAFER APP)        |
 |  - Commercial GPS bridge clearance & low-clearance mandates (NY, Federal HR 6531) |
 +-----------------------------------------------------------------------------------+
                                           |
@@ -57,14 +57,13 @@ Statutes and legislative proposals that explicitly name navigation applications,
 
 ### Topic 1.1: Slow Streets and Residential Route Exclusion
 * **Enacted:**
-  * **California AB 2015 (Chapter 207, Statutes of 2026):** Adds California Streets and Highways Code § 155.8. Empowers local authorities that have lawfully established slow streets programs to formally notify navigation app providers to exclude designated slow streets from commuter cut-through routes.
   * **Verified Statutory Provisions:**
     * *Study Scope:* Caltrans, in consultation with the California State Transportation Agency (CalSTA), must conduct a comprehensive **statewide empirical study** of the impacts of third-party navigation apps on state highways and local streets, evaluating congestion, safety, cut-through traffic, and emergency response. (An earlier draft proposal to limit the empirical inquiry to a single regional pilot was expanded during legislative amendments into a statewide study). The final report is due to the Legislature by **January 1, 2028**.
     * *Sunset Date:* Streets and Highways Code § 155.8(g) establishes a statutory sunset date of **January 1, 2033** (confirming Digital Democracy / Enrolled Bill records; resolving initial confusion from earlier summaries that referenced 2032).
 
 ### Topic 1.2: Route Adjustment During Emergencies
 * **Enacted:**
-  * **New Jersey A3036 / P.L. 2026, c. 12 (Smart App Freight Enforcement and Rerouting — SAFER APP Act):** Signed into law by Governor Phil Murphy on **January 20, 2026** (resolving outcome). Passed the Senate on December 18, 2025; the Legislature concurred with the Governor's conditional veto recommendations on January 12, 2026, and the bill was signed into law as Chapter 12 of the Laws of 2026.
+  * **New Jersey SAFER APP Act (P.L. 2025, c. 347):** Approved January 20, 2026. The Attorney General may order rerouting or work with the operator on an alternative in specified ongoing emergency traffic conditions. [Final bill text](https://pub.njleg.state.nj.us/Bills/2024/A3500/3036_R4.PDF) · [Enactment record](https://pub.njleg.state.nj.us/publications/legislative-digest/012826.pdf)
   * *Operational Mandate:* Empowers the New Jersey Attorney General, in coordination with the Department of Transportation and State Police, to issue emergency rerouting directives to turn-by-turn navigation apps during natural disasters, major infrastructure failures, commercial corridor closures, or severe weather events.
   * *Enforcement & Liability:* Imposes civil administrative penalties up to **$1,000 per violation** against navigation app providers that fail to incorporate official road restriction and emergency detour feeds.
 
@@ -86,7 +85,7 @@ Statutes and legislative proposals that explicitly name navigation applications,
 
 ### Topic 1.5: Study and Data Reporting
 * **Enacted:**
-  * **California AB 2015 (Chapter 207, Statutes of 2026):** Mandates Caltrans and CalSTA to study the systemic diversionary effects of third-party navigation apps, evaluate algorithmic routing impacts on local traffic calming, and submit empirical policy recommendations to the Legislature by **January 1, 2028**.
+  * **California AB 2015 (Chapter 207, Statutes of 2026):** Requires Caltrans to study third-party routing app impacts in a selected region or area and report findings and policy recommendations by January 1, 2029. The provision repeals January 1, 2033. [Chaptered text](https://legiscan.com/CA/text/AB2015/id/3458844)
 * **Pending Federal Proposals:**
   * **Federal MAP Roads Act (Modernizing Access to Public Roads Act):** *Pending.* Bipartisan federal bill directing the U.S. Department of Transportation to award competitive digitization grants to county, municipal, and rural road agencies to standardize and publish machine-readable geospatial databases of local road restrictions, bridge weight/clearance limits, and seasonal closures for seamless integration by commercial and consumer navigation applications.
 
