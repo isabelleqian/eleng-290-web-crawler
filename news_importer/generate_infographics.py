@@ -8,6 +8,8 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
+from news_importer.site_navigation import ARCHIVE_PAGE, render_site_navigation
+
 
 def format_location(value: str) -> str:
     """Standardize existing place labels without inferring missing geography."""
@@ -1016,12 +1018,7 @@ def generate_html_infographics(data_payload: dict) -> str:
       <p class="text-sm text-slate-400 mt-2 max-w-2xl">Saved news and archive pages about navigation apps, labeled with the codebook on sheet 1012_codebook. A document can match more than one measure. A document that contains none of the phrases stays unlabeled.</p>
     </div>
     <div class="flex flex-wrap items-center gap-3">
-      <nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">
-        <a href="index.html" class="px-3 py-1.5 rounded-lg font-medium bg-blue-600 text-white shadow-sm">Overview Map</a>
-        <a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News Database ({total_sources:,})</a>
-        <a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">U.S. Law Database (189)</a>
-        <a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk (186)</a>
-      </nav>
+      {render_site_navigation("index.html", "      ")}
       <div class="text-right pl-3 border-l border-slate-800 hidden sm:block">
         <div class="text-xs text-slate-500">Saved documents</div>
         <div id="stat-total-header" class="text-lg font-semibold text-white">{total_sources}</div>
@@ -3505,14 +3502,7 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         if is_archive
         else f'<a href="news_database_archive.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900 text-xs text-slate-300 hover:text-white hover:border-slate-500">View Complete Raw Archive ({archive_total:,} docs) &rarr;</a>'
     )
-    nav_bar = (
-        '<nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">'
-        '<a href="index.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Overview Map</a>'
-        f'<a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium {"bg-blue-600 text-white shadow-sm" if not is_archive else "text-slate-400 hover:text-white transition"}">News Database ({filtered_count:,})</a>'
-        '<a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">U.S. Law Database (189)</a>'
-        f'<a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk ({filtered_count:,})</a>'
-        '</nav>'
-    )
+    nav_bar = render_site_navigation(ARCHIVE_PAGE if is_archive else "news_database.html", "      ")
 
     if is_archive:
         topic_pills_html = f"""
