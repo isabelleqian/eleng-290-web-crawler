@@ -36,12 +36,11 @@
         This database examines how U.S. federal, state, county, and municipal laws, proposals, and court decisions shape vehicle routing apps and the routes they recommend. It organizes these materials using a <strong class="text-white">Three-Layer Regulatory Framework</strong> and a <strong class="text-white">Six-Category Codebook</strong>.
       </p>
     </div>
-    <nav aria-label="Site navigation" class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">
+    <nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">
       <a href="index.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Overview Map</a>
-      <a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News Database</a>
-      <a href="policy_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Policy Database</a>
-      <a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium bg-blue-600 text-white shadow-sm" aria-current="page">U.S. Law Database</a>
-      <a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk</a>
+      <a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News Database (186)</a>
+      <a href="policy_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Policy Database (66)</a><a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium bg-blue-600 text-white shadow-sm">U.S. Law Database (3,484 source records)</a>
+      <a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk (186)</a>
     </nav>
   </header>
 
@@ -985,7 +984,7 @@
         const expand = document.createElement('details'); expand.className = 'mt-3';
         expand.appendChild(sourceNode('summary', 'View evidence and verification fields', 'cursor-pointer text-blue-300'));
         sourceDetail(expand,'Evidence basis',row.text_basis+' · '+row.snapshot);
-        sourceDetail(expand,'Archived text excerpt',row.evidence_excerpt || 'No provision text matched to the archived source.');
+        sourceDetail(expand,'Text evidence for review',row.evidence_excerpt || 'No provision text matched to the archived source.');
         sourceDetail(expand,'Penalty or liability passage to check',row.penalty_excerpt || row.penalty_review);
         sourceDetail(expand,'Exception passage to check',row.exception_excerpt || 'Unverified');
         sourceDetail(expand,'Legal status',row.current_status);
@@ -1004,7 +1003,7 @@
 
     async function loadSourceRecords() {
       try {
-        const response = await fetch('data/all_research_records.json?v=20261117-1');
+        const response = await fetch('data/all_research_records.json?v=20261117-2');
         if (!response.ok) throw new Error('Source collection could not be loaded.');
         const data = await response.json();
         if (data.records.length !== 3484 || new Set(data.records.map(row=>row.record_id)).size !==3484) throw new Error('Source collection integrity check failed.');
