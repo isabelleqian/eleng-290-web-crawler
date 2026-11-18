@@ -76,7 +76,8 @@
   <!-- ========================================================================= -->
   <div id="tab-pane-summary" class="tab-pane space-y-12">
 
-<section class="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-4"><div class="bg-slate-900 border border-slate-700 rounded-xl p-4"><div class="text-sm text-slate-300">Layer 1</div><div class="text-3xl text-white font-bold">11</div><div class="text-xs text-slate-400">Provisional indexed classification</div></div><div class="bg-slate-900 border border-slate-700 rounded-xl p-4"><div class="text-sm text-slate-300">Layer 2</div><div class="text-3xl text-white font-bold">169</div><div class="text-xs text-slate-400">Provisional indexed classification</div></div><div class="bg-slate-900 border border-slate-700 rounded-xl p-4"><div class="text-sm text-slate-300">Layer 3</div><div class="text-3xl text-white font-bold">9</div><div class="text-xs text-slate-400">Provisional indexed classification</div></div><div class="bg-slate-900 border border-slate-700 rounded-xl p-4"><div class="text-sm text-slate-300">Court decisions</div><div class="text-3xl text-white font-bold">10</div></div></section>    <!-- SECTION 1: THREE-LAYER GOVERNANCE FRAMEWORK ARCHITECTURE -->
+<section id="overview-content-metrics" class="max-w-7xl mx-auto space-y-3"><h2 class="text-xl font-semibold text-white">Overview: content review of all 3,455 pending source records</h2><p class="text-sm text-slate-300">Allocation follows the archived operative content and principal legal subject. A record without sufficient text or a defensible scope connection remains unresolved. Counts below concern this complete 3,455-record review cohort; they are not counts of verified enacted laws.</p><div class="grid grid-cols-2 lg:grid-cols-5 gap-4"><div class="bg-slate-900 border border-slate-700 rounded-xl p-4"><div class="text-sm text-slate-300">Layer 1</div><div id="overview-count-1" class="text-3xl text-white font-bold">—</div><div class="text-xs text-slate-400">Content review; official verification pending</div></div><div class="bg-slate-900 border border-slate-700 rounded-xl p-4"><div class="text-sm text-slate-300">Layer 2</div><div id="overview-count-2" class="text-3xl text-white font-bold">—</div><div class="text-xs text-slate-400">Content review; official verification pending</div></div><div class="bg-slate-900 border border-slate-700 rounded-xl p-4"><div class="text-sm text-slate-300">Layer 3</div><div id="overview-count-3" class="text-3xl text-white font-bold">—</div><div class="text-xs text-slate-400">Content review; official verification pending</div></div><div class="bg-slate-900 border border-slate-700 rounded-xl p-4"><div class="text-sm text-slate-300">Unresolved</div><div id="overview-count-unresolved" class="text-3xl text-white font-bold">—</div><div class="text-xs text-slate-400">Content review; official verification pending</div></div><div class="bg-slate-900 border border-slate-700 rounded-xl p-4"><div class="text-sm text-slate-300">All cohort records</div><div id="overview-count-total" class="text-3xl text-white font-bold">—</div><div class="text-xs text-slate-400">Content review; official verification pending</div></div></div><p id="overview-content-check" class="text-sm text-slate-400" role="status">Loading all cohort records.</p></section>
+<!-- SECTION 1: THREE-LAYER GOVERNANCE FRAMEWORK ARCHITECTURE -->
     <section class="max-w-7xl mx-auto space-y-6">
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
@@ -86,15 +87,15 @@
               <h2 class="text-xl font-semibold text-white">Routing App Legal Regulation Framework: Three-Tier Architecture</h2>
             </div>
             <p class="text-xs text-slate-400 mt-1.5 max-w-4xl leading-relaxed">
-              Layers 1 and 2 address the AB 2015 research scope. Layer 1 concerns routing app providers as legal subjects. Layer 2 concerns other principal subjects with indirect effects on routing apps. Layer 3 covers other applicable laws. Counts reflect the indexed classification, including records still under review.
+              Layers 1 and 2 address the AB 2015 research scope. Layer 1 concerns routing app providers as legal subjects. Layer 2 concerns other principal subjects with indirect effects on routing apps. Layer 3 covers other applicable laws. Overview counts and primary breakdowns now use all 3,455 source records in the content-review cohort. The earlier index is retained separately.
             </p>
             <p class="text-xs text-slate-400 mt-1.5 max-w-4xl leading-relaxed">
               The database aims to cover all legislation and regulations that directly or indirectly affect routing apps or the routes they recommend at the U.S. federal level, at the state level in all 50 states, and at every level in California, including county and municipal ordinances.
             </p>
-            <p class="text-sm text-slate-300 mt-3">The 3,455 pending source records are also included in the empirical analysis, with provisional layer, category and jurisdiction breakdowns. These overlap the source collection and must not be added to the existing index as unique verified laws. <a class="text-blue-300 underline" href="#empirical" onclick="switchTab('empirical'); return false;">See pending-record layer allocation</a>.</p>
+            <p class="text-sm text-slate-300 mt-3">All 3,455 source records are listed in the layer groups below, with principal subjects, content evidence and classification reasons. Unresolved records include missing bill text, uncertain scope and proposed exclusions. <a class="text-blue-300 underline" href="data/all_research_records.csv">Download the updated record-level classification</a>.</p>
             <div id="nationwide-screening" class="mt-4 rounded-lg border border-slate-700 bg-slate-950/50 p-4 text-sm text-slate-300">
               <h3 class="font-semibold text-white">Federal and state screening results</h3>
-              <p class="mt-2 leading-relaxed"><strong class="text-white">3,484 screening records</strong> across the four candidate downloads (3,248 provision records and 236 bill records). 9 records from this screening batch were added after official text review. The source totals include records that overlap with the searchable index. The searchable index contains 189 instruments and 10 court decisions. <a class="text-blue-300 underline" href="#empirical" onclick="switchTab('empirical'); return false;">Read the policy analysis</a> or <a class="text-blue-300 underline" href="crosswalk.html">view the news evidence</a>.</p>
+              <p class="mt-2 leading-relaxed"><strong class="text-white">3,484 total source records</strong> across the four candidate downloads (3,248 provision records and 236 bill records). The present content-review cohort contains 3,455 records. The remaining 29 source records comprise 15 previously reviewed/indexed matches, four duplicates and ten earlier scope exclusions; verification gaps remain noted. The source totals include records that overlap with the searchable index. The searchable index contains 189 instruments and 10 court decisions. <a class="text-blue-300 underline" href="#empirical" onclick="switchTab('empirical'); return false;">Read the policy analysis</a> or <a class="text-blue-300 underline" href="crosswalk.html">view the news evidence</a>.</p>
               <p class="mt-2 leading-relaxed">The new screening covers federal sources and 49 states. The searchable corpus and policy analysis also include previously collected California material. Full-text screening covered the U.S. Code, the electronic Code of Federal Regulations, and snapshots of 45 state statutory codes and 37 state administrative codes. The state bill search used titles and available summaries for records with activity since January 2024.</p>
               <p class="mt-2 leading-relaxed">The downloads include research candidates and proposed bills. Each candidate still needs review for relevance, current legal status, and applicability to routing apps. The separately reviewed entries below link to their official text.</p>
               <ul class="mt-3 list-disc space-y-1 pl-5">
@@ -114,23 +115,38 @@
             </div>
           </div>
           <span class="px-3 py-1 rounded-full text-xs font-mono font-medium bg-purple-900/50 text-purple-300 border border-purple-700/50 whitespace-nowrap self-start md:self-auto">
-            189 Indexed Instruments
+            3,455 Content-Review Records
           </span>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5"><article class="bg-slate-900 border border-slate-700 rounded-xl p-5"><h3 class="text-lg text-white font-semibold">Layer 1</h3><p class="mt-2 text-sm text-slate-300">Within the AB 2015 research scope. Routing app providers are expressly granted rights or assigned duties or liability.</p><p class="mt-3 text-sm text-slate-400">Examples include proposed clearance-data protections for GPS administrators and enacted orders addressed to routing system operators.</p><p class="mt-3 text-xs text-slate-400">11 indexed records · 5.8% · provisional classification</p><button class="mt-3 text-blue-300 underline text-sm" onclick="filterByLayer('Layer 1 rights and duties for routing apps')">View Layer 1 records</button></article><article class="bg-slate-900 border border-slate-700 rounded-xl p-5"><h3 class="text-lg text-white font-semibold">Layer 2</h3><p class="mt-2 text-sm text-slate-300">Within the AB 2015 research scope. The principal legal subjects are other actors, and the provisions indirectly affect routing apps.</p><p class="mt-3 text-sm text-slate-400">AB 2015 belongs here because Caltrans conducts the study and report. Road access, truck routes, traffic controls and network planning also principally govern other actors.</p><p class="mt-3 text-xs text-slate-400">169 indexed records · 89.4% · provisional classification</p><button class="mt-3 text-blue-300 underline text-sm" onclick="filterByLayer('Tier 2: Other actors within AB 2015 research scope')">View Layer 2 records</button></article><article class="bg-slate-900 border border-slate-700 rounded-xl p-5"><h3 class="text-lg text-white font-semibold">Layer 3</h3><p class="mt-2 text-sm text-slate-300">Other laws that may apply to routing apps outside the first two groups, assessed by their actual subject and operation.</p><p class="mt-3 text-sm text-slate-400">General privacy, consumer protection and intermediary liability require separate analysis of applicability to the service or conduct.</p><p class="mt-3 text-xs text-slate-400">9 indexed records · 4.8% · provisional classification</p><button class="mt-3 text-blue-300 underline text-sm" onclick="filterByLayer('Tier 3: Other generally applicable laws')">View Layer 3 records</button></article></div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5"><article class="bg-slate-900 border border-slate-700 rounded-xl p-5"><h3 class="text-lg text-white font-semibold">Layer 1</h3><p class="mt-2 text-sm text-slate-300">Within the AB 2015 research scope. The routing app or provider must expressly hold a right, duty, exemption or liability in the operative text.</p><p id="overview-layer-1-summary" class="mt-3 text-sm text-slate-400">Loading content-based allocation.</p><button type="button" class="mt-3 text-blue-300 underline text-sm" onclick="showOverviewLayer('1')">View every Layer 1 cohort record in Overview</button></article><article class="bg-slate-900 border border-slate-700 rounded-xl p-5"><h3 class="text-lg text-white font-semibold">Layer 2</h3><p class="mt-2 text-sm text-slate-300">Within the AB 2015 research scope. Another principal actor is regulated, with a supported indirect connection to routing apps, route availability, traffic interventions or road data.</p><p id="overview-layer-2-summary" class="mt-3 text-sm text-slate-400">Loading content-based allocation.</p><button type="button" class="mt-3 text-blue-300 underline text-sm" onclick="showOverviewLayer('2')">View every Layer 2 cohort record in Overview</button></article><article class="bg-slate-900 border border-slate-700 rounded-xl p-5"><h3 class="text-lg text-white font-semibold">Layer 3</h3><p class="mt-2 text-sm text-slate-300">Other generally applicable laws outside the first two groups. Driver device-use rules and general geolocation definitions require separate applicability review.</p><p id="overview-layer-3-summary" class="mt-3 text-sm text-slate-400">Loading content-based allocation.</p><button type="button" class="mt-3 text-blue-300 underline text-sm" onclick="showOverviewLayer('3')">View every Layer 3 cohort record in Overview</button></article></div><p class="text-sm text-slate-400">AB 2015 remains Layer 2 in the earlier index because Caltrans is the principal subject. A missing or ambiguous provider clause is not enough for Layer 1. Records with an unproven scope connection are shown in the unresolved group below.</p>
     </section>
 
-    <!-- SECTION 2: SIX-CATEGORY CODEBOOK × THREE-LAYER CROSS-TABULATION MATRIX -->
+<section id="overview-layer-records" class="max-w-7xl mx-auto space-y-4"><h2 class="text-xl font-semibold text-white">All 3,455 records, separated by content-based layer</h2><p class="text-sm text-slate-300">Every cohort ID appears in exactly one group. Search and filter within each group; use the page controls to inspect every record. Expand a record to read the principal subject, classification rationale, supporting passage, scope decision and verification gaps. Unresolved is a deliberate research outcome, not Layer 2 by default.</p><div id="overview-layer-groups" class="space-y-5"></div></section>
+<section id="pending-source-analysis" class="bg-slate-900 border border-slate-700 rounded-xl p-5 space-y-5">
+<h3 class="text-xl font-semibold text-white">Content-based allocation and complete cohort breakdown</h3>
+<p class="text-sm text-slate-300">The <strong id="pending-analysis-total">3,455</strong> records awaiting relevance review are included in this analysis. The tables below use the revised content-based draft classifications, including unresolved records. They do not establish that a record is relevant, in force or correctly classified. Duplicate and excluded source records are omitted; previously reviewed records remain in the separate review totals above.</p>
+<div class="rounded-lg border border-amber-700 bg-amber-950/30 p-4 text-sm text-amber-100"><strong>Content-based draft, official verification pending.</strong> The earlier title/topic allocation has been superseded. Complete archived provision texts and the additionally retrieved federal bill texts were screened for operative effects and principal subjects. Focused contextual review corrected navigation-related false positives. Unclear subject matter and unavailable text are retained without a forced layer. A keyword match alone cannot establish a layer. Unresolved records stay under review and may change layers or be excluded.</div>
+<div class="overflow-x-auto"><table class="w-full text-left text-sm text-slate-300"><caption class="text-left text-slate-400 pb-2">Revised content-based layer allocation</caption><thead><tr><th class="p-3">Layer</th><th class="p-3">Pending source records</th><th class="p-3">Allocation rule</th><th class="p-3">Inspect source records</th></tr></thead><tbody id="pending-layer-body" class="divide-y divide-slate-700"></tbody></table></div>
+<details class="rounded-lg border border-slate-700 p-4"><summary class="cursor-pointer text-blue-300">How each record receives its final layer</summary><ol class="list-decimal pl-5 mt-3 space-y-2 text-sm text-slate-300"><li>Open the official operative text and confirm the instrument, jurisdiction, session and legal status. Exclude non-binding or irrelevant material and connect duplicate or amended versions.</li><li>Identify the principal legal subject and the actual right, duty, authority, remedy or exemption. A reference to GPS or a map alone does not establish that a routing app provider is regulated.</li><li>Within the AB 2015 research scope, assign Layer 1 when the provision expressly makes routing apps or their providers a legal subject; assign Layer 2 when it principally governs another actor and indirectly affects routing apps or their recommended routes.</li><li>Assign Layer 3 to other applicable law outside those first two groups. General privacy, consumer-protection and platform-liability provisions require a separate applicability analysis.</li><li>Record the citation, operative passage and classification rationale. Where a record spans layers, use the most direct relationship as primary and note the other layer. Leave the classification unresolved when the evidence is insufficient. Assign the six-category code independently of the layer.</li></ol><p class="mt-3 text-sm text-slate-300">AB 2015 itself belongs in Layer 2 under this framework because its research and reporting requirements address Caltrans. H.R. 6531 is a reviewed Layer 1 proposal because the introduced text expressly addresses GPS-administrator immunity. A proposed right or duty remains a proposal until enactment is confirmed. These examples explain the rule; they are not additional records in the pending count.</p></details>
+<div id="pending-analysis-findings" class="text-sm text-slate-300 space-y-2" role="status">Loading the content-review analysis.</div>
+<div class="grid lg:grid-cols-2 gap-5">
+<div class="overflow-x-auto"><table class="w-full text-left text-xs text-slate-300"><caption class="text-left font-semibold text-white pb-2">Provisional six-category coverage</caption><thead><tr><th class="p-2">Primary category family</th><th class="p-2">Records</th><th class="p-2">L1</th><th class="p-2">L2</th><th class="p-2">L3</th><th class="p-2">Unresolved layer</th></tr></thead><tbody id="pending-category-body" class="divide-y divide-slate-700"></tbody></table><p class="text-xs text-slate-400 mt-2">One primary category suggestion per record. Unassigned codes are shown explicitly. Category E does not by itself establish Layer 1.</p></div>
+<div class="overflow-x-auto"><table class="w-full text-left text-xs text-slate-300"><caption class="text-left font-semibold text-white pb-2">Source collection and evidence coverage</caption><thead><tr><th class="p-2">Collection</th><th class="p-2">Pending records</th><th class="p-2">Archived provision text matched</th></tr></thead><tbody id="pending-collection-body" class="divide-y divide-slate-700"></tbody></table><p class="text-xs text-slate-400 mt-2">Archived text matching is an evidence-availability measure. It does not certify official currency, applicability or legal status. Bill titles and metadata require operative-text review.</p></div>
+</div>
+<details class="rounded-lg border border-slate-700 p-4"><summary class="cursor-pointer text-blue-300">Content-review allocation by jurisdiction: federal, 50 states and DC</summary><div class="overflow-x-auto mt-3"><table class="w-full text-left text-xs text-slate-300"><thead><tr><th class="p-2">Jurisdiction</th><th class="p-2">Pending sources</th><th class="p-2">L1</th><th class="p-2">L2</th><th class="p-2">L3</th><th class="p-2">Unresolved layer</th><th class="p-2">Inspect</th></tr></thead><tbody id="pending-jurisdiction-body" class="divide-y divide-slate-700"></tbody></table></div><p class="text-xs text-slate-400 mt-3">Zero pending sources means this queue supplies no records for that jurisdiction. It does not establish that no relevant law exists. Earlier California records remain in the existing index; this 49-state crawl does not complete California or DC coverage.</p></details>
+<p class="text-sm text-slate-400">Interpretation: this collection can support a provisional map of research topics and verification needs. It cannot yet establish the nationwide prevalence of enacted routing app laws, provider liability or policy effectiveness. Counts are source-record counts and may include related provisions and successive bills.</p>
+</section>
+<details class="max-w-7xl mx-auto border border-slate-700 rounded-xl p-5"><summary class="text-blue-300 cursor-pointer">Earlier 189-instrument index — separate reference counts</summary>    <!-- SECTION 2: SIX-CATEGORY CODEBOOK × THREE-LAYER CROSS-TABULATION MATRIX -->
     <section class="max-w-7xl mx-auto space-y-6">
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
         <div class="flex items-center gap-2">
           <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-900/60 text-blue-300 border border-blue-700/50">Crosswalk Matrix</span>
-          <h2 class="text-xl font-semibold text-white">Six-Category Codebook × Three-Layer Cross-Tabulation Matrix</h2>
+          <h2 class="text-xl font-semibold text-white">Earlier index: category matrix (189 instruments)</h2>
         </div>
         <p class="text-xs text-slate-400 mt-1.5 max-w-4xl leading-relaxed">
-          Counts are generated from the searchable corpus, grouped by primary code and layer. The denominator includes all indexed records, including bill entries and repeated local template entries. Counts measure database coverage.
+          These separate historical counts use the 189-instrument index only. They do not represent the 3,455-record content review above. Counts are grouped by primary code and layer. The denominator includes all indexed records, including bill entries and repeated local template entries. Counts measure database coverage.
         </p>
       </div>
 
@@ -139,6 +155,7 @@
       </div>
     </section>
 
+</details>
     <!-- SECTION 3: LANDMARK APPELLATE PRECEDENTS -->
     <section class="max-w-7xl mx-auto space-y-4">
       <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5">
@@ -163,7 +180,7 @@
           <h2 class="text-xl font-semibold text-white">Research Deliverables & Data Center</h2>
         </div>
         <p class="text-xs text-slate-400 mt-1 max-w-4xl leading-relaxed">
-          Access formal project deliverables conforming strictly to the research instruction specifications (Section 5 Three-Layer Summary and Section 6 Multi-Sheet Detailed Database).
+          Download project records and earlier research deliverables. The current content-review classification is in the complete CSV/JSON and in the Overview groups above; older deliverables may contain superseded classifications.
         </p>
       </div>
 
@@ -174,7 +191,7 @@
             <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-purple-900/50 text-purple-300 border border-purple-700/50 uppercase tracking-wider">Output 1 Document</span>
             <h3 class="text-base font-semibold text-white mt-2">Three-Layer Summary Document</h3>
             <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-              Executive summary document conforming strictly to Section 5: "Navigation App Regulation: Three-Layer Summary (US, Phase 1)". Organizes all instruments by Layer 1 (E1, E2, E3, E4, F3), Layer 2 (A5), and Layer 3 (A1-F7) with canonical citations.
+              Earlier summary document for the indexed collection. Its historical layer/code assignments are superseded by the current framework and record-level content review above; it does not cover every record in the 3,455-record cohort.
             </p>
             <div class="mt-3 pt-3 border-t border-slate-800 text-xs text-slate-400 font-mono">
               Navigation_App_Regulation_Three_Layer_Summary.md
@@ -264,20 +281,7 @@
 <button type="button" onclick="switchTab('database')" class="text-blue-300 underline text-sm">Inspect every source record and its verification steps</button>
 </section>
 
-<section id="pending-source-analysis" class="bg-slate-900 border border-slate-700 rounded-xl p-5 space-y-5">
-<h3 class="text-xl font-semibold text-white">Layer allocation of the pending research collection</h3>
-<p class="text-sm text-slate-300">The <strong id="pending-analysis-total">3,455</strong> records awaiting relevance review are included in this analysis. The tables below count their existing screening suggestions. They do not establish that a record is relevant, in force or correctly classified. Duplicate and excluded source records are omitted; previously reviewed records remain in the separate review totals above.</p>
-<div class="rounded-lg border border-amber-700 bg-amber-950/30 p-4 text-sm text-amber-100"><strong>Provisional allocation, not a verified legal distribution.</strong> The earlier screening assigned most road-related candidates to Layer 2. That broad suggestion must be tested against the regulated actor, operative provision and AB 2015 research scope. A keyword match alone cannot establish a layer. Unresolved records stay under review and may change layers or be excluded.</div>
-<div class="overflow-x-auto"><table class="w-full text-left text-sm text-slate-300"><caption class="text-left text-slate-400 pb-2">Existing suggested layers among pending records</caption><thead><tr><th class="p-3">Layer</th><th class="p-3">Pending source records</th><th class="p-3">Allocation rule</th><th class="p-3">Inspect source records</th></tr></thead><tbody id="pending-layer-body" class="divide-y divide-slate-700"></tbody></table></div>
-<details class="rounded-lg border border-slate-700 p-4"><summary class="cursor-pointer text-blue-300">How each record receives its final layer</summary><ol class="list-decimal pl-5 mt-3 space-y-2 text-sm text-slate-300"><li>Open the official operative text and confirm the instrument, jurisdiction, session and legal status. Exclude non-binding or irrelevant material and connect duplicate or amended versions.</li><li>Identify the principal legal subject and the actual right, duty, authority, remedy or exemption. A reference to GPS or a map alone does not establish that a routing app provider is regulated.</li><li>Within the AB 2015 research scope, assign Layer 1 when the provision expressly makes routing apps or their providers a legal subject; assign Layer 2 when it principally governs another actor and indirectly affects routing apps or their recommended routes.</li><li>Assign Layer 3 to other applicable law outside those first two groups. General privacy, consumer-protection and platform-liability provisions require a separate applicability analysis.</li><li>Record the citation, operative passage and classification rationale. Where a record spans layers, use the most direct relationship as primary and note the other layer. Leave the classification unresolved when the evidence is insufficient. Assign the six-category code independently of the layer.</li></ol><p class="mt-3 text-sm text-slate-300">AB 2015 itself belongs in Layer 2 under this framework because its research and reporting requirements address Caltrans. H.R. 6531 is a reviewed Layer 1 proposal because the introduced text expressly addresses GPS-administrator immunity. A proposed right or duty remains a proposal until enactment is confirmed. These examples explain the rule; they are not additional records in the pending count.</p></details>
-<div id="pending-analysis-findings" class="text-sm text-slate-300 space-y-2" role="status">Loading the pending-record analysis.</div>
-<div class="grid lg:grid-cols-2 gap-5">
-<div class="overflow-x-auto"><table class="w-full text-left text-xs text-slate-300"><caption class="text-left font-semibold text-white pb-2">Provisional six-category coverage</caption><thead><tr><th class="p-2">Primary category family</th><th class="p-2">Records</th><th class="p-2">L1</th><th class="p-2">L2</th><th class="p-2">L3</th><th class="p-2">Unresolved layer</th></tr></thead><tbody id="pending-category-body" class="divide-y divide-slate-700"></tbody></table><p class="text-xs text-slate-400 mt-2">One primary category suggestion per record. Unassigned codes are shown explicitly. Category E does not by itself establish Layer 1.</p></div>
-<div class="overflow-x-auto"><table class="w-full text-left text-xs text-slate-300"><caption class="text-left font-semibold text-white pb-2">Source collection and evidence coverage</caption><thead><tr><th class="p-2">Collection</th><th class="p-2">Pending records</th><th class="p-2">Archived provision text matched</th></tr></thead><tbody id="pending-collection-body" class="divide-y divide-slate-700"></tbody></table><p class="text-xs text-slate-400 mt-2">Archived text matching is an evidence-availability measure. It does not certify official currency, applicability or legal status. Bill titles and metadata require operative-text review.</p></div>
-</div>
-<details class="rounded-lg border border-slate-700 p-4"><summary class="cursor-pointer text-blue-300">Pending allocation by jurisdiction: federal, 50 states and DC</summary><div class="overflow-x-auto mt-3"><table class="w-full text-left text-xs text-slate-300"><thead><tr><th class="p-2">Jurisdiction</th><th class="p-2">Pending sources</th><th class="p-2">L1</th><th class="p-2">L2</th><th class="p-2">L3</th><th class="p-2">Unresolved layer</th><th class="p-2">Inspect</th></tr></thead><tbody id="pending-jurisdiction-body" class="divide-y divide-slate-700"></tbody></table></div><p class="text-xs text-slate-400 mt-3">Zero pending sources means this queue supplies no records for that jurisdiction. It does not establish that no relevant law exists. Earlier California records remain in the existing index; this 49-state crawl does not complete California or DC coverage.</p></details>
-<p class="text-sm text-slate-400">Interpretation: this collection can support a provisional map of research topics and verification needs. It cannot yet establish the nationwide prevalence of enacted routing app laws, provider liability or policy effectiveness. Counts are source-record counts and may include related provisions and successive bills.</p>
-</section>
+<section class="bg-slate-900 border border-slate-700 rounded-xl p-5 space-y-3"><h3 class="text-lg font-semibold text-white">Complete source classification in Overview</h3><p class="text-sm text-slate-300">All 3,455 cohort records, the revised content-based allocations, unresolved scope questions and the category/jurisdiction matrix are in Overview. The previous title-based 3 / 3,448 / 4 allocation has been superseded.</p><button class="text-blue-300 underline text-sm" onclick="switchTab('summary'); document.getElementById('overview-content-metrics').scrollIntoView({block:'start'});">Read the full Overview classification</button></section>
 <section id="federal-review-update" class="bg-slate-900 border border-slate-700 rounded-xl p-5 space-y-4">
 <h3 class="text-lg font-semibold text-white">Federal review under the revised layers</h3>
 <p class="text-sm text-slate-300">As of November 17, 2026, federal review remains partial. The initial checkpoint contains 17 research records with missing fields explicitly identified. This update additionally checks work-zone controls and the binding traffic-device standard. California and the remaining jurisdictions await sequential review under this protocol. Existing state and local index classifications are provisional.</p>
@@ -363,7 +367,7 @@
 <label class="flex flex-col gap-1 text-slate-300">Jurisdiction<select id="source-jurisdiction" class="rounded bg-slate-950 border border-slate-600 p-2 text-white"><option value="">All jurisdictions</option></select></label>
 <label class="flex flex-col gap-1 text-slate-300">Collection<select id="source-collection" class="rounded bg-slate-950 border border-slate-600 p-2 text-white"><option value="">All collections</option><option value="state-provision">State provisions</option><option value="federal-provision">Federal provisions</option><option value="state-bill">State bills</option><option value="federal-bill">Federal bills</option></select></label>
 <label class="flex flex-col gap-1 text-slate-300">Review outcome<select id="source-outcome" class="rounded bg-slate-950 border border-slate-600 p-2 text-white"><option value="">All outcomes</option><option>Relevance review pending</option><option>Previously reviewed and indexed</option><option>Duplicate source record</option><option>Excluded after scope review</option></select></label>
-<label class="flex flex-col gap-1 text-slate-300">Suggested layer<select id="source-layer" class="rounded bg-slate-950 border border-slate-600 p-2 text-white"><option value="">All suggestions</option><option>Layer 1</option><option>Layer 2</option><option>Layer 3</option></select></label>
+<label class="flex flex-col gap-1 text-slate-300">Suggested layer<select id="source-layer" class="rounded bg-slate-950 border border-slate-600 p-2 text-white"><option value="">All suggestions</option><option>Layer 1</option><option>Layer 2</option><option>Layer 3</option><option>Unresolved</option></select></label>
 </div>
 <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300">
 <p id="source-record-count" role="status">Loading the 3,484-record research collection.</p>
@@ -959,7 +963,7 @@
         if (collection && row.collection !== collection) return false;
         if (outcome && row.disposition !== outcome) return false;
         if (layer && row.suggested_layer !== layer) return false;
-        const text = [row.record_id,row.jurisdiction,row.citation,row.title,row.category_name,row.evidence_excerpt].join(' ').toLowerCase();
+        const text = [row.record_id,row.jurisdiction,row.citation,row.title,row.category_name,row.evidence_excerpt,row.principal_subject,row.classification_rationale].join(' ').toLowerCase();
         return words.every(word => text.includes(word));
       });
     }
@@ -999,6 +1003,12 @@
         detail.appendChild(sourceNode('p', row.review_reason));
         const expand = document.createElement('details'); expand.className = 'mt-3';
         expand.appendChild(sourceNode('summary', 'View evidence and verification fields', 'cursor-pointer text-blue-300'));
+        sourceDetail(expand,'Principal legal subject',row.principal_subject);
+        sourceDetail(expand,'Content classification rationale',row.classification_rationale);
+        sourceDetail(expand,'Supporting content passage',row.classification_evidence);
+        sourceDetail(expand,'Content scope decision',row.content_scope_decision);
+        sourceDetail(expand,'Official-source classification check',row.content_official_check);
+        sourceDetail(expand,'Official bill text retrieved',row.content_text_url);
         sourceDetail(expand,'Evidence basis',row.text_basis+' · '+row.snapshot);
         sourceDetail(expand,'Text evidence for review',row.evidence_excerpt || 'No provision text matched to the archived source.');
         sourceDetail(expand,'Penalty or liability passage to check',row.penalty_excerpt || row.penalty_review);
@@ -1085,21 +1095,88 @@
       const bills=pending.filter(row=>row.collection.endsWith('-bill')).length;
       const findings=document.getElementById('pending-analysis-findings'); findings.replaceChildren();
       const statements=[
-        pending.length.toLocaleString()+' pending source records are represented in every breakdown below. Suggested Layer 1: '+distribution[0].toLocaleString()+'; Layer 2: '+distribution[1].toLocaleString()+'; Layer 3: '+distribution[2].toLocaleString()+'; unresolved layer: '+distribution[3].toLocaleString()+'. The Layer 2 concentration reflects broad screening and is not evidence that all these laws indirectly govern routing apps.',
-        textMatched.toLocaleString()+' pending records have archived provision text matched; '+bills.toLocaleString()+' are bill candidates. Bill status, enactment and applicable version need official confirmation.',
+        pending.length.toLocaleString()+' cohort records are represented in every breakdown below. Content-based draft Layer 1: '+distribution[0].toLocaleString()+'; Layer 2: '+distribution[1].toLocaleString()+'; Layer 3: '+distribution[2].toLocaleString()+'; unresolved layer: '+distribution[3].toLocaleString()+'. All allocations are provisional. Unresolved records must not be counted as Layer 2 or as accepted laws.',
+        textMatched.toLocaleString()+' cohort records have archived provision text matched; '+pending.filter(row=>row.content_text_url).length.toLocaleString()+' additional federal bill texts were retrieved. '+pending.filter(row=>row.content_scope_decision==='Text unavailable').length.toLocaleString()+' records still lack operative text. Bill status and enacted versions require official verification.',
         unassigned.toLocaleString()+' records have no primary code suggestion. These remain visible in the unassigned category rather than being forced into the codebook. Category counts identify research workload, not verified legal coverage.'
       ];
       for(const statement of statements) findings.appendChild(sourceNode('p',statement));
     }
 
+
+    let overviewGroups = {};
+    function showOverviewLayer(key) {
+      switchTab('summary');
+      const panel=document.getElementById('overview-group-'+key);
+      if(panel){panel.open=true;panel.scrollIntoView({block:'start'});}
+    }
+    function renderOverviewContent(records) {
+      const cohort=records.filter(row=>row.content_review_cohort==='3455-content-review-20261117');
+      const layers=['Layer 1','Layer 2','Layer 3','Unresolved'];
+      const container=document.getElementById('overview-layer-groups');container.replaceChildren();overviewGroups={};
+      document.getElementById('overview-count-total').textContent=cohort.length.toLocaleString();
+      const allocations=layers.map(layer=>cohort.filter(row=>row.suggested_layer===layer));
+      document.getElementById('overview-content-check').textContent=allocations.map((rows,i)=>layers[i]+': '+rows.length.toLocaleString()).join(' + ')+' = '+cohort.length.toLocaleString()+' records. Each ID is counted once. Provisional content classification; official status and applicability remain under review.';
+      allocations.forEach((rows,index)=>{
+        const key=index<3 ? String(index+1) : 'unresolved';
+        document.getElementById('overview-count-'+key).textContent=rows.length.toLocaleString();
+        if(index<3) document.getElementById('overview-layer-'+key+'-summary').textContent=rows.length.toLocaleString()+' of '+cohort.length.toLocaleString()+' cohort records · content-based draft; official verification pending';
+        const panel=document.createElement('details');panel.id='overview-group-'+key;panel.className='bg-slate-900 border border-slate-700 rounded-xl p-5 space-y-3';
+        if(index!==1)panel.open=true;
+        panel.appendChild(sourceNode('summary',layers[index]+' — '+rows.length.toLocaleString()+' records','text-lg font-semibold text-white cursor-pointer'));
+        const description=index===3 ? 'No forced layer: missing operative text, uncertain applicability/subject matter, or proposed exclusion. These records are retained in full for review.' : 'Classification follows the supporting content passage and principal subject. These are draft allocations, not official-current-law certifications.';
+        panel.appendChild(sourceNode('p',description,'text-sm text-slate-400'));
+        const decisions=[...new Set(rows.map(row=>row.content_scope_decision))];
+        panel.appendChild(sourceNode('p',decisions.map(value=>value+': '+rows.filter(row=>row.content_scope_decision===value).length.toLocaleString()).join(' · '),'text-sm text-slate-300'));
+        const tools=sourceNode('div','','flex flex-wrap gap-3 text-sm');
+        const search=document.createElement('input');search.type='search';search.id='overview-search-'+key;search.setAttribute('aria-label','Search '+layers[index]+' overview records');search.placeholder='Search ID, citation, content or actor';search.className='bg-slate-950 border border-slate-600 rounded p-2 text-white w-80 max-w-full';tools.appendChild(search);
+        const jur=document.createElement('select');jur.id='overview-jurisdiction-'+key;jur.setAttribute('aria-label',layers[index]+' jurisdiction');jur.className='bg-slate-950 border border-slate-600 rounded p-2';jur.add(new Option('All jurisdictions',''));[...new Set(rows.map(row=>row.jurisdiction))].sort().forEach(value=>jur.add(new Option(value,value)));tools.appendChild(jur);
+        const scope=document.createElement('select');scope.id='overview-scope-'+key;scope.setAttribute('aria-label',layers[index]+' scope decision');scope.className='bg-slate-950 border border-slate-600 rounded p-2';scope.add(new Option('All scope decisions',''));[...new Set(rows.map(row=>row.content_scope_decision))].sort().forEach(value=>scope.add(new Option(value,value)));tools.appendChild(scope);const category=document.createElement('select');category.id='overview-category-'+key;category.setAttribute('aria-label',layers[index]+' category');category.className='bg-slate-950 border border-slate-600 rounded p-2';category.add(new Option('All category families',''));for(const code of ['A','B','C','D','E','F','Unassigned'])category.add(new Option(code,code));tools.appendChild(category);panel.appendChild(tools);
+        const status=sourceNode('p','','text-sm text-slate-300');status.id='overview-status-'+key;status.setAttribute('role','status');panel.appendChild(status);
+        const list=sourceNode('div','','space-y-3');list.id='overview-records-'+key;panel.appendChild(list);
+        const controls=sourceNode('div','','flex flex-wrap gap-3 items-center text-sm');
+        const previous=sourceNode('button','Previous 50','border border-slate-600 rounded px-3 py-2 disabled:opacity-40');previous.id='overview-previous-'+key;previous.type='button';controls.appendChild(previous);
+        const page=sourceNode('span','','text-slate-400');page.id='overview-page-'+key;controls.appendChild(page);
+        const next=sourceNode('button','Next 50','border border-slate-600 rounded px-3 py-2 disabled:opacity-40');next.id='overview-next-'+key;next.type='button';controls.appendChild(next);panel.appendChild(controls);container.appendChild(panel);
+        const state={rows,page:0,search,jur,scope,category,status,list,previous,next,pageLabel:page};overviewGroups[key]=state;
+        const update=()=>{state.page=0;renderOverviewGroup(key);};search.addEventListener('input',update);jur.addEventListener('change',update);scope.addEventListener('change',update);category.addEventListener('change',update);
+        previous.addEventListener('click',()=>{state.page--;renderOverviewGroup(key);});next.addEventListener('click',()=>{state.page++;renderOverviewGroup(key);});renderOverviewGroup(key);
+      });
+    }
+    function renderOverviewGroup(key) {
+      const state=overviewGroups[key];
+      const words=state.search.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+      const filtered=state.rows.filter(row=>{
+        if(state.jur.value && row.jurisdiction!==state.jur.value)return false;
+        if(state.scope.value && row.content_scope_decision!==state.scope.value)return false;
+        if(state.category.value==='Unassigned' && row.category_code)return false;
+        if(state.category.value && state.category.value!=='Unassigned' && !(row.category_code || '').startsWith(state.category.value))return false;
+        const content=[row.record_id,row.citation,row.title,row.jurisdiction,row.category_code,row.principal_subject,row.classification_rationale,row.classification_evidence].join(' ').toLowerCase();return words.every(word=>content.includes(word));
+      });
+      const pages=Math.max(1,Math.ceil(filtered.length/50));state.page=Math.max(0,Math.min(state.page,pages-1));state.list.replaceChildren();
+      for(const row of filtered.slice(state.page*50,(state.page+1)*50)){
+        const entry=document.createElement('details');entry.className='border border-slate-700 rounded-lg p-3';entry.setAttribute('data-record-id',row.record_id);
+        entry.appendChild(sourceNode('summary',row.record_id+' · '+row.jurisdiction+' · '+row.citation+' · '+row.title,'cursor-pointer text-slate-200 text-sm'));
+        const fields=[['Layer and primary code',row.suggested_layer+' · '+(row.category_code || 'Unassigned category')],['Principal legal subject',row.principal_subject],['Classification rationale',row.classification_rationale],['Supporting content passage',row.classification_evidence],['Scope decision',row.content_scope_decision],['Classification status',row.classification_status],['Evidence basis',row.text_basis],['Official-source classification check',row.content_official_check],['Content review method',row.content_review_method],['Official bill text version',row.content_text_version],['Bill text retrieval result',row.content_text_retrieval],['Failed text URL to revisit',row.content_text_attempt_url],['Source legal status',row.current_status],['Effective date',row.effective_date],['Latest amendment',row.latest_amendment],['Penalty or liability review',row.penalty_review],['Penalty passage to verify',row.penalty_excerpt],['Exceptions to verify',row.exception_excerpt]];
+        for(const [label,value] of fields)sourceDetail(entry,label,value);
+        const source=row.content_text_url || row.source_reference;
+        if(source && /^https?:\/\//i.test(source)){
+          const link=sourceNode('a','Open source reference','block text-blue-300 underline text-sm mt-3');link.href=source.split(' | ')[0];link.target='_blank';link.rel='noopener noreferrer';entry.appendChild(link);
+        }
+        state.list.appendChild(entry);
+      }
+      state.status.textContent=filtered.length.toLocaleString()+' matching records of '+state.rows.length.toLocaleString()+' in this group. Every matching record is accessible through the pages.';
+      state.pageLabel.textContent='Page '+(state.page+1)+' of '+pages;state.previous.disabled=state.page===0;state.next.disabled=state.page===pages-1;
+    }
+
     async function loadSourceRecords() {
       try {
-        const response = await fetch('data/all_research_records.json?v=20261117-2');
+        const response = await fetch('data/all_research_records.json?v=20261117-content-1');
         if (!response.ok) throw new Error('Source collection could not be loaded.');
         const data = await response.json();
         if (data.records.length !== 3484 || new Set(data.records.map(row=>row.record_id)).size !==3484) throw new Error('Source collection integrity check failed.');
         allSourceRecords = data.records;
         renderPendingAnalysis(allSourceRecords);
+        renderOverviewContent(allSourceRecords);
         const jurs = [...new Set(allSourceRecords.map(row=>row.jurisdiction))].sort();
         const select = document.getElementById('source-jurisdiction');
         for (const jurisdiction of jurs) select.add(new Option(jurisdiction,jurisdiction));
@@ -1114,7 +1191,8 @@
       } catch (error) {
         document.getElementById('source-record-count').textContent = 'The research collection could not load. Refresh this page or download the full CSV.';
         document.getElementById('all-record-review-totals').textContent = 'Review totals unavailable. See the complete CSV download.';
-        document.getElementById('pending-analysis-findings').textContent = 'Pending-record analysis unavailable. See the source CSV; no verified distribution is asserted.';
+        document.getElementById('pending-analysis-findings').textContent = 'Content classification unavailable. See the full source CSV.';
+        document.getElementById('overview-content-check').textContent = 'Content review data could not load. Refresh or download the full source CSV.';
         document.getElementById('source-record-previous').disabled=true;
         document.getElementById('source-record-next').disabled=true;
       }
