@@ -91,6 +91,7 @@
             <p class="text-xs text-slate-400 mt-1.5 max-w-4xl leading-relaxed">
               The database aims to cover all legislation and regulations that directly or indirectly affect routing apps or the routes they recommend at the U.S. federal level, at the state level in all 50 states, and at every level in California, including county and municipal ordinances.
             </p>
+            <p class="text-sm text-slate-300 mt-3">The 3,455 pending source records are also included in the empirical analysis, with provisional layer, category and jurisdiction breakdowns. These overlap the source collection and must not be added to the existing index as unique verified laws. <a class="text-blue-300 underline" href="#empirical" onclick="switchTab('empirical'); return false;">See pending-record layer allocation</a>.</p>
             <div id="nationwide-screening" class="mt-4 rounded-lg border border-slate-700 bg-slate-950/50 p-4 text-sm text-slate-300">
               <h3 class="font-semibold text-white">Federal and state screening results</h3>
               <p class="mt-2 leading-relaxed"><strong class="text-white">3,484 screening records</strong> across the four candidate downloads (3,248 provision records and 236 bill records). 9 records from this screening batch were added after official text review. The source totals include records that overlap with the searchable index. The searchable index contains 189 instruments and 10 court decisions. <a class="text-blue-300 underline" href="#empirical" onclick="switchTab('empirical'); return false;">Read the policy analysis</a> or <a class="text-blue-300 underline" href="crosswalk.html">view the news evidence</a>.</p>
@@ -261,6 +262,21 @@
 <div id="all-record-review-totals" class="text-sm text-slate-300" role="status">Loading review outcome totals.</div>
 <p class="text-sm text-slate-300">Text matches supply passages for review, including possible penalty and exception clauses. These excerpts need to be read with the full provision, definitions and cross-references. A snapshot status is recorded as Unverified until official currency checks are complete.</p>
 <button type="button" onclick="switchTab('database')" class="text-blue-300 underline text-sm">Inspect every source record and its verification steps</button>
+</section>
+
+<section id="pending-source-analysis" class="bg-slate-900 border border-slate-700 rounded-xl p-5 space-y-5">
+<h3 class="text-xl font-semibold text-white">Layer allocation of the pending research collection</h3>
+<p class="text-sm text-slate-300">The <strong id="pending-analysis-total">3,455</strong> records awaiting relevance review are included in this analysis. The tables below count their existing screening suggestions. They do not establish that a record is relevant, in force or correctly classified. Duplicate and excluded source records are omitted; previously reviewed records remain in the separate review totals above.</p>
+<div class="rounded-lg border border-amber-700 bg-amber-950/30 p-4 text-sm text-amber-100"><strong>Provisional allocation, not a verified legal distribution.</strong> The earlier screening assigned most road-related candidates to Layer 2. That broad suggestion must be tested against the regulated actor, operative provision and AB 2015 research scope. A keyword match alone cannot establish a layer. Unresolved records stay under review and may change layers or be excluded.</div>
+<div class="overflow-x-auto"><table class="w-full text-left text-sm text-slate-300"><caption class="text-left text-slate-400 pb-2">Existing suggested layers among pending records</caption><thead><tr><th class="p-3">Layer</th><th class="p-3">Pending source records</th><th class="p-3">Allocation rule</th><th class="p-3">Inspect source records</th></tr></thead><tbody id="pending-layer-body" class="divide-y divide-slate-700"></tbody></table></div>
+<details class="rounded-lg border border-slate-700 p-4"><summary class="cursor-pointer text-blue-300">How each record receives its final layer</summary><ol class="list-decimal pl-5 mt-3 space-y-2 text-sm text-slate-300"><li>Open the official operative text and confirm the instrument, jurisdiction, session and legal status. Exclude non-binding or irrelevant material and connect duplicate or amended versions.</li><li>Identify the principal legal subject and the actual right, duty, authority, remedy or exemption. A reference to GPS or a map alone does not establish that a routing app provider is regulated.</li><li>Within the AB 2015 research scope, assign Layer 1 when the provision expressly makes routing apps or their providers a legal subject; assign Layer 2 when it principally governs another actor and indirectly affects routing apps or their recommended routes.</li><li>Assign Layer 3 to other applicable law outside those first two groups. General privacy, consumer-protection and platform-liability provisions require a separate applicability analysis.</li><li>Record the citation, operative passage and classification rationale. Where a record spans layers, use the most direct relationship as primary and note the other layer. Leave the classification unresolved when the evidence is insufficient. Assign the six-category code independently of the layer.</li></ol><p class="mt-3 text-sm text-slate-300">AB 2015 itself belongs in Layer 2 under this framework because its research and reporting requirements address Caltrans. H.R. 6531 is a reviewed Layer 1 proposal because the introduced text expressly addresses GPS-administrator immunity. A proposed right or duty remains a proposal until enactment is confirmed. These examples explain the rule; they are not additional records in the pending count.</p></details>
+<div id="pending-analysis-findings" class="text-sm text-slate-300 space-y-2" role="status">Loading the pending-record analysis.</div>
+<div class="grid lg:grid-cols-2 gap-5">
+<div class="overflow-x-auto"><table class="w-full text-left text-xs text-slate-300"><caption class="text-left font-semibold text-white pb-2">Provisional six-category coverage</caption><thead><tr><th class="p-2">Primary category family</th><th class="p-2">Records</th><th class="p-2">L1</th><th class="p-2">L2</th><th class="p-2">L3</th><th class="p-2">Unresolved layer</th></tr></thead><tbody id="pending-category-body" class="divide-y divide-slate-700"></tbody></table><p class="text-xs text-slate-400 mt-2">One primary category suggestion per record. Unassigned codes are shown explicitly. Category E does not by itself establish Layer 1.</p></div>
+<div class="overflow-x-auto"><table class="w-full text-left text-xs text-slate-300"><caption class="text-left font-semibold text-white pb-2">Source collection and evidence coverage</caption><thead><tr><th class="p-2">Collection</th><th class="p-2">Pending records</th><th class="p-2">Archived provision text matched</th></tr></thead><tbody id="pending-collection-body" class="divide-y divide-slate-700"></tbody></table><p class="text-xs text-slate-400 mt-2">Archived text matching is an evidence-availability measure. It does not certify official currency, applicability or legal status. Bill titles and metadata require operative-text review.</p></div>
+</div>
+<details class="rounded-lg border border-slate-700 p-4"><summary class="cursor-pointer text-blue-300">Pending allocation by jurisdiction: federal, 50 states and DC</summary><div class="overflow-x-auto mt-3"><table class="w-full text-left text-xs text-slate-300"><thead><tr><th class="p-2">Jurisdiction</th><th class="p-2">Pending sources</th><th class="p-2">L1</th><th class="p-2">L2</th><th class="p-2">L3</th><th class="p-2">Unresolved layer</th><th class="p-2">Inspect</th></tr></thead><tbody id="pending-jurisdiction-body" class="divide-y divide-slate-700"></tbody></table></div><p class="text-xs text-slate-400 mt-3">Zero pending sources means this queue supplies no records for that jurisdiction. It does not establish that no relevant law exists. Earlier California records remain in the existing index; this 49-state crawl does not complete California or DC coverage.</p></details>
+<p class="text-sm text-slate-400">Interpretation: this collection can support a provisional map of research topics and verification needs. It cannot yet establish the nationwide prevalence of enacted routing app laws, provider liability or policy effectiveness. Counts are source-record counts and may include related provisions and successive bills.</p>
 </section>
 <section id="federal-review-update" class="bg-slate-900 border border-slate-700 rounded-xl p-5 space-y-4">
 <h3 class="text-lg font-semibold text-white">Federal review under the revised layers</h3>
@@ -1001,6 +1017,81 @@
       document.getElementById('source-record-next').disabled = sourcePage===pages-1;
     }
 
+
+    function inspectPendingSources(layer = '', jurisdiction = '') {
+      for (const id of sourceControls) document.getElementById(id).value = '';
+      document.getElementById('source-outcome').value = 'Relevance review pending';
+      document.getElementById('source-layer').value = layer;
+      document.getElementById('source-jurisdiction').value = jurisdiction;
+      sourcePage = 0;
+      renderSourceRecords();
+      switchTab('database');
+      document.getElementById('source-record-count').scrollIntoView({block:'center'});
+    }
+
+    function renderPendingAnalysis(records) {
+      const pending = records.filter(row => row.disposition === 'Relevance review pending');
+      const layers = ['Layer 1','Layer 2','Layer 3'];
+      const counts = rows => [...layers.map(layer => rows.filter(row => row.suggested_layer === layer).length),rows.filter(row => !layers.includes(row.suggested_layer)).length];
+      const makeRow = (body, values) => {
+        const tr = document.createElement('tr');
+        values.forEach((value,index) => tr.appendChild(sourceNode(index === 0 ? 'th' : 'td',typeof value === 'number' ? value.toLocaleString() : value,'p-3 align-top')));
+        body.appendChild(tr);
+        return tr;
+      };
+      const inspectButton = (parent, layer, jurisdiction, label) => {
+        const button = sourceNode('button',label,'text-blue-300 underline text-left');
+        button.type = 'button';
+        button.addEventListener('click',()=>inspectPendingSources(layer,jurisdiction));
+        parent.appendChild(button);
+      };
+      document.getElementById('pending-analysis-total').textContent = pending.length.toLocaleString();
+      const body = document.getElementById('pending-layer-body'); body.replaceChildren();
+      const rules = [
+        'Within the AB 2015 research scope: routing app or provider expressly holds a right, duty or liability.',
+        'Within the same scope: another principal actor is regulated, indirectly affecting routing apps or recommended routes.',
+        'Other applicable laws outside Layers 1 and 2; applicability to routing apps still requires evidence.',
+        'Insufficient evidence to assign a layer. Do not force an allocation.'
+      ];
+      const distribution = counts(pending);
+      [...layers,'Unresolved'].forEach((layer,i)=>{
+        const n=distribution[i];
+        const row=makeRow(body,[layer,n.toLocaleString()+' ('+(pending.length ? n*100/pending.length : 0).toFixed(1)+'%)',rules[i],'']);
+        if(i<3 && n) inspectButton(row.lastElementChild,layer,'','Inspect '+n.toLocaleString()+' pending records');
+      });
+      const totalRow=makeRow(body,['Total pending records',pending.length,'All allocations remain provisional.','']);
+      inspectButton(totalRow.lastElementChild,'','','Inspect the complete pending collection');
+      const categories = [['A','Access and movement restrictions'],['B','Physical traffic calming and street design'],['C','Traffic control and operations'],['D','Pricing and charges'],['E','Routing and navigation'],['F','Planning, data, and demand management'],['','Unassigned category']];
+      const catbody=document.getElementById('pending-category-body'); catbody.replaceChildren();
+      for(const [code,name] of categories){
+        const rows=pending.filter(row=>code ? (row.category_code || '').startsWith(code) : !/^[A-F][1-7]$/.test(row.category_code || ''));
+        makeRow(catbody,[(code ? code+'. ' : '')+name,rows.length,...counts(rows)]);
+      }
+      const collectionbody=document.getElementById('pending-collection-body'); collectionbody.replaceChildren();
+      for(const [key,name] of [['state-provision','State provisions'],['federal-provision','Federal provisions'],['state-bill','State bills'],['federal-bill','Federal bills']]){
+        const rows=pending.filter(row=>row.collection===key);
+        makeRow(collectionbody,[name,rows.length,rows.filter(row=>row.text_available).length]);
+      }
+      const states='Alabama|Alaska|Arizona|Arkansas|California|Colorado|Connecticut|Delaware|Florida|Georgia|Hawaii|Idaho|Illinois|Indiana|Iowa|Kansas|Kentucky|Louisiana|Maine|Maryland|Massachusetts|Michigan|Minnesota|Mississippi|Missouri|Montana|Nebraska|Nevada|New Hampshire|New Jersey|New Mexico|New York|North Carolina|North Dakota|Ohio|Oklahoma|Oregon|Pennsylvania|Rhode Island|South Carolina|South Dakota|Tennessee|Texas|Utah|Vermont|Virginia|Washington|West Virginia|Wisconsin|Wyoming'.split('|');
+      const jurbody=document.getElementById('pending-jurisdiction-body'); jurbody.replaceChildren();
+      for(const jurisdiction of ['Federal',...states,'District of Columbia']){
+        const rows=pending.filter(row=>row.jurisdiction===jurisdiction);
+        const tr=makeRow(jurbody,[jurisdiction,rows.length,...counts(rows),'']);
+        if(rows.length) inspectButton(tr.lastElementChild,'',jurisdiction,'Inspect records');
+        else tr.lastElementChild.textContent='No pending sources in this queue';
+      }
+      const unassigned=pending.filter(row=>!/^[A-F][1-7]$/.test(row.category_code || '')).length;
+      const textMatched=pending.filter(row=>row.text_available).length;
+      const bills=pending.filter(row=>row.collection.endsWith('-bill')).length;
+      const findings=document.getElementById('pending-analysis-findings'); findings.replaceChildren();
+      const statements=[
+        pending.length.toLocaleString()+' pending source records are represented in every breakdown below. Suggested Layer 1: '+distribution[0].toLocaleString()+'; Layer 2: '+distribution[1].toLocaleString()+'; Layer 3: '+distribution[2].toLocaleString()+'; unresolved layer: '+distribution[3].toLocaleString()+'. The Layer 2 concentration reflects broad screening and is not evidence that all these laws indirectly govern routing apps.',
+        textMatched.toLocaleString()+' pending records have archived provision text matched; '+bills.toLocaleString()+' are bill candidates. Bill status, enactment and applicable version need official confirmation.',
+        unassigned.toLocaleString()+' records have no primary code suggestion. These remain visible in the unassigned category rather than being forced into the codebook. Category counts identify research workload, not verified legal coverage.'
+      ];
+      for(const statement of statements) findings.appendChild(sourceNode('p',statement));
+    }
+
     async function loadSourceRecords() {
       try {
         const response = await fetch('data/all_research_records.json?v=20261117-2');
@@ -1008,6 +1099,7 @@
         const data = await response.json();
         if (data.records.length !== 3484 || new Set(data.records.map(row=>row.record_id)).size !==3484) throw new Error('Source collection integrity check failed.');
         allSourceRecords = data.records;
+        renderPendingAnalysis(allSourceRecords);
         const jurs = [...new Set(allSourceRecords.map(row=>row.jurisdiction))].sort();
         const select = document.getElementById('source-jurisdiction');
         for (const jurisdiction of jurs) select.add(new Option(jurisdiction,jurisdiction));
@@ -1022,6 +1114,7 @@
       } catch (error) {
         document.getElementById('source-record-count').textContent = 'The research collection could not load. Refresh this page or download the full CSV.';
         document.getElementById('all-record-review-totals').textContent = 'Review totals unavailable. See the complete CSV download.';
+        document.getElementById('pending-analysis-findings').textContent = 'Pending-record analysis unavailable. See the source CSV; no verified distribution is asserted.';
         document.getElementById('source-record-previous').disabled=true;
         document.getElementById('source-record-next').disabled=true;
       }
