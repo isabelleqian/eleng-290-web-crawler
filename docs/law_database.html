@@ -39,7 +39,7 @@
     <nav class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">
       <a href="index.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Overview Map</a>
       <a href="news_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News Database (186)</a>
-      <a href="policy_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Policy Database (66)</a><a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium bg-blue-600 text-white shadow-sm">U.S. Law Database (199)</a>
+      <a href="policy_database.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Policy Database (66)</a><a href="law_database.html" class="px-3 py-1.5 rounded-lg font-medium bg-blue-600 text-white shadow-sm">U.S. Law Database (3,484 source records)</a>
       <a href="crosswalk.html" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">News ↔ Law Crosswalk (186)</a>
     </nav>
   </header>
@@ -60,7 +60,7 @@
         <button onclick="switchTab('database')" id="tab-btn-database" class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center gap-2 transition">
           <span>📜</span>
           <span>3. Searchable Database</span>
-          <span class="px-1.5 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400 font-mono">189</span>
+          <span class="px-1.5 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400 font-mono">3,484</span>
         </button>
       </div>
       <div class="flex items-center gap-2">
@@ -254,6 +254,14 @@
 
 
 
+
+<section id="all-record-review-analysis" class="bg-slate-900 border border-slate-700 rounded-xl p-5 space-y-4">
+<h3 class="text-lg font-semibold text-white">Initial review of the complete source collection</h3>
+<p class="text-sm text-slate-300">All 3,484 source records have stable identifiers and a recorded initial outcome. Provision texts are matched to their archived source where available. State bills rely on titles and metadata until their official texts are reviewed. The full collection covers federal sources and 49 states. Earlier California material remains in the existing index.</p>
+<div id="all-record-review-totals" class="text-sm text-slate-300" role="status">Loading review outcome totals.</div>
+<p class="text-sm text-slate-300">Text matches supply passages for review, including possible penalty and exception clauses. These excerpts need to be read with the full provision, definitions and cross-references. A snapshot status is recorded as Unverified until official currency checks are complete.</p>
+<button type="button" onclick="switchTab('database')" class="text-blue-300 underline text-sm">Inspect every source record and its verification steps</button>
+</section>
 <section id="federal-review-update" class="bg-slate-900 border border-slate-700 rounded-xl p-5 space-y-4">
 <h3 class="text-lg font-semibold text-white">Federal review under the revised layers</h3>
 <p class="text-sm text-slate-300">As of November 17, 2026, federal review remains partial. The initial checkpoint contains 17 research records with missing fields explicitly identified. This update additionally checks work-zone controls and the binding traffic-device standard. California and the remaining jurisdictions await sequential review under this protocol. Existing state and local index classifications are provisional.</p>
@@ -325,11 +333,35 @@
   <!-- TAB PANE 3: SEARCHABLE DATABASE (FLAT TABLE & ADVANCED FILTERS) -->
   <!-- ========================================================================= -->
   <div id="tab-pane-database" class="tab-pane hidden space-y-4">
+<section id="all-records" class="max-w-7xl mx-auto bg-slate-900 border border-slate-700 rounded-xl p-5 space-y-4">
+<h2 class="text-xl font-semibold text-white">All 3,484 research source records</h2>
+<p class="text-sm text-slate-300">Every record from the four crawl collections is searchable here. Initial review checks source identity, duplicate keys and available text. Individual official-text, applicability, status and liability verification continues. The 199-record existing index below overlaps this source collection.</p>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+<div><span class="block text-slate-400">Source records</span><strong class="text-xl text-white">3,484</strong></div>
+<div><span class="block text-slate-400">Provision records</span><strong class="text-xl text-white">3,248</strong></div>
+<div><span class="block text-slate-400">Bill records</span><strong class="text-xl text-white">236</strong></div>
+<div><span class="block text-slate-400">Full text matched to archive</span><strong id="source-text-total" class="text-xl text-white">Loading</strong></div>
+</div>
+<div class="flex flex-wrap gap-3 text-sm">
+<label class="flex flex-col gap-1 text-slate-300">Search all records<input id="source-record-search" type="search" placeholder="Citation, title, topic, jurisdiction or record ID" class="rounded bg-slate-950 border border-slate-600 p-2 text-white w-80 max-w-full"></label>
+<label class="flex flex-col gap-1 text-slate-300">Jurisdiction<select id="source-jurisdiction" class="rounded bg-slate-950 border border-slate-600 p-2 text-white"><option value="">All jurisdictions</option></select></label>
+<label class="flex flex-col gap-1 text-slate-300">Collection<select id="source-collection" class="rounded bg-slate-950 border border-slate-600 p-2 text-white"><option value="">All collections</option><option value="state-provision">State provisions</option><option value="federal-provision">Federal provisions</option><option value="state-bill">State bills</option><option value="federal-bill">Federal bills</option></select></label>
+<label class="flex flex-col gap-1 text-slate-300">Review outcome<select id="source-outcome" class="rounded bg-slate-950 border border-slate-600 p-2 text-white"><option value="">All outcomes</option><option>Relevance review pending</option><option>Previously reviewed and indexed</option><option>Duplicate source record</option><option>Excluded after scope review</option></select></label>
+<label class="flex flex-col gap-1 text-slate-300">Suggested layer<select id="source-layer" class="rounded bg-slate-950 border border-slate-600 p-2 text-white"><option value="">All suggestions</option><option>Layer 1</option><option>Layer 2</option><option>Layer 3</option></select></label>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300">
+<p id="source-record-count" role="status">Loading the 3,484-record research collection.</p>
+<div class="flex gap-3"><a class="text-blue-300 underline" href="data/all_research_records.csv">Download all records CSV</a><a class="text-blue-300 underline" href="data/all_research_records.json">Download JSON</a></div>
+</div>
+<div class="overflow-x-auto"><table class="w-full text-left text-xs text-slate-300"><thead class="text-slate-400"><tr><th class="p-3">Record and jurisdiction</th><th class="p-3 min-w-[240px]">Citation and title</th><th class="p-3 min-w-[180px]">Review outcome</th><th class="p-3 min-w-[200px]">Evidence and remaining checks</th></tr></thead><tbody id="source-record-body" class="divide-y divide-slate-700"></tbody></table></div>
+<div class="flex items-center justify-between gap-3 text-sm"><button id="source-record-previous" type="button" class="rounded border border-slate-600 px-3 py-2 disabled:opacity-40">Previous 50</button><span id="source-record-page" class="text-slate-400"></span><button id="source-record-next" type="button" class="rounded border border-slate-600 px-3 py-2 disabled:opacity-40">Next 50</button></div>
+</section>
+
     <!-- Header Card -->
     <div class="max-w-7xl mx-auto bg-slate-900/90 border border-slate-800 rounded-xl p-5">
       <div class="flex items-center gap-2">
         <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-900/60 text-blue-300 border border-blue-700/50">Full Database</span>
-        <h2 class="text-xl font-semibold text-white">Searchable Statutes, Regulations, Bills & Local Measures</h2>
+        <h2 class="text-xl font-semibold text-white">Existing instrument index and court decisions</h2>
       </div>
       <p class="text-xs text-slate-400 mt-1 max-w-4xl">
         Search indexed federal, state, county and municipal records by jurisdiction, layer and topic. Review each instrument’s type and status. Links from the <a class="text-blue-300 underline" href="crosswalk.html">News ↔ Law Crosswalk</a> open the corresponding record.
@@ -887,6 +919,119 @@
       } else {
         switchTab('summary');
       }
+    });
+  </script>
+
+  <script>
+    let allSourceRecords = [];
+    let sourcePage = 0;
+    const sourcePageSize = 50;
+    const sourceControls = ['source-record-search','source-jurisdiction','source-collection','source-outcome','source-layer'];
+
+    function sourceNode(tag, text, className) {
+      const node = document.createElement(tag);
+      node.textContent = text || '';
+      if (className) node.className = className;
+      return node;
+    }
+
+    function filteredSourceRecords() {
+      const [query,jurisdiction,collection,outcome,layer] = sourceControls.map(id => document.getElementById(id).value);
+      const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+      return allSourceRecords.filter(row => {
+        if (jurisdiction && row.jurisdiction !== jurisdiction) return false;
+        if (collection && row.collection !== collection) return false;
+        if (outcome && row.disposition !== outcome) return false;
+        if (layer && row.suggested_layer !== layer) return false;
+        const text = [row.record_id,row.jurisdiction,row.citation,row.title,row.category_name,row.evidence_excerpt].join(' ').toLowerCase();
+        return words.every(word => text.includes(word));
+      });
+    }
+
+    function sourceDetail(parent, label, text) {
+      if (!text) return;
+      parent.appendChild(sourceNode('p', label, 'mt-3 font-semibold text-slate-200'));
+      parent.appendChild(sourceNode('p', text, 'mt-1 whitespace-pre-wrap text-slate-300'));
+    }
+
+    function renderSourceRecords() {
+      const rows = filteredSourceRecords();
+      const pages = Math.max(1,Math.ceil(rows.length/sourcePageSize));
+      sourcePage = Math.max(0,Math.min(sourcePage,pages-1));
+      const body = document.getElementById('source-record-body');
+      body.replaceChildren();
+      for (const row of rows.slice(sourcePage*sourcePageSize,(sourcePage+1)*sourcePageSize)) {
+        const tr = document.createElement('tr');
+        const identity = tr.insertCell(); identity.className = 'p-3 align-top';
+        identity.appendChild(sourceNode('p', row.record_id, 'font-mono text-blue-300'));
+        identity.appendChild(sourceNode('p', row.jurisdiction, 'mt-1'));
+        identity.appendChild(sourceNode('p', row.collection, 'mt-1 text-slate-400'));
+        const title = tr.insertCell(); title.className = 'p-3 align-top';
+        title.appendChild(sourceNode('p', row.citation, 'font-semibold text-white'));
+        title.appendChild(sourceNode('p', row.title, 'mt-2'));
+        const urls = row.source_reference.split(' | ').filter(url => /^https?:\/\//i.test(url));
+        for (const url of urls) {
+          const link = sourceNode('a', 'Source reference', 'mt-2 block text-blue-300 underline');
+          link.href = url; link.target = '_blank'; link.rel = 'noopener noreferrer'; title.appendChild(link);
+        }
+        const status = tr.insertCell(); status.className = 'p-3 align-top';
+        status.appendChild(sourceNode('p', row.disposition, 'text-amber-200'));
+        status.appendChild(sourceNode('p', row.verification_status, 'mt-2'));
+        status.appendChild(sourceNode('p', 'Suggested '+row.suggested_layer+' · '+(row.category_code || 'Code Unverified'), 'mt-2 text-slate-400'));
+        status.appendChild(sourceNode('p', row.classification_status, 'mt-1 text-slate-400'));
+        const detail = tr.insertCell(); detail.className = 'p-3 align-top';
+        detail.appendChild(sourceNode('p', row.review_reason));
+        const expand = document.createElement('details'); expand.className = 'mt-3';
+        expand.appendChild(sourceNode('summary', 'View evidence and verification fields', 'cursor-pointer text-blue-300'));
+        sourceDetail(expand,'Evidence basis',row.text_basis+' · '+row.snapshot);
+        sourceDetail(expand,'Archived text excerpt',row.evidence_excerpt || 'No provision text matched to the archived source.');
+        sourceDetail(expand,'Penalty or liability passage to check',row.penalty_excerpt || row.penalty_review);
+        sourceDetail(expand,'Exception passage to check',row.exception_excerpt || 'Unverified');
+        sourceDetail(expand,'Legal status',row.current_status);
+        sourceDetail(expand,'Effective date',row.effective_date);
+        sourceDetail(expand,'Latest amendment',row.latest_amendment);
+        sourceDetail(expand,'Official page opened',row.official_link);
+        sourceDetail(expand,'Existing index links',row.existing_index_ids);
+        sourceDetail(expand,'Duplicate of',row.duplicate_of);
+        detail.appendChild(expand); body.appendChild(tr);
+      }
+      document.getElementById('source-record-count').textContent = rows.length.toLocaleString()+' matching records of '+allSourceRecords.length.toLocaleString()+'. Official legal verification is in progress.';
+      document.getElementById('source-record-page').textContent = 'Page '+(sourcePage+1)+' of '+pages;
+      document.getElementById('source-record-previous').disabled = sourcePage===0;
+      document.getElementById('source-record-next').disabled = sourcePage===pages-1;
+    }
+
+    async function loadSourceRecords() {
+      try {
+        const response = await fetch('data/all_research_records.json?v=20261117-1');
+        if (!response.ok) throw new Error('Source collection could not be loaded.');
+        const data = await response.json();
+        if (data.records.length !== 3484 || new Set(data.records.map(row=>row.record_id)).size !==3484) throw new Error('Source collection integrity check failed.');
+        allSourceRecords = data.records;
+        const jurs = [...new Set(allSourceRecords.map(row=>row.jurisdiction))].sort();
+        const select = document.getElementById('source-jurisdiction');
+        for (const jurisdiction of jurs) select.add(new Option(jurisdiction,jurisdiction));
+        document.getElementById('source-text-total').textContent = data.summary.text_available.toLocaleString();
+        const totals = document.getElementById('all-record-review-totals');
+        const list = document.createElement('ul'); list.className = 'list-disc pl-5 space-y-1';
+        for (const [outcome,count] of Object.entries(data.summary.dispositions)) list.appendChild(sourceNode('li',outcome+' — '+count.toLocaleString()));
+        totals.replaceChildren(list);
+        const requested = new URLSearchParams(window.location.search).get('record');
+        if (requested) document.getElementById('source-record-search').value=requested;
+        renderSourceRecords();
+      } catch (error) {
+        document.getElementById('source-record-count').textContent = 'The research collection could not load. Refresh this page or download the full CSV.';
+        document.getElementById('all-record-review-totals').textContent = 'Review totals unavailable. See the complete CSV download.';
+        document.getElementById('source-record-previous').disabled=true;
+        document.getElementById('source-record-next').disabled=true;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded',()=>{
+      for (const id of sourceControls) document.getElementById(id).addEventListener(id==='source-record-search'?'input':'change',()=>{sourcePage=0;renderSourceRecords();});
+      document.getElementById('source-record-previous').addEventListener('click',()=>{sourcePage--;renderSourceRecords();});
+      document.getElementById('source-record-next').addEventListener('click',()=>{sourcePage++;renderSourceRecords();});
+      loadSourceRecords();
     });
   </script>
 </body>
