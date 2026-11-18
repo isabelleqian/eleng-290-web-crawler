@@ -375,22 +375,39 @@ LOCATION_NORM = {
     "Washington, Washington": "Washington, DC",
 }
 
+PUBLIC_URLS_MAP_PATH = Path(__file__).resolve().parent.parent / "docs" / "data" / "public_urls_mapping.json"
+PUBLIC_URLS_MAP = {}
+if PUBLIC_URLS_MAP_PATH.exists():
+    try:
+        with open(PUBLIC_URLS_MAP_PATH, "r", encoding="utf-8") as _f:
+            PUBLIC_URLS_MAP = json.load(_f)
+    except Exception:
+        PUBLIC_URLS_MAP = {}
+
 def resolve_url(d):
     """Resolve a live canonical URL for any crawled news document or Nexis Uni record."""
     sid = d.get("source_id") or d.get("id") or ""
     if sid in NON_NEXIS_CORRECTIONS and NON_NEXIS_CORRECTIONS[sid].get("url"):
         return NON_NEXIS_CORRECTIONS[sid]["url"]
 
+    if sid in PUBLIC_URLS_MAP:
+        return PUBLIC_URLS_MAP[sid]
+
     url = d.get("url") or d.get("final_url") or d.get("requested_url") or ""
-    if url and (url.startswith("http://") or url.startswith("https://")):
+    if url and (url.startswith("http://") or url.startswith("https://")) and "nexisuni.com" not in url:
         return url
 
     archive_dir = d.get("archive_dir") or ""
     combined = f"{sid} {archive_dir}"
     m = re.search(r"urn:contentItem:([A-Za-z0-9-]+)", combined)
     if m:
-        urn_id = m.group(1)
-        path = f"/shared/document/news/urn:contentItem:{urn_id}"
+        full_urn_key = f"nexis_urn:contentItem:{m.group(1)}"
+        if full_urn_key in PUBLIC_URLS_MAP:
+            return PUBLIC_URLS_MAP[full_urn_key]
+        raw_urn_key = f"urn:contentItem:{m.group(1)}"
+        if raw_urn_key in PUBLIC_URLS_MAP:
+            return PUBLIC_URLS_MAP[raw_urn_key]
+        path = f"/shared/document/news/urn:contentItem:{m.group(1)}"
         return f"https://www.nexisuni.com/document/?pddocfullpath={urllib.parse.quote(path, safe='')}"
     
     return ""
