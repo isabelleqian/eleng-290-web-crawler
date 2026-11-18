@@ -1,5 +1,6 @@
 """Write only standalone pilot results; never accesses a database."""
 import csv
+import json
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -59,7 +60,13 @@ def save_nexis_summary(index, summary, notes=''):
     existing = {r['source_id'] for r in read_csv(BASE / 'reviewed_results.csv')}
     if source['source_id'] in existing:
         raise ValueError(f"Already reviewed: {source['source_id']}")
-    prefix = ('Summary complete from archived article; public URL and '
+    mapping_path = ROOT / 'docs/data/public_urls_mapping.json'
+    mapping = json.loads(mapping_path.read_text(encoding='utf-8-sig')) if mapping_path.exists() else {}
+    public_url = mapping.get(source['source_id'], '')
+    prefix = ('Summary complete from archived article; independent public URL and '
               'title/publisher/date verification deferred at user request. '
               'Starting metadata retained without independent verification. ')
-    save_nexis_record(index, summary, prefix + notes)
+    if public_url:
+        prefix += ('Public URL imported by exact source_id from team-maintained '
+                   'docs/data/public_urls_mapping.json; not independently rechecked in this pass. ')
+    save_nexis_record(index, summary, prefix + notes, url=public_url)

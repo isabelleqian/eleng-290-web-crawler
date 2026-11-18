@@ -1,21 +1,22 @@
 {
-  "validated_at": "2026-11-17T23:06:10+00:00",
+  "validated_at": "2026-11-18T17:02:08+00:00",
   "checks_passed": true,
-  "total_rows": 656,
-  "unique_ids": 656,
+  "total_rows": 1628,
+  "unique_ids": 1628,
   "non_nexis_rows": 36,
-  "nexis_rows": 620,
+  "nexis_rows": 1592,
   "original_pilot_ids_preserved": true,
   "no_out_of_scope_ids": true,
   "all_1592_original_nexis_readables_unchanged": true,
   "status_counts": {
     "completed": 53,
-    "partial_verification": 603
+    "partial_verification": 1574,
+    "needs_attention": 1
   },
-  "nonblank_summaries": 656,
-  "nonblank_public_urls": 87,
-  "nonblank_dates": 653,
-  "review_is_complete": false,
+  "nonblank_summaries": 1628,
+  "nonblank_public_urls": 238,
+  "nonblank_dates": 1625,
+  "review_is_complete": true,
   "original_pilot_validation": {
     "validated_at": "2026-11-17T09:47:24+00:00",
     "checks_passed": true,
@@ -131,7 +132,7 @@
     "cost": null
   },
   "sha256": {
-    "outputs\\article_review_pilot\\reviewed_results.csv": "a97cd310869e3e88471f680d38b1919883d7c79908676ede714c1b94180fe2fd",
+    "outputs\\article_review_pilot\\reviewed_results.csv": "d32b08123027221497a079295b73fa7058cf1ca267c5d2add1c4da55404711a7",
     "outputs\\article_review_pilot\\support\\nexis_review_inventory.csv": "85b12c25ccd870ab870243c874fbd58bd79b96bd3dc9734445ff3e3c10529b13",
     "outputs\\article_review_pilot\\support\\nexis_selection.csv": "ce13ef69288e4c418d551ccf86d19ab452114354563d489207f82b66c924bc5f",
     "docs\\data\\non_nexis_metadata_reviewed.csv": "6a800bd6224dadbbbec50f5ab6c90e0f54233ce08f87d03324cb069dd28668b1"
