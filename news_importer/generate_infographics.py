@@ -9,6 +9,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 from news_importer.site_navigation import ARCHIVE_PAGE, render_site_navigation
+from news_importer.review_summaries import apply_reviewed_summaries, load_reviewed_summaries
 
 
 def format_location(value: str) -> str:
@@ -878,7 +879,8 @@ def render_keyword_audit_cards(keyword_audit: dict) -> str:
 
 def generate_html_infographics(data_payload: dict) -> str:
     """Generate self-contained HTML/Tailwind CSS interactive dashboard with SVG Map & Timeline Slider."""
-    json_str = json.dumps(data_payload)
+    data_payload = apply_reviewed_summaries(data_payload, load_reviewed_summaries())
+    json_str = json.dumps(data_payload).replace("<", "\\u003c")
     meta = data_payload["metadata"]
     total_sources = meta["total_sources"]
     localized_sources = meta["localized_sources"]
@@ -3133,7 +3135,7 @@ def generate_html_infographics(data_payload: dict) -> str:
 
         if (row.summary) {{
           const sumP = document.createElement('p');
-          sumP.className = 'text-xs text-slate-400 mt-1.5 leading-relaxed line-clamp-2';
+          sumP.className = 'text-xs text-slate-400 mt-1.5 leading-relaxed';
           sumP.textContent = row.summary;
           docCell.appendChild(sumP);
         }}
@@ -3486,6 +3488,7 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
             "layer": layer,
             "score_tier": score_tier,
         })
+    payload = apply_reviewed_summaries(payload, load_reviewed_summaries())
     data = json.dumps(payload, ensure_ascii=False).replace("<", "\\u003c")
     archive_total = total_archive_count or (len(payload) if is_archive else 1605)
     filtered_count = len(payload) if not is_archive else (sum(1 for r in payload if r.get("is_relevant") == 1) or len(payload))
@@ -3779,7 +3782,7 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
 
         if (row.summary) {{
           const sumP = document.createElement('p');
-          sumP.className = 'text-xs text-slate-400 mt-1.5 leading-relaxed line-clamp-2';
+          sumP.className = 'text-xs text-slate-400 mt-1.5 leading-relaxed';
           sumP.textContent = row.summary;
           docCell.appendChild(sumP);
         }}
