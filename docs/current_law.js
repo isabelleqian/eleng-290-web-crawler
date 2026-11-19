@@ -46,20 +46,19 @@
     const group = node('div'); group.append(node('dt', label), node('dd', text)); dl.append(group);
   }
   function record(r) {
-    const badgeText = r.relevance_badge || (r.tier_group === 'excluded' ? 'Excluded Candidate' : (r.tier_group === 'pending' ? 'Pending Audit' : `In-Scope (Tier ${r.tier})`));
-    const item = node('details', null, `law-record tier-${r.tier} status-${r.tier_group || 'inscope'}`); item.id = 'law-' + r.id;
+    const item = node('details', null, `law-record tier-${r.tier}`); item.id = 'law-' + r.id;
     const summary = node('summary');
     summary.append(
-      node('span', `${r.tier_label || ('Tier ' + r.tier)} · ${r.jurisdiction} · ${r.category_code} · ${badgeText}`, 'record-meta'),
+      node('span', `${r.tier_label || ('Tier ' + r.tier)} · ${r.jurisdiction} · ${r.category_code}`, 'record-meta'),
       node('strong', r.title),
       node('span', r.citation, 'record-citation')
     );
     item.append(summary, node('p', r.summary));
     const dl = node('dl', null, 'record-details');
     detail(dl, 'Legal instrument', `${r.instrument_type} · ${r.id}`);
-    detail(dl, 'Relevance audit status', `${badgeText} (${r.tier_label || 'Codified provision'})`);
     detail(dl, 'Primary codebook subclass', `${r.category_code} · ${r.category_name}`);
     detail(dl, 'Scope of application', r.scope);
+    detail(dl, 'Tier classification', r.tier_label || `Tier ${r.tier}`);
     detail(dl, 'Classification rationale', r.classification_rationale);
     if (r.operative_evidence) detail(dl, 'Operative supporting passage', r.operative_evidence);
     detail(dl, 'Current status', `${r.current_status}. Checked ${r.status_checked_on}.`);
@@ -99,7 +98,7 @@
       }
       section.append(list); el('full-codebook').append(section);
     }
-    el('collection-description').textContent = `${number(records.length)} codified legal instruments systematically screened across federal statutes, regulations, and 49 states. Excluded baseline provisions and candidates awaiting individual operative text review remain cataloged in the research audit.`;
+    el('collection-description').textContent = `${number(records.length)} codified legal instruments systematically screened across federal statutes, regulations, and 49 states organized under the three-tier governance framework.`;
     el('screening-summary').textContent = `This codified collection covers federal sources and 49 states, totaling ${number(records.length)} codified records organized under the three-tier governance framework and six-category codebook.`;
     for (const tier of [1, 2, 3]) el('tier-count-' + tier).textContent = number(data.counts.by_tier[tier]);
     const jurisdictions = Object.keys(data.counts.by_jurisdiction).sort();
@@ -113,23 +112,11 @@
       const query = el('current-law-search').value.trim().toLowerCase();
       const tierFilter = el('current-law-tier').value;
       return records.filter(r => {
-        if (tierFilter) {
-          if (tierFilter === '1' || tierFilter === '2') {
-            if (String(r.tier) !== tierFilter) return false;
-          } else if (tierFilter === '3') {
-            if (r.tier_group !== '3') return false;
-          } else if (tierFilter === 'excluded') {
-            if (r.tier_group !== 'excluded') return false;
-          } else if (tierFilter === 'pending') {
-            if (r.tier_group !== 'pending') return false;
-          } else if (tierFilter === 'all-tier-3') {
-            if (r.tier !== 3) return false;
-          }
-        }
+        if (tierFilter && String(r.tier) !== tierFilter) return false;
         if (el('current-law-jurisdiction').value && r.jurisdiction !== el('current-law-jurisdiction').value) return false;
         if (el('current-law-category').value && r.category_code !== el('current-law-category').value) return false;
         if (el('current-law-type').value && r.instrument_type !== el('current-law-type').value) return false;
-        if (query && ![r.id, r.title, r.citation, r.summary, r.scope, r.classification_rationale, r.category_name, r.tier_label, r.relevance_badge].join(' ').toLowerCase().includes(query)) return false;
+        if (query && ![r.id, r.title, r.citation, r.summary, r.scope, r.classification_rationale, r.category_name, r.tier_label].join(' ').toLowerCase().includes(query)) return false;
         return true;
       });
     }
