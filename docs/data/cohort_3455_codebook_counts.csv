@@ -1,0 +1,37 @@
+﻿Code,Category name,Records,Layer 1,Layer 2,Layer 3
+A1,Turn restrictions,126,0,126,0
+A2,Through-traffic restrictions,41,0,41,0
+A3,One-way and circulation restrictions,225,0,225,0
+A4,Permit-based access and exemptions,23,0,23,0
+A5,Vehicle- or trip-purpose-based access restrictions,409,0,409,0
+B1,"Traffic filters, diverters, and closures",169,0,169,0
+B2,Vertical traffic calming,6,0,6,0
+B3,Street narrowing and horizontal deflection,2,0,2,0
+B4,Intersection geometry and traffic circles,8,0,8,0
+B5,Road-space reallocation,0,0,0,0
+B6,Surface and perceptual traffic calming,3,0,3,0
+C1,Traffic signal control and timing,107,0,107,0
+C2,Stop and priority control,66,0,66,0
+C3,Roadway and ramp metering,0,0,0,0
+C4,Speed management and harmonization,216,0,216,0
+C5,Dynamic lane and roadway allocation,52,0,52,0
+D1,Area and cordon congestion charging,49,0,49,0
+D2,Road or facility tolling,579,0,579,0
+D3,"Dynamic, time-, or distance-based pricing",1,0,1,0
+D4,Vehicle-differentiated charges,2,0,2,0
+D5,Permit and access fees,1,0,1,0
+D6,Parking pricing,57,0,57,0
+E1,Routing restrictions for designated streets or areas,4,3,1,0
+E2,Recognition of official traffic restrictions,629,0,629,0
+E3,Route guidance and routing criteria,5,0,5,0
+E4,Routing information correction and updating,0,0,0,0
+E5,Algorithm or performance requirements,0,0,0,0
+E6,Legal or regulatory action against routing providers,0,0,0,0
+F1,Government-platform data exchange and official data feeds,1,0,1,0
+F2,Government-platform coordination and pilot programs,0,0,0,0
+F3,Routing-impact monitoring and traffic analysis,22,0,22,0
+F4,Integration into transportation and land-use planning,73,0,73,0
+F5,Transportation demand management and mode shift,10,0,10,0
+F6,Traveler information and behavioral interventions,19,2,17,0
+F7,Development and subdivision design requirements,34,0,34,0
+,No exact subclass,54,0,2,52

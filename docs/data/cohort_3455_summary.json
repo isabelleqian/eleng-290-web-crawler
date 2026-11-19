@@ -1,0 +1,70 @@
+{
+  "date": "2026-11-18",
+  "base_records": 3455,
+  "counting_unit": "Stable source record ID; not deduplicated enacted laws. No old-index records are added.",
+  "layers": {
+    "Layer 1": 5,
+    "Layer 2": 2936,
+    "Layer 3": 52
+  },
+  "outcomes": {
+    "Assigned": 2993,
+    "Excluded": 436,
+    "Pending text": 25,
+    "Pending scope": 1
+  },
+  "categories": {
+    "A3": 225,
+    "E2": 629,
+    "B1": 169,
+    "A1": 126,
+    "No exact subclass": 54,
+    "A5": 409,
+    "D2": 579,
+    "D6": 57,
+    "C1": 107,
+    "C2": 66,
+    "C4": 216,
+    "F4": 73,
+    "A4": 23,
+    "A2": 41,
+    "C5": 52,
+    "F7": 34,
+    "E3": 5,
+    "B4": 8,
+    "F6": 19,
+    "F3": 22,
+    "F5": 10,
+    "D1": 49,
+    "B3": 2,
+    "F1": 1,
+    "B2": 6,
+    "B6": 3,
+    "D5": 1,
+    "D4": 2,
+    "E1": 4,
+    "D3": 1
+  },
+  "state_bill_text_retrieved": 163,
+  "federal_bill_text_retrieved": 62,
+  "contextual_decisions": 441,
+  "status_verification": "Content classification does not verify current status, enactment, amendment, effective date or exhaustiveness.",
+  "excluded_records": 436,
+  "pending_records": 26,
+  "classification_accounting": {
+    "Layer 1": 5,
+    "Layer 2": 2936,
+    "Layer 3": 52,
+    "Excluded": 436,
+    "Pending": 26
+  },
+  "collections": {
+    "state-provision": 2854,
+    "federal-provision": 366,
+    "state-bill": 170,
+    "federal-bill": 65
+  },
+  "usable_archived_payloads": 3429,
+  "assigned_without_exact_subclass": 54,
+  "identical_bill_text_captures": 3
+}
