@@ -1,0 +1,130 @@
+[
+  {
+    "key": "NJ-PL2025-c347",
+    "url": "https://pub.njleg.state.nj.us/Bills/2024/PL25/347_.PDF",
+    "status": "200",
+    "error": "",
+    "file": "NJ-PL2025-c347.pdf",
+    "sha256": "cd2a3b4a800aeff272805957eea8fccc0b4d7bd11968c4977e7e2c4e36eaf05a"
+  },
+  {
+    "key": "ecfr23-658",
+    "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-11-17/title-23.xml?part=658",
+    "status": "200",
+    "error": "",
+    "file": "ecfr23-658.xml",
+    "sha256": "0006e03138b14760163fdb1eb9b6d46d7e68097086a3ebb4590ab80a971aea2a"
+  },
+  {
+    "key": "ecfr23-655",
+    "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-11-17/title-23.xml?part=655",
+    "status": "200",
+    "error": "",
+    "file": "ecfr23-655.xml",
+    "sha256": "7c53ccadcb6cf54c3bb7927fe909bf3389ea10d3d0f16dba41ed5b04deceff69"
+  },
+  {
+    "key": "ecfr23-630",
+    "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-11-17/title-23.xml?part=630",
+    "status": "200",
+    "error": "",
+    "file": "ecfr23-630.xml",
+    "sha256": "7678e06c00581920d49cf47d85e1af8a8716f2422c05cff151ef9cc9cac43829"
+  },
+  {
+    "key": "ecfr23-450",
+    "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-11-17/title-23.xml?part=450",
+    "status": "200",
+    "error": "",
+    "file": "ecfr23-450.xml",
+    "sha256": "f776c674f84edbf557ef98d7f900b0fe75390bdb901934981611f53219d77f95"
+  },
+  {
+    "key": "ecfr23-657",
+    "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-11-17/title-23.xml?part=657",
+    "status": "200",
+    "error": "",
+    "file": "ecfr23-657.xml",
+    "sha256": "d5f4644a544d9c458b4f18d589ef71594424674955c2cbde2bd78ada40c96406"
+  },
+  {
+    "key": "ecfr49-397",
+    "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-11-17/title-49.xml?part=397",
+    "status": "200",
+    "error": "",
+    "file": "ecfr49-397.xml",
+    "sha256": "d573c8cd5f63bbe7a23d159903c1dd16b0e97b43cfd2641af38cf198ba2efd2b"
+  },
+  {
+    "key": "ecfr36-4",
+    "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-11-17/title-36.xml?part=4",
+    "status": "200",
+    "error": "",
+    "file": "ecfr36-4.xml",
+    "sha256": "cfc8ff5362a26e10309fbfe1b9bbb3e6e88c9cab4e7d804dc9d8cff5a2ea62ab"
+  },
+  {
+    "key": "ecfr25-170",
+    "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-11-17/title-25.xml?part=170",
+    "status": "200",
+    "error": "",
+    "file": "ecfr25-170.xml",
+    "sha256": "3ec164956a7233db763e3fc40212393e2a38aaf85d14a851fce8801c301691d5"
+  },
+  {
+    "key": "ecfr43-423",
+    "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-11-17/title-43.xml?part=423",
+    "status": "200",
+    "error": "",
+    "file": "ecfr43-423.xml",
+    "sha256": "54b05e926dcc1c5b3fe205a949154156a817b577ab9fd403a1ba1b0c8441e6ea"
+  },
+  {
+    "key": "usc15-45",
+    "url": "https://uscode.house.gov/us/usc/t15/s45/",
+    "status": "200",
+    "error": "",
+    "file": "usc15-45.html",
+    "sha256": "e4bffbf23bd21663853f9c80b3eac8af32a69c324476a6da186caa905d333995"
+  },
+  {
+    "key": "usc47-230",
+    "url": "https://uscode.house.gov/us/usc/t47/s230/",
+    "status": "200",
+    "error": "",
+    "file": "usc47-230.html",
+    "sha256": "bd2136300f0a6cb7aa3504f338fb2ea9bb56ab4bd8563701b3b733b2dcb15075"
+  },
+  {
+    "key": "usc23-127",
+    "url": "https://uscode.house.gov/us/usc/t23/s127/",
+    "status": "200",
+    "error": "",
+    "file": "usc23-127.html",
+    "sha256": "f7e01c732d6779af9727971385dd97017e48c2963d3378c4a7257f8091ab4cde"
+  },
+  {
+    "key": "usc23-129",
+    "url": "https://uscode.house.gov/us/usc/t23/s129/",
+    "status": "200",
+    "error": "",
+    "file": "usc23-129.html",
+    "sha256": "ae428c2865995c458823c5f537b801e4f9c8b4d89716334540e4acffa4644a13"
+  },
+  {
+    "key": "usc23-166",
+    "url": "https://uscode.house.gov/us/usc/t23/s166/",
+    "status": "200",
+    "error": "",
+    "file": "usc23-166.html",
+    "sha256": "b4cb9911bc4462119a11decbd6981d2ff59b833578838f73a2ee2f9a7bbd6e29"
+  },
+  {
+    "key": "usc49-5112",
+    "url": "https://uscode.house.gov/us/usc/t49/s5112/",
+    "status": "200",
+    "error": "",
+    "file": "usc49-5112.html",
+    "sha256": "d506353f9c9e892b36a4ebb100d0074696a1c638d343475e36c002012144e43b"
+  }
+]
