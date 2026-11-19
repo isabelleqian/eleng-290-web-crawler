@@ -63,18 +63,18 @@ class CurrentLawPublicationTests(unittest.TestCase):
             self.assertIn(norm(r['operative_evidence']), norm(capture['text']))
             self.assertNotIn('Request Access', capture['text'][:2000])
 
-    def test_crosswalk_has_no_unverified_current_law_edges(self):
-        data = json.loads((ROOT / 'docs/data/current_news_law_crosswalk.json').read_text())
-        eligible = {r['id'] for r in self.records}
-        self.assertEqual(len(data['news']), 373)
-        for edge in data['verified_links']:
-            self.assertIn(edge['instrument_id'], eligible)
-            self.assertEqual(edge['verification_status'], 'Verified article-to-current-provision relationship')
-        for page in ('law_database.html', 'crosswalk.html'):
-            html = (ROOT / 'docs' / page).read_text()
-            self.assertNotIn('const LEGISLATION =', html)
-            self.assertNotIn('const CROSSWALK =', html)
-            self.assertNotIn('cohort_3455_analysis.json', html)
+    def test_crosswalk_content_and_functionality_are_preserved(self):
+        # User requested that the pre-review crosswalk remain unchanged except colors.
+        self.assertEqual(hashlib.sha256((ROOT / 'docs/crosswalk.html').read_bytes()).hexdigest(),
+                         '85f0550c1afa49545c3ccc8e588a52e3e3d21c6077ee86dda1a0befac745aa7d')
+        html = (ROOT / 'docs/law_database.html').read_text()
+        self.assertNotIn('const LEGISLATION =', html)
+        self.assertNotIn('const CROSSWALK =', html)
+        self.assertNotIn('cohort_3455_analysis.json', html)
+        self.assertEqual(len(self.data['codebook']), 35)
+        self.assertEqual(Counter(code[0] for code in self.data['codebook']),
+                         {'A': 5, 'B': 6, 'C': 5, 'D': 6, 'E': 6, 'F': 7})
+        self.assertIn('id="full-codebook"', html)
         with (AUDIT / 'jurisdiction_tracker.csv').open(encoding='utf-8-sig', newline='') as stream:
             tracker = list(csv.DictReader(stream))
         self.assertEqual(len(tracker), 52)
