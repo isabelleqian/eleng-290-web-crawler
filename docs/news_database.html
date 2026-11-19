@@ -106,7 +106,7 @@
           <th class="py-3 px-3.5 w-[34%] font-semibold">Project Relevance & Specific Rationale</th>
           <th class="py-3 px-3.5 w-[14%] font-semibold">Topic Category</th>
           <th class="py-3 px-3.5 w-[10%] font-semibold">Governing Level</th>
-          <th class="py-3 px-3.5 w-[8%] font-semibold text-center">Law Crosswalk</th>
+          <th class="py-3 px-3.5 w-[8%] font-semibold text-center">Crosswalk review</th>
         </tr>
       </thead>
       <tbody id="rows" class="divide-y divide-slate-800/80"></tbody>
@@ -311,13 +311,13 @@
         // 5. Law Crosswalk Cell (w-[8%])
         const crossCell = document.createElement('td');
         crossCell.className = 'py-3 px-3.5 align-top text-center';
-        if (row.crosswalk_id) {
+        if (row.is_relevant) {
           const crossLink = document.createElement('a');
           crossLink.href = 'crosswalk.html#doc-' + (row.id || row.source_id);
           crossLink.target = '_blank';
           crossLink.className = 'inline-block px-2 py-1 rounded text-[11px] font-mono font-medium bg-slate-900 hover:bg-blue-900/60 text-blue-300 hover:text-white border border-slate-700 hover:border-blue-500 transition shadow-sm';
-          crossLink.textContent = row.crosswalk_id;
-          crossLink.title = row.crosswalk_name || '';
+          crossLink.textContent = 'Review status';
+          crossLink.title = 'News context only; no verified current-law relationship is asserted';
           crossCell.appendChild(crossLink);
         } else {
           const dash = document.createElement('span');
