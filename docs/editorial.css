@@ -165,3 +165,11 @@ td span[class*="border"],td div[class*="rounded"] { border:0!important; backgrou
 @media(max-width:700px) { .tier-grid { grid-template-columns:1fr; gap:24px; } .research-stats { gap:14px; } .research-stats span { font-size:32px; } .record-details { grid-template-columns:1fr; } .research-tabs { gap:0 22px; } .research-filters label { flex:1 1 100%; } .research-filters input,.research-filters select { max-width:100%; } #gov-pills { flex-wrap:wrap; } }
 body nav.research-tabs a { border:0!important; border-bottom:3px solid transparent!important; }
 body nav.research-tabs a[aria-current="page"] { border-bottom-color:var(--gold)!important; }
+
+#codebook { margin:48px 0; border-top:1px solid var(--rule); padding-top:24px; }
+#full-codebook { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px 40px; }
+.codebook-family { border-top:1px solid var(--rule); padding-top:4px; }
+.codebook-definitions > div { display:grid; grid-template-columns:36px 1fr; gap:10px; margin:10px 0; font-size:14px; }
+.codebook-definitions dt { color:var(--blue); font-weight:700; }
+.codebook-definitions dd { margin:0; }
+@media(max-width:700px) { #full-codebook { grid-template-columns:1fr; } }

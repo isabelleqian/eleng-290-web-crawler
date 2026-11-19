@@ -70,16 +70,26 @@
     const records = data.records; let currentPage = 0;
     el('law-total').textContent = number(records.length);
     el('law-jurisdictions').textContent = number(Object.keys(data.counts.by_jurisdiction).length);
-    el('law-categories').textContent = number(Object.keys(data.counts.by_category).length);
+    el('law-categories').textContent = '6';
+    const families = {A:'Access and movement restrictions', B:'Physical traffic calming and street design', C:'Traffic control and operations', D:'Pricing and charges', E:'Routing and navigation', F:'Planning, data, and demand management'};
+    for (const [family, name] of Object.entries(families)) {
+      const section = node('section', null, 'codebook-family');
+      section.append(node('h3', `${family}. ${name}`));
+      const list = node('dl', null, 'codebook-definitions');
+      for (const [code, label] of Object.entries(data.codebook).filter(([code]) => code.startsWith(family))) {
+        const row = node('div'); row.append(node('dt', code), node('dd', label)); list.append(row);
+      }
+      section.append(list); el('full-codebook').append(section);
+    }
     el('collection-description').textContent = `${number(records.length)} checked, nonoverlapping legal entries appear in the public collection. Pending proposals, future-effective instruments, non-specific placeholders and sources awaiting individual legal verification are outside this collection.`;
     el('screening-summary').textContent = `This verified subset covers the federal level and ${Object.keys(data.counts.by_jurisdiction).length - 1} states. Each retained entry was checked against official operative text; nationwide, DC and California local coverage remain incomplete. Source currency is stated per record.`;
     for (const tier of [1, 2, 3]) el('tier-count-' + tier).textContent = number(data.counts.by_tier[tier]);
     const jurisdictions = Object.keys(data.counts.by_jurisdiction).sort();
     for (const value of jurisdictions) { const o = node('option', value); o.value = value; el('current-law-jurisdiction').append(o); }
-    for (const code of Object.keys(data.counts.by_category).sort()) { const o = node('option', `${code} · ${data.codebook[code]}`); o.value = code; el('current-law-category').append(o); }
+    for (const code of Object.keys(data.codebook).sort()) { const o = node('option', `${code} · ${data.codebook[code]}`); o.value = code; el('current-law-category').append(o); }
     for (const type of Object.keys(data.counts.by_instrument_type).sort()) { const o = node('option', type); o.value = type; el('current-law-type').append(o); }
     countTable(el('jurisdiction-counts'), jurisdictions, records, {key: r => r.jurisdiction, label: g => g});
-    countTable(el('category-counts'), Object.keys(data.counts.by_category).sort(), records, {key: r => r.category_code, label: g => `${g} · ${data.codebook[g]}`});
+    countTable(el('category-counts'), Object.keys(data.codebook).sort(), records, {key: r => r.category_code, label: g => `${g} · ${data.codebook[g]}`});
     for (const [type, count] of Object.entries(data.counts.by_instrument_type)) el('instrument-counts').append(node('p', `${type}: ${number(count)}`));
     function filtered() {
       const query = el('current-law-search').value.trim().toLowerCase();
