@@ -984,7 +984,7 @@
         const title = tr.insertCell(); title.className = 'p-3 align-top';
         title.appendChild(sourceNode('p', row.citation, 'font-semibold text-white'));
         title.appendChild(sourceNode('p', row.title, 'mt-2'));
-        const urls = row.source_reference.split(' | ').filter(url => /^https?:\/\//i.test(url));
+        const urls = [...new Set([row.content_text_url,row.official_link,...row.source_reference.split(' | ')].filter(url => /^https?:\/\//i.test(url || '')))];
         for (const url of urls) {
           const link = sourceNode('a', 'Source reference', 'mt-2 block text-blue-300 underline');
           link.href = url; link.target = '_blank'; link.rel = 'noopener noreferrer'; title.appendChild(link);
