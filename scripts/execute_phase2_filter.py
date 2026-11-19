@@ -784,9 +784,17 @@ def run_phase2_execution():
             f.write(index_content)
         print(f"Saved updated {INDEX_HTML} (metadata total_sources: {len(filtered_db)})")
 
-    # 7. Regenerate Law Crosswalk Dashboard HTML pages
+    # 7. Synchronize Crosswalk HTML Dashboard
+    print("\nSynchronizing News ↔ Law Crosswalk HTML Dashboard...")
+    try:
+        from scripts.sync_crosswalk_page import sync_crosswalk_page
+        sync_crosswalk_page()
+    except Exception as e:
+        print(f"Error syncing crosswalk page: {e}")
+
+    # 8. Regenerate Law Crosswalk Dashboard HTML pages if Law_Crawler is available
     if generate_all_dashboard_pages and (PARENT_ROOT / "Law_Crawler").exists():
-        print("\nRegenerating Law Crosswalk HTML Dashboards...")
+        print("\nRegenerating Law Crosswalk HTML Dashboards from Law_Crawler...")
         try:
             res = generate_all_dashboard_pages(PARENT_ROOT / "Law_Crawler", ROOT / "docs")
             print(f"Generated dashboard pages: {res}")
