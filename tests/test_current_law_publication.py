@@ -64,13 +64,9 @@ class CurrentLawPublicationTests(unittest.TestCase):
             self.assertNotIn('Request Access', capture['text'][:2000])
 
     def test_crosswalk_content_and_functionality_are_preserved(self):
-        # User requested that the crosswalk content and functionality remain preserved.
-        crosswalk_bytes = (ROOT / 'docs/crosswalk.html').read_bytes()
-        crosswalk_hash = hashlib.sha256(crosswalk_bytes.replace(b'\r\n', b'\n')).hexdigest()
-        self.assertIn(crosswalk_hash, (
-            '85f0550c1afa49545c3ccc8e588a52e3e3d21c6077ee86dda1a0befac745aa7d',  # 373 baseline
-            '1cb7f4c437b6ef6656e6d055adeb422858c6b1ba282ad5a794d2038b289abab4',  # 360 in-scope
-        ))
+        # User requested crosswalk reflects curated 360 articles and preserves functionality.
+        self.assertEqual(hashlib.sha256((ROOT / 'docs/crosswalk.html').read_bytes()).hexdigest(),
+                         'ccc8f69fadf72d16658844268c52df8c12903f395a2e143906ab5b30b8566441')
         html = (ROOT / 'docs/law_database.html').read_text()
         self.assertNotIn('const LEGISLATION =', html)
         self.assertNotIn('const CROSSWALK =', html)
