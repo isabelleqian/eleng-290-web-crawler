@@ -1,0 +1,66 @@
+{
+  "as_of": "2026-11-18",
+  "public_counts": {
+    "total": 37,
+    "by_tier": {
+      "1": 1,
+      "2": 34,
+      "3": 2
+    },
+    "by_jurisdiction": {
+      "California": 9,
+      "Federal": 17,
+      "Florida": 1,
+      "Massachusetts": 1,
+      "Minnesota": 1,
+      "New Jersey": 1,
+      "New York": 3,
+      "Oregon": 1,
+      "Virginia": 1,
+      "Washington": 2
+    },
+    "by_instrument_type": {
+      "Statute": 23,
+      "Statute (enacted public law)": 1,
+      "Regulation": 13
+    },
+    "by_category": {
+      "A1": 2,
+      "A3": 1,
+      "A4": 1,
+      "A5": 13,
+      "B1": 4,
+      "C4": 1,
+      "D2": 1,
+      "E1": 1,
+      "E2": 5,
+      "E3": 2,
+      "E6": 2,
+      "F1": 1,
+      "F3": 1,
+      "F4": 1,
+      "F5": 1
+    }
+  },
+  "initial_cohort_source_records": 3455,
+  "supplementary_legacy_source_records": 189,
+  "total_source_records_accounted_for": 3644,
+  "source_dispositions": {
+    "Withheld—individual legal verification incomplete": 3274,
+    "Consolidated into verified current instrument": 41,
+    "Removed—advisory content, not a separate operative duty": 1,
+    "Withheld—current enacted effect not verified": 253,
+    "Removed—not yet effective": 1,
+    "Removed—superseded companion draft": 1,
+    "Removed—non-specific directory placeholder": 73
+  },
+  "cohort_dispositions": {
+    "Withheld—individual legal verification incomplete": 3208,
+    "Consolidated into verified current instrument": 11,
+    "Removed—advisory content, not a separate operative duty": 1,
+    "Withheld—current enacted effect not verified": 235
+  },
+  "source_url_access_attempts": 3316,
+  "review_complete": false,
+  "limitation": "All source IDs have a publication disposition. Only the approved subset has individual current-text/legal classification verification; withheld records still require legal review."
+}
