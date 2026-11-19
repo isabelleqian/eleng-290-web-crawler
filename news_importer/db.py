@@ -241,6 +241,9 @@ def ensure_schema(connection: sqlite3.Connection) -> None:
         ("exclusion_reason", "TEXT DEFAULT NULL"),
         ("relevance_score", "INTEGER DEFAULT 85"),
         ("relevance_rationale", "TEXT DEFAULT NULL"),
+        ("topic_category", "TEXT DEFAULT NULL"),
+        ("crosswalk_instrument_id", "TEXT DEFAULT NULL"),
+        ("crosswalk_instrument_name", "TEXT DEFAULT NULL"),
     ]:
         if name not in crawled_cols:
             connection.execute(f"ALTER TABLE crawled_documents ADD COLUMN {name} {declaration}")

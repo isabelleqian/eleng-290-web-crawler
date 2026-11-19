@@ -170,9 +170,20 @@ function renderRows(matches, groups) {
 }
 
 async function main() {
-  const response = await fetch("data/policy_screening.json");
-  if (!response.ok) throw new Error("Policy dataset could not be loaded");
-  const all = await response.json();
+  let all;
+  const embedded = byId("policy-screening-data");
+  if (embedded && embedded.textContent.trim()) {
+    try {
+      all = JSON.parse(embedded.textContent);
+    } catch (e) {
+      console.warn("Failed to parse embedded policy data, falling back to fetch", e);
+    }
+  }
+  if (!all) {
+    const response = await fetch("data/policy_screening.json");
+    if (!response.ok) throw new Error("Policy dataset could not be loaded");
+    all = await response.json();
+  }
   const candidates = all.filter(row => row.candidate);
   const records = archiveMode ? all : candidates;
   const groups = new Map();

@@ -67,9 +67,21 @@ function sourceEvidence(source) {
 }
 
 async function main() {
-  const response = await fetch("data/policy_measure_review.json");
-  if (!response.ok) throw new Error("Policy measure data could not be loaded");
-  const {instances, codes, categories} = await response.json();
+  let raw;
+  const embedded = document.getElementById("policy-measure-data");
+  if (embedded && embedded.textContent.trim()) {
+    try {
+      raw = JSON.parse(embedded.textContent);
+    } catch (e) {
+      console.warn("Failed to parse embedded measure review data, falling back to fetch", e);
+    }
+  }
+  if (!raw) {
+    const response = await fetch("data/policy_measure_review.json");
+    if (!response.ok) throw new Error("Policy measure data could not be loaded");
+    raw = await response.json();
+  }
+  const {instances, codes, categories} = raw;
   const codebook = new Map(codes.map(code => [code.code, code]));
   const codeCounts = new Map();
   const locations = new Set();

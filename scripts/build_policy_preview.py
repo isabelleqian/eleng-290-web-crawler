@@ -255,6 +255,17 @@ def build_preview(source, output, *, public=False):
     )
     integrate_overview(output, review)
 
+    # Embed offline JSON fallbacks so local file:// browsing does not fail due to CORS
+    min_ps = json.dumps(rows, separators=(",", ":"), ensure_ascii=False).replace("<", "\\u003c")
+    data_tag_ps = f'<script type="application/json" id="policy-screening-data">{min_ps}</script>\n</body>'
+    for page in ("policy_database.html", "policy_database_archive.html"):
+        p = output / page
+        p.write_text(p.read_text(encoding="utf-8").replace("</body>", data_tag_ps, 1), encoding="utf-8")
+    min_pm = json.dumps(review, separators=(",", ":"), ensure_ascii=False).replace("<", "\\u003c")
+    data_tag_pm = f'<script type="application/json" id="policy-measure-data">{min_pm}</script>\n</body>'
+    pm_page = output / "policy_measure_review.html"
+    pm_page.write_text(pm_page.read_text(encoding="utf-8").replace("</body>", data_tag_pm, 1), encoding="utf-8")
+
 
 def build_public_site(source):
     with TemporaryDirectory() as directory:

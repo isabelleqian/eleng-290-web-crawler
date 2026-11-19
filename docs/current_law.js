@@ -16,6 +16,18 @@
     return n;
   };
   async function load(path) {
+    if (path.includes('current_law_database.json')) {
+      const emb = document.getElementById('current-law-data');
+      if (emb && emb.textContent.trim()) {
+        try { return JSON.parse(emb.textContent); } catch (e) {}
+      }
+    }
+    if (path.includes('current_news_law_crosswalk.json')) {
+      const emb = document.getElementById('current-crosswalk-data');
+      if (emb && emb.textContent.trim()) {
+        try { return JSON.parse(emb.textContent); } catch (e) {}
+      }
+    }
     const response = await fetch(path + '?v=current-law-20261118-1');
     if (!response.ok) throw new Error('The checked collection could not be loaded.');
     return response.json();

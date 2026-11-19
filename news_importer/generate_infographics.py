@@ -12,8 +12,38 @@ from news_importer.site_navigation import ARCHIVE_PAGE, render_site_navigation
 from news_importer.review_summaries import apply_reviewed_summaries, load_reviewed_summaries
 
 
+LOCATION_NORM: dict[str, str] = {
+    "Detroit": "Detroit, MI",
+    "Houston": "Houston, TX",
+    "Tampa": "Tampa, FL",
+    "New York City": "New York, NY",
+    "New York, District of Columbia": "Washington, DC",
+    "San Jose, UT": "San Jose, CA",
+    "Boston": "Boston, MA",
+    "Chicago": "Chicago, IL",
+    "Los Angeles": "Los Angeles, CA",
+    "San Francisco": "San Francisco, CA",
+    "Seattle": "Seattle, WA",
+    "Columbus": "Columbus, OH",
+    "Leonia": "Leonia, NJ",
+    "Mantoloking": "Mantoloking, NJ",
+    "Torrance": "Torrance, CA",
+    "Saint Louis, MO": "St. Louis, MO",
+    "New York City, NY": "New York, NY",
+    "Atlanta, Boston, Chicago, Los Angeles, Miami, New York, Philadelphia, Salt Lake City, San Francisco, Seattle": "United States (Multi-City)",
+    "Boston, Los Angeles County, Miami, New York City, Pittsburgh; Florida, Utah, Kentucky": "United States (Multi-City)",
+    "Las Vegas, NV (Southern Nevada), Tampa, FL, Delaware": "United States (Multi-City)",
+    "San Francisco Bay Area, Los Angeles, Phoenix, Austin, Atlanta": "United States (Multi-City)",
+    "San Francisco, Los Angeles, Phoenix, Austin, Atlanta": "United States (Multi-City)",
+}
+
+
 def format_location(value: str) -> str:
     """Standardize existing place labels without inferring missing geography."""
+    label = re.sub(r'\s+', ' ', str(value or '')).strip()
+    if label in LOCATION_NORM:
+        return LOCATION_NORM[label]
+
     states = dict(zip(
         ('Alabama|Alaska|Arizona|Arkansas|California|Colorado|Connecticut|Delaware|'
          'Florida|Georgia|Hawaii|Idaho|Illinois|Indiana|Iowa|Kansas|Kentucky|Louisiana|'
@@ -24,7 +54,6 @@ def format_location(value: str) -> str:
          'Wisconsin|Wyoming').split('|'),
         'AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY'.split(),
     ))
-    label = re.sub(r'\s+', ' ', str(value or '')).strip()
     state_label = re.sub(r'\s*\(state\)$', '', label, flags=re.I)
     names = {name.casefold(): name for name in states}
     if state_label.casefold() in names:
@@ -39,10 +68,9 @@ def format_location(value: str) -> str:
         elif region.upper() in set(states.values()) | {'DC'}:
             region = region.upper()
         else:
-            return label
+            return LOCATION_NORM.get(label, label)
         label = f'{place}, {region}'
-    return {'New York City, NY': 'New York, NY',
-            'Saint Louis, MO': 'St. Louis, MO'}.get(label, label)
+    return LOCATION_NORM.get(label, label)
 
 # Geographic coordinates lookup for U.S. target locations (all localized cities, counties, and states)
 COORDINATES_MAP: dict[str, dict[str, float | str]] = {
@@ -458,7 +486,13 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
     """Read every crawled document, falling back to the coded research file."""
     from news_importer.db import load_crawled_documents
 
-    database = input_json_path.parent.parent / "news.sqlite"
+    db_candidates = [
+        input_json_path.resolve().parents[2] / "data" / "news.sqlite",
+        input_json_path.resolve().parents[1] / "data" / "news.sqlite",
+        Path("data/news.sqlite").resolve(),
+        input_json_path.parent.parent / "news.sqlite",
+    ]
+    database = next((p for p in db_candidates if p.exists()), input_json_path.parent.parent / "news.sqlite")
     all_raw_data = load_crawled_documents(database, only_filtered=False)
     if not all_raw_data:
         all_raw_data = json.loads(input_json_path.read_text(encoding="utf-8"))
@@ -659,10 +693,42 @@ def build_infographic_dataset(input_json_path: Path) -> dict:
             "articles": nationwide_articles,
         },
         "keyword_audit": keyword_audit,
-        "measures": load_measure_panel(input_json_path.parent / "measure_tags.json", allowed_ids=filtered_ids),
-        "outside": load_outside_codebook(input_json_path.parent / "measure_tags.json", allowed_ids=filtered_ids),
+        "measures": load_measure_panel(
+            next(
+                (p for p in [
+                    input_json_path.parent / "measure_tags.json",
+                    Path("data/exports/measure_tags.json"),
+                    Path("docs/data/measure_tags.json"),
+                    Path(__file__).resolve().parent.parent / "data" / "exports" / "measure_tags.json",
+                ] if p.is_file()),
+                input_json_path.parent / "measure_tags.json",
+            ),
+            allowed_ids=filtered_ids,
+        ),
+        "outside": load_outside_codebook(
+            next(
+                (p for p in [
+                    input_json_path.parent / "measure_tags.json",
+                    Path("data/exports/measure_tags.json"),
+                    Path("docs/data/measure_tags.json"),
+                    Path(__file__).resolve().parent.parent / "data" / "exports" / "measure_tags.json",
+                ] if p.is_file()),
+                input_json_path.parent / "measure_tags.json",
+            ),
+            allowed_ids=filtered_ids,
+        ),
         "database": database_rows,
-        "search": load_search_note(input_json_path.parent / "measure_search.json"),
+        "search": load_search_note(
+            next(
+                (p for p in [
+                    input_json_path.parent / "measure_search.json",
+                    Path("data/exports/measure_search.json"),
+                    Path("docs/data/measure_search.json"),
+                    Path(__file__).resolve().parent.parent / "data" / "exports" / "measure_search.json",
+                ] if p.is_file()),
+                input_json_path.parent / "measure_search.json",
+            )
+        ),
     }
 
 
@@ -907,6 +973,10 @@ def generate_html_infographics(data_payload: dict) -> str:
     else:
         search_line = ""
 
+    db_rows = data_payload.get("database", [])
+    archive_total = meta.get("archive_total_sources", len(db_rows))
+    topic_counts = Counter(r.get("topic_category") for r in db_rows if r.get("is_relevant") == 1)
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -971,7 +1041,7 @@ def generate_html_infographics(data_payload: dict) -> str:
     <button onclick="switchTab('keywords-view')" id="tab-btn-keywords" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">Keywords</button>
     <button onclick="switchTab('measures-view')" id="tab-btn-measures" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">Measures</button>
     <button onclick="switchTab('outside-view')" id="tab-btn-outside" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">Outside codebook</button>
-    <button onclick="switchTab('database-view')" id="tab-btn-database" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">Database</button>
+    <button onclick="switchTab('database-view')" id="tab-btn-database" class="tab-btn px-3 py-2 text-sm text-slate-400 border-b-2 border-transparent hover:text-white">News Database</button>
   </nav>
 
   <!-- MAIN TAB 1: GEOGRAPHIC MAP & TIMELINE SLIDER -->
@@ -1418,16 +1488,22 @@ def generate_html_infographics(data_payload: dict) -> str:
       <!-- Top Row: Title, Corpus Pills, Actions -->
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
         <div class="flex flex-wrap items-center gap-3">
-          <h2 class="text-xl font-bold text-white">Document database</h2>
+          <h2 class="text-xl font-bold text-white">News Database</h2>
           <div class="inline-flex rounded-lg border border-slate-800 bg-slate-950 p-0.5 text-xs font-medium" id="database-corpus-pills">
-            <button type="button" data-corpus="filtered" class="corpus-pill px-2.5 py-1 rounded bg-blue-600 text-white shadow-sm">Filtered Project Corpus (189)</button>
-            <button type="button" data-corpus="all" class="corpus-pill px-2.5 py-1 rounded text-slate-400 hover:text-white">Complete Raw Archive (1,605)</button>
+            <button type="button" data-corpus="filtered" class="corpus-pill px-2.5 py-1 rounded bg-blue-600 text-white shadow-sm">Filtered Project Corpus ({total_sources:,})</button>
+            <button type="button" data-corpus="all" class="corpus-pill px-2.5 py-1 rounded text-slate-400 hover:text-white">Complete Raw Archive ({archive_total:,})</button>
           </div>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
           <button type="button" id="database-reset-filters" class="px-2.5 py-1 rounded-lg text-xs font-medium text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition">Reset Filters</button>
           <a href="news_database.html" target="_blank" class="px-3 py-1 rounded-lg border border-blue-600 bg-blue-950/60 text-xs text-blue-300 hover:text-white transition inline-flex items-center gap-1">
-            <span>Open Standalone Database Page</span> &nearr;
+            <span>Standalone News Database</span> &nearr;
+          </a>
+          <a href="policy_database.html" target="_blank" class="px-3 py-1 rounded-lg border border-amber-600 bg-amber-950/60 text-xs text-amber-300 hover:text-white transition inline-flex items-center gap-1">
+            <span>Policy Database (1,290)</span> &nearr;
+          </a>
+          <a href="law_database.html" target="_blank" class="px-3 py-1 rounded-lg border border-emerald-600 bg-emerald-950/60 text-xs text-emerald-300 hover:text-white transition inline-flex items-center gap-1">
+            <span>U.S. Law Database (131)</span> &nearr;
           </a>
         </div>
       </div>
@@ -1437,13 +1513,13 @@ def generate_html_infographics(data_payload: dict) -> str:
       <div class="pt-2 border-t border-slate-800/80">
         <div class="flex flex-wrap items-center gap-1.5 text-xs" id="database-topic-pills">
           <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1.5">Topic:</span>
-          <button type="button" data-topic="" class="db-topic-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Topics (186)</button>
-          <button type="button" data-topic="Public-Private Data Partnerships" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Data Partnerships (77)</button>
-          <button type="button" data-topic="Municipal Traffic Mitigation & Street Controls" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Municipal Mitigation (29)</button>
-          <button type="button" data-topic="Legislation & City Council Actions" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Legislation & Actions (23)</button>
-          <button type="button" data-topic="Community Pushback & Safety Hazards" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Community Pushback (22)</button>
-          <button type="button" data-topic="Commercial Freight & Bridge Clearance" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Freight & Bridge Clearances (21)</button>
-          <button type="button" data-topic="Platform Features & Routing Algorithms" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Platform Features (14)</button>
+          <button type="button" data-topic="" class="db-topic-pill px-2.5 py-1 rounded font-medium bg-blue-600 text-white shadow-sm transition">All Topics ({total_sources:,})</button>
+          <button type="button" data-topic="Public-Private Data Partnerships" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Data Partnerships ({topic_counts.get('Public-Private Data Partnerships', 0):,})</button>
+          <button type="button" data-topic="Municipal Traffic Mitigation & Street Controls" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Municipal Mitigation ({topic_counts.get('Municipal Traffic Mitigation & Street Controls', 0):,})</button>
+          <button type="button" data-topic="Legislation & City Council Actions" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Legislation & Actions ({topic_counts.get('Legislation & City Council Actions', 0):,})</button>
+          <button type="button" data-topic="Community Pushback & Safety Hazards" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Community Pushback ({topic_counts.get('Community Pushback & Safety Hazards', 0):,})</button>
+          <button type="button" data-topic="Commercial Freight & Bridge Clearance" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Freight & Bridge Clearances ({topic_counts.get('Commercial Freight & Bridge Clearance', 0):,})</button>
+          <button type="button" data-topic="Platform Features & Routing Algorithms" class="db-topic-pill px-2.5 py-1 rounded font-medium text-slate-400 hover:text-white border border-slate-800 hover:bg-slate-800 transition">Platform Features ({topic_counts.get('Platform Features & Routing Algorithms', 0):,})</button>
         </div>
       </div>
 
@@ -1496,8 +1572,6 @@ def generate_html_infographics(data_payload: dict) -> str:
           </tr>
         </thead>
         <tbody id="database-body" class="divide-y divide-slate-800/80"></tbody>
-      </table>
-    </div>
       </table>
     </div>
   </section>
@@ -2944,6 +3018,30 @@ def generate_html_infographics(data_payload: dict) -> str:
       }});
     }}
 
+    function updateDbPillCounts() {{
+      const allRows = DATA.database || [];
+      const corpusRows = dbActiveCorpus === 'filtered'
+        ? allRows.filter(r => r.is_relevant === 1)
+        : allRows;
+
+      const topicCounts = {{}};
+      corpusRows.forEach(r => {{
+        const t = r.topic_category || 'Unclassified';
+        topicCounts[t] = (topicCounts[t] || 0) + 1;
+      }});
+
+      document.querySelectorAll('#database-topic-pills .db-topic-pill').forEach(p => {{
+        const top = p.dataset.topic;
+        if (!top) {{
+          p.textContent = 'All Topics (' + corpusRows.length.toLocaleString() + ')';
+        }} else {{
+          const shortName = p.textContent.split('(')[0].trim();
+          const c = topicCounts[top] || 0;
+          p.textContent = shortName + ' (' + c.toLocaleString() + ')';
+        }}
+      }});
+    }}
+
     function matchesGov(rowGov, filterGov) {{
       if (!filterGov) return true;
       const g = String(rowGov || '').toLowerCase();
@@ -3041,10 +3139,10 @@ def generate_html_infographics(data_payload: dict) -> str:
           docCell.appendChild(sumP);
         }}
 
-        if (row.is_relevant === 0 && row.exclusion_reason) {{
+        if (row.is_relevant === 0) {{
           const exBadge = document.createElement('span');
           exBadge.className = 'mt-1.5 inline-block px-1.5 py-0.5 rounded text-[10px] font-medium bg-rose-950/80 text-rose-300 border border-rose-800/50';
-          exBadge.textContent = 'Excluded: ' + row.exclusion_reason;
+          exBadge.textContent = row.tier || 'Archived Background';
           docCell.appendChild(exBadge);
         }}
 
@@ -3052,12 +3150,20 @@ def generate_html_infographics(data_payload: dict) -> str:
         const relCell = document.createElement('td');
         relCell.className = 'py-3 px-3.5 align-top';
         const score = Number(row.relevance_score != null ? row.relevance_score : (row.is_relevant === 1 ? 85 : 10));
-        const scoreBadge = document.createElement('span');
+        const scoreBadge = document.createElement('button');
+        scoreBadge.type = 'button';
+        scoreBadge.title = 'Filter by this relevance score band';
+        scoreBadge.addEventListener('click', (e) => {{
+          e.stopPropagation();
+          dbActiveScore = row.score_tier;
+          updateDbPillsUI();
+          renderDatabase();
+        }});
         const badgeColor = score >= 95 ? 'bg-emerald-950/90 text-emerald-300 border-emerald-700/60' :
                            score >= 90 ? 'bg-teal-950/90 text-teal-300 border-teal-700/60' :
                            score >= 85 ? 'bg-blue-950/90 text-blue-300 border-blue-700/60' :
                            'bg-slate-800 text-slate-400 border-slate-700';
-        scoreBadge.className = 'inline-flex items-center px-2 py-0.5 rounded text-xs font-bold border mr-2 mb-1 shadow-sm ' + badgeColor;
+        scoreBadge.className = 'inline-flex items-center px-2 py-0.5 rounded text-xs font-bold border mr-2 mb-1 shadow-sm transition hover:opacity-80 ' + badgeColor;
         scoreBadge.textContent = score + '%';
         relCell.appendChild(scoreBadge);
 
@@ -3087,8 +3193,16 @@ def generate_html_infographics(data_payload: dict) -> str:
         const govCell = document.createElement('td');
         govCell.className = 'py-3 px-3.5 align-top whitespace-nowrap';
         const gVal = row.gov || 'Company';
-        const govBadge = document.createElement('span');
-        govBadge.className = 'px-2 py-0.5 rounded text-xs font-medium ' + govBadgeClass(gVal);
+        const govBadge = document.createElement('button');
+        govBadge.type = 'button';
+        govBadge.title = 'Filter by ' + gVal;
+        govBadge.addEventListener('click', (e) => {{
+          e.stopPropagation();
+          dbActiveGov = String(gVal).replace('Government: ', '');
+          updateDbPillsUI();
+          renderDatabase();
+        }});
+        govBadge.className = 'px-2 py-0.5 rounded text-xs font-medium transition hover:opacity-80 ' + govBadgeClass(gVal);
         govBadge.textContent = String(gVal).replace('Government: ', '');
         govCell.appendChild(govBadge);
 
@@ -3206,6 +3320,7 @@ def generate_html_infographics(data_payload: dict) -> str:
           pill.addEventListener('click', () => {{
             dbActiveCorpus = pill.dataset.corpus || 'filtered';
             updateDbPillsUI();
+            updateDbPillCounts();
             populatePlaceDropdown();
             renderDatabase();
           }});
@@ -3255,6 +3370,8 @@ def generate_html_infographics(data_payload: dict) -> str:
         updateDbPillsUI();
       }}
 
+      updateDbPillCounts();
+      updateDbPillsUI();
       renderDatabase();
     }}
 
@@ -3688,10 +3805,10 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
           docCell.appendChild(sumP);
         }}
 
-        if (row.is_relevant === 0 && row.exclusion_reason) {{
+        if (row.is_relevant === 0) {{
           const exBadge = document.createElement('span');
           exBadge.className = 'mt-1.5 inline-block px-1.5 py-0.5 rounded text-[10px] font-medium bg-rose-950/80 text-rose-300 border border-rose-800/50';
-          exBadge.textContent = 'Excluded: ' + row.exclusion_reason;
+          exBadge.textContent = row.tier || 'Archived Background';
           docCell.appendChild(exBadge);
         }}
 
@@ -4007,13 +4124,40 @@ def main() -> int:
     output_path.write_text(html_content, encoding="utf-8")
     print(f"Saved interactive infographics to {output_path}")
 
+    # Seamlessly preserve Policy Commons overview integration on index.html
+    policy_review_candidates = [
+        output_path.parent / "data" / "policy_measure_review.json",
+        Path("docs/data/policy_measure_review.json"),
+    ]
+    policy_review_file = next((p for p in policy_review_candidates if p.exists()), None)
+    if policy_review_file and output_path.name == "index.html":
+        try:
+            from scripts.build_policy_preview import integrate_overview
+            review_data = json.loads(policy_review_file.read_text(encoding="utf-8"))
+            integrate_overview(output_path.parent, review_data)
+            print("Integrated Policy Commons overview into index.html")
+        except Exception as e:
+            print(f"Warning: could not integrate policy overview: {e}")
+
     from news_importer.db import load_database_rows
 
     database_path = output_path.parent / "news_database.html"
     database_archive_path = output_path.parent / "news_database_archive.html"
 
-    filtered_db_rows = load_database_rows(input_path.parent.parent / "news.sqlite", only_filtered=True)
-    all_db_rows = load_database_rows(input_path.parent.parent / "news.sqlite", only_filtered=False)
+    db_candidates = [
+        input_path.resolve().parents[2] / "data" / "news.sqlite",
+        input_path.resolve().parents[1] / "data" / "news.sqlite",
+        Path("data/news.sqlite").resolve(),
+        input_path.parent.parent / "news.sqlite",
+    ]
+    db_file = next((p for p in db_candidates if p.exists()), None)
+    if db_file:
+        filtered_db_rows = load_database_rows(db_file, only_filtered=True)
+        all_db_rows = load_database_rows(db_file, only_filtered=False)
+    else:
+        all_raw_json = json.loads(input_path.read_text(encoding="utf-8"))
+        all_db_rows = all_raw_json
+        filtered_db_rows = [r for r in all_raw_json if int(r.get("is_project_relevant", 1)) == 1]
 
     database_path.write_text(generate_database_html(filtered_db_rows, is_archive=False, total_archive_count=len(all_db_rows)), encoding="utf-8")
     database_archive_path.write_text(generate_database_html(all_db_rows, is_archive=True, total_archive_count=len(all_db_rows)), encoding="utf-8")
