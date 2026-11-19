@@ -16,17 +16,16 @@ ARCHIVE_PAGE = "news_database_archive.html"
 
 def render_site_navigation(page: str, indent: str = "") -> str:
     lines = [
-        '<nav aria-label="Site navigation" class="flex flex-wrap items-center gap-1.5 '
-        'bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">'
+        '<nav aria-label="Site navigation" class="site-navigation">'
     ]
     for href, label in NAV_LINKS:
         if href == page:
-            style = "bg-blue-600 text-white shadow-sm"
+            style = "site-navigation-link"
             current = ' aria-current="page"'
         else:
-            style = "text-slate-400 hover:text-white transition"
+            style = "site-navigation-link"
             current = ""
-        lines.append(f'  <a href="{href}" class="px-3 py-1.5 rounded-lg font-medium {style}"{current}>{label}</a>')
+        lines.append(f'  <a href="{href}" class="{style}"{current}>{label}</a>')
     lines.append("</nav>")
     return ("\n" + indent).join(lines)
 

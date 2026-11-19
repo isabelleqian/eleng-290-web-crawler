@@ -75,8 +75,8 @@ const policyOverview = (() => {
       const {x, y} = project(place.lat, place.lon);
       const pin = document.createElementNS("http://www.w3.org/2000/svg", "path");
       pin.setAttribute("d", `M ${x} ${y - 9} l 9 9 -9 9 -9 -9 z`);
-      pin.setAttribute("fill", "#fb923c");
-      pin.setAttribute("stroke", "#171a1b");
+      pin.setAttribute("fill", "#FDB515");
+      pin.setAttribute("stroke", "#002676");
       pin.setAttribute("stroke-width", "2");
       pin.setAttribute("vector-effect", "non-scaling-stroke");
       pin.setAttribute("role", "button");
