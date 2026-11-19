@@ -17,21 +17,13 @@
   "excluded_and_pending_exports_match": true,
   "files": {
     "cohort_3455_unverified.csv": "1300b31475eb33ccb85db5f207bb723b9e2f98a78936ac3c0c05fef3215430f3",
-    "cohort_3455_analysis.json": "8fc10d5744665f3ff43d695844b3707c12c5ae66fdf9af8dde72db8ed3e3c06f",
+    "cohort_3455_analysis.json": "beba5f4a0cc2fa3a7dab9dab1296818c9728621bfb8d5eb71f32042489bb6cbb",
     "cohort_3455_README.md": "6a091e32396456c71421e88556452eedf13160ecc5b7725db14b6be79c226b7f",
     "cohort_3455_summary.json": "224155d861cb5a14924ef0abd79715bf4433a2359f631394f6d5ad6d4f8f5226",
-    "cohort_3455_excluded.csv": "e849220ecf7dbc9ab1fea6f23704af88b4d10a6b49d95af5a504b237061ea030",
-    "cohort_3455_analysis.csv": "a49ae89db7b3d1728f8b2fb0040387f3e1f5e4c5a9bf7c9214959b4ed33ea080",
+    "cohort_3455_excluded.csv": "63c64fecbea1dba1484afac1cb90a5f5b96db3ee8a467ae16d20c91414783959",
+    "cohort_3455_analysis.csv": "819eb37be4c93485a5695cb0d0f24735156ea24471a9a413d9c6c3321a4671c0",
     "cohort_3455_jurisdiction_counts.csv": "fa52bfd8b0ba53c5fbf85343af51d420918c479819e8b22956e0fc840be9099d",
     "cohort_3455_codebook_counts.csv": "8810ea05a14cd6baec8cc5d9cfdf66c083eba70359e5a4231cce27c7f890836d"
   },
-  "web_checks": [
-    "Layer1 filter5 records",
-    "Excluded filter436 records",
-    "Pending-evidence filter26 records",
-    "Primary-codeC4 filter216 records",
-    "SP-0909 school-zone electronic enforcement corrected toLayer2C4",
-    "Layer2 pagination page2 of59 with50 records"
-  ],
   "qualification": "Structural/content consistency checks only; not current-law or exhaustive individual legal verification."
 }
