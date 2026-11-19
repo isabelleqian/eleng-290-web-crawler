@@ -1492,7 +1492,7 @@ def generate_html_infographics(data_payload: dict) -> str:
             <th class="px-3.5 py-3 font-semibold w-[34%]">Project Relevance & Specific Rationale</th>
             <th class="px-3.5 py-3 font-semibold w-[14%]">Topic Category</th>
             <th class="px-3.5 py-3 font-semibold w-[10%]">Governing Level</th>
-            <th class="px-3.5 py-3 font-semibold w-[8%] text-center">Crosswalk review</th>
+            <th class="px-3.5 py-3 font-semibold w-[8%] text-center">Law Crosswalk</th>
           </tr>
         </thead>
         <tbody id="database-body" class="divide-y divide-slate-800/80"></tbody>
@@ -3095,13 +3095,13 @@ def generate_html_infographics(data_payload: dict) -> str:
         // 5. Law Crosswalk Cell (w-[8%])
         const crossCell = document.createElement('td');
         crossCell.className = 'py-3 px-3.5 align-top text-center';
-        if (row.is_relevant) {{
+        if (row.crosswalk_id) {{
           const crossLink = document.createElement('a');
           crossLink.href = 'crosswalk.html#doc-' + row.source_id;
           crossLink.target = '_blank';
           crossLink.className = 'inline-block px-2 py-1 rounded text-[11px] font-mono font-medium bg-slate-900 hover:bg-blue-900/60 text-blue-300 hover:text-white border border-slate-700 hover:border-blue-500 transition shadow-sm';
-          crossLink.textContent = 'Review status';
-          crossLink.title = 'News context only; no verified current-law relationship is asserted';
+          crossLink.textContent = row.crosswalk_id;
+          crossLink.title = row.crosswalk_name || '';
           crossCell.appendChild(crossLink);
         }} else {{
           const dash = document.createElement('span');
@@ -3548,7 +3548,7 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
           <th class="py-3 px-3.5 w-[34%] font-semibold">Project Relevance & Specific Rationale</th>
           <th class="py-3 px-3.5 w-[14%] font-semibold">Topic Category</th>
           <th class="py-3 px-3.5 w-[10%] font-semibold">Governing Level</th>
-          <th class="py-3 px-3.5 w-[8%] font-semibold text-center">Crosswalk review</th>
+          <th class="py-3 px-3.5 w-[8%] font-semibold text-center">Law Crosswalk</th>
         </tr>
       </thead>
       <tbody id="rows" class="divide-y divide-slate-800/80"></tbody>
@@ -3753,13 +3753,13 @@ def generate_database_html(rows: list[dict], is_archive: bool = False, total_arc
         // 5. Law Crosswalk Cell (w-[8%])
         const crossCell = document.createElement('td');
         crossCell.className = 'py-3 px-3.5 align-top text-center';
-        if (row.is_relevant) {{
+        if (row.crosswalk_id) {{
           const crossLink = document.createElement('a');
           crossLink.href = 'crosswalk.html#doc-' + (row.id || row.source_id);
           crossLink.target = '_blank';
           crossLink.className = 'inline-block px-2 py-1 rounded text-[11px] font-mono font-medium bg-slate-900 hover:bg-blue-900/60 text-blue-300 hover:text-white border border-slate-700 hover:border-blue-500 transition shadow-sm';
-          crossLink.textContent = 'Review status';
-          crossLink.title = 'News context only; no verified current-law relationship is asserted';
+          crossLink.textContent = row.crosswalk_id;
+          crossLink.title = row.crosswalk_name || '';
           crossCell.appendChild(crossLink);
         }} else {{
           const dash = document.createElement('span');

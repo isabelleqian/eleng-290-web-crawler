@@ -1,13 +1,15 @@
 {
   "as_of": "2026-11-18",
   "public_counts": {
-    "total": 37,
+    "total": 41,
     "by_tier": {
       "1": 1,
-      "2": 34,
+      "2": 38,
       "3": 2
     },
     "by_jurisdiction": {
+      "Alaska": 1,
+      "Arizona": 1,
       "California": 9,
       "Federal": 17,
       "Florida": 1,
@@ -15,18 +17,20 @@
       "Minnesota": 1,
       "New Jersey": 1,
       "New York": 3,
+      "Ohio": 1,
       "Oregon": 1,
+      "Pennsylvania": 1,
       "Virginia": 1,
       "Washington": 2
     },
     "by_instrument_type": {
-      "Statute": 23,
+      "Statute": 24,
       "Statute (enacted public law)": 1,
-      "Regulation": 13
+      "Regulation": 16
     },
     "by_category": {
       "A1": 2,
-      "A3": 1,
+      "A3": 5,
       "A4": 1,
       "A5": 13,
       "B1": 4,
@@ -46,19 +50,19 @@
   "supplementary_legacy_source_records": 189,
   "total_source_records_accounted_for": 3644,
   "source_dispositions": {
-    "Withheld—individual legal verification incomplete": 3274,
-    "Consolidated into verified current instrument": 41,
-    "Removed—advisory content, not a separate operative duty": 1,
-    "Withheld—current enacted effect not verified": 253,
-    "Removed—not yet effective": 1,
-    "Removed—superseded companion draft": 1,
-    "Removed—non-specific directory placeholder": 73
+    "Consolidated into verified current instrument": 45,
+    "Withheld\u2014individual legal verification incomplete": 3270,
+    "Removed\u2014advisory content, not a separate operative duty": 1,
+    "Withheld\u2014current enacted effect not verified": 253,
+    "Removed\u2014not yet effective": 1,
+    "Removed\u2014superseded companion draft": 1,
+    "Removed\u2014non-specific directory placeholder": 73
   },
   "cohort_dispositions": {
-    "Withheld—individual legal verification incomplete": 3208,
-    "Consolidated into verified current instrument": 11,
-    "Removed—advisory content, not a separate operative duty": 1,
-    "Withheld—current enacted effect not verified": 235
+    "Consolidated into verified current instrument": 15,
+    "Withheld\u2014individual legal verification incomplete": 3204,
+    "Removed\u2014advisory content, not a separate operative duty": 1,
+    "Withheld\u2014current enacted effect not verified": 235
   },
   "source_url_access_attempts": 3316,
   "review_complete": false,
